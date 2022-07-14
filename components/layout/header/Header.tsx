@@ -3,15 +3,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
 import Image from 'next/image'
 import logo from "../../../public/logo.svg"
+import theme from "../../../theme"
 
 const pages = ['Home', 'Projects', 'Project History','Updates'];
 
 
-const StyledAppBar = styled(AppBar,{
-    name: "StyledAppBar"
-} )((props: any) => ({
-    backgroundColor: "white"
-}))
+const StyledAppBar = styled(AppBar) (({ theme }) => `
+    background-color: ${theme.bg.main}
+`
+)
 
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -91,7 +91,7 @@ const Header = () => {
                         <Button
                             key={page}
                             onClick={handleCloseNavMenu}
-                            sx={{ my: 2, color: 'white', display: 'block' }}
+                            sx={{ my: 2, display: 'block' }}
                         >
                             {page}
                         </Button>
