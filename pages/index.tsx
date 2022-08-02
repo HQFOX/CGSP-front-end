@@ -4,8 +4,12 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const Home: NextPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.container}>
       <Head>
@@ -19,7 +23,7 @@ const Home: NextPage = () => {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <Button variant="contained"> Olá Mundo</Button>
+        <Button variant="contained">{t("h1")}</Button>
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -72,5 +76,12 @@ const Home: NextPage = () => {
     </div>
   )
 }
+
+
+export const getStaticProps = async ( ctx: any ) => ({
+  props: {
+    ...await serverSideTranslations(ctx.locale, ['common', 'footer']),
+  },
+})
 
 export default Home
