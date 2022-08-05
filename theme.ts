@@ -7,9 +7,13 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#ff8e5c',
+      light: '#ffbf8a',
+      dark: '#c75f30',
     },
     secondary: {
-      main: '#19857b',
+      main: '#d3d3d3',
+      light: '#ffffff',
+      dark: '#a2a2a2',
     },
     error: {
       main: red.A400,
@@ -17,11 +21,11 @@ const theme = createTheme({
   },
   //custom theme variables   
   bg: {
-        main: '#fff',
+        main: '#F5F5F5',
         light: '#F4F5F7'
   },
     text: {
-        main: '#172B4D',
+        main: '#F5F5F5',
         light: '#262930'
     }
 });

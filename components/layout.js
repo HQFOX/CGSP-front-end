@@ -1,8 +1,12 @@
+import Footer from "./layout/footer/Footer";
 import Header from "./layout/header/Header";
 
 export default function Layout({ children }) {
   return (
   <div className="layout">
-    <Header></Header>
-    {children}</div>);
+    <Header/>
+    {children}
+    <Footer/>
+  </div>
+  );
 }

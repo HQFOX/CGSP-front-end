@@ -3,7 +3,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import React from "react";
 import Image from 'next/image'
 import logo from "../../../public/logo.svg"
-import theme from "../../../theme"
 
 const pages = ['Home', 'Projects', 'Project History','Updates'];
 
