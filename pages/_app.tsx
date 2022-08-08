@@ -2,9 +2,10 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Layout from '../components/layout'
 import { ThemeProvider } from "@emotion/react";
-
-import theme from '../theme';
+imort theme from '../theme';
 import { Head } from 'next/document';
+import { appWithTranslation } from 'next-i18next';
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -16,4 +17,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default MyApp
+export default appWithTranslation(MyApp);
