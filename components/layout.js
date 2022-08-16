@@ -1,12 +1,13 @@
-import Footer from "./layout/footer/Footer";
-import Header from "./layout/header/Header";
+/* eslint-disable react/prop-types */
+import Footer from './layout/footer/Footer';
+import Header from './layout/header/Header';
 
 export default function Layout({ children }) {
   return (
-  <div className="layout">
-    <Header/>
-    {children}
-    <Footer/>
-  </div>
+    <div className="layout">
+      <Header />
+      {children}
+      <Footer />
+    </div>
   );
 }
