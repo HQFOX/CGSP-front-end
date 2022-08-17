@@ -6,7 +6,6 @@ import Image from 'next/image';
 
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const StyledFooter = styled('footer')(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,

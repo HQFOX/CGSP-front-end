@@ -13,8 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import React from 'react';
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
-
-const pages = ['Home', 'Projects', 'Project History', 'Updates'];
+import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
@@ -23,6 +23,36 @@ const StyledAppBar = styled(AppBar)(
 );
 
 const Header = () => {
+  const { t } = useTranslation('header');
+
+  const pages = [
+    {
+      id: 1,
+      headerText: t('home'),
+      path: '/'
+    },
+    {
+      id: 2,
+      headerText: t('projects'),
+      path: '/projects'
+    },
+    {
+      id: 3,
+      headerText: t('history'),
+      path: '/history'
+    },
+    {
+      id: 4,
+      headerText: t('updates'),
+      path: '/updates'
+    },
+    {
+      id: 5,
+      headerText: t('faq'),
+      path: '/faq'
+    }
+  ];
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -74,8 +104,8 @@ const Header = () => {
                 display: { xs: 'block', md: 'none' }
               }}>
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Box textAlign="center">{page}</Box>
+                <MenuItem key={page.headerText} onClick={handleCloseNavMenu}>
+                  <Box textAlign="center">{page.headerText}</Box>
                 </MenuItem>
               ))}
             </Menu>
@@ -92,9 +122,11 @@ const Header = () => {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, display: 'block' }}>
-                {page}
-              </Button>
+              <Link key={page.id} href={page.path}>
+                <Button key={page.id} onClick={handleCloseNavMenu} sx={{ my: 2, display: 'block' }}>
+                  {page.headerText}
+                </Button>
+              </Link>
             ))}
           </Box>
         </Toolbar>

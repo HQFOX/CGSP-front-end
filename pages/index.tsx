@@ -1,8 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import styles from '../styles/Home.module.css';
-import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -59,7 +57,7 @@ const Home: NextPage = () => {
 
 export const getStaticProps = async (ctx: any) => ({
   props: {
-    ...(await serverSideTranslations(ctx.locale, ['common', 'footer']))
+    ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header']))
   }
 });
 
