@@ -1,58 +1,51 @@
-import { Button } from '@mui/material';
+import { Button, Box, Typography, styled } from '@mui/material';
 import React from 'react';
-import carousel1 from '../../public/carousel1.jpg';
-import carousel2 from '../../public/carousel2.jpg';
-import carousel3 from '../../public/carousel3.jpg';
-import PropTypes, { InferProps } from 'prop-types';
 
-const items = [
-  {
-    name: 'Random Name #1',
-    description: 'Probably the most random thing you have ever seen!',
-    image: carousel1
-  },
-  {
-    name: 'Random Name #2',
-    description: 'Hello World!',
-    image: carousel2
-  },
-  {
-    name: 'Random Name #3',
-    description: 'Hello World!',
-    image: carousel3
-  }
-];
-
-const CarouselCard = ({ index, item }: InferProps<typeof CarouselCard.propTypes>): JSX.Element => {
+const CarouselCard = ({ index, item }: CarouselCardProps) => {
   return (
-    <div
+    <Box
       key={`carousel${index}`}
-      style={{
+      sx={{
         backgroundImage: `url(${item.image.src})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
+        backgroundSize: { xs: 'cover', md: 'auto' },
         width: '100vw',
         height: '70vh',
         display: 'flex'
       }}>
-      <div
-        style={{
-          alignSelf: 'flex-end',
-          backgroundColor: 'rgba(0,0,0,.3)',
-          width: '100vw',
-          height: '22rem'
-        }}>
-        <h2>{item.name}</h2>
-        <p>{item.description}</p>
+      <CarouselCardText>
+        <Typography variant="h4" component="h1" color="common.white">
+          {item.name}
+        </Typography>
+        <Typography variant="subtitle1" component="h2" color="common.white">
+          {item.description}
+        </Typography>
         <Button className="CheckButton">Check it out!</Button>
-      </div>
-    </div>
+      </CarouselCardText>
+    </Box>
   );
 };
 
-CarouselCard.propTypes = {
-  index: PropTypes.string,
-  item: PropTypes.object
+const CarouselCardText = styled('div')(
+  ({ theme }) => `
+  background-color:rgba(0,0,0,.3);
+  align-self: end;
+  width: 100vw;
+  ${theme.breakpoints.down('md')} {  
+    padding: ${theme.spacing(2)};
+    height: 12rem;
+  }
+  ${theme.breakpoints.up('md')} {
+    padding: ${theme.spacing(8)};
+    height: 22rem;
+  }
+`
+);
+
+type CarouselCardProps = {
+  index: string;
+  item: any;
 };
 
 export default CarouselCard;

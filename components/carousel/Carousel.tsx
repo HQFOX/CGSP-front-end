@@ -6,26 +6,27 @@ import carousel2 from '../../public/carousel2.jpg';
 import carousel3 from '../../public/carousel3.jpg';
 import Image from 'next/image';
 import { width } from '@mui/system';
+import CarouselCard from './CarouselCard';
 
 const items = [
   {
-    name: 'Random Name #1',
+    name: 'Sede da Cooperativa Évora',
     description: 'Probably the most random thing you have ever seen!',
     image: carousel1
   },
   {
-    name: 'Random Name #2',
+    name: 'LOTEAMENTO MOINHO I - ÉVORA',
     description: 'Hello World!',
     image: carousel2
   },
   {
-    name: 'Random Name #3',
+    name: 'LOTEAMENTO CABEÇO DO ARRAIAL - ALMEIRIM - ÉVORA',
     description: 'Hello World!',
     image: carousel3
   }
 ];
 
-const CGSPCarousel = () => {
+const CGSPCarousel: React.FC = () => {
   return (
     <Carousel
       fullHeightHover
@@ -35,28 +36,7 @@ const CGSPCarousel = () => {
         }
       }}>
       {items.map((item, i) => (
-        <div
-          key={`carousel${i}`}
-          style={{
-            backgroundImage: `url(${item.image.src})`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            width: '100vw',
-            height: '70vh',
-            display: 'flex'
-          }}>
-          <div
-            style={{
-              alignSelf: 'flex-end',
-              backgroundColor: 'rgba(0,0,0,.3)',
-              width: '100vw',
-              height: '22rem'
-            }}>
-            <h2>{item.name}</h2>
-            <p>{item.description}</p>
-            <Button className="CheckButton">Check it out!</Button>
-          </div>
-        </div>
+        <CarouselCard key={i} index={`${i}`} item={item} />
       ))}
     </Carousel>
   );

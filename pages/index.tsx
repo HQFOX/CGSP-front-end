@@ -4,7 +4,7 @@ import styles from '../styles/Home.module.css';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import CGSPCarousel from '../components/carousel/carousel';
+import CGSPCarousel from '../components/carousel/Carousel';
 
 const Home: NextPage = () => {
   const { t } = useTranslation();
