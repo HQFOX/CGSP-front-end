@@ -6,7 +6,7 @@ import example from '../../public/carousel1.jpg';
 const width = '40vw';
 
 // eslint-disable-next-line react/prop-types
-const UpdateCard = ({ post }: any) => {
+const UpdateCard = ({ post }: UpdateCardProps) => {
   return (
     <Paper
       sx={(theme) => ({
@@ -35,3 +35,7 @@ const UpdateCard = ({ post }: any) => {
 };
 
 export default UpdateCard;
+
+type UpdateCardProps = {
+  post: Update;
+};

@@ -45,7 +45,7 @@ const CarouselCardText = styled('div')(
 
 type CarouselCardProps = {
   index: string;
-  item: any;
+  item: CarouselItem;
 };
 
 export default CarouselCard;

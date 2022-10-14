@@ -2,7 +2,7 @@ import { Stack } from '@mui/material';
 import React from 'react';
 import UpdateCard from './UpdateCard';
 
-const updates = [
+const updates: Update[] = [
   {
     title: 'APARTAMENTOS - BEJA'
   },
