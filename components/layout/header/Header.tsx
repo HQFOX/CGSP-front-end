@@ -15,6 +15,7 @@ import Image from 'next/image';
 import logo from '../../../public/logo.svg';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
@@ -24,6 +25,8 @@ const StyledAppBar = styled(AppBar)(
 
 const Header = () => {
   const { t } = useTranslation('header');
+
+  const router = useRouter();
 
   const pages = [
     {
@@ -72,9 +75,10 @@ const Header = () => {
             href="/"
             sx={{
               mr: 2,
+              p: 2,
               display: { xs: 'none', md: 'flex' }
             }}>
-            <Image src={logo} alt="logo" width={150} height={50} />
+            <Image src={logo} alt="logo" width={210} height={70} />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -118,16 +122,22 @@ const Header = () => {
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1
             }}>
-            <Image src={logo} alt="logo" width={100} height={30} />
+            <Image src={logo} alt="logo" width={120} height={40} />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Link key={page.id} href={page.path}>
-                <Button key={page.id} onClick={handleCloseNavMenu} sx={{ my: 2, display: 'block' }}>
-                  {page.headerText}
+                <Button size="large" sx={{ p: 4, display: 'block' }}>
+                  {page.headerText.toUpperCase()}
                 </Button>
               </Link>
             ))}
+            <Link href={router.pathname} locale="pt">
+              <a>PT</a>
+            </Link>
+            <Link href={router.pathname} locale="en">
+              <a>EN</a>
+            </Link>
           </Box>
         </Toolbar>
       </Container>
