@@ -10,12 +10,13 @@ import {
   Toolbar
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const StyledAppBar = styled(AppBar)(
   ({ theme }) => `
@@ -25,8 +26,13 @@ const StyledAppBar = styled(AppBar)(
 
 const Header = () => {
   const { t } = useTranslation('header');
-
   const router = useRouter();
+
+  const locales = router.locales;
+
+  const [language, setLanguage] = useState(router.locale);
+
+  // useEffect(() => {}, [language]);
 
   const pages = [
     {
@@ -57,6 +63,15 @@ const Header = () => {
   ];
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (locale: string | void) => {
+    setAnchorEl(null);
+    if (locale) router.push(router.asPath, undefined, { locale: locale });
+  };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -67,7 +82,7 @@ const Header = () => {
   };
 
   return (
-    <StyledAppBar position="static">
+    <StyledAppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
@@ -78,7 +93,7 @@ const Header = () => {
               p: 2,
               display: { xs: 'none', md: 'flex' }
             }}>
-            <Image src={logo} alt="logo" width={210} height={70} />
+            <Image src={logo} alt="logo" width={180} height={60} />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -124,20 +139,62 @@ const Header = () => {
             }}>
             <Image src={logo} alt="logo" width={120} height={40} />
           </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Button
+              id="languageDropdown"
+              aria-haspopup="true"
+              onClick={handleClick}
+              endIcon={<ExpandMoreIcon />}
+              variant="outlined"
+              size="small">
+              {language?.toUpperCase()}
+            </Button>
+            <Menu
+              id="languageDropdown-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => handleClose()}
+              MenuListProps={{
+                'aria-labelledby': 'languageDropdown'
+              }}>
+              {locales?.map((locale, index) => (
+                <MenuItem key={index} onClick={() => handleClose(locale)}>
+                  {t(`languages.${locale}`)}
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Link key={page.id} href={page.path}>
-                <Button size="large" sx={{ p: 4, display: 'block' }}>
-                  {page.headerText.toUpperCase()}
-                </Button>
+                <Button sx={{ p: 4, display: 'block' }}>{page.headerText.toUpperCase()}</Button>
               </Link>
             ))}
-            <Link href={router.pathname} locale="pt">
-              <a>PT</a>
-            </Link>
-            <Link href={router.pathname} locale="en">
-              <a>EN</a>
-            </Link>
+            <Box m="auto" sx={{ mr: 0 }}>
+              <Button
+                id="languageDropdown"
+                aria-haspopup="true"
+                onClick={handleClick}
+                endIcon={<ExpandMoreIcon />}
+                variant="outlined"
+                sx={{ maxHeight: 40 }}>
+                {t(`languages.${language}`)}
+              </Button>
+              <Menu
+                id="languageDropdown-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={() => handleClose()}
+                MenuListProps={{
+                  'aria-labelledby': 'languageDropdown'
+                }}>
+                {locales?.map((locale, index) => (
+                  <MenuItem key={index} onClick={() => handleClose(locale)}>
+                    {t(`languages.${locale}`)}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           </Box>
         </Toolbar>
       </Container>

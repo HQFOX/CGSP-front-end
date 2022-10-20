@@ -7,7 +7,7 @@ const Updates: NextPage = () => {
 
 export const getStaticProps = async (ctx: any) => ({
   props: {
-    ...(await serverSideTranslations(ctx.locale, ['common', 'footer']))
+    ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header']))
   }
 });
 
