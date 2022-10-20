@@ -3,5 +3,9 @@
     "projects" : "Projetos",
     "history" : "Histórico",
     "updates" : "Atualizações",
-    "faq" : "FAQ"
+    "faq" : "FAQ",
+    "languages" : {
+        "pt" : "Português",
+        "en" : "Inglês"
+    }
 }
