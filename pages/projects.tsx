@@ -1,6 +1,7 @@
 import { Box, Container, Divider, Grid, Typography } from '@mui/material';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
 import ProjectCard from '../components/projects/ProjectCard';
 
 const projects: Project[] = [
@@ -18,23 +19,31 @@ const projects: Project[] = [
   }
 ];
 
-const Projects: NextPage = () => (
-  <Container component="main" sx={{ pt: 10, pb: 10 }}>
-    <Box sx={{ pb: 15 }}>
-      <Typography variant="h4" component="h1">
-        On going Projects
-      </Typography>
-      <Divider />
-    </Box>
-    <Grid container>
-      {projects.map((project, i) => (
-        <Grid key={i} item xs={12} md={6} p={1}>
-          <ProjectCard key={i} project={project} />
-        </Grid>
-      ))}
-    </Grid>
-  </Container>
-);
+const Projects: NextPage = () => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('projects/1');
+  };
+
+  return (
+    <Container component="main" sx={{ pt: 10, pb: 10 }}>
+      <Box sx={{ pb: 15 }}>
+        <Typography variant="h4" component="h1">
+          On going Projects
+        </Typography>
+        <Divider />
+      </Box>
+      <Grid container>
+        {projects.map((project, i) => (
+          <Grid key={i} item xs={12} md={6} p={1} onClick={handleClick}>
+            <ProjectCard key={i} project={project} />
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
+  );
+};
 
 export const getStaticProps = async (ctx: any) => ({
   props: {
