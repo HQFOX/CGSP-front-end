@@ -1,24 +1,9 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Container,
-  Divider,
-  Grid,
-  Tab,
-  Tabs,
-  Typography
-} from '@mui/material';
+import { Box, Container, Divider, Grid, Stack, Tab, Tabs, Typography, Paper } from '@mui/material';
 import type { GetStaticPaths, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import example from '../../public/1/projeccao/projeccao6.jpg';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { useState } from 'react';
-import ProjectCarousel from '../../components/projectCarousel/Carousel';
+import ProjectCarousel from '../../components/projectCarousel/ProjectCarousel';
+import { TabPanel } from '../../components/tabpanel/tabpanel';
 
 const ProjectDetails: NextPage = () => {
   const [value, setValue] = useState(0);
@@ -36,64 +21,44 @@ const ProjectDetails: NextPage = () => {
         <Divider />
       </Box>
       <Grid container justifyContent={'center'}>
-        <Grid item>
-          <Card sx={{ maxWidth: 800, margin: 'auto' }}>
-            <CardActionArea>
-              <CardMedia component="img" height={400} image={example.src} alt="green iguana" />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Lizard
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles, with over 6,000 species,
-                  ranging across all continents except Antarctica
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button variant="contained" startIcon={<PhotoCameraIcon />}>
-                Fotos
-              </Button>
-              <Button color="primary" startIcon={<PhotoCameraIcon />}>
-                Projeção
-              </Button>
-              <Button color="primary" startIcon={<PhotoCameraIcon />}>
-                Planta
-              </Button>
-              <Button color="primary" startIcon={<PhotoCameraIcon />}>
-                Localização
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-      <Grid container justifyContent={'center'}>
         <Grid item style={{ width: '600px' }}>
           <ProjectCarousel />
         </Grid>
       </Grid>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Características" />
-          <Tab label="Inscrição" />
-          <Tab label="Atualizações" />
-        </Tabs>
-      </Box>
-      <Grid container>
-        <Grid item md={12}>
-          <Typography>Área Interior: 41 m2</Typography>
+      <Paper>
+        <Box pt={4} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <Tab label="Características" />
+            <Tab label="Inscrição" />
+            <Tab label="Atualizações" />
+            <Tab label="Localização" />
+          </Tabs>
+        </Box>
+        <Grid container p={5}>
+          <TabPanel index={0} value={value}>
+            <Stack spacing={2}>
+              <Typography>Área Interior: 41 m2</Typography>
+              <Typography>Casas de Banho: 2</Typography>
+              <Typography>Área Exterior: 41 m2</Typography>
+            </Stack>
+          </TabPanel>
+          <TabPanel index={1} value={value}>
+            <Stack spacing={2}>
+              <Typography>Área Interior: 41 m2</Typography>
+            </Stack>
+          </TabPanel>
+          <TabPanel index={2} value={value}>
+            <Stack spacing={2}>
+              <Typography>Área Exterior: 41 m2</Typography>
+            </Stack>
+          </TabPanel>
         </Grid>
-        <Grid item md={12}>
-          <Typography>Área Exterior: 41 m2</Typography>
-        </Grid>
-        <Grid item md={12}>
-          <Typography>Casas de Banho: 2</Typography>
-        </Grid>
-      </Grid>
+      </Paper>
     </Container>
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getStaticProps = async (ctx: any) => ({
   props: {
     ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header']))

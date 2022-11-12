@@ -12,7 +12,7 @@ import Carousel from 'react-material-ui-carousel';
 import carousel1 from '../../public/carousel1.jpg';
 import carousel2 from '../../public/carousel2.jpg';
 import carousel3 from '../../public/carousel3.jpg';
-import ProjectCarouselCard from './CarouselCard';
+import ProjectCarouselCard from './ProjectCarouselCard';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 const items = [
