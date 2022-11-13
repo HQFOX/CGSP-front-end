@@ -7,13 +7,19 @@ import {
   CardActions,
   Button
 } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
 import carousel1 from '../../public/carousel1.jpg';
 import carousel2 from '../../public/carousel2.jpg';
 import carousel3 from '../../public/carousel3.jpg';
 import ProjectCarouselCard from './ProjectCarouselCard';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import construction0 from '../../public/1/construction/construcao0.jpg';
+import construction1 from '../../public/1/construction/construcao1.jpg';
+import construction2 from '../../public/1/construction/construcao2.jpg';
+import construction3 from '../../public/1/construction/construcao3.jpg';
+import construction4 from '../../public/1/construction/construcao4.jpg';
+import ProjectModal from '../projectModal/projectModal';
 
 const items = [
   {
@@ -33,7 +39,120 @@ const items = [
   }
 ];
 
+const construction = [
+  {
+    name: "",
+    description: "",
+    image: construction0
+  },
+  {
+    name: "",
+    description: "",
+    image: construction1
+  },
+  {
+    name: "",
+    description: "",
+    image: construction2
+  },
+  {
+    name: "",
+    description: "",
+    image: construction3
+  },
+  {
+    name: "",
+    description: "",
+    image: construction4
+  }
+]
+
+const projection = [
+  {
+    name: "",
+    description: "",
+    image: construction0
+  },
+  {
+    name: "",
+    description: "",
+    image: construction1
+  },
+  {
+    name: "",
+    description: "",
+    image: construction2
+  },
+  {
+    name: "",
+    description: "",
+    image: construction3
+  },
+  {
+    name: "",
+    description: "",
+    image: construction4
+  }
+]
+
+const plant = [
+  {
+    name: "",
+    description: "",
+    image: construction1
+  },
+  {
+    name: "",
+    description: "",
+    image: construction1
+  },
+  {
+    name: "",
+    description: "",
+    image: construction2
+  },
+  {
+    name: "",
+    description: "",
+    image: construction3
+  },
+  {
+    name: "",
+    description: "",
+    image: construction4
+  }
+]
+
+enum DisplayType { "construction", "projection", "plant", "all" }
+
 const ProjectCarousel: React.FC = () => {
+  const [display, setDisplay] = useState<DisplayType>(DisplayType.projection) 
+  const [openModal, setOpenModal] = useState<boolean>(false)
+
+  const modalOpen = (currentState: boolean) => {
+    setOpenModal(!currentState);
+  }
+
+
+  const carouselItems = (display : DisplayType) => {
+    switch(display) {
+      case DisplayType.construction : 
+        return (construction.map((item, i) => (
+        <ProjectCarouselCard key={i} index={`${i}`} item={item} />
+          )
+        ))
+      case DisplayType.projection : 
+        return (projection.map((item, i) => (
+        <ProjectCarouselCard key={i} index={`${i}`} item={item} />
+         )
+        ))
+      case DisplayType.plant : 
+        return (plant.map((item, i) => (
+        <ProjectCarouselCard key={i} index={`${i}`} item={item} />
+        )
+        ))
+    }
+  }
   return (
     <Grid container justifyContent={'center'}>
       <Grid item>
@@ -45,9 +164,7 @@ const ProjectCarousel: React.FC = () => {
                 marginTop: '1em'
               }
             }}>
-            {items.map((item, i) => (
-              <ProjectCarouselCard key={i} index={`${i}`} item={item} />
-            ))}
+            {carouselItems(display)}
           </Carousel>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
@@ -62,18 +179,22 @@ const ProjectCarousel: React.FC = () => {
             <Button variant="contained" startIcon={<PhotoCameraIcon />}>
               Fotos
             </Button>
-            <Button color="primary" startIcon={<PhotoCameraIcon />}>
+            <Button variant={display === DisplayType.projection? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.projection)}} startIcon={<PhotoCameraIcon />}>
               Projeção
             </Button>
-            <Button color="primary" startIcon={<PhotoCameraIcon />}>
+            <Button variant={display === DisplayType.plant? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.plant)}} startIcon={<PhotoCameraIcon />}>
               Planta
             </Button>
-            <Button color="primary" startIcon={<PhotoCameraIcon />}>
-              Localização
+            <Button variant={display === DisplayType.construction? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.construction)}} startIcon={<PhotoCameraIcon />}>
+              Construção
+            </Button>
+            <Button variant={"outlined"} startIcon={<PhotoCameraIcon />} onClick={() => {modalOpen(openModal)}}>
+              Tela Inteira
             </Button>
           </CardActions>
         </Card>
       </Grid>
+      <ProjectModal open={openModal} modalOpen={modalOpen}/>
     </Grid>
   );
 };

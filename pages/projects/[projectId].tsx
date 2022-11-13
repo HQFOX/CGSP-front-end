@@ -13,7 +13,7 @@ const ProjectDetails: NextPage = () => {
   };
 
   return (
-    <Container component="main" sx={{ pt: 10, pb: 10 }}>
+    <Container component="main" sx={{ pt: 10, pb: 10 , backgroundColor: "lightgray"}}>
       <Box sx={{ pb: 15 }}>
         <Typography variant="h4" component="h1" textAlign="right">
           Nome do Projeto
@@ -25,8 +25,8 @@ const ProjectDetails: NextPage = () => {
           <ProjectCarousel />
         </Grid>
       </Grid>
-      <Paper>
-        <Box pt={4} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Paper sx={{ mt: 4}}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="Características" />
             <Tab label="Inscrição" />
