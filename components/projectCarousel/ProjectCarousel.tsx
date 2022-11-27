@@ -13,13 +13,14 @@ import carousel1 from '../../public/carousel1.jpg';
 import carousel2 from '../../public/carousel2.jpg';
 import carousel3 from '../../public/carousel3.jpg';
 import ProjectCarouselCard from './ProjectCarouselCard';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import construction0 from '../../public/1/construction/construcao0.jpg';
 import construction1 from '../../public/1/construction/construcao1.jpg';
 import construction2 from '../../public/1/construction/construcao2.jpg';
 import construction3 from '../../public/1/construction/construcao3.jpg';
 import construction4 from '../../public/1/construction/construcao4.jpg';
 import ProjectModal from '../projectModal/projectModal';
+import { Foundation, Fullscreen, PhotoCamera, ViewInAr } from '@mui/icons-material';
+import Floorpan from '../../public/noun-floor-plan';
 
 const items = [
   {
@@ -129,8 +130,12 @@ const ProjectCarousel: React.FC = () => {
   const [display, setDisplay] = useState<DisplayType>(DisplayType.projection) 
   const [openModal, setOpenModal] = useState<boolean>(false)
 
-  const modalOpen = (currentState: boolean) => {
-    setOpenModal(!currentState);
+  const handleOpenModal = () => {
+    setOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false)
   }
 
 
@@ -138,23 +143,24 @@ const ProjectCarousel: React.FC = () => {
     switch(display) {
       case DisplayType.construction : 
         return (construction.map((item, i) => (
-        <ProjectCarouselCard key={i} index={`${i}`} item={item} />
+        <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} />
           )
         ))
       case DisplayType.projection : 
         return (projection.map((item, i) => (
-        <ProjectCarouselCard key={i} index={`${i}`} item={item} />
+        <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal}/>
          )
         ))
       case DisplayType.plant : 
         return (plant.map((item, i) => (
-        <ProjectCarouselCard key={i} index={`${i}`} item={item} />
+        <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal}/>
         )
         ))
     }
   }
   return (
     <Grid container justifyContent={'center'}>
+      <Floorpan/>
       <Grid item>
         <Card sx={{ width: 800, margin: 'auto' }}>
           <Carousel
@@ -176,25 +182,25 @@ const ProjectCarousel: React.FC = () => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button variant="contained" startIcon={<PhotoCameraIcon />}>
+            <Button variant="contained" startIcon={<PhotoCamera />}>
               Fotos
             </Button>
-            <Button variant={display === DisplayType.projection? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.projection)}} startIcon={<PhotoCameraIcon />}>
+            <Button variant={display === DisplayType.projection? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.projection)}} startIcon={<ViewInAr/>}>
               Projeção
             </Button>
-            <Button variant={display === DisplayType.plant? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.plant)}} startIcon={<PhotoCameraIcon />}>
+            <Button variant={display === DisplayType.plant? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.plant)}} startIcon={<Floorpan />}>
               Planta
             </Button>
-            <Button variant={display === DisplayType.construction? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.construction)}} startIcon={<PhotoCameraIcon />}>
+            <Button variant={display === DisplayType.construction? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.construction)}} startIcon={<Foundation/>}>
               Construção
             </Button>
-            <Button variant={"outlined"} startIcon={<PhotoCameraIcon />} onClick={() => {modalOpen(openModal)}}>
+            <Button style={{marginLeft: 'auto'}} variant={"outlined"} startIcon={<Fullscreen />} onClick={handleOpenModal}>
               Tela Inteira
             </Button>
           </CardActions>
         </Card>
       </Grid>
-      <ProjectModal open={openModal} modalOpen={modalOpen}/>
+      <ProjectModal open={openModal} modalOpen={handleOpenModal} modalClose={handleCloseModal} />
     </Grid>
   );
 };

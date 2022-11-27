@@ -13,7 +13,7 @@ import {
 import React from 'react';
 import Image from 'next/image';
 
-const ProjectCarouselCard = ({ index, item }: CarouselCardProps) => {
+const ProjectCarouselCard = ({ index, item, handleOpenModal, handleCloseModal }: CarouselCardProps) => {
   return (
     <CardMedia>
       <div style={{ height: 500, overflow: 'hidden' }}>
@@ -21,6 +21,7 @@ const ProjectCarouselCard = ({ index, item }: CarouselCardProps) => {
           src={item.image}
           objectFit="cover" // or objectFit="cover"
           // height={600}
+          onClick={handleOpenModal}
         />
       </div>
     </CardMedia>
@@ -30,6 +31,8 @@ const ProjectCarouselCard = ({ index, item }: CarouselCardProps) => {
 type CarouselCardProps = {
   index: string;
   item: CarouselItem;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
 };
 
 export default ProjectCarouselCard;
