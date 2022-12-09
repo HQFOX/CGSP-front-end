@@ -1,0 +1,13 @@
+{
+    "projectPageTitle" : "Projetos A Decorrer",
+    "all" : "todas",
+    "searchPlaceholder" : "Pesquise um projeto",
+    "locationFilterLabel" : "Localizações",
+    "filters" : "filtros",
+    "projectDetails" : {
+        "title" : "título",
+        "tipology" : "Tipologia",
+        "bedrooms" : "Quartos",
+        "bathrooms" : "Casas de banho"
+    }
+}

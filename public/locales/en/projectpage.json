@@ -1,0 +1,14 @@
+{
+    "projectPageTitle" : "On Going Projects",
+    "all" : "all",
+    "searchPlaceholder" : "Search for a project",
+    "locationFilterLabel" : "Locations",
+    "filters" : "filters",
+    "projectDetails" : {
+        "title" : "title",
+        "tipology" : "Tipology",
+        "bedrooms" : "Bedrooms",
+        "bathrooms" : "Bathrooms"
+
+    }
+}
