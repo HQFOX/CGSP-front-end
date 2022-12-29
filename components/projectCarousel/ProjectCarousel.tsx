@@ -18,11 +18,16 @@ import construction1 from '../../public/1/construction/construcao1.jpg';
 import construction2 from '../../public/1/construction/construcao2.jpg';
 import construction3 from '../../public/1/construction/construcao3.jpg';
 import construction4 from '../../public/1/construction/construcao4.jpg';
+import projection3 from '../../public/1/projection/projeccao3.jpg';
+import projection5 from '../../public/1/projection/projeccao5.jpg';
+import projection6 from '../../public/1/projection/projeccao6.jpg';
+import projection7 from '../../public/1/projection/projeccao7.jpg';
+import projection8 from '../../public/1/projection/projeccao8.jpg';
 import ProjectModal from '../projectModal/projectModal';
 import { Foundation, Fullscreen, PhotoCamera, ViewInAr } from '@mui/icons-material';
 import Floorpan from '../../public/noun-floor-plan';
 
-const items = [
+const items: CarouselItem[] = [
   {
     name: 'Sede da Cooperativa Évora',
     description: 'Probably the most random thing you have ever seen!',
@@ -40,7 +45,7 @@ const items = [
   }
 ];
 
-const construction = [
+const construction: CarouselItem[] = [
   {
     name: "",
     description: "",
@@ -68,11 +73,39 @@ const construction = [
   }
 ]
 
-const projection = [
+const projection: CarouselItem[] = [
   {
     name: "",
     description: "",
-    image: construction0
+    image: projection3
+  },
+  {
+    name: "",
+    description: "",
+    image: projection5
+  },
+  {
+    name: "",
+    description: "",
+    image: projection6
+  },
+  {
+    name: "",
+    description: "",
+    image: projection7
+  },
+  {
+    name: "",
+    description: "",
+    image: projection8
+  }
+]
+
+const plant: CarouselItem[] = [
+  {
+    name: "",
+    description: "",
+    image: construction1
   },
   {
     name: "",
@@ -96,39 +129,12 @@ const projection = [
   }
 ]
 
-const plant = [
-  {
-    name: "",
-    description: "",
-    image: construction1
-  },
-  {
-    name: "",
-    description: "",
-    image: construction1
-  },
-  {
-    name: "",
-    description: "",
-    image: construction2
-  },
-  {
-    name: "",
-    description: "",
-    image: construction3
-  },
-  {
-    name: "",
-    description: "",
-    image: construction4
-  }
-]
-
-enum DisplayType { "construction", "projection", "plant", "all" }
+enum CategoryType { "construction", "projection", "plant", "all" }
 
 const ProjectCarousel: React.FC = () => {
-  const [display, setDisplay] = useState<DisplayType>(DisplayType.projection) 
-  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [category, setCategory] = useState<CategoryType>(CategoryType.projection);
+  const [index, setIndex] = useState<number>(0);
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const handleOpenModal = () => {
     setOpenModal(true)
@@ -139,28 +145,41 @@ const ProjectCarousel: React.FC = () => {
   }
 
 
-  const carouselItems = (display : DisplayType) => {
-    switch(display) {
-      case DisplayType.construction : 
+  const carouselItems = (category : CategoryType) => {
+    switch(category) {
+      case CategoryType.construction : 
         return (construction.map((item, i) => (
         <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} />
           )
         ))
-      case DisplayType.projection : 
+      case CategoryType.projection : 
         return (projection.map((item, i) => (
         <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal}/>
          )
         ))
-      case DisplayType.plant : 
+      case CategoryType.plant : 
         return (plant.map((item, i) => (
         <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal}/>
         )
         ))
     }
   }
+
+  const getItems = (category: CategoryType): CarouselItem[] => {
+    switch(category) {
+      case CategoryType.construction : 
+        return construction
+      case CategoryType.projection : 
+        return projection
+      case CategoryType.plant : 
+        return plant
+      default:
+        return [] as CarouselItem[];
+    }
+
+  }
   return (
     <Grid container justifyContent={'center'}>
-      <Floorpan/>
       <Grid item>
         <Card sx={{ width: 800, margin: 'auto' }}>
           <Carousel
@@ -170,7 +189,7 @@ const ProjectCarousel: React.FC = () => {
                 marginTop: '1em'
               }
             }}>
-            {carouselItems(display)}
+            {carouselItems(category)}
           </Carousel>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
@@ -185,13 +204,13 @@ const ProjectCarousel: React.FC = () => {
             <Button variant="contained" startIcon={<PhotoCamera />}>
               Fotos
             </Button>
-            <Button variant={display === DisplayType.projection? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.projection)}} startIcon={<ViewInAr/>}>
+            <Button variant={category === CategoryType.projection? "contained" : "outlined"} onClick={() => {setCategory(CategoryType.projection)}} startIcon={<ViewInAr/>}>
               Projeção
             </Button>
-            <Button variant={display === DisplayType.plant? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.plant)}} startIcon={<Floorpan />}>
+            <Button variant={category === CategoryType.plant? "contained" : "outlined"} onClick={() => {setCategory(CategoryType.plant)}} startIcon={<Floorpan />}>
               Planta
             </Button>
-            <Button variant={display === DisplayType.construction? "contained" : "outlined"} onClick={() => {setDisplay(DisplayType.construction)}} startIcon={<Foundation/>}>
+            <Button variant={category === CategoryType.construction? "contained" : "outlined"} onClick={() => {setCategory(CategoryType.construction)}} startIcon={<Foundation/>}>
               Construção
             </Button>
             <Button style={{marginLeft: 'auto'}} variant={"outlined"} startIcon={<Fullscreen />} onClick={handleOpenModal}>
@@ -200,7 +219,7 @@ const ProjectCarousel: React.FC = () => {
           </CardActions>
         </Card>
       </Grid>
-      <ProjectModal open={openModal} modalOpen={handleOpenModal} modalClose={handleCloseModal} />
+      <ProjectModal open={openModal} modalOpen={handleOpenModal} modalClose={handleCloseModal} items={getItems(category)} index={0} />
     </Grid>
   );
 };
