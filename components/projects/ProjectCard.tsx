@@ -13,6 +13,12 @@ import Image from 'next/image';
 import example from '../../public/carousel1.jpg';
 import { Bathtub, Home, KingBed, SquareFoot } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import styled from '@emotion/styled';
+
+const StyledTypography = styled(Typography)({
+  display: "flex",
+  alignItems: "end",
+})
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
   const { t, i18n } = useTranslation(['projectpage', 'common']);
@@ -20,7 +26,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Card>
       <CardActionArea>
-        <CardHeader title={project.title} subheader="Localização: September 14, 2016" />
+        <CardHeader title={project.title} subheader={`Localização: ${project.location}`} />
         <CardMedia>
           <div style={{ position: 'relative', width: '100%', height: '100%' }}>
             <Image
@@ -32,35 +38,34 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
         <CardContent>
           <Grid container>
             <Grid item md={6}>
-              <Typography variant="body2" color="text.secondary" sx={{display:"flex", alignItems: 'end'}}>
+              <StyledTypography variant="body2" color="text.secondary">
                 <Home sx={{marginRight: "5px"}}/>{t("projectDetails.tipology")}: T4
-              </Typography>
+              </StyledTypography>
             </Grid>
             <Grid item md={6}>
-              <Typography variant="body2" color="text.secondary" sx={{display:"flex", alignItems: 'end'}}>
+              <StyledTypography variant="body2" color="text.secondary">
                 <Bathtub sx={{marginRight: "5px"}}/>{t("projectDetails.bathrooms")}: 2
-              </Typography>
+              </StyledTypography>
             </Grid>
             <Grid item md={6}>
-              <Typography variant="body2" color="text.secondary" sx={{display:"flex", alignItems: 'end'}}>
-                <SquareFoot sx={{marginRight: "5px"}}/>Area Interior: T4
-              </Typography>
+              <StyledTypography variant="body2" color="text.secondary">
+                <SquareFoot sx={{marginRight: "5px"}}/>{t("projectDetails.interiorArea")}: T4
+              </StyledTypography>
             </Grid>
             <Grid item md={6}>
-              <Typography variant="body2" color="text.secondary" sx={{display:"flex", alignItems: 'end'}}>
+              <StyledTypography variant="body2" color="text.secondary">
                 <KingBed sx={{marginRight: "5px"}}/>{t("projectDetails.bedrooms")}: 4
-              </Typography>
+              </StyledTypography>
             </Grid>
           </Grid>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
+          <StyledTypography variant="body2" color="text.secondary">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+          </StyledTypography>
         </CardContent>
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          Detalhes
+          {t("projectDetails.details")}
         </Button>
       </CardActions>
     </Card>

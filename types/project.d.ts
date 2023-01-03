@@ -1,6 +1,7 @@
 type Project = {
   title: string;
   location?: string;
+  status?: "completed" | "building" | "open"
 };
 
 type ProjectDetails = {

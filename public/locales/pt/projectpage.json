@@ -1,13 +1,22 @@
 {
     "projectPageTitle" : "Projetos A Decorrer",
-    "all" : "todas",
+    "allm" : "todos",
+    "allf" : "todas",
     "searchPlaceholder" : "Pesquise um projeto",
     "locationFilterLabel" : "Localizações",
+    "projectStatusFilterLabel" : "Estado do Projeto",
     "filters" : "filtros",
     "projectDetails" : {
         "title" : "título",
         "tipology" : "Tipologia",
         "bedrooms" : "Quartos",
-        "bathrooms" : "Casas de banho"
+        "bathrooms" : "Casas de banho",
+        "interiorArea" : "Área Interior",
+        "details": "detalhes"
+    },
+    "status" : {
+        "completed" : "Terminado",
+        "building" : "Em construção",
+        "open" : "Incrições Abertas"
     }
 }
