@@ -3,6 +3,7 @@ import { Search, Tune, Map, MapOutlined, GridView, ViewListOutlined } from '@mui
 import { Box, Container, Divider, Grid, TextField, Typography, Button, Paper, IconButton } from '@mui/material';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Dropdown from '../components/dropdown/Dropdown';
@@ -53,10 +54,15 @@ type SearchParams = {
 }
 
 const Projects: NextPage = () => {
+  const router = useRouter();
   const { t, i18n } = useTranslation(['projectpage', 'common']);
   const [search, setSearch] = useState<SearchParams>({ title: "", location: t("allf"), status: t('allm'), wildcard: ""})
   const [projects, setProjects] = useState<Project[]>(projectData)
   const [projectSearchResults, setProjectSearchResults] = useState<Project[]>(projects)
+  
+  const handleClick = () => {
+    router.push('projects/1');
+  };
 
   useEffect(() => {
     var results = projects;
@@ -196,7 +202,7 @@ const Projects: NextPage = () => {
         </Paper>
         <Grid container>
           {projectSearchResults.map((project, i) => (
-            <Grid key={i} item xs={12} md={6} p={1}>
+            <Grid key={i} item xs={12} md={6} p={1} onClick={handleClick}>
               <ProjectCard key={i} project={project} />
             </Grid>
           ))}
