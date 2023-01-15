@@ -3,7 +3,7 @@ import type { GetStaticPaths, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import ProjectCarousel from '../../components/projectCarousel/ProjectCarousel';
-import { TabPanel } from '../../components/tabpanel/tabpanel';
+import TabPanel from '../../components/tabpanel/TabPanel';
 
 const ProjectDetails: NextPage = () => {
   const [value, setValue] = useState(0);

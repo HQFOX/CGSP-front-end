@@ -1,8 +1,9 @@
-import { Box, Button, CardMedia, Dialog, Typography } from "@mui/material";
+import { Box, Button, CardMedia, Dialog, IconButton, Typography } from "@mui/material";
 import CancelIcon from '@mui/icons-material/Cancel';
 import Image from "next/image";
 import construction0 from '../../public/1/construction/construcao0.jpg';
 import Carousel from "react-material-ui-carousel";
+import { StyledIconButton } from "./projectModal.styles";
 
 
 type projectModalProps = {
@@ -11,10 +12,12 @@ type projectModalProps = {
     modalClose: () => void,
     items: CarouselItem[],
     index: number,
+    autoPlay: boolean,
+    handleCarouselItemChange: (index?:number) => void
 }
 
 
-const ProjectModal = ({open, modalOpen, modalClose, items, index}: projectModalProps) => {
+const ProjectModal = ({open, modalOpen, modalClose, items, index, autoPlay, handleCarouselItemChange}: projectModalProps) => {
     return (
         <Dialog
             fullScreen
@@ -22,8 +25,8 @@ const ProjectModal = ({open, modalOpen, modalClose, items, index}: projectModalP
             onClose={modalClose}
             sx={{ p:3 }}
             >
-            <Button sx={{ alignSelf: "end", marginLeft: 'auto'}} onClick={modalClose}><CancelIcon/></Button>
-            <Carousel sx={{ flex: 1}} autoPlay={false} fullHeightHover navButtonsAlwaysVisible>
+            <StyledIconButton color="primary" onClick={modalClose}><CancelIcon/></StyledIconButton>
+            <Carousel sx={{ flex: 1}} autoPlay={autoPlay} fullHeightHover navButtonsAlwaysVisible index={index} onChange={(now?:number, next?) => handleCarouselItemChange(now)}>
                 {items.map((item, i) => (
                 <Box
                     key={`carousel${index}`}

@@ -135,31 +135,44 @@ const ProjectCarousel: React.FC = () => {
   const [category, setCategory] = useState<CategoryType>(CategoryType.projection);
   const [index, setIndex] = useState<number>(0);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [autoPlay, setAutoPlay] =  useState<boolean>(true);
 
-  const handleOpenModal = () => {
-    setOpenModal(true)
-  }
+const handleSetCategory = (category: CategoryType) => {
+  setCategory(category);
+  setIndex(0);
+}
 
-  const handleCloseModal = () => {
-    setOpenModal(false)
-  }
+const handleOpenModal = (index: number) => {
+  setIndex(index)
+  setOpenModal(true)
+  setAutoPlay(false)
+}
+
+const handleCloseModal = () => {
+  setOpenModal(false)
+  setAutoPlay(true)
+}
+
+const handleCarouselItemChange = (index?: number) => {
+  index ? setIndex(index) : setIndex(0);
+}
 
 
   const carouselItems = (category : CategoryType) => {
     switch(category) {
       case CategoryType.construction : 
         return (construction.map((item, i) => (
-        <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} />
+        <ProjectCarouselCard key={`${category+i}`} index={`${i}`} item={item} handleOpenModal={() => handleOpenModal(i)} handleCloseModal={handleCloseModal} />
           )
         ))
       case CategoryType.projection : 
         return (projection.map((item, i) => (
-        <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal}/>
+        <ProjectCarouselCard key={`${category+i}`} index={`${i}`} item={item} handleOpenModal={() => handleOpenModal(i)} handleCloseModal={handleCloseModal}/>
          )
         ))
       case CategoryType.plant : 
         return (plant.map((item, i) => (
-        <ProjectCarouselCard key={i} index={`${i}`} item={item} handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal}/>
+        <ProjectCarouselCard key={`${category+i}`} index={`${i}`} item={item} handleOpenModal={() => handleOpenModal(i)} handleCloseModal={handleCloseModal}/>
         )
         ))
     }
@@ -188,7 +201,11 @@ const ProjectCarousel: React.FC = () => {
               style: {
                 marginTop: '1em'
               }
-            }}>
+            }}
+            index={index}
+            onChange={(now?:number, next?) => handleCarouselItemChange(now)}
+            autoPlay={autoPlay}
+            >
             {carouselItems(category)}
           </Carousel>
           <CardContent>
@@ -204,22 +221,29 @@ const ProjectCarousel: React.FC = () => {
             <Button variant="contained" startIcon={<PhotoCamera />}>
               Fotos
             </Button>
-            <Button variant={category === CategoryType.projection? "contained" : "outlined"} onClick={() => {setCategory(CategoryType.projection)}} startIcon={<ViewInAr/>}>
+            <Button variant={category === CategoryType.projection? "contained" : "outlined"} onClick={() => {handleSetCategory(CategoryType.projection)}} startIcon={<ViewInAr/>}>
               Projeção
             </Button>
-            <Button variant={category === CategoryType.plant? "contained" : "outlined"} onClick={() => {setCategory(CategoryType.plant)}} startIcon={<Floorpan />}>
+            <Button variant={category === CategoryType.plant? "contained" : "outlined"} onClick={() => {handleSetCategory(CategoryType.plant)}} startIcon={<Floorpan />}>
               Planta
             </Button>
-            <Button variant={category === CategoryType.construction? "contained" : "outlined"} onClick={() => {setCategory(CategoryType.construction)}} startIcon={<Foundation/>}>
+            <Button variant={category === CategoryType.construction? "contained" : "outlined"} onClick={() => {handleSetCategory(CategoryType.construction)}} startIcon={<Foundation/>}>
               Construção
             </Button>
-            <Button style={{marginLeft: 'auto'}} variant={"outlined"} startIcon={<Fullscreen />} onClick={handleOpenModal}>
+            <Button style={{marginLeft: 'auto'}} variant={"outlined"} startIcon={<Fullscreen />} onClick={() => handleOpenModal(index)}>
               Tela Inteira
             </Button>
           </CardActions>
         </Card>
       </Grid>
-      <ProjectModal open={openModal} modalOpen={handleOpenModal} modalClose={handleCloseModal} items={getItems(category)} index={0} />
+      <ProjectModal
+        open={openModal}
+        modalOpen={() => handleOpenModal(index)} 
+        modalClose={handleCloseModal} 
+        items={getItems(category)} 
+        index={index} 
+        autoPlay={autoPlay}
+        handleCarouselItemChange={handleCarouselItemChange}/>
     </Grid>
   );
 };
