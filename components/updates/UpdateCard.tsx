@@ -5,7 +5,6 @@ import example from '../../public/carousel1.jpg';
 
 const width = '40vw';
 
-// eslint-disable-next-line react/prop-types
 const UpdateCard = ({ post }: UpdateCardProps) => {
   return (
     <Paper

@@ -1,0 +1,23 @@
+{
+    "projectPageTitle" : "On Going Projects",
+    "allm" : "all",
+    "allf" : "all",
+    "searchPlaceholder" : "Search for a project",
+    "locationFilterLabel" : "Locations",
+    "projectStatusFilterLabel" : "Project Status",
+    "filters" : "filters",
+    "projectDetails" : {
+        "title" : "title",
+        "tipology" : "Tipology",
+        "bedrooms" : "Bedrooms",
+        "bathrooms" : "Bathrooms",
+        "interiorArea" : "Interior Area",
+        "details": "details"
+
+    },
+    "status" : {
+        "completed" : "Completed",
+        "building" : "Building",
+        "open" : "Open"
+    }
+}
