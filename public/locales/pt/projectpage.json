@@ -18,5 +18,14 @@
         "completed" : "Terminado",
         "building" : "Em construção",
         "open" : "Incrições Abertas"
+    },
+    "preEnroll" : "Pré-Inscrição",
+    "form" : {
+        "firstName": "Primeiro Nome",
+        "lastName": "Último Nome",
+        "email": "Email",
+        "telephoneNumber": "Número de telefone",
+        "submit": "submeter",
+        "required": "Obrigatório"
     }
 }

@@ -23,7 +23,7 @@ import projection5 from '../../public/1/projection/projeccao5.jpg';
 import projection6 from '../../public/1/projection/projeccao6.jpg';
 import projection7 from '../../public/1/projection/projeccao7.jpg';
 import projection8 from '../../public/1/projection/projeccao8.jpg';
-import ProjectModal from '../projectModal/projectModal';
+import ProjectModal from '../modals/projectModal/projectModal';
 import { Foundation, Fullscreen, PhotoCamera, ViewInAr } from '@mui/icons-material';
 import Floorpan from '../../public/noun-floor-plan';
 

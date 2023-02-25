@@ -19,5 +19,14 @@
         "completed" : "Completed",
         "building" : "Building",
         "open" : "Open"
+    },
+    "preEnroll" : "Pre-Enroll",
+    "form" : {
+        "firstName": "First Name",
+        "lastName": "Surname",
+        "email": "Email",
+        "telephoneNumber": "Telephone Number",
+        "submit": "Submit",
+        "required": "Required"
     }
 }
