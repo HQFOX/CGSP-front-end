@@ -27,5 +27,15 @@
         "telephoneNumber": "Número de telefone",
         "submit": "submeter",
         "required": "Obrigatório"
+    },
+    "successMessage" : {
+        "success" : "Pedido de Pré-Inscrição submetido com successo.",
+        "confirmation" : "Um email de confirmação foi enviado para o email {{email}}",
+        "contactSoon" : "Entraremos em contacto consigo em breve."
+    },
+    "errorMessage" : {
+        "error" : "Erro ao subemeter Pedido de Pré-Inscrição.",
+        "reason" : "Por algum motivo o Pedido de Pré-Inscrição não foi submetido.",
+        "trySoon" : "Por favor tente mais tarde."
     }
 }

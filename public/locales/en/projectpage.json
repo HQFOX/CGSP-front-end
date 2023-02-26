@@ -28,5 +28,15 @@
         "telephoneNumber": "Telephone Number",
         "submit": "Submit",
         "required": "Required"
+    },
+    "successMessage" : {
+        "success" : "Pre-Enroll request successfully submitted.",
+        "confirmation" : "A confirmation email has been sent to {{email}}",
+        "contactSoon" : "We will contact you soon."
+    },
+    "errorMessage" : {
+        "error" : "There was an error submitting your Pre-Enroll request.",
+        "reason" : "For some reason the request was not submitted.",
+        "trySoon" : "Please try again soon."
     }
 }
