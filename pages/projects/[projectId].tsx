@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { EnrollmentModal } from '../../components/modals/enrollmentModal/enrollmentModal';
 import ProjectCarousel from '../../components/projectCarousel/ProjectCarousel';
 import TabPanel from '../../components/tabpanel/TabPanel';
+import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 
 const ProjectDetails: NextPage = () => {
   const { t, i18n } = useTranslation(['projectpage', 'common']);
@@ -65,9 +66,7 @@ In est quis minim esse eu aliquip nostrud labore sunt adipisicing adipisicing. P
             </Box>
           </TabPanel>
           <TabPanel index={2} value={value}>
-            <Stack spacing={2}>
-              <Typography>Área Exterior: 41 m2</Typography>
-            </Stack>
+              <UpdateStepper />
           </TabPanel>
         </Grid>
       </Paper>
