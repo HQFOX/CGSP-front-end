@@ -8,6 +8,21 @@ import ProjectCarousel from '../../components/projectCarousel/ProjectCarousel';
 import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 
+const updates: Update[] = [
+  {
+    title: 'APARTAMENTOS - BEJA'
+  },
+  {
+    title: 'APARTAMENTOS - BEJA'
+  },
+  {
+    title: 'APARTAMENTOS - BEJA'
+  },
+  {
+    title: 'APARTAMENTOS - BEJA'
+  }
+];
+
 const ProjectDetails: NextPage = () => {
   const { t, i18n } = useTranslation(['projectpage', 'common']);
   const [value, setValue] = useState(0);
@@ -66,7 +81,7 @@ In est quis minim esse eu aliquip nostrud labore sunt adipisicing adipisicing. P
             </Box>
           </TabPanel>
           <TabPanel index={2} value={value}>
-              <UpdateStepper />
+              <UpdateStepper updates={updates}/>
           </TabPanel>
         </Grid>
       </Paper>
