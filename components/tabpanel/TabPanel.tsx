@@ -6,7 +6,7 @@ type TabPanelProps = {
 
 export const TabPanel = ({ children, index, value }: TabPanelProps) => {
   return (
-    <div role="tabpanel" hidden={value !== index} id={`tab-panel-${index}`}>
+    <div role="tabpanel" hidden={value !== index} id={`tab-panel-${index}`} style={{width: "100%"}}>
       {children}
     </div>
   );
