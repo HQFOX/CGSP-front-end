@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Dropdown from '../components/dropdown/Dropdown';
+import { Loading } from '../components/loading/Loading';
 import ProjectCard from '../components/projects/ProjectCard';
 
 const StyledInput = styled.input({
@@ -20,6 +21,7 @@ const StyledInput = styled.input({
 })
 
 const StyledMain = styled.main({
+  minHeight: "60vh",
   backgroundColor: "#f6f6f6"
 })
 
@@ -53,12 +55,13 @@ type SearchParams = {
   wildcard: string
 }
 
-const Projects: NextPage = () => {
+const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
   const router = useRouter();
   const { t, i18n } = useTranslation(['projectpage', 'common']);
   const [search, setSearch] = useState<SearchParams>({ title: "", location: t("allf"), status: t('allm'), wildcard: ""})
-  const [projects, setProjects] = useState<Project[]>(projectData)
+  const [projects, setProjects] = useState<Project[]>(data.projects)
   const [projectSearchResults, setProjectSearchResults] = useState<Project[]>(projects)
+
   
   const handleClick = () => {
     router.push('projects/1');
@@ -208,14 +211,27 @@ const Projects: NextPage = () => {
           ))}
         </Grid>
       </Container>
+      {/* <Loading /> */}
   </StyledMain>
   );
 }
 
-export const getStaticProps = async (ctx: any) => ({
-  props: {
+// export const getStaticProps = async (ctx: any) => ({
+//   props: {
+//     ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header','projectpage']))
+//   }
+// });
+
+export const getServerSideProps = async (ctx: any) => {
+  
+  const res = await fetch(`http://localhost:8080/project`);
+  const projects = (await res.json()) as Project[];
+
+  return { props: { 
+    projects,
     ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header','projectpage']))
-  }
-});
+  }}
+
+}
 
 export default Projects;
