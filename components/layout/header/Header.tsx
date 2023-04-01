@@ -166,7 +166,7 @@ const Header = () => {
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Link key={page.id} href={page.path}>
+              <Link key={page.id} href={page.path} passHref>
                 <Button sx={{ p: 4, display: 'block' }}>{page.headerText.toUpperCase()}</Button>
               </Link>
             ))}
