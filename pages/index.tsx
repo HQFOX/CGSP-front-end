@@ -8,6 +8,13 @@ import { Box, Divider, Typography } from '@mui/material';
 import Image from 'next/image';
 import logo from '../public/logo.svg';
 import Updates from '../components/updates/Update';
+import dynamic from 'next/dynamic';
+// import { Map } from '../components/map/Map';
+
+const Map = dynamic(() => import('../components/map/Map'), {
+  ssr: false
+},
+)
 
 const Home: NextPage = () => {
   const { t, i18n } = useTranslation(['homepage', 'common']);
@@ -36,6 +43,9 @@ const Home: NextPage = () => {
         <Typography variant="h4" component="h1">
           {t('howToGetThere')}:
         </Typography>
+        <div id="map" style={{ height: 480}}>
+          <Map/>
+        </div>
       </Box>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Image src={logo} alt="logo" width={200} height={60} />

@@ -29,7 +29,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       console.log("handle Start")
       setLoading(true);
     }
-
     setAdminRoute(checkAdminRoute());
  
     const handleStop = () => {
@@ -54,6 +53,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   
   return (
     <ThemeProvider theme={theme}>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+        crossOrigin=""/>
+         <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossOrigin=""></script>
       <Layout isAdmin={isAdminRoute}>
         {loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
       </Layout>
