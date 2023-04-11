@@ -44,7 +44,7 @@ const Home: NextPage = () => {
           {t('howToGetThere')}:
         </Typography>
         <div id="map" style={{ height: 480}}>
-          <Map/>
+          <Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>
         </div>
       </Box>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
