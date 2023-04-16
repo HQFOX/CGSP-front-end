@@ -72,7 +72,6 @@ export const UpdateStepper = ({updates}:{updates: Update[]}) => {
             updateRender.push(<Seperator key={index+"seperator"} />)
 
         })
-        console.log(updateRender)
         return updateRender;
         
     }, [updates]);

@@ -8,10 +8,15 @@ import theme from "../../theme";
 interface MapProps {
     centerCoordinates: LatLngTuple,
     markers?: LatLngTuple[],
+    zoom?: number,
 }
 
+const StyledMarker = styled(Marker)({
+
+})
+
 const iconMarkup = renderToStaticMarkup(
-    <RoomIcon />
+    <RoomIcon style={{ color: theme.palette.primary.main, fontSize: 50, position: "absolute", top: "-27px", left: "-20px" }}/>
   );
   const customMarkerIcon = divIcon({
     html: iconMarkup
@@ -19,10 +24,11 @@ const iconMarkup = renderToStaticMarkup(
 
 
 
-const Map = ({ centerCoordinates, markers }: MapProps) => {
+const Map = ({ centerCoordinates, markers, zoom = 13 }: MapProps) => {
+
 
     return (
-        <MapContainer center={centerCoordinates} zoom={13} scrollWheelZoom={false} style={{ width: "100%", height: "100%" }}>
+        <MapContainer center={centerCoordinates} zoom={zoom} scrollWheelZoom={false} style={{ width: "100%", height: "100%" }}>
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

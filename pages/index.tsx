@@ -9,6 +9,8 @@ import Image from 'next/image';
 import logo from '../public/logo.svg';
 import Updates from '../components/updates/Update';
 import dynamic from 'next/dynamic';
+import styled from '@emotion/styled';
+import theme from '../theme';
 // import { Map } from '../components/map/Map';
 
 const Map = dynamic(() => import('../components/map/Map'), {
@@ -16,11 +18,18 @@ const Map = dynamic(() => import('../components/map/Map'), {
 },
 )
 
+const StyledMain = styled("main")({
+  backgroundColor: theme.bg.main
+})
+
+
+
+
 const Home: NextPage = () => {
   const { t, i18n } = useTranslation(['homepage', 'common']);
 
   return (
-    <main className={styles.container && styles.main}>
+    <StyledMain className={styles.container && styles.main}>
       <CGSPCarousel />
       <Box
         sx={(theme) => ({
@@ -31,7 +40,7 @@ const Home: NextPage = () => {
           {t('aboutUsTitle')}
         </Typography>
         <Divider />
-        <Typography variant="h6" component="h2">
+        <Typography variant="h6" component="h2" style={{ whiteSpace: "pre-wrap" }}>
           {t('aboutUsText')}
         </Typography>
       </Box>
@@ -53,8 +62,7 @@ const Home: NextPage = () => {
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Updates />
       </div>
-      <Button variant="contained">{t('h1', { ns: 'common' })}</Button>
-    </main>
+    </StyledMain>
   );
 };
 

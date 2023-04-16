@@ -26,7 +26,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const handleStart = () => {
-      console.log("handle Start")
       setLoading(true);
     }
     setAdminRoute(checkAdminRoute());

@@ -10,6 +10,7 @@ import Dropdown from '../components/dropdown/Dropdown';
 import ProjectCard from '../components/projects/ProjectCard';
 import { NextConfig } from 'next';
 import dynamic from 'next/dynamic';
+import { ProjectTable } from '../components/tables/ProjectTable';
 
 const Map = dynamic(() => import('../components/map/Map'), {
   ssr: false
@@ -76,7 +77,7 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
 
   const [view, setView ] = useState<ViewType>("card");
 
-  
+
   const handleClick = () => {
     router.push('projects/1');
   };
@@ -230,9 +231,10 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
         </Grid>
         {view === "map" && 
           <div id="map" style={{ height: 480, padding: "8px"}}>
-              <Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>
+              <Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={projectSearchResults.map( project => project.coordinates)} zoom={6}/>
           </div>
         }
+        {view === "list" && <ProjectTable />}
       </Container>
   </StyledMain>
   );

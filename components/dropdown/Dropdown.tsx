@@ -2,6 +2,7 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ExpandLess } from "@mui/icons-material";
+import styled from "@emotion/styled";
 
 type DropdownProps = {
     options: string[];
@@ -9,6 +10,10 @@ type DropdownProps = {
     label: string;
     valueChange: (value:string) => void;
 }
+
+const StyledButton = styled(Button)({
+    textTransform: "none"
+})
 
 const Dropdown = ({options, displayValue, label, valueChange}: DropdownProps) => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -27,7 +32,7 @@ const Dropdown = ({options, displayValue, label, valueChange}: DropdownProps) =>
 
     return (
         <>
-            <Button
+            <StyledButton
                 id={label + "dropdown"}
                 aria-haspopup="true"
                 onClick={handleClick}
@@ -35,7 +40,7 @@ const Dropdown = ({options, displayValue, label, valueChange}: DropdownProps) =>
                 variant="outlined"
                 >
                 {displayValue}
-            </Button>
+            </StyledButton>
             <Menu
                 id={label + "menu"}
                 anchorEl={anchorEl}
