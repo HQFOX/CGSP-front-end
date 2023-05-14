@@ -32,7 +32,6 @@ const Header = () => {
 
   const [language, setLanguage] = useState(router.locale);
 
-  // useEffect(() => {}, [language]);
 
   const pages = [
     {
