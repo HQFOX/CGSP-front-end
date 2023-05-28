@@ -27,7 +27,7 @@ const pages = [
   {
     id: 4,
     text: 'Enroll Requests',
-    path: '/admin/enroll',
+    path: '/admin/enrollrequests',
     icon: <AccountBox />
   }
 ];

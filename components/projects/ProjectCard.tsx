@@ -39,7 +39,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           <Grid container>
             <Grid item md={6}>
               <StyledTypography variant="body2" color="text.secondary">
-                <Home sx={{marginRight: "5px"}}/>{t("projectDetails.tipology")}: T4
+                <Home sx={{marginRight: "5px"}}/>{t("projectDetails.typology")}: T4
               </StyledTypography>
             </Grid>
             <Grid item md={6}>

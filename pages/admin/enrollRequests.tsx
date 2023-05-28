@@ -1,17 +1,32 @@
+import styled from '@emotion/styled';
+import { Container, Typography } from '@mui/material';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { EnrollRequestTable } from '../../components/enrollrequests/EnrollRequestTable';
 
-const EnrollRequestsAdmin: NextPage = () => {
-  return <h2> hello world from enroll requests page </h2>;
+const StyledMain = styled.main({
+  minHeight: "70vh",
+  backgroundColor: "#f6f6f6"
+})
+
+const EnrollRequestsAdmin: NextPage<{ requests: EnrollRequest[] }> = (data) => {
+  return (
+    <StyledMain>
+    <Container sx={{ pt: 10, pb: 10 }}>
+      <Typography variant={"h4"}>Enroll Request Table</Typography>
+      <EnrollRequestTable requests={data.requests}/>
+    </Container>
+  </StyledMain>
+  );
 };
 
 export const getServerSideProps = async (ctx: any) => {
-  //   const res = await fetch(`http://localhost:8080/project`);
-  //   const projects = (await res.json()) as Project[];
+    const res = await fetch(`http://localhost:8080/enroll`);
+    const requests = (await res.json()) as EnrollRequest[];
 
   return {
     props: {
-      //   projects,
+        requests,
       ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header']))
     }
   };

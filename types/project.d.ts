@@ -1,11 +1,12 @@
 type Project = {
+  id?: string;
   title: string;
   location?: string;
   status?: "completed" | "building" | "open"
 };
 
 type ProjectDetails = {
-  tipology: string;
+  typology: string;
   bedroomNumber: string;
   bathroomNumber: string;
 }

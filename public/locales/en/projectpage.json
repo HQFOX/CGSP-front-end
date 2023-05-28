@@ -8,7 +8,7 @@
     "filters" : "filters",
     "projectDetails" : {
         "title" : "title",
-        "tipology" : "Tipology",
+        "typology" : "Typology",
         "bedrooms" : "Bedrooms",
         "bathrooms" : "Bathrooms",
         "interiorArea" : "Interior Area",
