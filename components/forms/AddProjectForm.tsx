@@ -1,15 +1,32 @@
-import { Button, Chip, Grid, InputLabel, MenuItem, Select, Autocomplete, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  Chip,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Autocomplete,
+  TextField,
+  Typography,
+  Box,
+  IconButton
+} from '@mui/material';
+import Image from 'next/image';
 import { useFormik } from 'formik';
-import { KeyboardEvent } from 'react';
+import { KeyboardEvent, useState } from 'react';
+import Dropzone from 'react-dropzone';
 import * as Yup from 'yup';
+import { Cancel } from '@mui/icons-material';
 
 export const AddProjectForm = () => {
+  const [file, setFile] = useState<File[]>();
+
   const formik = useFormik({
     initialValues: {
       title: '',
       status: '',
       location: '',
-      typology: ["T1", "T2"],
+      typology: [],
       bedroomNumber: '',
       bathroomNumber: '',
       latitude: '',
@@ -61,22 +78,29 @@ export const AddProjectForm = () => {
   });
 
   const handleTypologyDelete = (option: string | string[]) => {
-    console.log(option)
-    formik.setValues({...formik.values, typology: formik.values.typology.filter( value => value != option) })
-  }
+    console.log(option);
+    formik.setValues({
+      ...formik.values,
+      typology: formik.values.typology.filter((value) => value != option)
+    });
+  };
 
   const handleTypologyAdd = (option: string | string[]) => {
-    console.log(option)
-    formik.setValues({...formik.values, typology: formik.values.typology.concat(option) })
-  }
+    console.log(option);
+    formik.setValues({ ...formik.values, typology: formik.values.typology.concat(option) });
+  };
 
   const handleKeyDown = (e: KeyboardEvent<any>) => {
-    e.key === "Enter" ? handleTypologyAdd(e.target.value) : undefined
+    e.key === 'Enter' ? handleTypologyAdd(e.target.value) : undefined;
+  };
+
+  const handleDeleteFile = () => {
+    setFile([])
   }
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container rowSpacing={4}>
+      <Grid container rowSpacing={4} mt={2}>
         <Grid item>
           <Typography variant={'h4'}>Adicionar Projeto</Typography>
         </Grid>
@@ -84,7 +108,7 @@ export const AddProjectForm = () => {
           <TextField
             id="title"
             name="title"
-            label={'title'}
+            label={'Nome do projeto'}
             value={formik.values.title}
             onChange={formik.handleChange}
             error={formik.touched.title && Boolean(formik.errors.title)}
@@ -97,22 +121,21 @@ export const AddProjectForm = () => {
           <Select
             labelId="status-select-dropdown-label"
             id="status-select-dropdown"
-            name='status'
+            name="status"
             value={formik.values.status}
             error={formik.touched.status && Boolean(formik.errors.status)}
             onChange={formik.handleChange}
-            sx={{ width: "100%" }}
-            >
-            <MenuItem value={"Status"}>Status</MenuItem>
-            <MenuItem value={"Completed"}>Completo</MenuItem>
-            <MenuItem value={"History"}>Histórico</MenuItem>
+            sx={{ width: '100%' }}>
+            <MenuItem value={'Status'}>Status</MenuItem>
+            <MenuItem value={'Completed'}>Completo</MenuItem>
+            <MenuItem value={'History'}>Histórico</MenuItem>
           </Select>
         </Grid>
         <Grid item xs={12}>
           <TextField
             id="location"
             name="location"
-            label={'location'}
+            label={'Localização (Cidade)'}
             value={formik.values.location}
             onChange={formik.handleChange}
             error={formik.touched.location && Boolean(formik.errors.location)}
@@ -128,17 +151,24 @@ export const AddProjectForm = () => {
             value={formik.values.typology}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
-                <Chip variant="outlined" label={option} {...getTagProps({ index })} onDelete={() => handleTypologyDelete(option)} />
+                <Chip
+                  variant="outlined"
+                  label={option}
+                  {...getTagProps({ index })}
+                  onDelete={() => handleTypologyDelete(option)}
+                />
               ))
             }
-            renderInput={(params) => <TextField {...params} label={"typology"} onKeyDown={(e) => handleKeyDown(e)}/>}
+            renderInput={(params) => (
+              <TextField {...params} label={'typology'} onKeyDown={(e) => handleKeyDown(e)} />
+            )}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             id="bedroomNumber"
             name="bedroomNumber"
-            label={'bedroomNumber'}
+            label={'Número de quartos'}
             value={formik.values.bedroomNumber}
             onChange={formik.handleChange}
             error={formik.touched.bedroomNumber && Boolean(formik.errors.bedroomNumber)}
@@ -150,7 +180,7 @@ export const AddProjectForm = () => {
           <TextField
             id="bathroomNumber"
             name="bathroomNumber"
-            label={'bathroomNumber'}
+            label={'Número de casas de banho'}
             value={formik.values.bathroomNumber}
             onChange={formik.handleChange}
             error={formik.touched.bathroomNumber && Boolean(formik.errors.bathroomNumber)}
@@ -182,10 +212,43 @@ export const AddProjectForm = () => {
             fullWidth
           />
         </Grid>
-        <Grid item>
-          <Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
-            {'Submit'}
-          </Button>
+        <Grid item xs={6}>
+          <Typography variant="h6">Adicionar Foto de Capa</Typography>
+          <Dropzone onDrop={setFile}>
+            {({ getRootProps, getInputProps }) => (
+              <Box
+                {...getRootProps()}
+                sx={{ border: `2px dashed orange`, display: "flex", justifyContent: "center", alignItems: "center"}}
+                padding={4}
+                
+                >
+                <input {...getInputProps()} />
+                {file && file?.length > 0 ? (
+                  <div style={{position: "relative" }}>
+                    <Image
+                      src={URL.createObjectURL(file[0])}
+                      width= '200px'
+                      height= '200px'
+                    />
+                    <IconButton aria-label="delete" sx={{ position: "absolute", top: "-15px", right: "-15px"}}  color="secondary" onClick={handleDeleteFile}>
+                      <Cancel />
+                    </IconButton>
+                    
+                  </div>
+
+                ) : (
+                  <Typography variant="h6">Arraste ou clique para adicionar um ficheiro</Typography>
+                )}
+              </Box>
+            )}
+          </Dropzone>
+        </Grid>
+        <Grid container>
+          <Grid item>
+            <Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
+              {'Submit'}
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     </form>
