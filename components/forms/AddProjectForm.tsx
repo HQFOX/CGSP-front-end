@@ -8,15 +8,11 @@ import {
   Autocomplete,
   TextField,
   Typography,
-  Box,
-  IconButton
 } from '@mui/material';
-import Image from 'next/image';
 import { useFormik } from 'formik';
 import { KeyboardEvent, useState } from 'react';
-import Dropzone from 'react-dropzone';
 import * as Yup from 'yup';
-import { Cancel } from '@mui/icons-material';
+import { CGSPDropzone } from '../dropzone/Dropzone';
 
 export const AddProjectForm = () => {
   const [file, setFile] = useState<File[]>();
@@ -26,7 +22,7 @@ export const AddProjectForm = () => {
       title: '',
       status: '',
       location: '',
-      typology: [],
+      typology: [] as string[],
       bedroomNumber: '',
       bathroomNumber: '',
       latitude: '',
@@ -85,18 +81,21 @@ export const AddProjectForm = () => {
     });
   };
 
-  const handleTypologyAdd = (option: string | string[]) => {
-    console.log(option);
-    formik.setValues({ ...formik.values, typology: formik.values.typology.concat(option) });
+  const handleTypologyAdd = (option: string) => {
+    formik.setValues({ ...formik.values, typology: formik.values.typology.concat(option) })
   };
 
   const handleKeyDown = (e: KeyboardEvent<any>) => {
     e.key === 'Enter' ? handleTypologyAdd(e.target.value) : undefined;
   };
 
-  const handleDeleteFile = () => {
-    setFile([])
+  const handleAddFile = (files: File[]) => {
+    setFile([...files])
   }
+
+  const handleDeleteFile = () => {
+    setFile([]);
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -214,41 +213,13 @@ export const AddProjectForm = () => {
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h6">Adicionar Foto de Capa</Typography>
-          <Dropzone onDrop={setFile}>
-            {({ getRootProps, getInputProps }) => (
-              <Box
-                {...getRootProps()}
-                sx={{ border: `2px dashed orange`, display: "flex", justifyContent: "center", alignItems: "center"}}
-                padding={4}
-                
-                >
-                <input {...getInputProps()} />
-                {file && file?.length > 0 ? (
-                  <div style={{position: "relative" }}>
-                    <Image
-                      src={URL.createObjectURL(file[0])}
-                      width= '200px'
-                      height= '200px'
-                    />
-                    <IconButton aria-label="delete" sx={{ position: "absolute", top: "-15px", right: "-15px"}}  color="secondary" onClick={handleDeleteFile}>
-                      <Cancel />
-                    </IconButton>
-                    
-                  </div>
-
-                ) : (
-                  <Typography variant="h6">Arraste ou clique para adicionar um ficheiro</Typography>
-                )}
-              </Box>
-            )}
-          </Dropzone>
+          <CGSPDropzone maxContent={1} files={file} onAddFile={handleAddFile}  onDeleteFile={handleDeleteFile}/>
         </Grid>
-        <Grid container>
-          <Grid item>
-            <Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
-              {'Submit'}
-            </Button>
-          </Grid>
+        <Grid item xs={6}></Grid>
+        <Grid item>
+          <Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
+            {'Submit'}
+          </Button>
         </Grid>
       </Grid>
     </form>
