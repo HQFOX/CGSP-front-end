@@ -1,9 +1,8 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import Layout from '../components/layout';
+import Layout from '../components/layout/layout';
 import { ThemeProvider } from '@emotion/react';
 import theme from '../theme';
-import { Head } from 'next/document';
 import { appWithTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -14,18 +13,34 @@ function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(true);
 
+  const [isAdmin, setAdmin] = useState(true);
+
+  const checkAdminRoute = () => {
+    if(router.pathname.includes("/admin") && isAdmin){
+      return true;
+    }
+    return false;
+  }
+
+  const [isAdminRoute, setAdminRoute] = useState(checkAdminRoute());
+
   useEffect(() => {
     const handleStart = () => {
       console.log("handle Start")
       setLoading(true);
     }
 
+    setAdminRoute(checkAdminRoute());
+ 
     const handleStop = () => {
       setLoading(false);
     }
 
+
+
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleStop)
+    router.events.on('routeChangeError', handleStop)
 
     return () => {
       router.events.off('routeChangeStart', handleStart)
@@ -39,9 +54,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   
   return (
     <ThemeProvider theme={theme}>
-      <Layout>
+      <Layout isAdmin={isAdminRoute}>
         {loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
-        
       </Layout>
     </ThemeProvider>
   );

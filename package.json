@@ -22,6 +22,7 @@
     "next-i18next": "^11.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-i18next": "^11.18.3",
     "react-material-ui-carousel": "^3.4.2",
     "yup": "^1.0.0"
