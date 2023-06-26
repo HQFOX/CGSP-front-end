@@ -40,7 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleStop)
-    router.events.on('routeChangeError', handleStart)
+    router.events.on('routeChangeError', handleStop)
 
     return () => {
       router.events.off('routeChangeStart', handleStart)

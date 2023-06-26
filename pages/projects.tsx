@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import Dropdown from '../components/dropdown/Dropdown';
 import { Loading } from '../components/loading/Loading';
 import ProjectCard from '../components/projects/ProjectCard';
+import { NextConfig } from 'next';
 
 const StyledInput = styled.input({
   fontSize: "1rem",
@@ -224,7 +225,7 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
 
 export const getServerSideProps = async (ctx: any) => {
   
-  const res = await fetch(`http://localhost:8080/project`);
+  const res = await fetch(`${process.env.API_URL}/project`);
   const projects = (await res.json()) as Project[];
 
   return { props: { 

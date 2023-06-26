@@ -23,9 +23,10 @@ export const CGSPDropzone = ({
   const [errors, setErrors] = useState<FileError[]>([]);
 
   const handleAddFile = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+    console.log(acceptedFiles);
     setErrors([]);
-    onAddFile(acceptedFiles);
-    setErrors(fileRejections[0].errors);
+    if (acceptedFiles.length > 0) onAddFile(acceptedFiles);
+    if (fileRejections.length > 0) setErrors(fileRejections[0].errors);
   };
 
   const handleDeleteFile = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,7 +49,8 @@ export const CGSPDropzone = ({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: theme.palette.background.paper
+              backgroundColor: theme.palette.background.paper,
+              minHeight: "250px",
             }}
             padding={4}>
             <input {...getInputProps()} />
@@ -56,9 +58,9 @@ export const CGSPDropzone = ({
               <div style={{ position: 'relative' }}>
                 <Image
                   src={URL.createObjectURL(files[0])}
-                  width="100%"
-                  height="100%"
-                  objectFit="contain"
+                  objectFit='cover'
+                  width={300}
+                  height={300}
                 />
                 <IconButton
                   aria-label="delete"

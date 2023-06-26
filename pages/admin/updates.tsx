@@ -27,7 +27,7 @@ const UpdateAdmin: NextPage<{updates: Update[] }> = ( data ) => {
 };
 
 export const getServerSideProps = async (ctx: any) => {
-      const res = await fetch(`http://localhost:8080/update`);
+      const res = await fetch(`${process.env.API_URL}/update`);
       const updates = (await res.json()) as Update[];
   
     return {

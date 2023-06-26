@@ -17,7 +17,7 @@ export const AddUpdateForm = () => {
 
       // alert(JSON.stringify(values, null, 2));
 
-      const endpoint = 'http://localhost:8080/update';
+      const endpoint = `${process.env.API_URL}/project`;
 
       const options = {
         // The method is POST because we are sending data.

@@ -21,7 +21,7 @@ const EnrollRequestsAdmin: NextPage<{ requests: EnrollRequest[] }> = (data) => {
 };
 
 export const getServerSideProps = async (ctx: any) => {
-    const res = await fetch(`http://localhost:8080/enroll`);
+    const res = await fetch(`${process.env.API_URL}/enroll`);
     const requests = (await res.json()) as EnrollRequest[];
 
   return {

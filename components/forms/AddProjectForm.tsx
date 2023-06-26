@@ -14,8 +14,14 @@ import { KeyboardEvent, useState } from 'react';
 import * as Yup from 'yup';
 import { CGSPDropzone } from '../dropzone/Dropzone';
 
+export const uploadImages = ( path: string, files: File[]) => {
+  // Todo: this is a simulation and should be replaced
+
+  files.map( file => { console.log(file) })
+}
+
 export const AddProjectForm = () => {
-  const [file, setFile] = useState<File[]>();
+  const [file, setFile] = useState<File[]>([]);
 
   const formik = useFormik({
     initialValues: {
@@ -51,9 +57,7 @@ export const AddProjectForm = () => {
 
       const jsonData = JSON.stringify(formatValue);
 
-      // alert(JSON.stringify(values, null, 2));
-
-      const endpoint = 'http://localhost:8080/project';
+      const endpoint = `${process.env.API_URL}/project`;
 
       const options = {
         // The method is POST because we are sending data.

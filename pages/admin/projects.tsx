@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button, Container, Grid, TextField, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
@@ -13,7 +13,7 @@ const StyledMain = styled.main({
 
 const ProjectAdmin: NextPage<{ projects: Project[] }> = ( data ) => {
   
-  const [projects, setProjects] = useState<Project[]>(data.projects)
+  const [projects] = useState<Project[]>(data.projects)
 
 
   return (
@@ -28,7 +28,7 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = ( data ) => {
 };
 
 export const getServerSideProps = async (ctx: any) => {
-      const res = await fetch(`http://localhost:8080/project`);
+      const res = await fetch(`${process.env.API_URL}/project`);
       const projects = (await res.json()) as Project[];
   
     return {
