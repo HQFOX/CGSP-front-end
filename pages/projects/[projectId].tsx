@@ -8,10 +8,12 @@ import ProjectCarousel from '../../components/projectCarousel/ProjectCarousel';
 import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import dynamic from 'next/dynamic';
+import { Loading } from '../../components/loading/Loading';
 // import  Map from '../../components/map/Map';
 
 const Map = dynamic(() => import('../../components/map/Map'), {
-  ssr: false
+  ssr: false,
+  loading: () => <Loading />,
 },
 )
 
@@ -32,7 +34,7 @@ const updates: Update[] = [
 
 const ProjectDetails: NextPage = () => {
   const { t, i18n } = useTranslation(['projectpage', 'common']);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(3);
   const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -91,9 +93,11 @@ In est quis minim esse eu aliquip nostrud labore sunt adipisicing adipisicing. P
               <UpdateStepper updates={updates}/>
           </TabPanel>
           <TabPanel index={3} value={value}>
-              <div id="map" style={{ height: 480}}>
-                <Map centerCoordinates={[38.56633674453089, -7.925327404275489]}/>
-            </div>
+          <Box>
+          <div id="map" style={{ height: 480}}>
+            <Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>
+          </div>
+          </Box>
           </TabPanel>
         </Grid>
       </Paper>
