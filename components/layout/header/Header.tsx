@@ -175,20 +175,24 @@ const Header = ({ admin = false, setOpen }: HeaderProps) => {
               ))}
             </Menu>
           </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
             {pages.map((page) => (
               <Link key={page.id} href={page.path} passHref>
-                <Button sx={{ p: 4, display: 'block' }}>{page.headerText.toUpperCase()}</Button>
+                <Button 
+                  sx={{ padding: "13px", display: 'block', borderRadius: "60px", color: "white", textTransform: "none", textAlign: "center", fontWeight: "700"}}
+                  disableElevation variant='contained'>
+                    {page.headerText}
+                </Button>
               </Link>
             ))}
-            <Box m="auto" sx={{ mr: 0 }}>
+            {/* <Box sx={{ mr: 0, justifyContent: "center" }}> */}
               <Button
                 id="languageDropdown"
                 aria-haspopup="true"
                 onClick={handleClick}
                 endIcon={<ExpandMoreIcon />}
                 variant="outlined"
-                sx={{ maxHeight: 40 }}>
+                sx={{ maxHeight: 40, textTransform: "none" }}>
                 {t(`languages.${language}`)}
               </Button>
               <Menu
@@ -205,7 +209,7 @@ const Header = ({ admin = false, setOpen }: HeaderProps) => {
                   </MenuItem>
                 ))}
               </Menu>
-            </Box>
+            {/* </Box> */}
           </Box>
         </Toolbar>
       </Container>

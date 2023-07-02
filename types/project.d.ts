@@ -2,7 +2,8 @@ type Project = {
   id?: string;
   title: string;
   location?: string;
-  status?: "completed" | "building" | "open"
+  status?: "completed" | "building" | "open";
+  coordinates?: any;
 };
 
 type ProjectDetails = {

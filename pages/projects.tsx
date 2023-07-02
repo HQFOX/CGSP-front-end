@@ -1,15 +1,21 @@
 import styled from '@emotion/styled';
-import { Search, Tune, Map, MapOutlined, GridView, ViewListOutlined } from '@mui/icons-material';
-import { Box, Container, Divider, Grid, TextField, Typography, Button, Paper, IconButton } from '@mui/material';
+import { Search, Tune, Map as MapIcon, MapOutlined, GridView, ViewListOutlined } from '@mui/icons-material';
+import { Box, Container, Divider, Grid, Typography, Button, Paper, IconButton } from '@mui/material';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Dropdown from '../components/dropdown/Dropdown';
-import { Loading } from '../components/loading/Loading';
 import ProjectCard from '../components/projects/ProjectCard';
 import { NextConfig } from 'next';
+import dynamic from 'next/dynamic';
+import { ProjectTable } from '../components/tables/ProjectTable';
+
+const Map = dynamic(() => import('../components/map/Map'), {
+  ssr: false
+},
+)
 
 const StyledInput = styled.input({
   fontSize: "1rem",
@@ -22,7 +28,7 @@ const StyledInput = styled.input({
 })
 
 const StyledMain = styled.main({
-  minHeight: "60vh",
+  minHeight: "calc(100vh - 190px)",
   backgroundColor: "#f6f6f6"
 })
 
@@ -56,14 +62,22 @@ type SearchParams = {
   wildcard: string
 }
 
+type ViewType = "card" | "list" | "map";
+
 const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
   const router = useRouter();
+
   const { t, i18n } = useTranslation(['projectpage', 'common']);
-  const [search, setSearch] = useState<SearchParams>({ title: "", location: t("allf"), status: t('allm'), wildcard: ""})
-  const [projects, setProjects] = useState<Project[]>(data.projects)
+
+  const [search, setSearch] = useState<SearchParams>({ title: "", location: t("allf"), status: t('allm'), wildcard: ""});
+
+  const [projects, setProjects] = useState<Project[]>(data.projects);
+
   const [projectSearchResults, setProjectSearchResults] = useState<Project[]>(projects)
 
-  
+  const [view, setView ] = useState<ViewType>("card");
+
+
   const handleClick = () => {
     router.push('projects/1');
   };
@@ -142,6 +156,10 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
     setSearch(search => ({...search, location: location}))
   }
 
+  const handleViewChange = (view: ViewType) => {
+    setView(view);
+  }
+
   const handleStatusChange = (status:string) => {
     switch(status)
     {
@@ -175,7 +193,7 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
           </Typography>
           <Divider />
         </Box>
-        <Paper sx={{ ml: 1, mr: 1, p:2}}>
+        <Paper sx={{ ml: 1, mr: 1, p:2, mb:2 }}>
           <Grid container spacing={2}>
             <Grid item>
               <Button size={"large"} variant={"outlined"} startIcon={<Search/>} disableRipple>
@@ -183,13 +201,13 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
               </Button>
             </Grid>
             <Grid item sx={{ml:'auto'}}>
-              <IconButton aria-label='map view'><MapOutlined/></IconButton>
+              <IconButton aria-label='map view' onClick={() => handleViewChange("map")} color={view === "map"? 'primary' : 'default'}><MapOutlined/></IconButton>
             </Grid>
             <Grid item>
-              <IconButton aria-label='grid view'><GridView/></IconButton>
+              <IconButton aria-label='card view' onClick={() => handleViewChange("card")} color={view === "card"? 'primary' : 'default'}><GridView/></IconButton>
             </Grid>
             <Grid item>
-              <IconButton aria-label='grid view'><ViewListOutlined/></IconButton>
+              <IconButton aria-label='list view'onClick={() => handleViewChange("list")} color={view === "list"? 'primary' : 'default'}><ViewListOutlined/></IconButton>
             </Grid>
             <Grid item>
               <Typography sx={{mr: 1, verticalAlign: "middle"}} component={"span"} variant="body1">{t("projectStatusFilterLabel")}: </Typography>
@@ -205,23 +223,22 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
           </Grid>
         </Paper>
         <Grid container>
-          {projectSearchResults.map((project, i) => (
+          {view === "card" && projectSearchResults.map((project, i) => (
             <Grid key={i} item xs={12} md={6} p={1} onClick={handleClick}>
               <ProjectCard key={i} project={project} />
             </Grid>
           ))}
         </Grid>
+        {view === "map" && 
+          <div id="map" style={{ height: 480, padding: "8px"}}>
+              <Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={projectSearchResults.map( project => project.coordinates)} zoom={6}/>
+          </div>
+        }
+        {view === "list" && <ProjectTable />}
       </Container>
-      {/* <Loading /> */}
   </StyledMain>
   );
 }
-
-// export const getStaticProps = async (ctx: any) => ({
-//   props: {
-//     ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header','projectpage']))
-//   }
-// });
 
 export const getServerSideProps = async (ctx: any) => {
   

@@ -4,6 +4,7 @@ import carousel1 from '../../public/carousel1.jpg';
 import carousel2 from '../../public/carousel2.jpg';
 import carousel3 from '../../public/carousel3.jpg';
 import CarouselCard from './CarouselCard';
+import theme from '../../theme';
 
 const items = [
   {
@@ -31,7 +32,13 @@ const CGSPCarousel: React.FC = () => {
         style: {
           marginTop: '1em'
         }
-      }}>
+      }}
+      activeIndicatorIconButtonProps={{
+        style: {
+            color: theme.palette.primary.main,
+          }
+      }}
+      >
       {items.map((item, i) => (
         <CarouselCard key={i} index={`${i}`} item={item} />
       ))}
