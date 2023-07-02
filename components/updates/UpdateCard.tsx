@@ -20,9 +20,9 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
           30 de Setembro de 2022
         </Typography>
       </Box>
-      <Box sx={{ width: 1 }}>
-        <Image src={example} />
-      </Box>
+      <div style={{width: '100%', height: '60vh', position: 'relative'}}>
+        <Image src={example} alt={''} fill />
+      </div>
       <Box sx={{ p: 4 }}>
         <Typography variant="body2" color="text.secondary">
           This impressive paella is a perfect party dish and a fun meal to cook together with your
