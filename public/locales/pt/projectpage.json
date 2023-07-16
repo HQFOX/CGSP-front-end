@@ -8,6 +8,15 @@
     "filters" : "filtros",
     "projectDetails" : {
         "title" : "título",
+        "typologies" : "Tipologias",
+        "bedrooms" : "Quartos",
+        "bathrooms" : "Casas de banho",
+        "interiorArea" : "Área Interior",
+        "details": "detalhes",
+        "lots": "Lotes",
+        "assignedLots": "Lotes Atribuídos"
+    },
+    "typologyDetails" : {
         "typology" : "Tipologia",
         "bedrooms" : "Quartos",
         "bathrooms" : "Casas de banho",

@@ -11,61 +11,64 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import example from '../../public/carousel1.jpg';
-import { Bathtub, Home, KingBed, SquareFoot } from '@mui/icons-material';
+import { Bathtub, Home, HomeWork, HowToReg, KingBed, SquareFoot } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 
 const StyledTypography = styled(Typography)({
-  display: "flex",
-  alignItems: "end",
-})
+  display: 'flex',
+  alignItems: 'end'
+});
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
   const { t, i18n } = useTranslation(['projectpage', 'common']);
-  
+
   return (
     <Card>
       <CardActionArea>
         <CardHeader title={project.title} subheader={`Localização: ${project.location}`} />
         <CardMedia>
-          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-            <Image
-              src={example}
-              objectFit="contain" // or objectFit="cover"
-            />
+          <div style={{ position: 'relative', overflow: 'hidden', height: '400px' }}>
+            <Image src={example} alt={`cover image for ${project.title} project`} fill={true} style={{ objectFit: 'cover' }} />
           </div>
         </CardMedia>
         <CardContent>
           <Grid container>
             <Grid item md={6}>
               <StyledTypography variant="body2" color="text.secondary">
-                <Home sx={{marginRight: "5px"}}/>{t("projectDetails.typology")}: T4
+                <HomeWork sx={{ marginRight: '5px' }} />
+                {t('projectDetails.typologies')}: {project.typologies?.map( details => details.typology )}
               </StyledTypography>
             </Grid>
             <Grid item md={6}>
               <StyledTypography variant="body2" color="text.secondary">
-                <Bathtub sx={{marginRight: "5px"}}/>{t("projectDetails.bathrooms")}: 2
+                <Home sx={{ marginRight: '5px' }} />
+                {t('projectDetails.lots')}: {project.lots}
               </StyledTypography>
             </Grid>
             <Grid item md={6}>
               <StyledTypography variant="body2" color="text.secondary">
-                <SquareFoot sx={{marginRight: "5px"}}/>{t("projectDetails.interiorArea")}: T4
+                <HowToReg sx={{ marginRight: '5px' }} />
+                {t('projectDetails.assignedLots')}: {project.assignedLots}
               </StyledTypography>
             </Grid>
             <Grid item md={6}>
               <StyledTypography variant="body2" color="text.secondary">
-                <KingBed sx={{marginRight: "5px"}}/>{t("projectDetails.bedrooms")}: 4
+                <KingBed sx={{ marginRight: '5px' }} />
+                {t('projectDetails.bedrooms')}: 4
               </StyledTypography>
             </Grid>
           </Grid>
           <StyledTypography variant="body2" color="text.secondary">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
           </StyledTypography>
         </CardContent>
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">
-          {t("projectDetails.details")}
+          {t('projectDetails.details')}
         </Button>
       </CardActions>
     </Card>

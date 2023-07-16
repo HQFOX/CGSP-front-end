@@ -8,12 +8,20 @@
     "filters" : "filters",
     "projectDetails" : {
         "title" : "title",
+        "typologies" : "Typologies",
+        "bedrooms" : "Bedrooms",
+        "bathrooms" : "Bathrooms",
+        "interiorArea" : "Interior Area",
+        "details": "details",
+        "lots": "Lots",
+        "assignedLots": "Assigned Lots"
+    },
+    "typologyDetails" : {
         "typology" : "Typology",
         "bedrooms" : "Bedrooms",
         "bathrooms" : "Bathrooms",
         "interiorArea" : "Interior Area",
         "details": "details"
-
     },
     "status" : {
         "completed" : "Completed",
