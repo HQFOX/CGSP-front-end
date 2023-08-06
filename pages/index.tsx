@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
 import styles from '../styles/Home.module.css';
-import Button from '@mui/material/Button';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import CGSPCarousel from '../components/carousel/Carousel';
@@ -11,7 +10,6 @@ import Updates from '../components/updates/Update';
 import dynamic from 'next/dynamic';
 import styled from '@emotion/styled';
 import theme from '../theme';
-// import { Map } from '../components/map/Map';
 
 const Map = dynamic(() => import('../components/map/Map'), {
   ssr: false
@@ -25,7 +23,7 @@ const StyledMain = styled("main")({
 
 
 
-const Home: NextPage = () => {
+const Home: NextPage<{updates : Update[] }> = ( data ) => {
   const { t, i18n } = useTranslation(['homepage', 'common']);
 
   return (
@@ -60,16 +58,21 @@ const Home: NextPage = () => {
         <Image src={logo} alt="logo" width={200} height={60} />
       </div>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Updates />
+        <Updates updates={data.updates}/>
       </div>
     </StyledMain>
   );
 };
 
-export const getStaticProps = async (ctx: any) => ({
-  props: {
-    ...(await serverSideTranslations(ctx.locale, ['common', 'homepage', 'footer', 'header']))
-  }
-});
+export const getServerSideProps = async (ctx: any) => {
+  
+  const res = await fetch(`${process.env.API_URL}/update`);
+  const updates = (await res.json()) as Update[];
+
+  return { props: { 
+    updates,
+    ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header', "homepage"]))
+  }}
+}
 
 export default Home;

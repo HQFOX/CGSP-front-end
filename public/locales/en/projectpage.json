@@ -9,18 +9,17 @@
     "projectDetails" : {
         "title" : "title",
         "typologies" : "Typologies",
-        "bedrooms" : "Bedrooms",
-        "bathrooms" : "Bathrooms",
-        "interiorArea" : "Interior Area",
         "details": "details",
         "lots": "Lots",
-        "assignedLots": "Assigned Lots"
+        "assignedLots": "Assigned Lots",
+        "location": "Location"
     },
     "typologyDetails" : {
         "typology" : "Typology",
         "bedrooms" : "Bedrooms",
         "bathrooms" : "Bathrooms",
         "interiorArea" : "Interior Area",
+        "exteriorArea" : "Exterior Area",
         "details": "details"
     },
     "status" : {
@@ -46,5 +45,17 @@
         "error" : "There was an error submitting your Pre-Enroll request.",
         "reason" : "For some reason the request was not submitted.",
         "trySoon" : "Please try again soon."
+    },
+    "tabsTitle" : {
+        "details" : "Details",
+        "enroll" : "Enroll",
+        "updates" : "Updates",
+        "location" : "Location"
+    },
+    "photoCategories" : {
+        "projection" : "projection",
+        "plant" : "plant",
+        "construction" : "construction",
+        "fullscreen" : "fullscreen"
     }
 }

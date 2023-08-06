@@ -1,5 +1,19 @@
-import { Box, Container, Divider, Grid, Stack, Tab, Tabs, Typography, Paper, Button } from '@mui/material';
-import type { GetStaticPaths, NextPage } from 'next';
+import {
+  Box,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Tab,
+  Tabs,
+  Typography,
+  Paper,
+  Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
+} from '@mui/material';
+import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,120 +23,159 @@ import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import dynamic from 'next/dynamic';
 import { Loading } from '../../components/loading/Loading';
-// import  Map from '../../components/map/Map';
+import { Bathtub, ExpandMore, SquareFoot } from '@mui/icons-material';
+import styled from '@emotion/styled';
 
 const Map = dynamic(() => import('../../components/map/Map'), {
   ssr: false,
-  loading: () => <Loading />,
-},
-)
+  loading: () => <Loading />
+});
 
-const updates: Update[] = [
-  {
-    title: 'APARTAMENTOS - BEJA'
-  },
-  {
-    title: 'APARTAMENTOS - BEJA'
-  },
-  {
-    title: 'APARTAMENTOS - BEJA'
-  },
-  {
-    title: 'APARTAMENTOS - BEJA'
-  }
-];
+const StyledMain = styled.main({
+  minHeight: '70dvh',
+  backgroundColor: '#f6f6f6'
+});
 
-const ProjectDetails: NextPage = () => {
+const ProjectDetails: NextPage<{ project: Project, updates: Update[] }> = (data) => {
   const { t, i18n } = useTranslation(['projectpage', 'common']);
   const [value, setValue] = useState(3);
-  const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false)
+  const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false);
+
+  const project: Project = data.project;
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const handleEnrollmentModalClose = () => {
-    setShowEnrollmentModal(false)
-  }
+    setShowEnrollmentModal(false);
+  };
 
   return (
-    <Container component="main" sx={{ pt: 10, pb: 10 , backgroundColor: "lightgray"}}>
-      <Box sx={{ pb: 15 }}>
-        <Typography variant="h4" component="h1" textAlign="right">
-          Nome do Projeto
-        </Typography>
-        <Divider />
-      </Box>
-      <Grid container justifyContent={'center'}>
-        <Grid item style={{ width: '600px' }}>
-          <ProjectCarousel />
-        </Grid>
-      </Grid>
-      <Paper sx={{ mt: 4}}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Características" />
-            <Tab label="Inscrição" />
-            <Tab label="Atualizações" />
-            <Tab label="Localização" />
-          </Tabs>
+    <StyledMain>
+      <Container sx={{ pt: 10, pb: 10 }}>
+        <Box sx={{ pb: 15 }}>
+          <Typography variant="h4" component="h1" textAlign="right">
+            {project.title}
+          </Typography>
+          <Divider />
         </Box>
-        <Grid container p={5}>
-          <TabPanel index={0} value={value}>
-            <Stack spacing={2}>
-              <Typography>Área Interior: 41 m2</Typography>
-              <Typography>Casas de Banho: 2</Typography>
-              <Typography>Área Exterior: 41 m2</Typography>
-            </Stack>
-          </TabPanel>
-          <TabPanel index={1} value={value}>
-            <Box>
-              <Typography>Id labore officia amet consectetur aliqua culpa incididunt cillum non duis pariatur. Labore pariatur cillum sit ad reprehenderit eiusmod esse consequat ullamco ullamco. Commodo voluptate veniam veniam nulla non aute culpa ea irure amet sint exercitation. Ipsum labore magna sint incididunt sint adipisicing esse nisi minim non deserunt. Nulla eiusmod magna et enim dolor ullamco mollit ea aute ex magna non. Do sit ut adipisicing do minim quis labore id ea tempor sint est. Ad qui cillum amet anim ad.<br/>
-
-In est quis minim esse eu aliquip nostrud labore sunt adipisicing adipisicing. Pariatur aute ad deserunt ut consequat laboris ut voluptate laboris fugiat sint. Eu aute ex ipsum occaecat consectetur reprehenderit cupidatat sunt. Dolore nisi ullamco cillum mollit cillum Lorem. Cillum quis magna veniam officia voluptate Lorem nisi culpa sit consequat excepteur cupidatat. Labore anim eu tempor quis duis fugiat ullamco ipsum adipisicing consequat excepteur. Fugiat mollit aute nulla veniam cillum qui occaecat deserunt pariatur id laborum cillum adipisicing culpa.
-              </Typography>
-              <Grid container justifyContent={"flex-end"} paddingTop={4}>
-                <Grid item sm={2} >
-                  <Button variant='contained' color='primary' onClick={() => setShowEnrollmentModal(true)}>Pre-Enroll</Button>
-                  <EnrollmentModal open={showEnrollmentModal} handleEnrollmentModalClose={handleEnrollmentModalClose} />
-                </Grid>
-              </Grid>
-            </Box>
-          </TabPanel>
-          <TabPanel index={2} value={value}>
-              <UpdateStepper updates={updates}/>
-          </TabPanel>
-          <TabPanel index={3} value={value}>
-          <Box>
-          <div id="map" style={{ height: 480}}>
-            <Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>
-          </div>
+        <ProjectCarousel project={project}/>
+        <Paper sx={{ mt: 4 }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+              <Tab label={t('tabsTitle.details')} />
+              <Tab label={t('tabsTitle.enroll')} />
+              <Tab label={t('tabsTitle.updates')} />
+              <Tab label={t('tabsTitle.location')} />
+            </Tabs>
           </Box>
-          </TabPanel>
-        </Grid>
-      </Paper>
-    </Container>
+          <Grid container p={5}>
+            <TabPanel index={0} value={value}>
+              {project.typologies != null &&
+                project.typologies.map((typology, index) => {
+                  return (
+                    <Accordion key={'typologyDetails' + index} defaultExpanded={index == 0}>
+                      <AccordionSummary
+                        expandIcon={<ExpandMore />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header">
+                        <Typography>{typology.typology}</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Stack spacing={2}>
+                          <Stack direction="row" gap={1}>
+                            <SquareFoot />
+                            <Typography>{`${t('typologyDetails.interiorArea')}: ${
+                              typology.bathroomNumber
+                            } m2`}</Typography>
+                          </Stack>
+                          <Stack direction="row" gap={1}>
+                            <Bathtub />
+                            <Typography>{`${t('typologyDetails.bathrooms')}: ${
+                              typology.bathroomNumber
+                            }`}</Typography>
+                          </Stack>
+                          <Stack direction="row" gap={1}>
+                            <SquareFoot />
+                            <Typography>{`${t('typologyDetails.exteriorArea')}: ${
+                              typology.bathroomNumber
+                            } m2`}</Typography>
+                          </Stack>
+                        </Stack>
+                      </AccordionDetails>
+                    </Accordion>
+                  );
+                })}
+            </TabPanel>
+            <TabPanel index={1} value={value}>
+              <Box>
+                <Typography>
+                  Id labore officia amet consectetur aliqua culpa incididunt cillum non duis
+                  pariatur. Labore pariatur cillum sit ad reprehenderit eiusmod esse consequat
+                  ullamco ullamco. Commodo voluptate veniam veniam nulla non aute culpa ea irure
+                  amet sint exercitation. Ipsum labore magna sint incididunt sint adipisicing esse
+                  nisi minim non deserunt. Nulla eiusmod magna et enim dolor ullamco mollit ea aute
+                  ex magna non. Do sit ut adipisicing do minim quis labore id ea tempor sint est. Ad
+                  qui cillum amet anim ad.
+                  <br />
+                  In est quis minim esse eu aliquip nostrud labore sunt adipisicing adipisicing.
+                  Pariatur aute ad deserunt ut consequat laboris ut voluptate laboris fugiat sint.
+                  Eu aute ex ipsum occaecat consectetur reprehenderit cupidatat sunt. Dolore nisi
+                  ullamco cillum mollit cillum Lorem. Cillum quis magna veniam officia voluptate
+                  Lorem nisi culpa sit consequat excepteur cupidatat. Labore anim eu tempor quis
+                  duis fugiat ullamco ipsum adipisicing consequat excepteur. Fugiat mollit aute
+                  nulla veniam cillum qui occaecat deserunt pariatur id laborum cillum adipisicing
+                  culpa.
+                </Typography>
+                <Grid container justifyContent={'flex-end'} paddingTop={4}>
+                  <Grid item sm={2}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => setShowEnrollmentModal(true)}>
+                      Pre-Enroll
+                    </Button>
+                    <EnrollmentModal
+                      open={showEnrollmentModal}
+                      handleEnrollmentModalClose={handleEnrollmentModalClose}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
+            </TabPanel>
+            <TabPanel index={2} value={value}>
+              <UpdateStepper updates={data.project.updates} />
+            </TabPanel>
+            <TabPanel index={3} value={value}>
+              <Box>
+                <div id="map" style={{ height: 480 }}>
+                  <Map centerCoordinates={project.coordinates} markers={[project.coordinates]} />
+                </div>
+              </Box>
+            </TabPanel>
+          </Grid>
+        </Paper>
+      </Container>
+    </StyledMain>
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getStaticProps = async (ctx: any) => ({
-  props: {
-    ...(await serverSideTranslations(ctx.locale, ['projectpage','common', 'footer', 'header']))
-  }
-});
+export const getServerSideProps = async (context: any) => {
+  const id = context.params.projectId;
+  const projectRes = await fetch(`${process.env.API_URL}/project/${id}`);
+  const project = (await projectRes.json()) as Project;
 
-export const getStaticPaths: GetStaticPaths = async () => {
   return {
-    // Only `/posts/1` and `/posts/2` are generated at build time
-    paths: [
-      { params: { projectId: '1' }, locale: 'en' },
-      { params: { projectId: '1' }, locale: 'pt' },
-      { params: { projectId: '2' } }
-    ],
-    // Enable statically generating additional pages
-    // For example: `/posts/3`
-    fallback: false
+    props: {
+      project,
+      ...(await serverSideTranslations(context.locale, [
+        'common',
+        'footer',
+        'header',
+        'projectpage'
+      ]))
+    }
   };
 };
 

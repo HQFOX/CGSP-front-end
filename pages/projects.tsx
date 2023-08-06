@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Dropdown from '../components/dropdown/Dropdown';
 import ProjectCard from '../components/projects/ProjectCard';
-import { NextConfig } from 'next';
 import dynamic from 'next/dynamic';
 import { ProjectTable } from '../components/tables/ProjectTable';
 
@@ -31,29 +30,6 @@ const StyledMain = styled.main({
   minHeight: "calc(100vh - 190px)",
   backgroundColor: "#f6f6f6"
 })
-
-const projectData: Project[] = [
-  {
-    title: 'Loteamento BRº de almeirim',
-    location: 'Évora',
-    status: 'completed'
-  },
-  {
-    title: 'Empreendimento São José da Ponte',
-    location: 'Beja',
-    status: 'building',
-  },
-  {
-    title: 'Loteamento de Guadalupe',
-    location: 'Portalegre',
-    status: 'open'
-  },
-  {
-    title: 'Monte dos Clérigos',
-    location: 'Évora',
-    status: 'open'
-  },
-];
 
 type SearchParams = {
   title: string,
@@ -78,8 +54,8 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
   const [view, setView ] = useState<ViewType>("card");
 
 
-  const handleClick = () => {
-    router.push('projects/1');
+  const handleClick = (projectId: string) => {
+    router.push(`projects/${projectId}`);
   };
 
   useEffect(() => {
@@ -211,11 +187,11 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
             </Grid>
             <Grid item>
               <Typography sx={{mr: 1, verticalAlign: "middle"}} component={"span"} variant="body1">{t("projectStatusFilterLabel")}: </Typography>
-              <Dropdown label={"Status"} displayValue={search.status} options={status(projectData)} valueChange={handleStatusChange}/>
+              <Dropdown label={"Status"} displayValue={search.status} options={status(projects)} valueChange={handleStatusChange}/>
             </Grid>
             <Grid item>
               <Typography sx={{mr: 1, verticalAlign: "middle"}} component={"span"} variant="body1">{t("locationFilterLabel")}: </Typography>
-              <Dropdown label={"Location"} displayValue={search.location} options={locations(projectData)} valueChange={handleLocationChange}/>
+              <Dropdown label={"Location"} displayValue={search.location} options={locations(projects)} valueChange={handleLocationChange}/>
             </Grid>
             <Grid item>
               <Button startIcon={<Tune/>}>{t("filters")}</Button>
@@ -224,7 +200,7 @@ const Projects: NextPage<{ projects: Project[] }> = ( data ) => {
         </Paper>
         <Grid container>
           {view === "card" && projectSearchResults.map((project, i) => (
-            <Grid key={i} item xs={12} md={6} p={1} onClick={handleClick}>
+            <Grid key={i} item xs={12} md={6} p={1} onClick={(_) => handleClick(project.id)}>
               <ProjectCard key={i} project={project} />
             </Grid>
           ))}

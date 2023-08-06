@@ -9,18 +9,17 @@
     "projectDetails" : {
         "title" : "título",
         "typologies" : "Tipologias",
-        "bedrooms" : "Quartos",
-        "bathrooms" : "Casas de banho",
-        "interiorArea" : "Área Interior",
         "details": "detalhes",
         "lots": "Lotes",
-        "assignedLots": "Lotes Atribuídos"
+        "assignedLots": "Lotes Atribuídos",
+        "location": "Localização"
     },
     "typologyDetails" : {
         "typology" : "Tipologia",
         "bedrooms" : "Quartos",
         "bathrooms" : "Casas de banho",
         "interiorArea" : "Área Interior",
+        "exteriorArea" : "Área Exterior",
         "details": "detalhes"
     },
     "status" : {
@@ -46,5 +45,17 @@
         "error" : "Erro ao subemeter Pedido de Pré-Inscrição.",
         "reason" : "Por algum motivo o Pedido de Pré-Inscrição não foi submetido.",
         "trySoon" : "Por favor tente mais tarde."
+    },
+    "tabsTitle" : {
+        "details" : "Detalhes",
+        "enroll" : "Inscrição",
+        "updates" : "Atualizações",
+        "location" : "Localização"
+    },
+    "photoCategories" : {
+        "projection" : "projeções",
+        "plant" : "planta",
+        "construction" : "construção",
+        "fullscreen" : "ecrã inteiro"
     }
 }

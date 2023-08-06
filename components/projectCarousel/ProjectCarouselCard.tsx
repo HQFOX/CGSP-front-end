@@ -16,11 +16,11 @@ import Image from 'next/image';
 const ProjectCarouselCard = ({ index, item, handleOpenModal, handleCloseModal }: CarouselCardProps) => {
   return (
     <CardMedia>
-      <div style={{ height: 500, overflow: 'hidden' }}>
+      <div style={{ height: 700, overflow: 'hidden' }}>
         <Image
+          alt=""
           src={item.image}
-          objectFit="cover" // or objectFit="cover"
-          // height={600}
+          fill={true} style={{ objectFit: 'cover' }}
           onClick={handleOpenModal}
         />
       </div>

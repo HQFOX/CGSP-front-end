@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import Image from 'next/image';
 import example from '../../public/carousel1.jpg';
-import { Bathtub, Home, HomeWork, HowToReg, KingBed, SquareFoot } from '@mui/icons-material';
+import { Home, HomeWork, HowToReg } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import styled from '@emotion/styled';
 
@@ -26,7 +26,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
     <Card>
       <CardActionArea>
-        <CardHeader title={project.title} subheader={`Localização: ${project.location}`} />
+        <CardHeader title={project.title} subheader={`${t('projectDetails.location')}: ${project.location}`} />
         <CardMedia>
           <div style={{ position: 'relative', overflow: 'hidden', height: '400px' }}>
             <Image src={example} alt={`cover image for ${project.title} project`} fill={true} style={{ objectFit: 'cover' }} />
@@ -37,7 +37,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
             <Grid item md={6}>
               <StyledTypography variant="body2" color="text.secondary">
                 <HomeWork sx={{ marginRight: '5px' }} />
-                {t('projectDetails.typologies')}: {project.typologies?.map( details => details.typology )}
+                {t('projectDetails.typologies')}: {project.typologies?.map( details => details.typology + " " )}
               </StyledTypography>
             </Grid>
             <Grid item md={6}>
@@ -50,12 +50,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
               <StyledTypography variant="body2" color="text.secondary">
                 <HowToReg sx={{ marginRight: '5px' }} />
                 {t('projectDetails.assignedLots')}: {project.assignedLots}
-              </StyledTypography>
-            </Grid>
-            <Grid item md={6}>
-              <StyledTypography variant="body2" color="text.secondary">
-                <KingBed sx={{ marginRight: '5px' }} />
-                {t('projectDetails.bedrooms')}: 4
               </StyledTypography>
             </Grid>
           </Grid>

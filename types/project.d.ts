@@ -1,5 +1,5 @@
 type Project = {
-  id?: string;
+  id: string;
   title: string;
   location?: string;
   status?: "completed" | "building" | "open";
@@ -7,6 +7,7 @@ type Project = {
   lots?: number;
   assignedLots?: number;
   typologies?: TypologyDetails[];
+  updates?: Updates[];
 };
 
 type TypologyDetails = {

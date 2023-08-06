@@ -1,7 +1,7 @@
 {
     "contactsTitle": "Contacts",
-    "address": "address",
-    "telephone": "telephone",
-    "email": "email",
+    "address": "Address",
+    "telephone": "Telephone",
+    "email": "Email",
     "supportEntities": "With support from the following entities"
 }

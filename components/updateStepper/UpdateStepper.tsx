@@ -3,7 +3,7 @@ import { Button, Dialog, Grid, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import UpdateCard from "../updates/UpdateCard";
 
-export const UpdateStepper = ({updates}:{updates: Update[]}) => {
+export const UpdateStepper = ({updates}:{updates?: Update[]}) => {
     const [updateDialogOpen, setUpdateDialogOpen] = useState(false)
     const [updateDialog, setUpdateDialog] = useState<Update>()
 
@@ -52,7 +52,7 @@ export const UpdateStepper = ({updates}:{updates: Update[]}) => {
 
 
 
-            updates.map( (update, index) => {
+            updates != null && updates.map( (update, index) => {
   
             index % 2 == 0 ?
                 updateRender.push(
