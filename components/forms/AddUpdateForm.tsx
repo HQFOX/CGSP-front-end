@@ -1,23 +1,27 @@
-import { Button, Grid, TextField, Typography } from '@mui/material';
+import { Button, Grid, MenuItem, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-export const AddUpdateForm = () => {
+export const AddUpdateForm = ({ projects }: { projects?: Project[]}) => {
   const formik = useFormik({
     initialValues: {
+      id: '0',
       title: '',
-      content: ''
+      content: '',
+      projectId: '',
     },
     validationSchema: Yup.object({
       title: Yup.string().required('Obrigatório'),
-      content: Yup.string()
+      content: Yup.string(),
+      projectId: Yup.string(),
     }),
     onSubmit: async (values) => {
+
       const jsonData = JSON.stringify(values);
 
-      // alert(JSON.stringify(values, null, 2));
+      const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/update`;
 
-      const endpoint = `${process.env.API_URL}/project`;
+      console.log(console.log(jsonData))
 
       const options = {
         // The method is POST because we are sending data.
@@ -66,6 +70,25 @@ export const AddUpdateForm = () => {
             helperText={formik.touched.content && formik.errors.content}
             fullWidth
           />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="projectId"
+            name="projectId"
+            label={'projectId'}
+            select
+            value={formik.values.projectId}
+            onChange={formik.handleChange}
+            error={formik.touched.projectId && Boolean(formik.errors.projectId)}
+            helperText={formik.touched.projectId && formik.errors.projectId}
+            fullWidth
+          >
+             {projects && projects.length > 0 && projects.map((option) => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.title}
+            </MenuItem>
+          ))}
+          </TextField>
         </Grid>
         <Grid item>
           <Button type="submit" variant="contained" color="primary" value="submit" fullWidth>

@@ -8,29 +8,39 @@ import {
   Autocomplete,
   TextField,
   Typography,
+  AccordionDetails,
+  Accordion,
+  AccordionSummary
 } from '@mui/material';
 import { useFormik } from 'formik';
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { CGSPDropzone } from '../dropzone/Dropzone';
+import { ExpandMore } from '@mui/icons-material';
 
-export const uploadImages = ( path: string, files: File[]) => {
+
+export const uploadImages = (path: string, files: File[]) => {
   // Todo: this is a simulation and should be replaced
 
-  files.map( file => { console.log(file) })
-}
+  files.map((file) => {
+    console.log(file);
+  });
+};
 
 export const AddProjectForm = () => {
   const [file, setFile] = useState<File[]>([]);
+
+  const ref = useRef(null);
 
   const formik = useFormik({
     initialValues: {
       title: '',
       status: '',
       location: '',
-      typology: [] as string[],
-      bedroomNumber: '',
-      bathroomNumber: '',
+      lots: '',
+      assignedLots: '0',
+      typology: [] as { index: '', typology: ''}[],
+      typologies: [] as { bedroomNumber: '', bathroomNumber: ''}[],
       latitude: '',
       longitude: ''
     },
@@ -38,9 +48,17 @@ export const AddProjectForm = () => {
       title: Yup.string().required('Obrigatório'),
       status: Yup.string().required('Obrigatório'),
       location: Yup.string().required('Obrigatório'),
-      typology: Yup.array(),
-      bedroomNumber: Yup.string().required('Obrigatório'),
-      bathroomNumber: Yup.string().required('Obrigatório'),
+      lots: Yup.string().required('Obrigatório'),
+      assignedLots: Yup.string(),
+      typology: Yup.array().of(
+        Yup.object().shape({
+          index: Yup.string(),
+          typology: Yup.string()
+        })),
+      typologies: Yup.array().of(Yup.object().shape({
+        bedroomNumber: Yup.string().required('Obrigatório'),
+        bathroomNumber: Yup.string().required('Obrigatório'),
+      })),
       latitude: Yup.string().required('Obrigatório'),
       longitude: Yup.string().required('Obrigatório')
     }),
@@ -49,15 +67,16 @@ export const AddProjectForm = () => {
         title: values.title,
         status: values.status,
         location: values.location,
-        typology: values.typology,
-        bedroomNumber: values.bedroomNumber,
-        bathroomNumber: values.bathroomNumber,
+        lots: values.lots,
+        assignedLots: values.assignedLots,
+        typologies: values.typologies,
         coordinates: [values.latitude, values.longitude]
       };
 
       const jsonData = JSON.stringify(formatValue);
 
-      const endpoint = `${process.env.API_URL}/project`;
+
+      const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/project`;
 
       const options = {
         // The method is POST because we are sending data.
@@ -77,16 +96,16 @@ export const AddProjectForm = () => {
     }
   });
 
-  const handleTypologyDelete = (option: string | string[]) => {
-    console.log(option);
+  const handleTypologyDelete = (index: string | undefined) => {
     formik.setValues({
       ...formik.values,
-      typology: formik.values.typology.filter((value) => value != option)
+      typology: formik.values.typology.filter((value) => value.index != index)
     });
   };
 
   const handleTypologyAdd = (option: string) => {
-    formik.setValues({ ...formik.values, typology: formik.values.typology.concat(option) })
+    const newTypology = {index: formik.values.typology.length.toString(), typology: option}
+    formik.setValues({ ...formik.values, typology: formik.values.typology.concat(newTypology as { index: '', typology: ''}), typologies: formik.values.typologies.concat({ bedroomNumber: '', bathroomNumber: ''}) });
   };
 
   const handleKeyDown = (e: KeyboardEvent<any>) => {
@@ -94,8 +113,8 @@ export const AddProjectForm = () => {
   };
 
   const handleAddFile = (files: File[]) => {
-    setFile([...files])
-  }
+    setFile([...files]);
+  };
 
   const handleDeleteFile = () => {
     setFile([]);
@@ -103,7 +122,7 @@ export const AddProjectForm = () => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container rowSpacing={4} mt={2}>
+      <Grid container rowSpacing={4} mt={2} columnSpacing={4}>
         <Grid item>
           <Typography variant={'h4'}>Adicionar Projeto</Typography>
         </Grid>
@@ -119,8 +138,8 @@ export const AddProjectForm = () => {
             fullWidth
           />
         </Grid>
-        <Grid item xs={12}>
-          <InputLabel id="status-select-dropdown">Status</InputLabel>
+        <Grid item xs={4}>
+          {/* <InputLabel id="status-select-dropdown">Status</InputLabel> */}
           <Select
             labelId="status-select-dropdown-label"
             id="status-select-dropdown"
@@ -134,7 +153,7 @@ export const AddProjectForm = () => {
             <MenuItem value={'History'}>Histórico</MenuItem>
           </Select>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={4}>
           <TextField
             id="location"
             name="location"
@@ -146,50 +165,92 @@ export const AddProjectForm = () => {
             fullWidth
           />
         </Grid>
+        <Grid item xs={4}>
+          <TextField
+            id="lots"
+            name="lots"
+            label={'Lots'}
+            value={formik.values.lots}
+            onChange={formik.handleChange}
+            error={formik.touched.lots && Boolean(formik.errors.lots)}
+            helperText={formik.touched.lots && formik.errors.lots}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <TextField
+            id="assignedLots"
+            name="assignedLots"
+            label={'Assigned Lots'}
+            value={formik.values.assignedLots}
+            onChange={formik.handleChange}
+            error={formik.touched.assignedLots && Boolean(formik.errors.assignedLots)}
+            helperText={formik.touched.assignedLots && formik.errors.assignedLots}
+            fullWidth
+          />
+        </Grid>
         <Grid item xs={12}>
           <Autocomplete
             multiple
             options={[]}
             freeSolo
-            value={formik.values.typology}
+            value={formik.values.typology.map( element => element.typology)}
             renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
+              value.map((option, index) =>(
                 <Chip
                   variant="outlined"
                   label={option}
                   {...getTagProps({ index })}
-                  onDelete={() => handleTypologyDelete(option)}
+                  onDelete={() => handleTypologyDelete(formik.values.typology.at(index)?.index)}
                 />
               ))
             }
             renderInput={(params) => (
-              <TextField {...params} label={'typology'} onKeyDown={(e) => handleKeyDown(e)} />
+              <TextField ref={ref} {...params} label={'typology'} onKeyDown={(e) => handleKeyDown(e)} />
             )}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            id="bedroomNumber"
-            name="bedroomNumber"
-            label={'Número de quartos'}
-            value={formik.values.bedroomNumber}
-            onChange={formik.handleChange}
-            error={formik.touched.bedroomNumber && Boolean(formik.errors.bedroomNumber)}
-            helperText={formik.touched.bedroomNumber && formik.errors.bedroomNumber}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="bathroomNumber"
-            name="bathroomNumber"
-            label={'Número de casas de banho'}
-            value={formik.values.bathroomNumber}
-            onChange={formik.handleChange}
-            error={formik.touched.bathroomNumber && Boolean(formik.errors.bathroomNumber)}
-            helperText={formik.touched.bathroomNumber && formik.errors.bathroomNumber}
-            fullWidth
-          />
+          {formik.values.typology.map((typology, index) => {
+            return (
+              <Accordion key={'typologyDetails' + index} defaultExpanded={index == 0}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header">
+                  <Typography>{typology.typology}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container rowSpacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="bedroomNumber"
+                        name={`typologies[${index}].bedroomNumber`}
+                        label={'Número de quartos'}
+                        value={formik.values.typologies.at(index)?.bedroomNumber || ""}
+                        onChange={formik.handleChange}
+                        error={formik.touched.typologies?.at(index)?.bedroomNumber && Boolean(formik.errors.typologies?.at(index)?.bedroomNumber)}
+                        helperText={formik.touched.typologies?.at(index)?.bedroomNumber && formik.errors.typologies?.at(index)?.bedroomNumber}
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="bathroomNumber"
+                        name={`typologies[${index}].bathroomNumber`}
+                        label={'Número de casas de banho'}
+                        value={formik.values.typologies.at(index)?.bathroomNumber || ""}
+                        onChange={formik.handleChange}
+                        error={formik.touched.typologies?.at(index)?.bedroomNumber && Boolean(formik.errors.typologies?.at(index)?.bathroomNumber)}
+                        helperText={formik.touched.typologies?.at(index)?.bedroomNumber && formik.errors.typologies?.at(index)?.bathroomNumber}
+                        fullWidth
+                      />
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            );
+          })}
         </Grid>
         <Grid item xs={12}>
           <TextField
@@ -217,7 +278,12 @@ export const AddProjectForm = () => {
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h6">Adicionar Foto de Capa</Typography>
-          <CGSPDropzone maxContent={1} files={file} onAddFile={handleAddFile}  onDeleteFile={handleDeleteFile}/>
+          <CGSPDropzone
+            maxContent={1}
+            files={file}
+            onAddFile={handleAddFile}
+            onDeleteFile={handleDeleteFile}
+          />
         </Grid>
         <Grid item xs={6}></Grid>
         <Grid item>
