@@ -57,7 +57,11 @@ export const AddUpdateForm = ({ projects, onCancel, onSubmit }: { projects?: Pro
 
       const response = await fetch(endpoint, options);
 
-      const result = await response.json();
+      if (response.status == 200) {
+        setSubmitted(true);
+        onSubmit();
+      }
+      const result = response.json();
       console.log(result);
     }
   });
@@ -75,7 +79,7 @@ export const AddUpdateForm = ({ projects, onCancel, onSubmit }: { projects?: Pro
             <Typography variant={'h4'}>Adicionar Update</Typography>
           </Grid>
           <Grid item ml="auto">
-            <IconButton onClick={() => setCancelModal(true)}>
+            <IconButton onClick={() => {submitted ? onCancel() : setCancelModal(true)}}>
               <Close />
             </IconButton>
           </Grid>

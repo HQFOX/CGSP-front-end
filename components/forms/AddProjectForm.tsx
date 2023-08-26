@@ -156,7 +156,7 @@ export const AddProjectForm = ({ onCancel, onSubmit }: { onCancel: () => void, o
             <Typography variant={'h4'}>Adicionar Projeto</Typography>
           </Grid>
           <Grid item ml="auto">
-            <IconButton onClick={() => setCancelModal(true)}>
+            <IconButton onClick={() => {submitted ? onCancel() : setCancelModal(true)}}>
               <Close />
             </IconButton>
           </Grid>
