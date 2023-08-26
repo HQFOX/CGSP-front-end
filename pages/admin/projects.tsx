@@ -24,8 +24,8 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 
   return (
     <PageContainer>
-      <Typography variant={'h4'}>Project Table</Typography>
-      <ProjectTable projects={projects} />
+      <Typography variant={'h4'} mb={2}>Project Table</Typography>
+      <ProjectTable projects={projects}/>
       {!showAddProjectForm && (
         <Grid container direction={'row-reverse'} mt={2}>
           <Grid item>
