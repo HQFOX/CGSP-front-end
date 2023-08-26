@@ -1,6 +1,5 @@
 import {
   Box,
-  Container,
   Divider,
   Grid,
   Stack,
@@ -24,17 +23,13 @@ import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import dynamic from 'next/dynamic';
 import { Loading } from '../../components/loading/Loading';
 import { Bathtub, ExpandMore, SquareFoot } from '@mui/icons-material';
-import styled from '@emotion/styled';
+import { PageContainer } from '../../components/pageContainer/PageContainer';
 
 const Map = dynamic(() => import('../../components/map/Map'), {
   ssr: false,
   loading: () => <Loading />
 });
 
-const StyledMain = styled.main({
-  minHeight: '70dvh',
-  backgroundColor: '#f6f6f6'
-});
 
 const ProjectDetails: NextPage<{ project: Project, updates: Update[] }> = (data) => {
   const { t, i18n } = useTranslation(['projectpage', 'common']);
@@ -52,8 +47,7 @@ const ProjectDetails: NextPage<{ project: Project, updates: Update[] }> = (data)
   };
 
   return (
-    <StyledMain>
-      <Container sx={{ pt: 10, pb: 10 }}>
+    <PageContainer>
         <Box sx={{ pb: 15 }}>
           <Typography variant="h4" component="h1" textAlign="right">
             {project.title}
@@ -156,8 +150,7 @@ const ProjectDetails: NextPage<{ project: Project, updates: Update[] }> = (data)
             </TabPanel>
           </Grid>
         </Paper>
-      </Container>
-    </StyledMain>
+    </PageContainer>
   );
 };
 
