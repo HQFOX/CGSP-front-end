@@ -1,41 +1,69 @@
-import styled from '@emotion/styled';
-import { Container, Typography } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UpdateTable } from '../../components/updates/UpdateTable';
 import { AddUpdateForm } from '../../components/forms/AddUpdateForm';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+import { PageContainer } from '../../components/pageContainer/PageContainer';
+import { Add } from '@mui/icons-material';
+import { Loading } from '../../components/loading/Loading';
 
+const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data) => {
+  const [updates, setUpdates] = useState<Update[]>(data.updates);
+  const [showAddUpdateForm, setShowAddUpdateForm] = useState(false);
 
-const StyledMain = styled.main({
-  minHeight: "70vh",
-  backgroundColor: "#f6f6f6"
-})
+  const handleSubmit = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update`);
+    if (res.status == 200) {
+      const updates = (await res.json()) as Project[];
 
-const UpdateAdmin: NextPage<{updates: Update[] }> = ( data ) => {
-  const [updates, setUpdates] = useState<Update[]>(data.updates)
+      setUpdates(updates);
+    }
+  };
 
   return (
-    <StyledMain>
-      <Container sx={{ pt: 10, pb: 10 }}>
-        <Typography variant={"h4"}>Update Table</Typography>
-        <UpdateTable updates={updates}/>
-        <AddUpdateForm />
-      </Container>
-    </StyledMain>
-    );
+    <PageContainer>
+      <Typography variant={'h4'} mb={2}>Update Table</Typography>
+      <UpdateTable updates={updates} />
+      {!showAddUpdateForm && (
+        <Grid container direction={'row-reverse'} mt={2}>
+          <Grid item>
+            <Button
+              startIcon={<Add />}
+              variant="contained"
+              onClick={() => setShowAddUpdateForm(true)}>
+              Add Update
+            </Button>
+          </Grid>
+        </Grid>
+      )}
+      {showAddUpdateForm && (
+        <Suspense fallback={<Loading />}>
+          <AddUpdateForm
+            projects={data.projects}
+            onCancel={() => setShowAddUpdateForm(false)}
+            onSubmit={() => handleSubmit()}
+          />
+        </Suspense>
+      )}
+    </PageContainer>
+  );
 };
 
 export const getServerSideProps = async (ctx: any) => {
-      const res = await fetch(`${process.env.API_URL}/update`);
-      const updates = (await res.json()) as Update[];
-  
-    return {
-      props: {
-          updates,
-        ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header']))
-      }
-    };
+  const res = await fetch(`${process.env.API_URL}/update`);
+  const updates = (await res.json()) as Update[];
+
+  const projectRes = await fetch(`${process.env.API_URL}/project`);
+  const projects = (await projectRes.json()) as Project[];
+
+  return {
+    props: {
+      updates,
+      projects,
+      ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header']))
+    }
   };
+};
 
 export default UpdateAdmin;

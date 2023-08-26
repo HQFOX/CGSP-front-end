@@ -20,25 +20,10 @@ import { useState } from 'react';
 import { AccountBox, Analytics, ArrowBackIosNew, Feed, Foundation } from '@mui/icons-material';
 import Link from 'next/link';
 import { VerticalNavigation } from '../../components/vesticalNavigation/VerticalNavigation';
-
-const StyledMain = styled.main({
-  minHeight: '80vh',
-  backgroundColor: '#f6f6f6'
-});
-
+import { PageContainer } from '../../components/pageContainer/PageContainer';
 
 const DashBoard: NextPage = () => {
-
-  return (
-    <>
-      <StyledMain>
-        <Container sx={{ pt: 10, pb: 10 }}>
-          <h3>hello world from admin dashboard</h3>
-          {/* <Button onClick={() => setOpen(!open)}>open naviagtion</Button> */}
-        </Container>
-      </StyledMain>
-    </>
-  );
+  return <h3>hello world from admin dashboard</h3>;
 };
 
 export const getServerSideProps = async (ctx: any) => {
