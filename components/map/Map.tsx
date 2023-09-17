@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
-import RoomIcon from '@mui/icons-material/Room';
+import React from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import RoomIcon from "@mui/icons-material/Room";
 import { LatLngTuple, divIcon } from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 import theme from "../../theme";
@@ -11,49 +11,45 @@ interface MapProps {
     zoom?: number,
 }
 
-const StyledMarker = styled(Marker)({
-
-})
-
 const iconMarkup = renderToStaticMarkup(
-    <RoomIcon style={{ color: theme.palette.primary.main, fontSize: 50, position: "absolute", top: "-27px", left: "-20px" }}/>
-  );
-  const customMarkerIcon = divIcon({
-    html: iconMarkup
-  });
+	<RoomIcon style={{ color: theme.palette.primary.main, fontSize: 50, position: "absolute", top: "-27px", left: "-20px" }}/>
+);
+const customMarkerIcon = divIcon({
+	html: iconMarkup
+});
 
 
 
 const Map = ({ centerCoordinates, markers, zoom = 13 }: MapProps) => {
 
-    const username = "hqfox"
+	const username = "hqfox";
 
-    const access_token = ""
+	const access_token = "";
 
-    const style_id = "cljkcualr006l01r56lm1139x"
+	const style_id = "cljkcualr006l01r56lm1139x";
 
-    const url = `https://api.mapbox.com/styles/v1/${username}/${style_id}/tiles/256/{z}/{x}/{y}@2x?access_token=${access_token}`
+	const url = `https://api.mapbox.com/styles/v1/${username}/${style_id}/tiles/256/{z}/{x}/{y}@2x?access_token=${access_token}`;
 
 
 
-    return (
-        <MapContainer center={centerCoordinates} zoom={zoom} scrollWheelZoom={false} style={{ width: "100%", height: "100%" }}>
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                url={url}
+	return (
+		<MapContainer center={centerCoordinates} zoom={zoom} scrollWheelZoom={false} style={{ width: "100%", height: "100%" }}>
+			<TileLayer
+				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+				// url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+				url={url}
 
-            />
-            { markers && markers.map( marker => (
-                <Marker position={marker} icon={customMarkerIcon}>
-                    <Popup>
+			/>
+			{ markers && markers.map( (marker, index) => (
+				<Marker position={marker} icon={customMarkerIcon} key={index}>
+					<Popup>
                     A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                </Marker>
-            ))}
+					</Popup>
+				</Marker>
+			))}
 
-        </MapContainer>
-    )
-}
+		</MapContainer>
+	);
+};
 
 export default Map;
