@@ -1,6 +1,5 @@
 import React from "react";
 import {
-	Button,
 	Card,
 	CardActionArea,
 	CardActions,
@@ -15,6 +14,7 @@ import example from "../../public/carousel1.jpg";
 import { Home, HomeWork, HowToReg } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import styled from "@emotion/styled";
+import { StyledButton } from "../Button";
 
 const StyledTypography = styled(Typography)({
 	display: "flex",
@@ -62,9 +62,9 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 				</CardContent>
 			</CardActionArea>
 			<CardActions>
-				<Button size="small" color="primary">
+				<StyledButton color="primary" variant="contained" sx={{  fontWeight: "600"}}>
 					{t("projectDetails.details")}
-				</Button>
+				</StyledButton>
 			</CardActions>
 		</Card>
 	);

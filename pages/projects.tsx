@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "@emotion/styled";
 import {
 	Search,
@@ -8,7 +8,7 @@ import {
 	GridView,
 	ViewListOutlined
 } from "@mui/icons-material";
-import { Box, Divider, Grid, Typography, Button, Paper, IconButton } from "@mui/material";
+import { Box, Divider, Grid, Typography, Button, Paper, IconButton, Fade } from "@mui/material";
 import type { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
@@ -17,12 +17,16 @@ import { useTranslation } from "react-i18next";
 import Dropdown from "../components/dropdown/Dropdown";
 import ProjectCard from "../components/projects/ProjectCard";
 import dynamic from "next/dynamic";
-import { ProjectTable } from "../components/tables/ProjectTable";
+// import { ProjectTable } from "../components/tables/ProjectTable";
 import { PageContainer } from "../components/pageContainer/PageContainer";
 
 const Map = dynamic(() => import("../components/map/Map"), {
 	ssr: false
 });
+
+const normalizeString = (value: string): string => {
+	return value.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+};
 
 const StyledInput = styled.input({
 	fontSize: "1rem",
@@ -64,6 +68,8 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 
 	const [projectSearchResults, setProjectSearchResults] = useState<Project[]>(projects);
 
+	const [animationStart, setAnimationStart] = useState(false);
+
 	const [view, setView] = useState<ViewType>("card");
 
 	const handleClick = (projectId: string) => {
@@ -71,13 +77,9 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 	};
 
 	useEffect(() => {
-		let results = projects;
-		results = filterResultsByLocation(search.location, results);
-		results = filterResultsByTitle(search.title, results);
-		results = filterResultsByStatus(search.status, results);
-		results = filterResultsByWildCard(search.wildcard, results);
-		setProjectSearchResults(results);
-	}, [search]);
+		setAnimationStart(true);
+
+	},[projectSearchResults]);
 
 	const filterResultsByLocation = (location: string, projects: Project[]): Project[] => {
 		let result: Project[] = projects;
@@ -130,9 +132,16 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 		return result;
 	};
 
-	const normalizeString = (value: string): string => {
-		return value.normalize("NFD").replace(/\p{Diacritic}/gu, "");
-	};
+	useMemo(() => {
+		let results = projects;
+		results = filterResultsByLocation(search.location, results);
+		results = filterResultsByTitle(search.title, results);
+		results = filterResultsByStatus(search.status, results);
+		results = filterResultsByWildCard(search.wildcard, results);
+		setProjectSearchResults(results);
+	}, [search, projects]);
+
+
 	const locations = (projectData: Project[]): string[] => {
 		const locationSet: string[] = [t("allf")];
 		projectData.map((project) => {
@@ -187,8 +196,8 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 
 	return (
 		<PageContainer>
-			<Box sx={{ pb: 15 }}>
-				<Typography variant="h4" component="h1">
+			<Box sx={{ p:2, pb: 4 }}>
+				<Typography variant="h5" component="h1">
 					{t("projectPageTitle")}
 				</Typography>
 				<Divider />
@@ -251,16 +260,18 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 						/>
 					</Grid>
 					<Grid item>
-						<Button startIcon={<Tune />}>{t("filters")}</Button>
+						<Button startIcon={<Tune />} sx={{ textTransform: "capitalize" }}>{t("filters")}</Button>
 					</Grid>
 				</Grid>
 			</Paper>
 			<Grid container>
 				{view === "card" &&
           projectSearchResults.map((project, i) => (
-          	<Grid key={i} item xs={12} md={6} p={1} onClick={() => handleClick(project.id)}>
-          		<ProjectCard key={i} project={project} />
-          	</Grid>
+          	<Fade key={i} in={animationStart} style={{ transitionDelay: animationStart ? `${i}00ms` : "0ms" }} unmountOnExit>
+          		<Grid key={i} item xs={12} md={6} p={1} onClick={() => handleClick(project.id)}>
+          			<ProjectCard key={i} project={project} />
+          		</Grid>
+			  </Fade>
           ))}
 			</Grid>
 			{view === "map" && (
@@ -272,7 +283,7 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 					/>
 				</div>
 			)}
-			{view === "list" && <ProjectTable />}
+			{/* {view === "list" && <ProjectTable />} */}
 		</PageContainer>
 	);
 };

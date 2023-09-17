@@ -17,6 +17,7 @@
     "@fontsource/roboto": "^4.5.7",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.0",
+    "@tanstack/react-table": "^8.9.3",
     "formik": "^2.2.9",
     "i18next": "^21.8.16",
     "leaflet": "^1.9.3",

@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { EnrollRequestTable } from "../../components/enrollrequests/EnrollRequestTable";
@@ -8,7 +8,12 @@ import { PageContainer } from "../../components/pageContainer/PageContainer";
 const EnrollRequestsAdmin: NextPage<{ requests: EnrollRequest[] }> = (data) => {
 	return (
 		<PageContainer>
-			<Typography variant={"h4"}>Enroll Request Table</Typography>
+			<Box sx={{ pb: 4 }}>
+				<Typography variant="h5" component="h1">
+					Enroll Requests Table
+				</Typography>
+				<Divider />
+			</Box>
 			<EnrollRequestTable requests={data.requests} />
 		</PageContainer>
 	);

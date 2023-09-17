@@ -21,7 +21,7 @@ import { ArrowForwardIos } from "@mui/icons-material";
 
 const StyledAppBar = styled(AppBar)(
 	({ theme }) => `
-    background-color: ${theme.bg.main}
+    background-color: ${theme.bg.light}
 `
 );
 

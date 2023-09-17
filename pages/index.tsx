@@ -18,7 +18,7 @@ const Map = dynamic(() => import("../components/map/Map"), {
 );
 
 const StyledMain = styled("main")({
-	backgroundColor: theme.bg.main
+	backgroundColor: theme.palette.secondary.main
 });
 
 
@@ -30,37 +30,47 @@ const Home: NextPage<{updates : Update[] }> = ( data ) => {
 	return (
 		<StyledMain className={styles.container && styles.main}>
 			<CGSPCarousel />
-			<Box
-				sx={(theme) => ({
-					[theme.breakpoints.up("md")]: { padding: theme.spacing(15) },
-					[theme.breakpoints.down("md")]: { padding: theme.spacing(5) }
-				})}>
-				<Typography variant="h4" component="h1" style={{ textAlign: "center" }}>
-					{t("aboutUsTitle")}
-				</Typography>
-				<Divider />
-				<Typography variant="h6" component="h2" style={{ whiteSpace: "pre-wrap" }}>
-					{t("aboutUsText")}
-				</Typography>
+			<Box sx={{backgroundColor: theme.bg.main, mt: 8}}>
+				<Box
+					sx={(theme) => ({
+						[theme.breakpoints.up("md")]: { paddingLeft: theme.spacing(15), paddingRight: theme.spacing(15) },
+						[theme.breakpoints.down("md")]: { paddingLeft: theme.spacing(5), paddingRight: theme.spacing(15) },
+						pt: 6, pb: 6
+					})}>
+					<Box sx={{ pb: 4 }}>
+						<Typography variant="h4" component="h1" style={{ textAlign: "center" }}>
+							{t("aboutUsTitle")}
+						</Typography>
+						<Divider />
+					</Box>
+					<Typography variant="h6" component="h2" style={{ whiteSpace: "pre-wrap" }}>
+						{t("aboutUsText")}
+					</Typography>
+				</Box>
 			</Box>
-			<Box
-				sx={(theme) => ({
-					[theme.breakpoints.up("md")]: { padding: theme.spacing(42) },
-					[theme.breakpoints.down("md")]: { padding: theme.spacing(5) }
-				})}>
-				<Typography variant="h4" component="h1">
-					{t("howToGetThere")}:
-				</Typography>
-				<div id="map" style={{ height: 480}}>
-					<Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>
+			<Box sx={{backgroundColor: theme.bg.main, mt: 20, pt: 4, pb: 8}}>
+				<Box
+					sx={(theme) => ({
+						[theme.breakpoints.up("md")]: { paddingLeft: theme.spacing(15), paddingRight: theme.spacing(15) },
+						[theme.breakpoints.down("md")]: { paddingLeft: theme.spacing(5), paddingRight: theme.spacing(15) },
+						pb: 4,
+						pt: 4
+					})}>
+					<Typography variant="h5" component="h1">
+						{t("howToGetThere")}:
+					</Typography>
+					<Divider />
+					<Box id="map" style={{ height: 480}} sx={{pt: 2}}>
+						<Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>
+					</Box>
+				</Box>
+				<div style={{ display: "flex", justifyContent: "center" }}>
+					<Image src={logo} alt="logo" width={200} height={60} />
 				</div>
 			</Box>
-			<div style={{ display: "flex", justifyContent: "center" }}>
-				<Image src={logo} alt="logo" width={200} height={60} />
-			</div>
-			<div style={{ display: "flex", justifyContent: "center" }}>
+			<Box sx={{backgroundColor: theme.bg.main, mt: 20, display: "flex", justifyContent: "center"}}>
 				<Updates updates={data.updates}/>
-			</div>
+			</Box>
 		</StyledMain>
 	);
 };

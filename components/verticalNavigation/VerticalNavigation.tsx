@@ -10,9 +10,11 @@ import {
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
-	Typography
+	Typography,
+	styled
 } from "@mui/material";
 import Link from "next/link";
+import theme from "../../theme";
 
 export interface VerticalNavigationProps {
   open?: boolean;
@@ -20,7 +22,16 @@ export interface VerticalNavigationProps {
   setOpen: (value: SetStateAction<boolean>) => void;
 }
 
+
+
 const drawerWidth = 240;
+
+export const StyledListItemButton = styled(ListItemButton)({
+	":hover" : {
+		backgroundColor: "#FF7F514D",
+	}
+
+});
 
 export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationProps) => {
 	return (
@@ -31,6 +42,7 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
 				width: `${drawerWidth}px`,
 				flexShrink: 0,
 				"& .MuiDrawer-paper": {
+					backgroundColor: theme.bg.main,
 					width: drawerWidth,
 					boxSizing: "border-box"
 				}
@@ -41,7 +53,7 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
 					sx={{ marginTop: "auto", padding: "5px", verticalAlign: "bottom" }}>
           Menu
 				</Typography>
-				<IconButton onClick={() => setOpen(!open)} sx={{height:"40px",width:"40px"}}>
+				<IconButton onClick={() => setOpen(!open)} size="large">
 					<ArrowBackIos />
 				</IconButton>
 			</Box>
@@ -51,11 +63,11 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
 					{pages &&
             pages.map((page) => (
             	<ListItem key={page.id}>
-            		<Link key={page.id} href={page.path} passHref>
-            			<ListItemButton>
+            		<Link key={page.id} href={page.path} passHref style={{ width: "100%"}}>
+            			<StyledListItemButton >
             				<ListItemIcon>{page.icon}</ListItemIcon>
             				<ListItemText>{page.text}</ListItemText>
-            			</ListItemButton>
+            			</StyledListItemButton>
             		</Link>
             	</ListItem>
             ))}

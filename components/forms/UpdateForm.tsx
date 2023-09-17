@@ -3,11 +3,6 @@ import { CheckCircle, Close } from "@mui/icons-material";
 import {
 	Button,
 	Container,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
 	Grid,
 	Grow,
 	IconButton,
@@ -20,17 +15,18 @@ import {
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
+import { CancelModal } from "../modals/CancelModal";
 
-export const AddUpdateForm = ({ projects, onCancel, onSubmit }: { projects?: Project[], onCancel: () => void, onSubmit: () => void }) => {
+export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
 
 	const formik = useFormik({
 		initialValues: {
-			id: "0",
-			title: "",
-			content: "",
+			id: update ? update.id : "0",
+			title: update ? update.title : "",
+			content: update ? update.content : "",
 			projectId: ""
 		},
 		validationSchema: Yup.object({
@@ -41,13 +37,13 @@ export const AddUpdateForm = ({ projects, onCancel, onSubmit }: { projects?: Pro
 		onSubmit: async (values) => {
 			const jsonData = JSON.stringify(values);
 
-			const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/update`;
+			const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
 
 			console.log(console.log(jsonData));
 
 			const options = {
 				// The method is POST because we are sending data.
-				method: "POST",
+				method: update ? "PUT" : "POST",
 				// Tell the server we're sending JSON.
 				headers: {
 					"Content-Type": "application/json"
@@ -67,9 +63,9 @@ export const AddUpdateForm = ({ projects, onCancel, onSubmit }: { projects?: Pro
 		}
 	});
 
-	const handleClose = () => {
+	const handleClose = (confirm: boolean) => {
 		setCancelModal(false);
-		// onCancel();
+		confirm && onCancel();
 	};
 
 	return (
@@ -77,7 +73,7 @@ export const AddUpdateForm = ({ projects, onCancel, onSubmit }: { projects?: Pro
 			<Container>
 				<Grid container pt={2}>
 					<Grid item mt={4}>
-						<Typography variant={"h4"}>Adicionar Update</Typography>
+						<Typography variant={"h5"}>{ update ? "Editar Update": "Adicionar Update"}</Typography>
 					</Grid>
 					<Grid item ml="auto">
 						<IconButton onClick={() => {submitted ? onCancel() : setCancelModal(true);}}>
@@ -154,28 +150,7 @@ export const AddUpdateForm = ({ projects, onCancel, onSubmit }: { projects?: Pro
 					</form>
 				)}
 			</Container>
-			<Dialog
-				open={cancelModal}
-				onClose={() => setCancelModal(false)}
-				aria-labelledby="alert-dialog-title"
-				aria-describedby="alert-dialog-description"
-			>
-				<DialogTitle id="alert-dialog-title">
-					{"Use Google's location service?"}
-				</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button autoFocus onClick={() => setCancelModal(false)}>Disagree</Button>
-					<Button onClick={() => handleClose()}>
-            Agree
-					</Button>
-				</DialogActions>
-			</Dialog>
+			<CancelModal open={cancelModal} handleClose={(confirm) => handleClose(confirm)}/>
 		</Paper>
 	);
 };

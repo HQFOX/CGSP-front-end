@@ -3,7 +3,6 @@ import {
 	CardContent,
 	Typography,
 	CardActions,
-	Button
 } from "@mui/material";
 import React, { useState } from "react";
 import Carousel from "react-material-ui-carousel";
@@ -29,6 +28,8 @@ import {
 	AutoAwesomeMosaic
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import { StyledButton } from "../Button";
+import theme from "../../theme";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const items: CarouselItem[] = [
@@ -224,6 +225,11 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 							marginTop: "1em"
 						}
 					}}
+					activeIndicatorIconButtonProps={{
+						style: {
+							color: theme.palette.primary.main,
+						}
+					}}
 					index={index}
 					// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					onChange={(now?: number, next?) => handleCarouselItemChange(now)}
@@ -240,37 +246,37 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 					</Typography>
 				</CardContent>
 				<CardActions>
-					<Button
+					<StyledButton
 						variant={category === CategoryType.projection ? "contained" : "outlined"}
 						onClick={() => {
 							handleSetCategory(CategoryType.projection);
 						}}
 						startIcon={<ViewInAr />}>
 						{t("photoCategories.projection")}
-					</Button>
-					<Button
+					</StyledButton>
+					<StyledButton
 						variant={category === CategoryType.plant ? "contained" : "outlined"}
 						onClick={() => {
 							handleSetCategory(CategoryType.plant);
 						}}
 						startIcon={<AutoAwesomeMosaic />}>
 						{t("photoCategories.plant")}
-					</Button>
-					<Button
+					</StyledButton>
+					<StyledButton
 						variant={category === CategoryType.construction ? "contained" : "outlined"}
 						onClick={() => {
 							handleSetCategory(CategoryType.construction);
 						}}
 						startIcon={<Foundation />}>
 						{t("photoCategories.construction")}
-					</Button>
-					<Button
+					</StyledButton>
+					<StyledButton
 						style={{ marginLeft: "auto" }}
 						variant={"outlined"}
 						startIcon={<Fullscreen />}
 						onClick={() => handleOpenModal(index)}>
 						{t("photoCategories.fullscreen")}
-					</Button>
+					</StyledButton>
 				</CardActions>
 			</Card>
 			<ProjectModal

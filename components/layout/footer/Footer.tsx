@@ -40,7 +40,7 @@ const Footer = () => {
 					<a href="https://www.facebook.com/profile.php/?id=100008109739037">
 						<FacebookIcon fontSize="large" />
 					</a>
-					<Typography variant="subtitle1">{t("supportEntities")}:</Typography>
+					<Typography variant="subtitle1" fontWeight={700}>{t("supportEntities")}:</Typography>
 					<StyledStack direction="row" gap={1}>
 						<Typography variant="subtitle1" component={"a"} href="https://www.facebook.com/profile.php/?id=100008109739037">
               Instituto da Habitação e da <br/>Reabilitação Urbana - IHRU
@@ -56,7 +56,7 @@ const Footer = () => {
 					<Image src={logo} alt="logo" width={150} height={50} />
 				</Grid>
 				<StyledItem item xs={12} md={4} textAlign="right">
-					<Typography variant="h5">{t("contactsTitle")}:</Typography>
+					<Typography variant="h5" fontWeight={600}>{t("contactsTitle")}:</Typography>
 					<StyledStack direction="row" gap={1} side="right">
 						<HomeRounded/>
 						<Typography variant="subtitle1" component={"span"}>

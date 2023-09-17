@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import { VerticalNavigation } from "../vesticalNavigation/VerticalNavigation";
+import { VerticalNavigation } from "../verticalNavigation/VerticalNavigation";
 import Footer from "./footer/Footer";
 import Header from "./header/Header";
 import Head from "next/head";

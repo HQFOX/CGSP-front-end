@@ -12,7 +12,7 @@ import { Loading } from "../components/loading/Loading";
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 
 	const [isAdmin] = useState(true);
 
@@ -25,18 +25,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	const [isAdminRoute, setAdminRoute] = useState(checkAdminRoute());
 
+	const handleStop = () => {
+		setLoading(false);
+	};
+
+	const handleStart = () => {
+		setLoading(true);
+	};
+
 	useEffect(() => {
-		const handleStart = () => {
-			setLoading(true);
-		};
+
 		setAdminRoute(checkAdminRoute());
  
-		const handleStop = () => {
-			setLoading(false);
-		};
-
-
-
 		router.events.on("routeChangeStart", handleStart);
 		router.events.on("routeChangeComplete", handleStop);
 		router.events.on("routeChangeError", handleStop);

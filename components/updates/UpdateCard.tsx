@@ -6,6 +6,9 @@ import example from "../../public/carousel1.jpg";
 const width = "40vw";
 
 const UpdateCard = ({ post }: UpdateCardProps) => {
+
+	const date = post.creationDate? new Date(post.creationDate) : undefined;
+
 	return (
 		<Paper
 			sx={(theme) => ({
@@ -17,7 +20,7 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 				<Typography variant={"h5"}>{post.title}</Typography>
 				<Divider sx={{ mb: 1 }} />
 				<Typography variant="body2" color="text.secondary" sx={{ textAlign: "right" }}>
-          30 de Setembro de 2022
+					{date && `${date?.getUTCDate()}/${date?.getUTCMonth()}/${date?.getUTCFullYear()}`}
 				</Typography>
 			</Box>
 			<div style={{width: "100%", height: "60vh", position: "relative"}}>

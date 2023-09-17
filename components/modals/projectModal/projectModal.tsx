@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
-import { Box, Dialog } from "@mui/material";
+import { Box, Dialog, IconButton } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Carousel from "react-material-ui-carousel";
 import { StyledIconButton } from "./projectModal.styles";
+import { Close } from "@mui/icons-material";
 
 
 type projectModalProps = {
@@ -23,10 +24,20 @@ const ProjectModal = ({open, modalOpen, modalClose, items, index, autoPlay, hand
 			fullScreen
 			open={open}
 			onClose={modalClose}
-			sx={{ p:3 }}
+			sx={{ p:2 }}
 		>
-			<StyledIconButton color="primary" onClick={modalClose}><CancelIcon/></StyledIconButton>
-			<Carousel sx={{ flex: 1}} autoPlay={autoPlay} fullHeightHover navButtonsAlwaysVisible index={index} onChange={(now?:number, next?) => handleCarouselItemChange(now)}>
+			<IconButton
+				aria-label="close"
+				onClick={modalClose}
+				sx={{
+					ml: "auto",
+					mt: 1,
+					mr: 2,
+				}}
+			>
+				<Close />
+			</IconButton>
+			<Carousel sx={{marginTop: 2}} autoPlay={autoPlay} fullHeightHover navButtonsAlwaysVisible index={index} onChange={(now?:number, next?) => handleCarouselItemChange(now)}>
 				{items.map((item) => (
 					<Box
 						key={`carousel${index}`}
@@ -36,7 +47,7 @@ const ProjectModal = ({open, modalOpen, modalClose, items, index, autoPlay, hand
 							backgroundPosition: "center",
 							backgroundSize: { xs: "cover", md: "auto" },
 							width: "100%",
-							height: "80vh",
+							height: "80dvh",
 						}}>
 					</Box>
 				))}
