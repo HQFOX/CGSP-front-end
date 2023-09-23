@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import {
-	Button,
 	Chip,
 	Grid,
 	MenuItem,
@@ -26,18 +25,55 @@ import { CGSPDropzone } from "../dropzone/Dropzone";
 import { CheckCircle, Close, ExpandMore } from "@mui/icons-material";
 import { CancelModal } from "../modals/CancelModal";
 import dynamic from "next/dynamic";
+import AWS from "aws-sdk";
+import { StyledButton } from "../Button";
+
+const S3_BUCKET ="cgsp-bucket";
+const REGION ="eu-west-3";
+
+
+AWS.config.update({
+	accessKeyId: "",
+	secretAccessKey: ""
+});
+
+const myBucket = new AWS.S3({
+	params: { Bucket: S3_BUCKET},
+	region: REGION,
+});
 
 const Map = dynamic(() => import("../map/Map"), {
 	ssr: false
 },
 );
 
-export const uploadImages = (path: string, files: File[]) => {
+
+const submitImage = (file: File): boolean => {
+	const params = {
+		ACL: "public-read",
+		Body: file,
+		Bucket: S3_BUCKET,
+		Key: file.name
+	};
+
+	myBucket.putObject(params).send((response) => {
+		if(response)
+		{
+			console.log(response);
+			return false;
+		}
+	});
+	return true;
+};
+
+export const uploadImages = (path: string, files: File[]): boolean => {
 	// Todo: this is a simulation and should be replaced
 
 	files.map((file) => {
-		console.log(file);
+		if(!submitImage(file))
+			return false;
 	});
+	return true;
 };
 
 export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project, onCancel: () => void, onSubmit: () => void}) => {
@@ -82,39 +118,42 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			longitude: Yup.number().required("Obrigatório")
 		}),
 		onSubmit: async (values) => {
-			const formatValue = {
-				title: values.title,
-				status: values.status,
-				location: values.location,
-				lots: values.lots,
-				assignedLots: values.assignedLots,
-				typologies: values.typologies,
-				coordinates: [values.latitude, values.longitude]
-			};
-
-			const jsonData = JSON.stringify(formatValue);
-
-			const endpoint = project ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}` : `${process.env.NEXT_PUBLIC_API_URL}/project` ;
-
-			const options = {
-				// The method is POST because we are sending data.
-				method: project ? "PUT" : "POST",
-				// Tell the server we're sending JSON.
-				headers: {
-					"Content-Type": "application/json"
-				},
-				// Body of the request is the JSON data we created above.
-				body: jsonData
-			};
-
-			const response = await fetch(endpoint, options);
-
-			if (response.status == 200) {
-				setSubmitted(true);
-				onSubmit();
+			if(uploadImages("",file)){
+				const formatValue = {
+					title: values.title,
+					status: values.status,
+					location: values.location,
+					lots: values.lots,
+					assignedLots: values.assignedLots,
+					typologies: values.typologies,
+					coordinates: [values.latitude, values.longitude]
+				};
+	
+				const jsonData = JSON.stringify(formatValue);
+	
+				const endpoint = project ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}` : `${process.env.NEXT_PUBLIC_API_URL}/project` ;
+	
+				const options = {
+					// The method is POST because we are sending data.
+					method: project ? "PUT" : "POST",
+					// Tell the server we're sending JSON.
+					headers: {
+						"Content-Type": "application/json"
+					},
+					// Body of the request is the JSON data we created above.
+					body: jsonData
+				};
+	
+				const response = await fetch(endpoint, options);
+	
+				if (response.status == 200) {
+					setSubmitted(true);
+					onSubmit();
+				}
+				const result = response.json();
+				console.log(result);
 			}
-			const result = response.json();
-			console.log(result);
+
 		}
 	});
 
@@ -361,14 +400,14 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							</Grid>
 							<Grid item xs={6}></Grid>
 							<Grid item ml="auto">
-								<Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
+								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
 									{"Submit"}
-								</Button>
+								</StyledButton>
 							</Grid>
 							<Grid item>
-								<Button variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
+								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
                   Cancel
-								</Button>
+								</StyledButton>
 							</Grid>
 						</Grid>
 					</form>
