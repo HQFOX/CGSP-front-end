@@ -14,6 +14,9 @@ type TypologyDetails = {
   typology?: string;
   bedroomNumber?: string;
   bathroomNumber?: string; 
+  garageNumber?: string; 
+  price?: string; 
+  plant?: string; 
 }
 
 type ProjectDetails = {

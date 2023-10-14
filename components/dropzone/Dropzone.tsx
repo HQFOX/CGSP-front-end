@@ -5,11 +5,12 @@ import Dropzone, { FileError, FileRejection } from "react-dropzone";
 import Image from "next/image";
 import { useState } from "react";
 import theme from "../../theme";
+import { PresignedFile } from "../forms/UpdateForm";
 
 export type CGSPDropzoneProps = {
   label?: string;
   maxContent?: number;
-  files?: File[];
+  files?: PresignedFile[];
   onDeleteFile: () => void;
   onAddFile: (files: File[]) => void;
 };
@@ -57,25 +58,27 @@ export const CGSPDropzone = ({
 						<input {...getInputProps()} />
 						{files && files?.length > 0 ? (
 							<div style={{ position: "relative" }}>
-								<Image
-									src={URL.createObjectURL(files[0])}
-									objectFit='cover'
-									width={300}
-									height={300}
-									alt="submitted image"
-								/>
-								<IconButton
-									aria-label="delete"
-									sx={{
-										position: "absolute",
-										top: "-15px",
-										right: "-15px",
-										backgroundColor: "#F5F5F580"
-									}}
-									color="secondary"
-									onClick={(e) => handleDeleteFile(e)}>
-									<Cancel />
-								</IconButton>
+								{files[0].file && 
+									<>
+										<Image
+											src={URL.createObjectURL(files[0].file)}
+											width={300}
+											height={300}
+											alt="submitted image" /><IconButton
+											aria-label="delete"
+											sx={{
+												objectFit: "cover",
+												position: "absolute",
+												top: "-15px",
+												right: "-15px",
+												backgroundColor: "#F5F5F580"
+											}}
+											color="secondary"
+											onClick={(e) => handleDeleteFile(e)}>
+											<Cancel />
+										</IconButton>
+									</>
+								}
 							</div>
 						) : (
 							<Grid container justifyContent={"center"} textAlign={"center"}>

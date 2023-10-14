@@ -25,6 +25,8 @@ import dynamic from "next/dynamic";
 import { Loading } from "../../components/loading/Loading";
 import {
 	Bathtub,
+	Dashboard,
+	Euro,
 	ExpandMore,
 	Garage,
 	Home,
@@ -156,7 +158,25 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               						<Grid item>
               							<Stack direction="row" gap={1}>
               								<Garage color="primary" />
-              								<StyledTypography variant="body2" color="text.secondary">{"Garagem: Sim"}</StyledTypography>
+              								<StyledTypography variant="body2" color="text.secondary">{`Garagem: ${
+              									typology.garageNumber
+              								}`}</StyledTypography>
+              							</Stack>
+              						</Grid>
+									  <Grid item>
+              							<Stack direction="row" gap={1}>
+              								<Euro color="primary" />
+              								<StyledTypography variant="body2" color="text.secondary">{`Price: ${
+              									typology.price
+              								}`}</StyledTypography>
+              							</Stack>
+              						</Grid>
+									  <Grid item>
+              							<Stack direction="row" gap={1}>
+              								<Dashboard color="primary" />
+              								<StyledTypography variant="body2" color="text.secondary">{`Plant: ${
+              									typology.plant
+              								}`}</StyledTypography>
               							</Stack>
               						</Grid>
               					</Grid>

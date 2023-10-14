@@ -1,7 +1,6 @@
 import React from "react";
 import { CheckCircle, Close } from "@mui/icons-material";
 import {
-	Button,
 	Container,
 	Grid,
 	Grow,
@@ -16,17 +15,100 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
 import { CancelModal } from "../modals/CancelModal";
+import { CGSPDropzone } from "../dropzone/Dropzone";
+import { StyledButton } from "../Button";
+
+export interface PresignedFile {
+	filename: string,
+	link?: string,
+	file?: File,
+}
+
+const getFileExtension = (filename: string) => {
+	return filename.substring(filename.lastIndexOf("."), filename.length) || filename;
+};
+
+
+const submitFile = async (file : PresignedFile) => {
+	if(file.file){
+
+		const endpoint = file.link ?? "";
+
+		const options = {
+			method: "PUT",
+			headers: {
+				"Content-Type": file.file?.type
+			},
+			body: file.file
+		};
+
+		const response = await fetch(endpoint, options);
+
+		console.log(response);
+		if (response.status !== 200) {
+			const result = (await response.json());
+			console.log(result);
+			return response.url;
+		}
+		return null;
+	}
+
+};
+
+const getPresignedUrl = async (file: File) => {
+
+	const values = {
+		filename: file.name,
+		extension: getFileExtension(file.name),
+	};
+
+	const jsonData = JSON.stringify(values);
+
+	const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/file/url`;
+
+	// console.log(jsonData);
+
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: jsonData
+	};
+
+	const response = await fetch(endpoint, options);
+
+	if (response.status == 200) {
+		const result = (await response.json()) as PresignedFile;
+		result.file = file;
+		console.log(result);
+		return result;
+	}
+	return null;
+};
+
 
 export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
+	const [file, setFile] = useState<PresignedFile[]>([]);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
 
+	const handleAddFile = async (files: File[]) => {
+		const newfile = await getPresignedUrl(files[0]);
+		if(newfile)
+			setFile([...file, newfile]);
+	};
+
+	const handleDeleteFile = () => {
+		setFile([]);
+	};
+
 	const formik = useFormik({
 		initialValues: {
 			id: update ? update.id : "0",
-			title: update ? update.title : "",
-			content: update ? update.content : "",
+			title: update ? update.title : "teste",
+			content: update ? update.content : "teste",
 			projectId: ""
 		},
 		validationSchema: Yup.object({
@@ -35,31 +117,35 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 			projectId: Yup.string()
 		}),
 		onSubmit: async (values) => {
-			const jsonData = JSON.stringify(values);
 
-			const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
+			const imageUrl = submitFile(file[0]);
 
-			console.log(console.log(jsonData));
+			if(imageUrl != null){
 
-			const options = {
-				// The method is POST because we are sending data.
-				method: update ? "PUT" : "POST",
-				// Tell the server we're sending JSON.
-				headers: {
-					"Content-Type": "application/json"
-				},
-				// Body of the request is the JSON data we created above.
-				body: jsonData
-			};
+				const jsonData = JSON.stringify(values);
 
-			const response = await fetch(endpoint, options);
+				const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
+	
+				console.log(console.log(jsonData));
+	
+				const options = {
+					method: update ? "PUT" : "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: jsonData
+				};
+	
+				const response = await fetch(endpoint, options);
+	
+				if (response.status == 200) {
+					setSubmitted(true);
+					onSubmit();
+				}
+				const result = response.json();
+				console.log(result);
 
-			if (response.status == 200) {
-				setSubmitted(true);
-				onSubmit();
 			}
-			const result = response.json();
-			console.log(result);
 		}
 	});
 
@@ -114,13 +200,14 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 									error={formik.touched.content && Boolean(formik.errors.content)}
 									helperText={formik.touched.content && formik.errors.content}
 									fullWidth
+									multiline
 								/>
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									id="projectId"
 									name="projectId"
-									label={"projectId"}
+									label={"Projeto Relacionado: "}
 									select
 									value={formik.values.projectId}
 									onChange={formik.handleChange}
@@ -128,23 +215,32 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 									helperText={formik.touched.projectId && formik.errors.projectId}
 									fullWidth>
 									{projects &&
-                  projects.length > 0 &&
-                  projects.map((option) => (
-                  	<MenuItem key={option.id} value={option.id}>
-                  		{option.title}
-                  	</MenuItem>
-                  ))}
+										projects.length > 0 &&
+										projects.map((option) => (
+											<MenuItem key={option.id} value={option.id}>
+												{option.title}
+											</MenuItem>
+										))}
 								</TextField>
 							</Grid>
+							<Grid item xs={6}>
+								<Typography variant="h6">Adicionar Foto à Atualização</Typography>
+								<CGSPDropzone
+									maxContent={1}
+									files={file}
+									onAddFile={handleAddFile}
+									onDeleteFile={handleDeleteFile}
+								/>
+							</Grid>
 							<Grid item ml="auto">
-								<Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
+								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
 									{"Submit"}
-								</Button>
+								</StyledButton>
 							</Grid>
 							<Grid item>
-								<Button variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
-                  Cancel
-								</Button>
+								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
+                 					 Cancel
+								</StyledButton>
 							</Grid>
 						</Grid>
 					</form>

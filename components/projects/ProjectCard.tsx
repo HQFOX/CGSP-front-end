@@ -6,6 +6,7 @@ import {
 	CardContent,
 	CardHeader,
 	CardMedia,
+	Chip,
 	Grid,
 	Typography
 } from "@mui/material";
@@ -30,24 +31,27 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 				<CardHeader title={project.title} subheader={`${t("projectDetails.location")}: ${project.location}`} />
 				<CardMedia>
 					<div style={{ position: "relative", overflow: "hidden", height: "400px" }}>
-						<Image src={example} alt={`cover image for ${project.title} project`} fill={true} style={{ objectFit: "cover" }} />
+						<Image src={example} alt={`cover image for ${project.title} project`} fill style={{ objectFit: "cover" }} />
 					</div>
 				</CardMedia>
 				<CardContent>
-					<Grid container>
-						<Grid item md={6}>
+					<Grid container justifyContent={"space-between"} spacing={1} paddingBottom={1} >
+						<Grid item md={4}>
 							<StyledTypography variant="body2" color="text.secondary">
 								<HomeWork sx={{ marginRight: "5px" }} />
 								{t("projectDetails.typologies")}: {project.typologies?.map( details => details.typology + " " )}
 							</StyledTypography>
 						</Grid>
-						<Grid item md={6}>
+						<Grid item md={4} textAlign={"center"}>
 							<StyledTypography variant="body2" color="text.secondary">
 								<Home sx={{ marginRight: "5px" }} />
 								{t("projectDetails.lots")}: {project.lots}
 							</StyledTypography>
 						</Grid>
-						<Grid item md={6}>
+						<Grid item md={4}>
+							<Typography variant="body2" color="text.secondary" component={"span"}>Status: </Typography><Chip variant="filled" color="success" label={"Concluído"} sx={{ color: "white", textTransform: "capitalize", fontWeight: "700"}}/>
+						</Grid>
+						<Grid item md={4}>
 							<StyledTypography variant="body2" color="text.secondary">
 								<HowToReg sx={{ marginRight: "5px" }} />
 								{t("projectDetails.assignedLots")}: {project.assignedLots}
