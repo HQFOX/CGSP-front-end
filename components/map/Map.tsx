@@ -24,7 +24,7 @@ const Map = ({ centerCoordinates, markers, zoom = 13 }: MapProps) => {
 
 	const username = "hqfox";
 
-	const access_token = "";
+    const access_token = "pk.eyJ1IjoiaHFmb3giLCJhIjoiY2xqbGtyNHUwMDUxdzNvcjFtNXQycmNjYSJ9.EFl0rmIyhCBfY5AMiss-UQ";
 
 	const style_id = "cljkcualr006l01r56lm1139x";
 

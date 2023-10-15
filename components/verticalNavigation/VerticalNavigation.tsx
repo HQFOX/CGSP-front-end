@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import theme from "../../theme";
+import { useRouter } from "next/router";
 
 export interface VerticalNavigationProps {
   open?: boolean;
@@ -29,11 +30,18 @@ const drawerWidth = 240;
 export const StyledListItemButton = styled(ListItemButton)({
 	":hover" : {
 		backgroundColor: "#FF7F514D",
-	}
+	},
 
 });
 
 export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationProps) => {
+
+	const router = useRouter();
+
+	console.log(router.pathname);
+
+	console.log(pages);
+
 	return (
 		<Drawer
 			variant={"persistent"}
@@ -64,7 +72,7 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
             pages.map((page) => (
             	<ListItem key={page.id}>
             		<Link key={page.id} href={page.path} passHref style={{ width: "100%"}}>
-            			<StyledListItemButton >
+            			<StyledListItemButton selected={router.pathname === page.path}>
             				<ListItemIcon>{page.icon}</ListItemIcon>
             				<ListItemText>{page.text}</ListItemText>
             			</StyledListItemButton>

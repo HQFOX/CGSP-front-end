@@ -22,6 +22,7 @@ export interface PresignedFile {
 	filename: string,
 	link?: string,
 	file?: File,
+	source? : string,
 }
 
 const getFileExtension = (filename: string) => {
@@ -45,12 +46,12 @@ const submitFile = async (file : PresignedFile) => {
 		const response = await fetch(endpoint, options);
 
 		console.log(response);
-		if (response.status !== 200) {
-			const result = (await response.json());
-			console.log(result);
-			return response.url;
-		}
-		return null;
+		// if (response.status == 200) {
+		// 	const result = (await response.json());
+		// 	console.log(result);
+		// 	return response.url;
+		// }
+		return response.url;
 	}
 
 };
@@ -89,7 +90,7 @@ const getPresignedUrl = async (file: File) => {
 
 
 export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
-	const [file, setFile] = useState<PresignedFile[]>([]);
+	const [file, setFile] = useState<PresignedFile[]>(update?.image ? [{filename: "teste", source: update.image }]:[]);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
@@ -109,43 +110,56 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 			id: update ? update.id : "0",
 			title: update ? update.title : "teste",
 			content: update ? update.content : "teste",
-			projectId: ""
+			project: update ? update.project : null,
+			// image: update ? update.image : undefined,
 		},
 		validationSchema: Yup.object({
 			title: Yup.string().required("Obrigatório"),
 			content: Yup.string(),
-			projectId: Yup.string()
 		}),
 		onSubmit: async (values) => {
+			let jsonData;
 
-			const imageUrl = submitFile(file[0]);
+			if(file.length > 0){
 
-			if(imageUrl != null){
+				let imageUrl;
 
-				const jsonData = JSON.stringify(values);
-
-				const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
-	
-				console.log(console.log(jsonData));
-	
-				const options = {
-					method: update ? "PUT" : "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: jsonData
-				};
-	
-				const response = await fetch(endpoint, options);
-	
-				if (response.status == 200) {
-					setSubmitted(true);
-					onSubmit();
+				if(file[0].source == undefined){
+					imageUrl = await submitFile(file[0]);
 				}
-				const result = response.json();
-				console.log(result);
+				
+				const valuesWithImage = {...values, image: file[0].source ?? file[0].filename};
 
+				jsonData = JSON.stringify( imageUrl != null ? valuesWithImage : values);
 			}
+			else{
+				jsonData = JSON.stringify(values);
+			}
+
+
+			// const jsonData = JSON.stringify( imageUrl != null ?valuesWithImage : values);
+
+			const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
+
+			console.log(console.log(jsonData));
+
+			const options = {
+				method: update ? "PUT" : "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: jsonData
+			};
+
+			const response = await fetch(endpoint, options);
+
+			if (response.status == 200) {
+				setSubmitted(true);
+				onSubmit();
+			}
+			const result = response.json();
+			console.log(result);
+
 		}
 	});
 
@@ -191,6 +205,15 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 								/>
 							</Grid>
 							<Grid item xs={12}>
+								<Typography variant="h6">Adicionar Foto à Atualização</Typography>
+								<CGSPDropzone
+									maxContent={1}
+									files={file}
+									onAddFile={handleAddFile}
+									onDeleteFile={handleDeleteFile}
+								/>
+							</Grid>
+							<Grid item xs={12}>
 								<TextField
 									id="content"
 									name="content"
@@ -206,13 +229,13 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 							<Grid item xs={12}>
 								<TextField
 									id="projectId"
-									name="projectId"
+									name="project.projectId"
 									label={"Projeto Relacionado: "}
 									select
-									value={formik.values.projectId}
+									value={formik.values.project?.projectId}
 									onChange={formik.handleChange}
-									error={formik.touched.projectId && Boolean(formik.errors.projectId)}
-									helperText={formik.touched.projectId && formik.errors.projectId}
+									error={formik.touched.project?.projectId && Boolean(formik.errors.project?.projectId)}
+									helperText={formik.touched.project?.projectId && formik.errors.project?.projectId}
 									fullWidth>
 									{projects &&
 										projects.length > 0 &&
@@ -222,15 +245,6 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 											</MenuItem>
 										))}
 								</TextField>
-							</Grid>
-							<Grid item xs={6}>
-								<Typography variant="h6">Adicionar Foto à Atualização</Typography>
-								<CGSPDropzone
-									maxContent={1}
-									files={file}
-									onAddFile={handleAddFile}
-									onDeleteFile={handleDeleteFile}
-								/>
 							</Grid>
 							<Grid item ml="auto">
 								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>

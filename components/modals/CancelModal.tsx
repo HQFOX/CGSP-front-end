@@ -1,6 +1,7 @@
 import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { StyledButton } from "../Button";
 
 export const CancelModal = ({open, handleClose }:{open: boolean, handleClose: (confirm: boolean) => void}) => {
 
@@ -32,10 +33,10 @@ export const CancelModal = ({open, handleClose }:{open: boolean, handleClose: (c
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>
-				<Button variant="contained" autoFocus onClick={() => handleClose(false)}>Não</Button>
-				<Button variant="outlined" onClick={() => handleClose(true)}>
+				<StyledButton variant="contained" autoFocus onClick={() => handleClose(false)}>Não</StyledButton>
+				<StyledButton variant="outlined" onClick={() => handleClose(true)}>
                     Sim
-				</Button>
+				</StyledButton>
 			</DialogActions>
 		</Dialog>
 	);
