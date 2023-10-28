@@ -25,22 +25,7 @@ import { CGSPDropzone } from "../dropzone/Dropzone";
 import { CheckCircle, Close, ExpandMore } from "@mui/icons-material";
 import { CancelModal } from "../modals/CancelModal";
 import dynamic from "next/dynamic";
-import AWS from "aws-sdk";
 import { StyledButton } from "../Button";
-
-const S3_BUCKET ="cgsp-bucket";
-const REGION ="eu-west-3";
-
-
-AWS.config.update({
-	accessKeyId: "",
-	secretAccessKey: ""
-});
-
-const myBucket = new AWS.S3({
-	params: { Bucket: S3_BUCKET},
-	region: REGION,
-});
 
 const Map = dynamic(() => import("../map/Map"), {
 	ssr: false
@@ -48,21 +33,8 @@ const Map = dynamic(() => import("../map/Map"), {
 );
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const submitImage = (file: File): boolean => {
-	const params = {
-		ACL: "public-read",
-		Body: file,
-		Bucket: S3_BUCKET,
-		Key: file.name
-	};
-
-	myBucket.putObject(params).send((response) => {
-		if(response)
-		{
-			console.log(response);
-			return false;
-		}
-	});
 	return true;
 };
 
@@ -393,7 +365,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								<Typography variant="h6">Adicionar Foto de Capa</Typography>
 								<CGSPDropzone
 									maxContent={1}
-									files={file}
+									// files={file}
 									onAddFile={handleAddFile}
 									onDeleteFile={handleDeleteFile}
 								/>

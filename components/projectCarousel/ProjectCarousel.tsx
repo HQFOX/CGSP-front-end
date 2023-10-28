@@ -236,7 +236,7 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 					autoPlay={autoPlay}>
 					{carouselItems(category)}
 				</Carousel>
-				<CardContent>
+				{/* <CardContent>
 					<Typography gutterBottom variant="h5" component="div">
 						{project?.title}
 					</Typography>
@@ -244,9 +244,9 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
             Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
             across all continents except Antarctica
 					</Typography>
-				</CardContent>
+				</CardContent> */}
 				<CardActions>
-					<StyledButton
+					{/* <StyledButton
 						variant={category === CategoryType.projection ? "contained" : "outlined"}
 						onClick={() => {
 							handleSetCategory(CategoryType.projection);
@@ -269,7 +269,7 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 						}}
 						startIcon={<Foundation />}>
 						{t("photoCategories.construction")}
-					</StyledButton>
+					</StyledButton> */}
 					<StyledButton
 						style={{ marginLeft: "auto" }}
 						variant={"outlined"}

@@ -59,11 +59,11 @@ const Header = ({ admin = false, setOpen }: HeaderProps) => {
 			headerText: t("updates"),
 			path: "/updates"
 		},
-		{
-			id: 5,
-			headerText: t("faq"),
-			path: "/faq"
-		}
+		// {
+		// 	id: 5,
+		// 	headerText: t("faq"),
+		// 	path: "/faq"
+		// }
 	];
 
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);

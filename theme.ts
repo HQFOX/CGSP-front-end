@@ -13,15 +13,23 @@ const theme = createTheme({
 			contrastText: "#fff"
 		},
 		secondary: {
-			main: "#d9d9d9",
+			main: "#f0efc0",
 			light: "#ffffff",
 			dark: "#a2a2a2"
+		},
+		warning: {
+			main: "#f7cb42",
+
 		},
 		error: {
 			main: "#f92b5b"
 		},
 		success: {
 			main: "#9ae3bb"
+		},
+		info: {
+			dark: "#40a7cc",
+			main: "#48bce5"
 		}
 	},
 	//custom theme variables

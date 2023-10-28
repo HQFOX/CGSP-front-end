@@ -5,7 +5,7 @@ import { FileError, FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { useState } from "react";
 import theme from "../../theme";
-import { PresignedFile } from "../forms/UpdateForm";
+import { AbstractFile } from "../forms/UpdateForm";
 import styled from "@emotion/styled";
 
 
@@ -44,7 +44,7 @@ const Container = styled.div`
 export type CGSPDropzoneProps = {
   label?: string;
   maxContent?: number;
-  files?: PresignedFile[];
+  files?: AbstractFile[];
   onDeleteFile: () => void;
   onAddFile: (files: File[]) => void;
 };

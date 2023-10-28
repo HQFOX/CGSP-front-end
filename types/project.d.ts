@@ -3,7 +3,10 @@ type Project = {
   title: string;
   location?: string;
   status?: "completed" | "building" | "open";
+  assignmentStatus?: string;
+  constructionStatus?: string;
   coordinates?: any;
+  coverPhoto?: string;
   lots?: number;
   assignedLots?: number;
   typologies?: TypologyDetails[];
@@ -12,10 +15,11 @@ type Project = {
 
 type TypologyDetails = {
   typology?: string;
+  type?: string;
   bedroomNumber?: string;
   bathroomNumber?: string; 
   garageNumber?: string; 
-  price?: string; 
+  price?: number; 
   plant?: string; 
 }
 

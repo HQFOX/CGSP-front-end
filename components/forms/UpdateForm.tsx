@@ -18,11 +18,11 @@ import { CancelModal } from "../modals/CancelModal";
 import { CGSPDropzone } from "../dropzone/Dropzone";
 import { StyledButton } from "../Button";
 
-export interface PresignedFile {
+export interface AbstractFile {
 	filename: string,
 	link?: string,
 	file?: File,
-	source? : string,
+	source? : string, // only used when aws file
 }
 
 const getFileExtension = (filename: string) => {
@@ -30,10 +30,10 @@ const getFileExtension = (filename: string) => {
 };
 
 
-const submitFile = async (file : PresignedFile) => {
+const submitFile = async (file : AbstractFile) => {
 	if(file.file){
 
-		const endpoint = file.link ?? "";
+		const endpoint = "";
 
 		const options = {
 			method: "PUT",
@@ -45,12 +45,6 @@ const submitFile = async (file : PresignedFile) => {
 
 		const response = await fetch(endpoint, options);
 
-		console.log(response);
-		// if (response.status == 200) {
-		// 	const result = (await response.json());
-		// 	console.log(result);
-		// 	return response.url;
-		// }
 		return response.url;
 	}
 
@@ -80,7 +74,7 @@ const getPresignedUrl = async (file: File) => {
 	const response = await fetch(endpoint, options);
 
 	if (response.status == 200) {
-		const result = (await response.json()) as PresignedFile;
+		const result = (await response.json()) as AbstractFile;
 		result.file = file;
 		console.log(result);
 		return result;
@@ -90,7 +84,7 @@ const getPresignedUrl = async (file: File) => {
 
 
 export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
-	const [file, setFile] = useState<PresignedFile[]>(update?.image ? [{filename: "teste", source: update.image }]:[]);
+	const [file, setFile] = useState<AbstractFile[]>(update?.image ? [{filename: "", link: update.image }]:[]);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
@@ -108,9 +102,9 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 	const formik = useFormik({
 		initialValues: {
 			id: update ? update.id : "0",
-			title: update ? update.title : "teste",
-			content: update ? update.content : "teste",
-			project: update ? update.project : null,
+			title: update?.title ? update.title : "teste",
+			content: update?.content ? update.content : "teste",
+			project: update?.project ? update.project : null,
 			// image: update ? update.image : undefined,
 		},
 		validationSchema: Yup.object({
@@ -124,20 +118,17 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 
 				let imageUrl;
 
-				if(file[0].source == undefined){
+				if(file[0].link == undefined){
 					imageUrl = await submitFile(file[0]);
 				}
 				
-				const valuesWithImage = {...values, image: file[0].source ?? file[0].filename};
+				const valuesWithImage = {...values, image: file[0].link ?? file[0].filename};
 
 				jsonData = JSON.stringify( imageUrl != null ? valuesWithImage : values);
 			}
 			else{
 				jsonData = JSON.stringify(values);
 			}
-
-
-			// const jsonData = JSON.stringify( imageUrl != null ?valuesWithImage : values);
 
 			const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
 
@@ -234,8 +225,8 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 									select
 									value={formik.values.project?.projectId}
 									onChange={formik.handleChange}
-									error={formik.touched.project?.projectId && Boolean(formik.errors.project?.projectId)}
-									helperText={formik.touched.project?.projectId && formik.errors.project?.projectId}
+									// error={formik.touched.project?.projectId && Boolean(formik.errors.project?.projectId)}
+									// helperText={formik.touched.project?.projectId && formik.errors.project?.projectId}
 									fullWidth>
 									{projects &&
 										projects.length > 0 &&

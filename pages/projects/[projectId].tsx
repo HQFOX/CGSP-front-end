@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 import {
 	Box,
@@ -54,7 +55,7 @@ const StyledTypography = styled(Typography)({
 
 const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data) => {
 	const { t } = useTranslation(["projectpage", "common"]);
-	const [value, setValue] = useState(3);
+	const [value, setValue] = useState(2);
 	const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false);
 
 	const project: Project = data.project;
@@ -78,9 +79,9 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 			<ProjectCarousel project={project} />
 			<Paper sx={{ mt: 4 }}>
 				<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-					<Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+					<Tabs value={value} onChange={handleChange}>
 						<StyledTab label={t("tabsTitle.details")} />
-						<StyledTab label={t("tabsTitle.enroll")} />
+						{/* <StyledTab label={t("tabsTitle.enroll")} /> */}
 						<StyledTab label={t("tabsTitle.updates")} />
 						<StyledTab label={t("tabsTitle.location")} />
 					</Tabs>
@@ -185,7 +186,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               	);
               })}
 					</TabPanel>
-					<TabPanel index={1} value={value}>
+					{/* <TabPanel index={1} value={value}>
 						<Box>
 							<Typography>
                 Id labore officia amet consectetur aliqua culpa incididunt cillum non duis pariatur.
@@ -220,11 +221,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 								</Grid>
 							</Grid>
 						</Box>
-					</TabPanel>
-					<TabPanel index={2} value={value}>
+					</TabPanel> */}
+					<TabPanel index={1} value={value}>
 						<UpdateStepper updates={data.project.updates} />
 					</TabPanel>
-					<TabPanel index={3} value={value}>
+					<TabPanel index={2} value={value}>
 						<Box>
 							<div id="map" style={{ height: 480 }}>
 								<Map centerCoordinates={project.coordinates} markers={[project.coordinates]} />
