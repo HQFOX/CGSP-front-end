@@ -31,14 +31,44 @@ const getPriceRange = (projects: Project[]) => {
 	return priceRange as number[];
 };
 
+const getTypologies = (projects: Project[]) => {
+	const typologies = new Set<string>();
+
+	projects.map( (project) => {
+		project.typologies?.map( (typology) => {
+			if(typology.typology){
+				typologies.add(typology.typology);
+			}
+		});
+	});
+
+	return [...typologies];
+};
+
+const getTypes = (projects: Project[]) => {
+	const types = new Set<string>();
+
+	projects.map( (project) => {
+		project.typologies?.map( (typology) => {
+			if(typology.type){
+				types.add(typology.type);
+			}
+		});
+	});
+
+	return [...types];
+};
+
 
 export type SearchParams = {
 	title: string;
 	location: string;
 	status: string;
-	assignmentStatus: string;
-	constructionStatus: string;
+	assignmentStatus: AssignmentStatusType[];
+	constructionStatus: ConstructionStatusType[];
 	priceRange: number[];
+	typologies: string[];
+	types: string[];
 	wildcard: string;
   };
 
@@ -62,9 +92,11 @@ export const ProjectInventory = ({
 		title: "",
 		location: t("allf"),
 		status: t("allm"),
-		assignmentStatus: "",
-		constructionStatus: "",
+		assignmentStatus: ["WAITING","ONGOING","CONCLUDED"],
+		constructionStatus: ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"],
 		priceRange: getPriceRange(projects),
+		typologies: getTypologies(projects),
+		types: getTypes(projects),
 		wildcard: ""
 	});
 
@@ -138,9 +170,24 @@ export const ProjectInventory = ({
 		let result: Project[] = projects;
 		
 		result = projects.filter( (project) => 
-			project.typologies?.filter( (typology ) => typology.price >= param[0] && typology.price <= param[1] ).length > 0
+			project.typologies ? project.typologies?.filter( (typology ) => typology.price && typology.price >= param[0] && typology.price <= param[1] ).length > 0 : false
 		);
-		console.log(result);
+		return result;
+	};
+
+	const filterResultsByTypology = (param: string[], projects: Project[]) => {
+		let result: Project[] = projects;
+		
+		result = projects.filter( (project) => project.typologies && project.typologies.some( typology => typology.typology && param.includes(typology.typology)));
+		
+		return result;
+	};
+
+	const filterResultsByType = (param: string[], projects: Project[]) => {
+		let result: Project[] = projects;
+		
+		result = projects.filter( (project) => project.typologies && project.typologies.some( typology => typology.type && param.includes(typology.type)));
+		
 		return result;
 	};
 
@@ -151,6 +198,8 @@ export const ProjectInventory = ({
 		results = filterResultsByStatus(search.status, results);
 		results = filterResultsByWildCard(search.wildcard, results);
 		results = filterResultsByPrice(search.priceRange, results);
+		results = filterResultsByTypology(search.typologies, results);
+		results = filterResultsByType(search.types, results);
 		setProjectSearchResults(results);
 	}, [search, projects]);
 
@@ -211,6 +260,28 @@ export const ProjectInventory = ({
 		setSearch((search) => ({ ...search, wildcard: wildcard }));
 	};
 
+	const onTypologyChange = (param: string, checked: boolean) => {
+		if(!checked)
+		{
+			setSearch((search) => ({ ...search, typologies: search.typologies.filter( value => value !== param)}));
+		}
+		else
+		{
+			setSearch((search) => ({ ...search, typologies: [...search.typologies, param]}));
+		}
+	};
+
+	const onTypeChange = (param: string, checked: boolean) => {
+		if(!checked)
+		{
+			setSearch((search) => ({ ...search, types: search.types.filter( value => value !== param)}));
+		}
+		else
+		{
+			setSearch((search) => ({ ...search, types: [...search.types, param]}));
+		}
+	};
+
 	return (
 		<>
 			<Controls
@@ -219,11 +290,15 @@ export const ProjectInventory = ({
 				locations={locations(projects)}
 				status={status(projects)}
 				priceRange={getPriceRange(projects)}
+				typologies={getTypologies(projects)}
+				types={getTypes(projects)}
 				onWildCardChange={onWildCardChange}
 				onViewChange={onViewChange}
 				onStatusChange={history ? undefined : onStatusChange}
 				onLocationChange={onLocationChange} 
 				onPriceRangeChange={onPriceRangeChange}
+				onTypologyChange={onTypologyChange}
+				onTypeChange={onTypeChange}
 			/>
 			<Grid container>
 				{view === "card" &&
@@ -239,7 +314,8 @@ export const ProjectInventory = ({
 				<div id="map" style={{ height: 480, padding: "8px" }}>
 					<Map
 						centerCoordinates={[38.56633674453089, -7.925327404275489]}
-						markers={projectSearchResults.map((project) => project.coordinates)}
+						// markers={projectSearchResults.map((project) => project.coordinates)}
+						projects={projectSearchResults}
 						zoom={6}
 					/>
 				</div>

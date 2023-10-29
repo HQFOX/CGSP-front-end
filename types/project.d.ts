@@ -3,9 +3,9 @@ type Project = {
   title: string;
   location?: string;
   status?: "completed" | "building" | "open";
-  assignmentStatus?: string;
-  constructionStatus?: string;
-  coordinates?: any;
+  assignmentStatus?: AssignmentStatusType;
+  constructionStatus?: ConstructionStatusType;
+  coordinates?: [float,float];
   coverPhoto?: string;
   lots?: number;
   assignedLots?: number;
@@ -28,3 +28,7 @@ type ProjectDetails = {
   bedroomNumber: string;
   bathroomNumber: string;
 }
+
+type AssignmentStatusType = "WAITING" | "ONGOING" | "CONCLUDED";
+
+type ConstructionStatusType = "ALLOTMENTPERMIT" | "BUILDINGPERMIT" | "CONCLUDED";

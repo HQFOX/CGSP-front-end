@@ -1,14 +1,20 @@
 import React from "react";
+
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
 import RoomIcon from "@mui/icons-material/Room";
+
 import { LatLngTuple, divIcon } from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
+
 import theme from "../../theme";
+import ProjectCard from "../projects/ProjectCard";
 
 interface MapProps {
     centerCoordinates: LatLngTuple,
     markers?: LatLngTuple[],
     zoom?: number,
+	projects?: Project[]
 }
 
 const iconMarkup = renderToStaticMarkup(
@@ -20,11 +26,11 @@ const customMarkerIcon = divIcon({
 
 
 
-const Map = ({ centerCoordinates, markers, zoom = 13 }: MapProps) => {
+const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [] }: MapProps) => {
 
 	const username = "hqfox";
 
-    const access_token = "pk.eyJ1IjoiaHFmb3giLCJhIjoiY2xqbGtyNHUwMDUxdzNvcjFtNXQycmNjYSJ9.EFl0rmIyhCBfY5AMiss-UQ";
+	const access_token = "pk.eyJ1IjoiaHFmb3giLCJhIjoiY2xqbGtyNHUwMDUxdzNvcjFtNXQycmNjYSJ9.EFl0rmIyhCBfY5AMiss-UQ";
 
 	const style_id = "cljkcualr006l01r56lm1139x";
 
@@ -40,13 +46,20 @@ const Map = ({ centerCoordinates, markers, zoom = 13 }: MapProps) => {
 				url={url}
 
 			/>
-			{ markers && markers.map( (marker, index) => (
+			{ markers.map( (marker, index) => (
 				<Marker position={marker} icon={customMarkerIcon} key={index}>
 					<Popup>
                     A pretty CSS3 popup. <br /> Easily customizable.
 					</Popup>
 				</Marker>
 			))}
+			{ projects.map( (project, index) => (
+				<Marker position={project.coordinates as LatLngTuple} icon={customMarkerIcon} key={index}>
+					<Popup>
+						<ProjectCard project={project} key={index}/>
+					</Popup>
+				</Marker>
+			))}	
 
 		</MapContainer>
 	);

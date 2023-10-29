@@ -1,5 +1,5 @@
-import React, { SyntheticEvent } from "react";
-import { Button, Grid, IconButton, Paper, Popper, Slider, Stack, Typography } from "@mui/material";
+import React from "react";
+import { Button, Checkbox, FormControlLabel, FormGroup, Grid, IconButton, Paper, Popper, Slider, Stack, Typography } from "@mui/material";
 import { GridView, MapOutlined, Search, Tune } from "@mui/icons-material";
 import Dropdown from "../dropdown/Dropdown";
 import { useTranslation } from "next-i18next";
@@ -24,11 +24,15 @@ export interface ControlProps {
     locations?: string[],
     status?: string[],
 	priceRange?: number[],
+	typologies?: string[],
+	types?: string[],
     onWildCardChange?: (wildcard: string) => void,
     onViewChange?: (view: ViewType) => void,
     onStatusChange?: (status: string) => void,
     onLocationChange?: (location: string) => void,
-	onPriceRangeChange?: (range: number[]) => void
+	onPriceRangeChange?: (range: number[]) => void,
+	onTypologyChange?: (typology: string, checked: boolean) => void,
+	onTypeChange?: (type: string, checked: boolean) => void,
 }
 
 export const Controls = ({
@@ -37,11 +41,15 @@ export const Controls = ({
 	locations = [],
 	status = [],
 	priceRange = [0,0],
+	typologies = [],
+	types = [],
 	onWildCardChange,
 	onViewChange,
 	onStatusChange,
 	onLocationChange,
-	onPriceRangeChange,
+	onPriceRangeChange = () => {},
+	onTypologyChange = () => {},
+	onTypeChange = () => {},
 }: ControlProps) => {
 
 	const { t } = useTranslation("projectpage");
@@ -59,7 +67,15 @@ export const Controls = ({
 
 	const handleChange = (event: Event, newValue: number | number[]) => {
 		if(newValue instanceof Array)
-			onPriceRangeChange ? onPriceRangeChange(newValue) : undefined;
+			onPriceRangeChange(newValue);
+	};
+
+	const handleTypologyChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+		onTypologyChange(event.target.name, checked);
+	};
+
+	const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+		onTypeChange(event.target.name, checked);
 	};
 
 	return (
@@ -103,7 +119,7 @@ export const Controls = ({
 				{onStatusChange &&
                     <Grid item>
                     	<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-                    		{t("projectStatusFilterLabel")}:{" "}
+                    		<b></b>{"Estado de Construção"}:{" "}
                     	</Typography>
                     	<Dropdown
                     		label={"Status"}
@@ -131,7 +147,7 @@ export const Controls = ({
 					<Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-start">
 						<Paper sx={{p: 4}} >
 							<Stack spacing={2} >
-								{onStatusChange &&
+								{/* {onStatusChange &&
 									<div>
 										<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
 											{"Estado de Atribuição"}:{" "}
@@ -143,19 +159,40 @@ export const Controls = ({
 											valueChange={onStatusChange}
 										/>
 									</div>
-								}
-								{onLocationChange && 
+								} */}
+								<div>
+									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
+										{"Estado de Construção"}:{" "}
+									</Typography>
+									<FormGroup>
+										<FormControlLabel control={<Checkbox />} label={"Alvará De Loteamento Aprovado"}/>
+										<FormControlLabel control={<Checkbox />} label={"Alvará de Construção Aprovado"}/>
+										<FormControlLabel control={<Checkbox />} label={"Concluído"}/>
+									</FormGroup>
+								</div>
+								<div>
+									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
+										{"Estado de Atribuição"}:{" "}
+									</Typography>
+									<FormGroup>
+										<FormControlLabel control={<Checkbox />} label={"Em espera"}/>
+										<FormControlLabel control={<Checkbox />} label={"A Decorrer"}/>
+										<FormControlLabel control={<Checkbox />} label={"Concluído"}/>
+									</FormGroup>
+								</div>
+								{onTypologyChange && onTypeChange &&
 									<div>
 										<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
 											{"Tipologias"}:{" "}
 										</Typography>
-										<Dropdown
-											label={"Location"}
-											displayValue={search.location}
-											options={locations}
-											valueChange={onLocationChange}
-										/>
+										<FormGroup row>
+											{typologies.map( (typology, index) => <FormControlLabel control={<Checkbox onChange={handleTypologyChange} name={typology}/>} label={typology} key={index} checked={search.typologies.includes(typology)}/>)}
+										</FormGroup>
+										<FormGroup row>
+											{types.map( (type, index) => <FormControlLabel control={<Checkbox onChange={handleTypeChange} name={type} />} label={type} key={index} checked={search.types.includes(type)}/>)}
+										</FormGroup>
 									</div>
+									
 								}
 								<div>
 									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
@@ -169,7 +206,6 @@ export const Controls = ({
 										marks={[{value: priceRange[0], label: priceRange[0]}, {value: priceRange[1], label: priceRange[1]}]}
 										min={priceRange[0]}
 										max={priceRange[1]}
-										// getAriaValueText={valuetext}
 									/>
 								</div>
 							</Stack>
