@@ -12,7 +12,10 @@
         "details": "detalhes",
         "lots": "Lotes",
         "assignedLots": "Lotes Atribuídos",
-        "location": "Localização"
+        "location": "Localização",
+        "assignmentStatus": "Estado de Atribuição",
+        "constructionStatus": "Estado de Construção",
+        "price": "Preço"
     },
     "typologyDetails" : {
         "typology" : "Tipologia",
@@ -26,6 +29,16 @@
         "completed" : "Terminado",
         "building" : "Em construção",
         "open" : "Incrições Abertas"
+    },
+    "assignmentStatus" : {
+        "WAITING" : "Em Espera",
+        "ONGOING" : "a Decorrer",
+        "CONCLUDED" : "Concluída"
+    },
+    "constructionStatus" : {
+        "ALLOTMENTPERMIT" : "Alvará De Loteamento Aprovado",
+        "BUILDINGPERMIT" : "Alvará De Construção Aprovado",
+        "CONCLUDED" : "Concluída"
     },
     "preEnroll" : "Pré-Inscrição",
     "form" : {

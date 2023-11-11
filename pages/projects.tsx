@@ -6,7 +6,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "react-i18next";
 
 import { PageContainer } from "../components/pageContainer/PageContainer";
-import { ProjectInventory } from "../components/projectInventory/ProjectInventory";
+import { ProjectInventory } from "../components/projects/projectInventory/ProjectInventory";
 
 
 export const normalizeString = (value: string): string => {
@@ -24,7 +24,7 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 	return (
 		<PageContainer>
 			<Box sx={{ p:2, pb: 4 }}>
-				<Typography variant="h5" component="h1">
+				<Typography variant="h5" component="h1" fontWeight={600} fontSize={24}>
 					{t("projectPageTitle")}
 				</Typography>
 				<Divider />

@@ -7,6 +7,7 @@ type Project = {
   constructionStatus?: ConstructionStatusType;
   coordinates?: [float,float];
   coverPhoto?: string;
+  files?: {filename: string}[];
   lots?: number;
   assignedLots?: number;
   typologies?: TypologyDetails[];

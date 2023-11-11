@@ -43,9 +43,9 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 					}
 				</Grid>
 			</Box>
-			{post.image && 
+			{post.files[0] && 
 				<div style={{width: "100%", height: "60vh", position: "relative"}}>
-					<Image src={post.image} alt={""} fill style={{objectFit: "cover"}}/>
+					<Image src={`${process.env.NEXT_PUBLIC_S3_URL}${post.files[0].filename}`} alt={""} fill style={{objectFit: "cover"}}/>
 				</div>
 			}
 			<Box sx={{ p: 4 }}>

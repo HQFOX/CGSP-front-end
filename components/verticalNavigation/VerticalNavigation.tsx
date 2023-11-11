@@ -1,4 +1,5 @@
 import React, { ReactNode, SetStateAction } from "react";
+
 import { ArrowBackIos } from "@mui/icons-material";
 import {
 	Box,
@@ -13,9 +14,11 @@ import {
 	Typography,
 	styled
 } from "@mui/material";
+
 import Link from "next/link";
-import theme from "../../theme";
 import { useRouter } from "next/router";
+
+import theme from "../../theme";
 
 export interface VerticalNavigationProps {
   open?: boolean;
@@ -37,10 +40,6 @@ export const StyledListItemButton = styled(ListItemButton)({
 export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationProps) => {
 
 	const router = useRouter();
-
-	console.log(router.pathname);
-
-	console.log(pages);
 
 	return (
 		<Drawer

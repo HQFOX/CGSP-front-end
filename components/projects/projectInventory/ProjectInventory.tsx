@@ -1,12 +1,12 @@
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
-import { Controls } from "../controls/Controls";
+import { Controls } from "../../controls/Controls";
 import { Fade, Grid } from "@mui/material";
-import ProjectCard from "../projects/ProjectCard";
+import ProjectCard from "../ProjectCard";
 import dynamic from "next/dynamic";
 
-const Map = dynamic(() => import("../map/Map"), {
+const Map = dynamic(() => import("../../map/Map"), {
 	ssr: false
 });
 
@@ -191,6 +191,22 @@ export const ProjectInventory = ({
 		return result;
 	};
 
+	const filterResultsByAssignmentStatus = (param: string[], projects: Project[]) => {
+		let result: Project[] = projects;
+		
+		result = projects.filter( (project) => project.assignmentStatus && param.includes(project.assignmentStatus));
+		
+		return result;
+	};
+
+	const filterResultsByConstructionStatus = (param: string[], projects: Project[]) => {
+		let result: Project[] = projects;
+		
+		result = projects.filter( (project) => project.constructionStatus && param.includes(project.constructionStatus));
+		
+		return result;
+	};
+
 	useMemo(() => {
 		let results = projects;
 		results = filterResultsByLocation(search.location, results);
@@ -200,6 +216,8 @@ export const ProjectInventory = ({
 		results = filterResultsByPrice(search.priceRange, results);
 		results = filterResultsByTypology(search.typologies, results);
 		results = filterResultsByType(search.types, results);
+		results = filterResultsByAssignmentStatus(search.assignmentStatus, results);
+		results = filterResultsByConstructionStatus(search.constructionStatus, results);
 		setProjectSearchResults(results);
 	}, [search, projects]);
 
@@ -212,16 +230,6 @@ export const ProjectInventory = ({
 			}
 		});
 		return locationSet;
-	};
-
-	const status = (projectData: Project[]): string[] => {
-		const statusSet: string[] = [t("allm")];
-		projectData.map((project) => {
-			if (project.status && !statusSet.includes(t(`status.${project.status}`))) {
-				statusSet.push(t(`status.${project.status}`));
-			}
-		});
-		return statusSet;
 	};
 
 	const onLocationChange = (location: string) => {
@@ -282,13 +290,35 @@ export const ProjectInventory = ({
 		}
 	};
 
+	const onAssignmentStatusChange = (param: AssignmentStatusType, checked: boolean) => {
+		if(!checked)
+		{
+			setSearch((search) => ({ ...search, assignmentStatus: search.assignmentStatus.filter( value => value !== param)}));
+		}
+		else
+		{
+			setSearch((search) => ({ ...search, assignmentStatus: [...search.assignmentStatus, param]}));
+		}
+	};
+
+	const onConstructionStatusChange = (param: ConstructionStatusType, checked: boolean) => {
+		if(!checked)
+		{
+			setSearch((search) => ({ ...search, constructionStatus: search.constructionStatus.filter( value => value !== param)}));
+		}
+		else
+		{
+			setSearch((search) => ({ ...search, constructionStatus: [...search.constructionStatus, param]}));
+		}
+	};
+
+
 	return (
 		<>
 			<Controls
 				search={search}
 				view={view}
 				locations={locations(projects)}
-				status={status(projects)}
 				priceRange={getPriceRange(projects)}
 				typologies={getTypologies(projects)}
 				types={getTypes(projects)}
@@ -299,6 +329,8 @@ export const ProjectInventory = ({
 				onPriceRangeChange={onPriceRangeChange}
 				onTypologyChange={onTypologyChange}
 				onTypeChange={onTypeChange}
+				onAssignmentStatusChange={onAssignmentStatusChange}
+				onConstructionStatusChange={onConstructionStatusChange}
 			/>
 			<Grid container>
 				{view === "card" &&

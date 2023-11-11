@@ -1,5 +1,6 @@
 import React from "react";
 import Carousel from "react-material-ui-carousel";
+import house from "../../public/house.png";
 import carousel1 from "../../public/carousel1.jpg";
 import carousel2 from "../../public/carousel2.jpg";
 import carousel3 from "../../public/carousel3.jpg";
@@ -7,6 +8,11 @@ import CarouselCard from "./CarouselCard";
 import theme from "../../theme";
 
 const items = [
+	{
+		name: "Giraldo Sem Pavor Cooperativa de Construção e Habitação",
+		description: "A desenhar e construir habitações para os seus sócios há mais de 40 anos.",
+		image: house
+	},
 	{
 		name: "Sede da Cooperativa Évora",
 		description: "Probably the most random thing you have ever seen!",
@@ -33,6 +39,7 @@ const CGSPCarousel: React.FC = () => {
 					marginTop: "1em"
 				}
 			}}
+			autoPlay={false}
 			activeIndicatorIconButtonProps={{
 				style: {
 					color: theme.palette.primary.main,

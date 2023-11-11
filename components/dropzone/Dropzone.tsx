@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
 import { AddPhotoAlternate, Cancel } from "@mui/icons-material";
 import { Grid, IconButton, Typography } from "@mui/material";
+
+import styled from "@emotion/styled";
+
 import { FileError, FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
-import { useState } from "react";
 import theme from "../../theme";
 import { AbstractFile } from "../forms/UpdateForm";
-import styled from "@emotion/styled";
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -112,48 +114,25 @@ export const CGSPDropzone = ({
 			<Grid item>
 				{ files && files?.length > 0 && files.map( (file, index) =>
 					<div key={index} style={{ position: "relative" }}>
-						{file.file && 
-							<div style={{ position: "relative", width: 100, height: 100 , border: "1px solid #F5F5F5"}}>
-								<Image
-									src={URL.createObjectURL(file.file)}
-									fill
-									style={{objectFit: "contain"}}
-									alt="submitted image" />
-								<IconButton
-									aria-label="delete"
-									sx={{
-										position: "absolute",
-										top: "-16px",
-										right: "-16px",
-										backgroundColor: "#F5F5F580"
-									}}
-									color="secondary"
-									onClick={(e) => handleDeleteFile(e)}>
-									<Cancel />
-								</IconButton>
-							</div>
-						}
-						{file.source && 
-							<div style={{ position: "relative", width: 100, height: 100 , border: "1px solid #F5F5F5"}}>
-								<Image
-									src={file.source}
-									fill
-									style={{objectFit: "contain"}}
-									alt="submitted image" />
-								<IconButton
-									aria-label="delete"
-									sx={{
-										position: "absolute",
-										top: "-16px",
-										right: "-16px",
-										backgroundColor: "#F5F5F580"
-									}}
-									color="secondary"
-									onClick={(e) => handleDeleteFile(e)}>
-									<Cancel />
-								</IconButton>
-							</div>
-						}
+						<div style={{ position: "relative", width: 100, height: 100 , border: "1px solid #F5F5F5"}}>
+							<Image
+								src={file.file ? URL.createObjectURL(file.file) : `${process.env.NEXT_PUBLIC_S3_URL}${file.filename}`}
+								fill
+								style={{objectFit: "contain"}}
+								alt="submitted image" />
+							<IconButton
+								aria-label="delete"
+								sx={{
+									position: "absolute",
+									top: "-16px",
+									right: "-16px",
+									backgroundColor: "#F5F5F580"
+								}}
+								color="secondary"
+								onClick={(e) => handleDeleteFile(e)}>
+								<Cancel />
+							</IconButton>
+						</div>
 					</div>
 				)}
 			</Grid>

@@ -1,138 +1,23 @@
+import React, { useState } from "react";
+
 import {
 	Card,
-	CardContent,
-	Typography,
+	// CardContent,
+	// Typography,
 	CardActions,
 } from "@mui/material";
-import React, { useState } from "react";
 import Carousel from "react-material-ui-carousel";
-import carousel1 from "../../public/carousel1.jpg";
-import carousel2 from "../../public/carousel2.jpg";
-import carousel3 from "../../public/carousel3.jpg";
 import ProjectCarouselCard from "./ProjectCarouselCard";
-import construction0 from "../../public/1/construction/construcao0.jpg";
-import construction1 from "../../public/1/construction/construcao1.jpg";
-import construction2 from "../../public/1/construction/construcao2.jpg";
-import construction3 from "../../public/1/construction/construcao3.jpg";
-import construction4 from "../../public/1/construction/construcao4.jpg";
-import projection3 from "../../public/1/projection/projeccao3.jpg";
-import projection5 from "../../public/1/projection/projeccao5.jpg";
-import projection6 from "../../public/1/projection/projeccao6.jpg";
-import projection7 from "../../public/1/projection/projeccao7.jpg";
-import projection8 from "../../public/1/projection/projeccao8.jpg";
-import ProjectModal from "../modals/projectModal/projectModal";
+import ProjectModal from "../../modals/projectModal/projectModal";
 import {
-	Foundation,
+	// Foundation,
 	Fullscreen,
-	ViewInAr,
-	AutoAwesomeMosaic
+	// ViewInAr,
+	// AutoAwesomeMosaic
 } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { StyledButton } from "../Button";
-import theme from "../../theme";
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const items: CarouselItem[] = [
-	{
-		name: "Sede da Cooperativa Évora",
-		description: "Probably the most random thing you have ever seen!",
-		image: carousel1
-	},
-	{
-		name: "LOTEAMENTO MOINHO I - ÉVORA",
-		description: "Hello World!",
-		image: carousel2
-	},
-	{
-		name: "LOTEAMENTO CABEÇO DO ARRAIAL - ALMEIRIM - ÉVORA",
-		description: "Hello World!",
-		image: carousel3
-	}
-];
-
-const construction: CarouselItem[] = [
-	{
-		name: "",
-		description: "",
-		image: construction0
-	},
-	{
-		name: "",
-		description: "",
-		image: construction1
-	},
-	{
-		name: "",
-		description: "",
-		image: construction2
-	},
-	{
-		name: "",
-		description: "",
-		image: construction3
-	},
-	{
-		name: "",
-		description: "",
-		image: construction4
-	}
-];
-
-const projection: CarouselItem[] = [
-	{
-		name: "",
-		description: "",
-		image: projection3
-	},
-	{
-		name: "",
-		description: "",
-		image: projection5
-	},
-	{
-		name: "",
-		description: "",
-		image: projection6
-	},
-	{
-		name: "",
-		description: "",
-		image: projection7
-	},
-	{
-		name: "",
-		description: "",
-		image: projection8
-	}
-];
-
-const plant: CarouselItem[] = [
-	{
-		name: "",
-		description: "",
-		image: construction1
-	},
-	{
-		name: "",
-		description: "",
-		image: construction1
-	},
-	{
-		name: "",
-		description: "",
-		image: construction2
-	},
-	{
-		name: "",
-		description: "",
-		image: construction3
-	},
-	{
-		name: "",
-		description: "",
-		image: construction4
-	}
-];
+import { StyledButton } from "../../Button";
+import theme from "../../../theme";
 
 enum CategoryType {
   "construction",
@@ -142,12 +27,13 @@ enum CategoryType {
 }
 
 const ProjectCarousel = ({ project } : { project?: Project}) => {
-	const [category, setCategory] = useState<CategoryType>(CategoryType.projection);
+	const [category, setCategory] = useState<CategoryType>(CategoryType.all);
 	const [index, setIndex] = useState<number>(0);
 	const [openModal, setOpenModal] = useState<boolean>(false);
 	const [autoPlay, setAutoPlay] = useState<boolean>(true);
 	const { t } = useTranslation(["projectpage"]);
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleSetCategory = (category: CategoryType) => {
 		setCategory(category);
 		setIndex(0);
@@ -197,6 +83,16 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 					index={`${i}`}
 					item={item}
 					handleOpenModal={() => handleOpenModal(i)}
+					handleCloseModal={handleCloseModal}
+				/>
+			));
+		case CategoryType.all:
+			return project?.files && project?.files.map((file, index) => (
+				<ProjectCarouselCard
+					key={`${category + index}`}
+					index={index.toString()}
+					item={`${process.env.NEXT_PUBLIC_S3_URL}${file.filename}`}
+					handleOpenModal={() => handleOpenModal(index)}
 					handleCloseModal={handleCloseModal}
 				/>
 			));

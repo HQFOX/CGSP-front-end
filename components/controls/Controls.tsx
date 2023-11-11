@@ -5,7 +5,7 @@ import Dropdown from "../dropdown/Dropdown";
 import { useTranslation } from "next-i18next";
 import { ViewType } from "../../pages/projects";
 import styled from "@emotion/styled";
-import { SearchParams } from "../projectInventory/ProjectInventory";
+import { SearchParams } from "../projects/projectInventory/ProjectInventory";
 
 const StyledInput = styled.input({
 	fontSize: "1rem",
@@ -22,7 +22,8 @@ export interface ControlProps {
     search: SearchParams
     view?: ViewType
     locations?: string[],
-    status?: string[],
+	assignmentStatus?: AssignmentStatusType[]
+	constructionsStatus?: ConstructionStatusType[]
 	priceRange?: number[],
 	typologies?: string[],
 	types?: string[],
@@ -33,23 +34,27 @@ export interface ControlProps {
 	onPriceRangeChange?: (range: number[]) => void,
 	onTypologyChange?: (typology: string, checked: boolean) => void,
 	onTypeChange?: (type: string, checked: boolean) => void,
+	onAssignmentStatusChange?: (status: AssignmentStatusType, checked: boolean) => void,
+	onConstructionStatusChange?: (status: ConstructionStatusType, checked: boolean) => void,
 }
 
 export const Controls = ({
 	search,
 	view = "card",
 	locations = [],
-	status = [],
+	assignmentStatus = ["WAITING","ONGOING","CONCLUDED"],
+	constructionsStatus= ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"],
 	priceRange = [0,0],
 	typologies = [],
 	types = [],
 	onWildCardChange,
 	onViewChange,
-	onStatusChange,
 	onLocationChange,
 	onPriceRangeChange = () => {},
 	onTypologyChange = () => {},
 	onTypeChange = () => {},
+	onAssignmentStatusChange = () => {},
+	onConstructionStatusChange = () => {},
 }: ControlProps) => {
 
 	const { t } = useTranslation("projectpage");
@@ -76,6 +81,14 @@ export const Controls = ({
 
 	const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
 		onTypeChange(event.target.name, checked);
+	};
+
+	const handleAssignmentStatusChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+		onAssignmentStatusChange(event.target.name as AssignmentStatusType, checked);
+	};
+
+	const handleConstructionStatusChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+		onConstructionStatusChange(event.target.name as ConstructionStatusType, checked);
 	};
 
 	return (
@@ -116,7 +129,7 @@ export const Controls = ({
                     <ViewListOutlined />
                 </IconButton>
             </Grid> */}
-				{onStatusChange &&
+				{/* {onStatusChange &&
                     <Grid item>
                     	<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
                     		<b></b>{"Estado de Construção"}:{" "}
@@ -128,7 +141,7 @@ export const Controls = ({
                     		valueChange={onStatusChange}
                     	/>
                     </Grid>
-				}
+				} */}
 				{onLocationChange && 
                     <Grid item>
                     	<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
@@ -147,56 +160,40 @@ export const Controls = ({
 					<Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-start">
 						<Paper sx={{p: 4}} >
 							<Stack spacing={2} >
-								{/* {onStatusChange &&
-									<div>
-										<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-											{"Estado de Atribuição"}:{" "}
-										</Typography>
-										<Dropdown
-											label={"Status"}
-											displayValue={search.status}
-											options={status}
-											valueChange={onStatusChange}
-										/>
-									</div>
-								} */}
 								<div>
 									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-										{"Estado de Construção"}:{" "}
+										{t("projectDetails.constructionStatus")}:{" "}
 									</Typography>
 									<FormGroup>
-										<FormControlLabel control={<Checkbox />} label={"Alvará De Loteamento Aprovado"}/>
-										<FormControlLabel control={<Checkbox />} label={"Alvará de Construção Aprovado"}/>
-										<FormControlLabel control={<Checkbox />} label={"Concluído"}/>
+										{constructionsStatus.map( (status, index) => (
+											<FormControlLabel control={<Checkbox name={status} onChange={handleConstructionStatusChange} checked={search.constructionStatus.includes(status)}/>} label={t(`constructionStatus.${status}`)} key={index} />
+										))}
 									</FormGroup>
 								</div>
 								<div>
 									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-										{"Estado de Atribuição"}:{" "}
+										{t("projectDetails.assignmentStatus")}:{" "}
 									</Typography>
 									<FormGroup>
-										<FormControlLabel control={<Checkbox />} label={"Em espera"}/>
-										<FormControlLabel control={<Checkbox />} label={"A Decorrer"}/>
-										<FormControlLabel control={<Checkbox />} label={"Concluído"}/>
+										{assignmentStatus.map( (status, index) => (
+											<FormControlLabel control={<Checkbox name={status} onChange={handleAssignmentStatusChange} checked={search.assignmentStatus.includes(status)}/>} label={t(`assignmentStatus.${status}`)} key={index} />
+										))}
 									</FormGroup>
 								</div>
-								{onTypologyChange && onTypeChange &&
-									<div>
-										<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-											{"Tipologias"}:{" "}
-										</Typography>
-										<FormGroup row>
-											{typologies.map( (typology, index) => <FormControlLabel control={<Checkbox onChange={handleTypologyChange} name={typology}/>} label={typology} key={index} checked={search.typologies.includes(typology)}/>)}
-										</FormGroup>
-										<FormGroup row>
-											{types.map( (type, index) => <FormControlLabel control={<Checkbox onChange={handleTypeChange} name={type} />} label={type} key={index} checked={search.types.includes(type)}/>)}
-										</FormGroup>
-									</div>
-									
-								}
 								<div>
 									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-										Preço:
+										{t("projectDetails.typologies")}:{" "}
+									</Typography>
+									<FormGroup row>
+										{typologies.map( (typology, index) => <FormControlLabel control={<Checkbox onChange={handleTypologyChange} name={typology}/>} label={typology} key={index} checked={search.typologies.includes(typology)}/>)}
+									</FormGroup>
+									<FormGroup row>
+										{types.map( (type, index) => <FormControlLabel control={<Checkbox onChange={handleTypeChange} name={type} />} label={type} key={index} checked={search.types.includes(type)}/>)}
+									</FormGroup>
+								</div>
+								<div>
+									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
+										{t("projectDetails.price")}
 									</Typography>
 									<Slider
 										getAriaLabel={() => "price range"}

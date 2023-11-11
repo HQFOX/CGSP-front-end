@@ -4,6 +4,7 @@ type Update = {
   content?: string;
   creationDate?: string;
   image?: string;
+  files: {filename: string}[]
   project?: {
     projectId: string,
     title: string,

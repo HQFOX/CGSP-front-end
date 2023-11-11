@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
+import React, { useState } from "react";
+
 import {
 	Box,
 	Divider,
@@ -14,16 +15,7 @@ import {
 	AccordionDetails,
 	styled
 } from "@mui/material";
-import type { NextPage } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { EnrollmentModal } from "../../components/modals/enrollmentModal/enrollmentModal";
-import ProjectCarousel from "../../components/projectCarousel/ProjectCarousel";
-import TabPanel from "../../components/tabpanel/TabPanel";
-import { UpdateStepper } from "../../components/updateStepper/UpdateStepper";
-import dynamic from "next/dynamic";
-import { Loading } from "../../components/loading/Loading";
+
 import {
 	Bathtub,
 	Dashboard,
@@ -36,8 +28,21 @@ import {
 	HowToReg,
 	SquareFoot
 } from "@mui/icons-material";
+
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
+
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "react-i18next";
+
+import { EnrollmentModal } from "../../components/modals/enrollmentModal/enrollmentModal";
+import ProjectCarousel from "../../components/projects/projectCarousel/ProjectCarousel";
+import TabPanel from "../../components/tabpanel/TabPanel";
+import { UpdateStepper } from "../../components/updateStepper/UpdateStepper";
+import { Loading } from "../../components/loading/Loading";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { StyledButton } from "../../components/Button";
+import { LatLngTuple } from "leaflet";
 
 const Map = dynamic(() => import("../../components/map/Map"), {
 	ssr: false,
@@ -228,7 +233,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					<TabPanel index={2} value={value}>
 						<Box>
 							<div id="map" style={{ height: 480 }}>
-								<Map centerCoordinates={project.coordinates} markers={[project.coordinates]} />
+								<Map centerCoordinates={project.coordinates as LatLngTuple} markers={[project.coordinates] as LatLngTuple[]} />
 							</div>
 						</Box>
 					</TabPanel>

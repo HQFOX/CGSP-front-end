@@ -1,5 +1,4 @@
 import {
-
 	CardMedia
 } from "@mui/material";
 import React from "react";
@@ -12,7 +11,7 @@ const ProjectCarouselCard = ({ index, item, handleOpenModal, handleCloseModal }:
 			<div style={{ height: 700, overflow: "hidden" }}>
 				<Image
 					alt=""
-					src={item.image}
+					src={item}
 					fill={true} style={{ objectFit: "cover" }}
 					onClick={handleOpenModal}
 				/>
@@ -23,7 +22,7 @@ const ProjectCarouselCard = ({ index, item, handleOpenModal, handleCloseModal }:
 
 type CarouselCardProps = {
   index: string;
-  item: CarouselItem;
+  item: any;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
 };

@@ -1,5 +1,5 @@
-import React from "react";
-import { CheckCircle, Close } from "@mui/icons-material";
+import React, { useState } from "react";
+
 import {
 	Container,
 	Grid,
@@ -11,92 +11,37 @@ import {
 	TextField,
 	Typography
 } from "@mui/material";
+
+import { CheckCircle, Close } from "@mui/icons-material";
+
 import { useFormik } from "formik";
-import { useState } from "react";
 import * as Yup from "yup";
+
 import { CancelModal } from "../modals/CancelModal";
 import { CGSPDropzone } from "../dropzone/Dropzone";
 import { StyledButton } from "../Button";
+import { AbstractFile } from "./types";
+import { getPresignedUrl, submitFile } from "./utils";
 
-export interface AbstractFile {
-	filename: string,
-	link?: string,
-	file?: File,
-	source? : string, // only used when aws file
-}
+export const UpdateForm = ({
+	 projects, 
+	 onCancel, 
+	 onSubmit, 
+	 update
+	 }	: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
 
-const getFileExtension = (filename: string) => {
-	return filename.substring(filename.lastIndexOf("."), filename.length) || filename;
-};
+	const [files, setFiles] = useState<AbstractFile[]>(update?.files ?? []);
 
-
-const submitFile = async (file : AbstractFile) => {
-	if(file.file){
-
-		const endpoint = "";
-
-		const options = {
-			method: "PUT",
-			headers: {
-				"Content-Type": file.file?.type
-			},
-			body: file.file
-		};
-
-		const response = await fetch(endpoint, options);
-
-		return response.url;
-	}
-
-};
-
-const getPresignedUrl = async (file: File) => {
-
-	const values = {
-		filename: file.name,
-		extension: getFileExtension(file.name),
-	};
-
-	const jsonData = JSON.stringify(values);
-
-	const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/file/url`;
-
-	// console.log(jsonData);
-
-	const options = {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: jsonData
-	};
-
-	const response = await fetch(endpoint, options);
-
-	if (response.status == 200) {
-		const result = (await response.json()) as AbstractFile;
-		result.file = file;
-		console.log(result);
-		return result;
-	}
-	return null;
-};
-
-
-export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
-	const [file, setFile] = useState<AbstractFile[]>(update?.image ? [{filename: "", link: update.image }]:[]);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
 
-	const handleAddFile = async (files: File[]) => {
-		const newfile = await getPresignedUrl(files[0]);
-		if(newfile)
-			setFile([...file, newfile]);
+	const handleAddFile = async (newfiles: File[]) => {
+		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setFiles([...files, value])));
 	};
 
 	const handleDeleteFile = () => {
-		setFile([]);
+		setFiles([]);
 	};
 
 	const formik = useFormik({
@@ -105,51 +50,30 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 			title: update?.title ? update.title : "teste",
 			content: update?.content ? update.content : "teste",
 			project: update?.project ? update.project : null,
-			// image: update ? update.image : undefined,
+			
 		},
 		validationSchema: Yup.object({
 			title: Yup.string().required("Obrigatório"),
 			content: Yup.string(),
 		}),
 		onSubmit: async (values) => {
-			let jsonData;
 
-			if(file.length > 0){
+			if(files.length > 0){
 
-				let imageUrl;
+				Promise.all(files.map( async (file) => submitFile(file)))
+					.then( async res => {
+						console.log(res);
+					
+						const valuesWithImage = {...values, files: files.map( file => { return { "filename": file.filename};})};
 
-				if(file[0].link == undefined){
-					imageUrl = await submitFile(file[0]);
-				}
+						postUpdate(valuesWithImage);
+					})
+					.catch( error => console.log(error));
 				
-				const valuesWithImage = {...values, image: file[0].link ?? file[0].filename};
-
-				jsonData = JSON.stringify( imageUrl != null ? valuesWithImage : values);
 			}
 			else{
-				jsonData = JSON.stringify(values);
+				postUpdate(values);
 			}
-
-			const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
-
-			console.log(console.log(jsonData));
-
-			const options = {
-				method: update ? "PUT" : "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: jsonData
-			};
-
-			const response = await fetch(endpoint, options);
-
-			if (response.status == 200) {
-				setSubmitted(true);
-				onSubmit();
-			}
-			const result = response.json();
-			console.log(result);
 
 		}
 	});
@@ -157,6 +81,31 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 	const handleClose = (confirm: boolean) => {
 		setCancelModal(false);
 		confirm && onCancel();
+	};
+
+	const postUpdate = (values: unknown) => {
+
+		const jsonData = JSON.stringify(values);
+
+		const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
+
+		const options = {
+			method: update ? "PUT" : "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: jsonData
+		};
+
+		fetch(endpoint, options).then( () => {
+			setSubmitted(true);
+			onSubmit();
+
+		}).catch( error => {
+			console.log(error);
+		});
+
+
 	};
 
 	return (
@@ -199,7 +148,7 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 								<Typography variant="h6">Adicionar Foto à Atualização</Typography>
 								<CGSPDropzone
 									maxContent={1}
-									files={file}
+									files={files}
 									onAddFile={handleAddFile}
 									onDeleteFile={handleDeleteFile}
 								/>

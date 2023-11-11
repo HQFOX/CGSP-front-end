@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { PageContainer } from "../components/pageContainer/PageContainer";
 import { Box, Divider, Typography } from "@mui/material";
 import { useTranslation } from "next-i18next";
-import { ProjectInventory } from "../components/projectInventory/ProjectInventory";
+import { ProjectInventory } from "../components/projects/projectInventory/ProjectInventory";
 
 const History: NextPage<{ projects: Project[] }> = (data) => {
 	

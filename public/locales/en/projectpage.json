@@ -12,7 +12,10 @@
         "details": "details",
         "lots": "Lots",
         "assignedLots": "Assigned Lots",
-        "location": "Location"
+        "location": "Location",
+        "assignmentStatus": "Assignment Status",
+        "constructionStatus": "Construction Status",
+        "price": "Price"
     },
     "typologyDetails" : {
         "typology" : "Typology",
@@ -26,6 +29,16 @@
         "completed" : "Completed",
         "building" : "Building",
         "open" : "Open"
+    },
+    "assignmentStatus" : {
+        "WAITING" : "Waiting",
+        "ONGOING" : "Ongoing",
+        "CONCLUDED" : "Concluded"
+    },
+    "constructionStatus" : {
+        "ALLOTMENTPERMIT" : "Allotment Permit Approved",
+        "BUILDINGPERMIT" : "Construction Permit Approved",
+        "CONCLUDED" : "Concluded"
     },
     "preEnroll" : "Pre-Enroll",
     "form" : {

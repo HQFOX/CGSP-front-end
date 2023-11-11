@@ -8,7 +8,8 @@ import { LatLngTuple, divIcon } from "leaflet";
 import { renderToStaticMarkup } from "react-dom/server";
 
 import theme from "../../theme";
-import ProjectCard from "../projects/ProjectCard";
+import { ProjectCardPopUp } from "../projects/ProjectCardPopUp";
+import { ClassNames } from "@emotion/react";
 
 interface MapProps {
     centerCoordinates: LatLngTuple,
@@ -24,6 +25,15 @@ const customMarkerIcon = divIcon({
 	html: iconMarkup
 });
 
+const styles = {
+	root: { 
+		margin: 0,
+		".leaflet-popup-content p" : {
+			margin: 0,
+		}
+		 
+	 }
+};
 
 
 const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [] }: MapProps) => {
@@ -48,16 +58,17 @@ const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [] }: MapP
 			/>
 			{ markers.map( (marker, index) => (
 				<Marker position={marker} icon={customMarkerIcon} key={index}>
-					<Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-					</Popup>
 				</Marker>
 			))}
 			{ projects.map( (project, index) => (
 				<Marker position={project.coordinates as LatLngTuple} icon={customMarkerIcon} key={index}>
-					<Popup>
-						<ProjectCard project={project} key={index}/>
-					</Popup>
+					<ClassNames>
+						{({ css }) => (
+							<Popup className={css(styles.root)}>
+								<ProjectCardPopUp project={project}/>
+							</Popup>
+						)}
+					</ClassNames>
 				</Marker>
 			))}	
 

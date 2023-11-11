@@ -1,29 +1,49 @@
-import { Button, Box, Typography, styled } from "@mui/material";
 import React from "react";
+
+import { Button, Box, Typography, styled, Grid, CardContent, CardMedia, Container } from "@mui/material";
+
+import Image from "next/image";
+import { StyledButton } from "../Button";
 
 const CarouselCard = ({ index, item }: CarouselCardProps) => {
 	return (
-		<Box
-			key={`carousel${index}`}
-			sx={{
-				backgroundImage: `url(${item.image.src})`,
-				backgroundRepeat: "no-repeat",
-				backgroundPosition: "center",
-				backgroundSize: { xs: "cover", md: "auto" },
-				width: "100vw",
-				height: "70vh",
-				display: "flex"
-			}}>
-			<CarouselCardText>
-				<Typography variant="h4" component="h1" color="common.white">
-					{item.name}
-				</Typography>
-				<Typography variant="subtitle1" component="h2" color="common.white">
-					{item.description}
-				</Typography>
-				<Button className="CheckButton">Check it out!</Button>
-			</CarouselCardText>
-		</Box>
+		// <Box
+		// 	key={`carousel${index}`}
+		// 	sx={{
+		// 		backgroundImage: `url(${item.image.src})`,
+		// 		backgroundRepeat: "no-repeat",
+		// 		backgroundPosition: "center",
+		// 		backgroundSize: { xs: "cover", md: "auto" },
+		// 		width: "100vw",
+		// 		height: "60vh",
+		// 		display: "flex"
+		// 	}}>
+		// 	<CarouselCardText>
+		// 		<Typography variant="h4" component="h1" color="common.white">
+		// 			{item.name}
+		// 		</Typography>
+		// 		<Typography variant="subtitle1" component="h2" color="common.white">
+		// 			{item.description}
+		// 		</Typography>
+		// 		<Button className="CheckButton">Check it out!</Button>
+		// 	</CarouselCardText>
+		// </Box>
+		<Grid container spacing={0}  height={600}>
+			<Grid item xs={5} alignSelf={"center"}>
+				<CardContent sx={{ p: 8, maxWidth: 500}}>
+					<Typography variant="h4" component="h1">
+						{item.name}
+					</Typography>
+					<Typography variant="subtitle1" component="h2">
+		 			{item.description}
+		 				</Typography>
+		 				<StyledButton variant="outlined">Sobre nós</StyledButton>
+				</CardContent>
+			</Grid>
+			<Grid item xs={7}>
+				<Image width={1500} height={600} src={item.image.src} alt="" style={{ maxWidth: "70dvw", objectFit: "contain"}}/>
+			</Grid>
+		</Grid>
 	);
 };
 
