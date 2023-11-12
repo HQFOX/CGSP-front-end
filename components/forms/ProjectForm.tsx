@@ -33,6 +33,7 @@ import { CancelModal } from "../modals/CancelModal";
 import { StyledButton } from "../Button";
 import { getPresignedUrl, submitFile } from "./utils";
 import { AbstractFile } from "./types";
+import { useTranslation } from "react-i18next";
 
 const Map = dynamic(() => import("../map/Map"), {
 	ssr: false
@@ -56,7 +57,11 @@ export const uploadImages = (path: string, files: File[]): boolean => {
 };
 
 export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project, onCancel: () => void, onSubmit: () => void}) => {
+
+	const { t } = useTranslation(["projectpage", "common"]);
+
 	const [files, setFiles] = useState<AbstractFile[]>(project?.files ?? []);
+	const [coverPhoto, setCoverPhoto] = useState<AbstractFile[]>([]);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
@@ -99,47 +104,29 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		}),
 		onSubmit: async (values) => {
 
-			let formatValue;
-
-			if(files.length > 0){
-
-				files.map( (file) => submitFile(file));
+			Promise.all(coverPhoto.map( async (file) => submitFile(file))).then( async () => {
 				
-				const valuesWithImage = files.map( file => { return { "filename": file.filename };});
+				Promise.all(files.map( async (file) => submitFile(file)))
+					.then( async res => {
+						console.log(res);
 
-				formatValue = {
-					title: values.title,
-					assignmentStatus: values.assignmentStatus,
-					constructionStatus: values.constructionStatus,
-					location: values.location,
-					lots: values.lots,
-					assignedLots: values.assignedLots,
-					typologies: values.typologies,
-					coordinates: [values.latitude, values.longitude],
-					files: valuesWithImage
-				};
-
-				postProject(formatValue);
-
-			}
-			else{
-
-				formatValue = {
-					title: values.title,
-					assignmentStatus: values.assignmentStatus,
-					constructionStatus: values.constructionStatus,
-					location: values.location,
-					lots: values.lots,
-					assignedLots: values.assignedLots,
-					typologies: values.typologies,
-					coordinates: [values.latitude, values.longitude],
-					// files: values.files
-				};
-
-				postProject(formatValue);
-			}
-
+						const formatValue = {
+							title: values.title,
+							assignmentStatus: values.assignmentStatus,
+							constructionStatus: values.constructionStatus,
+							location: values.location,
+							lots: values.lots,
+							assignedLots: values.assignedLots,
+							typologies: values.typologies,
+							coordinates: [values.latitude, values.longitude],
+							coverPhoto: coverPhoto.map( cover => { return { "filename": cover.filename };})[0],
+							files: files.map( file => { return { "filename": file.filename};})
+						};
 		
+						postProject(formatValue);
+					})
+					.catch( error => console.log(error));
+			});
 
 		}
 	});
@@ -168,8 +155,16 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setFiles([...files, value])));
 	};
 
-	const handleDeleteFile = () => {
-		setFiles([]);
+	const handleDeleteFile = (file: AbstractFile) => {
+		setFiles(files.filter( item => item != file));
+	};
+
+	const handleAddCover = async (newfiles: File[]) => {
+		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setCoverPhoto([...files, value])));
+	};
+
+	const handleDeleteCover = () => {
+		setCoverPhoto([]);
 	};
 
 	const handleClose = (confirm: boolean) => {
@@ -192,9 +187,12 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			body: jsonData
 		};
 
-		fetch(endpoint, options).then( () => {
-			setSubmitted(true);
-			onSubmit();
+		fetch(endpoint, options).then( (response) => {
+			if(response.ok){
+				setSubmitted(true);
+				onSubmit();
+			}
+			throw new Error("Error submitting Project:" + response);
 
 		}).catch( error => {
 			console.log(error);
@@ -244,32 +242,32 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 										label="Assignment Status"
 										labelId="assignment-status-select-dropdown-label"
 										id="assignment-status-select-dropdown"
-										name="assignment-status"
+										name="assignmentStatus"
 										value={formik.values.assignmentStatus}
 										error={formik.touched.assignmentStatus && Boolean(formik.errors.assignmentStatus)}
 										onChange={formik.handleChange}
 										sx={{ width: "100%" }}>
-										<MenuItem value={"WAITING"}>WAITING</MenuItem>
-										<MenuItem value={"ONGOING"}>ONGOING</MenuItem>
-										<MenuItem value={"CONCLUDED"}>CONCLUDED</MenuItem>
+										<MenuItem value={"WAITING"}>{t("assignmentStatus.WAITING")}</MenuItem>
+										<MenuItem value={"ONGOING"}>{t("assignmentStatus.ONGOING")}</MenuItem>
+										<MenuItem value={"CONCLUDED"}>{t("assignmentStatus.CONCLUDED")}</MenuItem>
 									</Select>
 								</FormControl>
 							</Grid>
 							<Grid item xs={4}>
 								<FormControl sx={{ width: "100%"}}>
-									<InputLabel id="construction-status-select-dropdown-label">Contruction Status</InputLabel>
+									<InputLabel id="construction-status-select-dropdown-label">Construction Status</InputLabel>
 									<Select
 										label="Construction Status"
 										labelId="construction-status-select-dropdown-label"
 										id="construction-status-select-dropdown"
-										name="construction-status"
+										name="constructionStatus"
 										value={formik.values.constructionStatus}
 										error={formik.touched.constructionStatus && Boolean(formik.errors.constructionStatus)}
 										onChange={formik.handleChange}
 										sx={{ width: "100%" }}>
-										<MenuItem value={"ALLOTMENTPERMIT"}>ALLOTMENTPERMIT</MenuItem>
-										<MenuItem value={"BUILDINGPERMIT"}>BUILDINGPERMIT</MenuItem>
-										<MenuItem value={"CONCLUDED"}>CONCLUDED</MenuItem>
+										<MenuItem value={"ALLOTMENTPERMIT"}>{t("constructionStatus.ALLOTMENTPERMIT")}</MenuItem>
+										<MenuItem value={"BUILDINGPERMIT"}>{t("constructionStatus.BUILDINGPERMIT")}</MenuItem>
+										<MenuItem value={"CONCLUDED"}>{t("constructionStatus.CONCLUDED")}</MenuItem>
 									</Select>
 								</FormControl>
 							</Grid>
@@ -423,12 +421,12 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							</Grid>
 							<Grid item xs={6}>
 								<Typography variant="h6">Adicionar Foto de Capa</Typography>
-								{/* <CGSPDropzone
-									maxContent={3}
-									// files={file}
-									onAddFile={handleAddFile}
-									onDeleteFile={handleDeleteFile}
-								/> */}
+								<CGSPDropzone
+									maxContent={1}
+									files={coverPhoto}
+									onAddFile={handleAddCover}
+									onDeleteFile={handleDeleteCover}
+								/>
 							</Grid>
 							<Grid item xs={6}></Grid>
 							<Grid item xs={12}>

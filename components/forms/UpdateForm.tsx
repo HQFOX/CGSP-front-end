@@ -58,22 +58,22 @@ export const UpdateForm = ({
 		}),
 		onSubmit: async (values) => {
 
-			if(files.length > 0){
+			// if(files.length > 0){
 
-				Promise.all(files.map( async (file) => submitFile(file)))
-					.then( async res => {
-						console.log(res);
+			Promise.all(files.map( async (file) => submitFile(file)))
+				.then( async res => {
+					console.log(res);
 					
-						const valuesWithImage = {...values, files: files.map( file => { return { "filename": file.filename};})};
+					const valuesWithImage = {...values, files: files.map( file => { return { "filename": file.filename};})};
 
-						postUpdate(valuesWithImage);
-					})
-					.catch( error => console.log(error));
+					postUpdate(valuesWithImage);
+				})
+				.catch( error => console.log(error));
 				
-			}
-			else{
-				postUpdate(values);
-			}
+			// }
+			// else{
+			// 	postUpdate(values);
+			// }
 
 		}
 	});

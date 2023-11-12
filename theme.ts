@@ -8,24 +8,29 @@ const theme = createTheme({
 	palette: {
 		primary: {
 			main: "#FF7F51",
-			light: "#ffbf8a",
+			light: "#ffb79e",
 			dark: "#c75f30",
 			contrastText: "#fff"
 		},
 		secondary: {
 			main: "#f0efc0",
-			light: "#ffffff",
-			dark: "#a2a2a2"
+			light: "#f6f5d9",
+			dark: "#d8d7ac"
 		},
 		warning: {
+			light: "#fbe5a0",
 			main: "#f7cb42",
-
+			dark: "#c5a234"
 		},
 		error: {
-			main: "#f92b5b"
+			light: "#fb7f9c",
+			main: "#f92b5b",
+			dark: "#ae1e3f",
 		},
 		success: {
-			main: "#9ae3bb"
+			light: "#d6f3e3",
+			main: "#9ae3bb",
+			dark: "#7bb595"
 		},
 		info: {
 			dark: "#40a7cc",

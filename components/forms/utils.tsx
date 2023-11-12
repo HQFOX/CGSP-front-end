@@ -12,10 +12,12 @@ export const submitFile = async (file : AbstractFile) => {
 		body: file.file
 	};
 
-	const response = await fetch(endpoint, options);
-
-	return response;
-
+	return fetch(endpoint, options).then( response => {
+		if (response.ok) {
+			return true;
+		}
+		throw new Error("Error submitting File:" + file.filename);
+	});
 };
 
 const getFileExtension = (filename: string) => {

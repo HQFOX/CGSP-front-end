@@ -43,6 +43,8 @@ import { Loading } from "../../components/loading/Loading";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { StyledButton } from "../../components/Button";
 import { LatLngTuple } from "leaflet";
+import { Details } from "../../components/details/Details";
+import theme from "../../theme";
 
 const Map = dynamic(() => import("../../components/map/Map"), {
 	ssr: false,
@@ -93,40 +95,22 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 				</Box>
 				<Grid container p={5}>
 					<TabPanel index={0} value={value}>
-						<Grid container>
-              				<Grid item md={6}>
-              					<StyledTypography variant="body2" color="text.secondary">
-              						<HomeWork sx={{ marginRight: "5px" }} />
-              						{t("projectDetails.typologies")}:{" "}
-              						{project.typologies?.map((details) => details.typology + " ")}
-              					</StyledTypography>
-              				</Grid>
-              				<Grid item md={6}>
-              					<StyledTypography variant="body2" color="text.secondary">
-              						<Home sx={{ marginRight: "5px" }} />
-              						{t("projectDetails.lots")}: {project.lots}
-              					</StyledTypography>
-              				</Grid>
-              				<Grid item md={6}>
-              					<StyledTypography variant="body2" color="text.secondary">
-              						<HowToReg sx={{ marginRight: "5px" }} />
-              						{t("projectDetails.assignedLots")}: {project.assignedLots}
-              					</StyledTypography>
-              				</Grid>
-              			</Grid>
-              			<StyledTypography variant="body2" color="text.secondary">
+						<Details project={project} />
+              			{/* <StyledTypography variant="body2" color="text.secondary">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                       incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
                       nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              			</StyledTypography>
+              			</StyledTypography> */}
 						{project.typologies != null &&
               project.typologies.map((typology, index) => {
               	return (
-              			<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0}>
+              			<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0} >
               				<AccordionSummary
               					expandIcon={<ExpandMore />}
               					aria-controls="panel1a-content"
-              					id="panel1a-header">
+              					id="panel1a-header"
+              					sx={{ backgroundColor: theme.palette.secondary.light}}
+              				>
               					<Typography>{typology.typology}</Typography>
               				</AccordionSummary>
               				<AccordionDetails>
@@ -177,14 +161,14 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               								}`}</StyledTypography>
               							</Stack>
               						</Grid>
-									  <Grid item>
+									  {/* <Grid item>
               							<Stack direction="row" gap={1}>
               								<Dashboard color="primary" />
               								<StyledTypography variant="body2" color="text.secondary">{`Plant: ${
               									typology.plant
               								}`}</StyledTypography>
               							</Stack>
-              						</Grid>
+              						</Grid> */}
               					</Grid>
               				</AccordionDetails>
               			</Accordion>

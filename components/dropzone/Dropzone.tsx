@@ -8,7 +8,7 @@ import styled from "@emotion/styled";
 import { FileError, FileRejection, useDropzone } from "react-dropzone";
 import Image from "next/image";
 import theme from "../../theme";
-import { AbstractFile } from "../forms/UpdateForm";
+import { AbstractFile } from "../forms/types";
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +47,7 @@ export type CGSPDropzoneProps = {
   label?: string;
   maxContent?: number;
   files?: AbstractFile[];
-  onDeleteFile: () => void;
+  onDeleteFile: (file: AbstractFile) => void;
   onAddFile: (files: File[]) => void;
 };
 
@@ -91,9 +91,9 @@ export const CGSPDropzone = ({
 
 
 
-	const handleDeleteFile = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleDeleteFile = (e: React.MouseEvent<HTMLButtonElement>, file: AbstractFile) => {
 		e.stopPropagation();
-		onDeleteFile();
+		onDeleteFile(file);
 	};
 
 
@@ -129,7 +129,7 @@ export const CGSPDropzone = ({
 									backgroundColor: "#F5F5F580"
 								}}
 								color="secondary"
-								onClick={(e) => handleDeleteFile(e)}>
+								onClick={(e) => handleDeleteFile(e, file)}>
 								<Cancel />
 							</IconButton>
 						</div>
