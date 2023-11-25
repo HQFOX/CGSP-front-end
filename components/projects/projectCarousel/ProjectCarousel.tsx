@@ -72,7 +72,7 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 
 	return (
 		<>
-			<Card>
+			<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
 				<Carousel
 					fullHeightHover
 					indicatorContainerProps={{

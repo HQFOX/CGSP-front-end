@@ -79,13 +79,13 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 	return (
 		<PageContainer>
 			<Box sx={{ pb: 4 }}>
-				<Title variant="h5" component="h1">
+				<Title variant="h5" component="h1" fontSize={24}>
 					{project.title}
 				</Title>
 				<Divider />
 			</Box>
 			<ProjectCarousel project={project} />
-			<Paper sx={{ mt: 4 }}>
+			<Paper sx={{ mt: 4, border: "1px solid rgb(237, 237, 237)", boxShadow: 0 }}>
 				<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 					<Tabs value={value} onChange={handleChange}>
 						<StyledTab label={t("tabsTitle.details")} />
@@ -105,7 +105,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 						{project.typologies != null &&
               project.typologies.map((typology, index) => {
               	return (
-              			<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0} >
+              			<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0} sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
               				<AccordionSummary
               					expandIcon={<ExpandMore />}
               					aria-controls="panel1a-content"
