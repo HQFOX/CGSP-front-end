@@ -21,39 +21,54 @@ export interface DetailsProps {
 
 export const Details = ({ project } : DetailsProps) => {
 	const { t } = useTranslation(["projectpage", "common"]);
-	const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+	const [assignmentAnchorEl, setAssignmentAnchorEl] = React.useState<HTMLElement | null>(null);
+	const [constructionAnchorEl, setConstructionAnchorEl] = React.useState<HTMLElement | null>(null);
 
-	const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-	  setAnchorEl(event.currentTarget);
+	const handleAssignmentPopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+	  setAssignmentAnchorEl(event.currentTarget);
 	};
   
-	const handlePopoverClose = () => {
-	  setAnchorEl(null);
+	const handleAssignmentPopoverClose = () => {
+	  setAssignmentAnchorEl(null);
 	};
+
+	const handleConstructionPopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+		setConstructionAnchorEl(event.currentTarget);
+	  };
+	
+	  const handleConstructionPopoverClose = () => {
+		setConstructionAnchorEl(null);
+	  };
   
-	const open = Boolean(anchorEl);
+	const openAssignment = Boolean(assignmentAnchorEl);
+
+	const openConstruction = Boolean(constructionAnchorEl);
 
 	const assignmentChips = (assignmentStatus: string) => {
 
 		let variant: "outlined" | "filled" = "outlined";
 		let chipColor: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" = "info";
 		let textColor;
+		let popoverText;
 		const label = t(`assignmentStatus.${assignmentStatus}`);
 	
 		switch(assignmentStatus){
 		case("WAITING"):
 			variant = "outlined";
 			chipColor = "info";
+			popoverText = t(`assignmentStatus.info.${assignmentStatus}`);
 			break;
 		case("ONGOING"):
 			variant = "filled";
 			chipColor = "success";
 			textColor = "white";
+			popoverText = t(`assignmentStatus.info.${assignmentStatus}`);
 			break;
 		case("CONCLUDED"):
 			variant = "filled";
 			chipColor = "warning";
 			textColor = "white";
+			popoverText = t(`assignmentStatus.info.${assignmentStatus}`);
 			break;
 		default:
 			variant = "filled";
@@ -64,15 +79,23 @@ export const Details = ({ project } : DetailsProps) => {
 	
 		return (
 			<>
-				<Chip icon={<Info />} variant={variant} color={chipColor} label={label} sx={{ color: textColor, textTransform: "capitalize", fontWeight: "700" }} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}/>
-		
+				<Chip 
+					icon={<Info />} 
+					variant={variant} 
+					color={chipColor} 
+					label={label} 
+					sx={{ color: textColor, textTransform: "capitalize", fontWeight: "700" }} 
+					onMouseEnter={handleAssignmentPopoverOpen} 
+					onMouseLeave={handleAssignmentPopoverClose}
+				/>
 				<Popover
-					id="mouse-over-popover"
+					id="mouse-over-popover-assignment"
 					sx={{
 						pointerEvents: "none",
+						// maxWidth: 600
 					}}
-					open={open}
-					anchorEl={anchorEl}
+					open={openAssignment}
+					anchorEl={assignmentAnchorEl}
 					anchorOrigin={{
 						vertical: "top",
 						horizontal: "right",
@@ -81,10 +104,10 @@ export const Details = ({ project } : DetailsProps) => {
 						vertical: "bottom",
 						horizontal: "right",
 					}}
-					onClose={handlePopoverClose}
+					onClose={handleAssignmentPopoverClose}
 					disableRestoreFocus
 				>
-					<Typography sx={{ p: 1 }}>I use Popover.</Typography>
+					<Typography sx={{ p: 3 }} variant="body2" color="text.secondary">{popoverText}</Typography>
 				</Popover>
 			</>
 		);
@@ -102,23 +125,23 @@ export const Details = ({ project } : DetailsProps) => {
 		case("ALLOTMENTPERMIT"):
 			variant = "outlined";
 			chipColor = "warning";
-			popoverText = "";
+			popoverText = t(`constructionStatus.info.${constructionStatus}`);
 			break;
 		case("BUILDINGPERMIT"):
 			variant = "outlined";
 			chipColor = "success";
-			popoverText = "";
+			popoverText = t(`constructionStatus.info.${constructionStatus}`);
 			break;
 		case("ONGOING"):
 			variant = "filled";
 			chipColor = "success";
-			popoverText = "O processo de construção está a decorrer";
+			popoverText = t(`constructionStatus.info.${constructionStatus}`);
 			break;
 		case("CONCLUDED"):
 			variant = "filled";
 			chipColor = "success";
 			textColor = "white";
-			popoverText = "O processo de construção foi terminado.";
+			popoverText = t(`constructionStatus.info.${constructionStatus}`);
 			break;
 		default:
 			variant = "outlined";
@@ -129,15 +152,24 @@ export const Details = ({ project } : DetailsProps) => {
 	
 		return (
 			<>
-				<Chip icon={<Info />} variant={variant} color={chipColor} label={label} sx={{ color: textColor, textTransform: "capitalize", fontWeight: "700" }} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}/>
+				<Chip 
+					icon={<Info />} 
+					variant={variant} 
+					color={chipColor} 
+					label={label} 
+					sx={{ color: textColor, textTransform: "capitalize", fontWeight: "700" }} 
+					onMouseEnter={handleConstructionPopoverOpen} 
+					onMouseLeave={handleConstructionPopoverClose}
+				/>
 		
 				<Popover
-					id="mouse-over-popover"
+					id="mouse-over-popover-construction"
 					sx={{
 						pointerEvents: "none",
+						// maxWidth: 600
 					}}
-					open={open}
-					anchorEl={anchorEl}
+					open={openConstruction}
+					anchorEl={constructionAnchorEl}
 					anchorOrigin={{
 						vertical: "top",
 						horizontal: "right",
@@ -146,10 +178,10 @@ export const Details = ({ project } : DetailsProps) => {
 						vertical: "bottom",
 						horizontal: "right",
 					}}
-					onClose={handlePopoverClose}
+					onClose={handleConstructionPopoverClose}
 					disableRestoreFocus
 				>
-					<Typography sx={{ p: 1 }}>{popoverText}</Typography>
+					<Typography sx={{ p: 3 }} variant="body2" color="text.secondary">{popoverText}</Typography>
 				</Popover>
 			</>
 		);

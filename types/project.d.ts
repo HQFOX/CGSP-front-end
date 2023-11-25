@@ -1,3 +1,7 @@
+type ProjectFile = {
+  filename: string
+};
+
 type Project = {
   id: string;
   title: string;
@@ -6,8 +10,8 @@ type Project = {
   assignmentStatus?: AssignmentStatusType;
   constructionStatus?: ConstructionStatusType;
   coordinates?: [float,float];
-  coverPhoto?: {filename: string};
-  files?: {filename: string}[];
+  coverPhoto?: ProjectFile;
+  files?: ProjectFile[];
   lots?: number;
   assignedLots?: number;
   typologies?: TypologyDetails[];

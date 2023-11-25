@@ -56,36 +56,7 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 
 	const carouselItems = (category: CategoryType) => {
 		switch (category) {
-		case CategoryType.construction:
-			return construction.map((item, i) => (
-				<ProjectCarouselCard
-					key={`${category + i}`}
-					index={`${i}`}
-					item={item}
-					handleOpenModal={() => handleOpenModal(i)}
-					handleCloseModal={handleCloseModal}
-				/>
-			));
-		case CategoryType.projection:
-			return projection.map((item, i) => (
-				<ProjectCarouselCard
-					key={`${category + i}`}
-					index={`${i}`}
-					item={item}
-					handleOpenModal={() => handleOpenModal(i)}
-					handleCloseModal={handleCloseModal}
-				/>
-			));
-		case CategoryType.plant:
-			return plant.map((item, i) => (
-				<ProjectCarouselCard
-					key={`${category + i}`}
-					index={`${i}`}
-					item={item}
-					handleOpenModal={() => handleOpenModal(i)}
-					handleCloseModal={handleCloseModal}
-				/>
-			));
+	
 		case CategoryType.all:
 			return project?.files && project?.files.map((file, index) => (
 				<ProjectCarouselCard
@@ -99,18 +70,6 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 		}
 	};
 
-	const getItems = (category: CategoryType): CarouselItem[] => {
-		switch (category) {
-		case CategoryType.construction:
-			return construction;
-		case CategoryType.projection:
-			return projection;
-		case CategoryType.plant:
-			return plant;
-		default:
-			return [] as CarouselItem[];
-		}
-	};
 	return (
 		<>
 			<Card>
@@ -132,15 +91,6 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 					autoPlay={autoPlay}>
 					{carouselItems(category)}
 				</Carousel>
-				{/* <CardContent>
-					<Typography gutterBottom variant="h5" component="div">
-						{project?.title}
-					</Typography>
-					<Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-					</Typography>
-				</CardContent> */}
 				<CardActions>
 					{/* <StyledButton
 						variant={category === CategoryType.projection ? "contained" : "outlined"}
@@ -179,7 +129,7 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 				open={openModal}
 				modalOpen={() => handleOpenModal(index)}
 				modalClose={handleCloseModal}
-				items={getItems(category)}
+				files={project?.files ?? []}
 				index={index}
 				autoPlay={autoPlay}
 				handleCarouselItemChange={handleCarouselItemChange}

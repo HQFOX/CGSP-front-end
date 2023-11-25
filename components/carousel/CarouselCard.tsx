@@ -1,9 +1,8 @@
 import React from "react";
 
-import { Button, Box, Typography, styled, Grid, CardContent, CardMedia, Container } from "@mui/material";
+import {  Typography, Grid, CardContent } from "@mui/material";
 
 import Image from "next/image";
-import { StyledButton } from "../Button";
 
 const CarouselCard = ({ index, item }: CarouselCardProps) => {
 	return (
@@ -28,16 +27,16 @@ const CarouselCard = ({ index, item }: CarouselCardProps) => {
 		// 		<Button className="CheckButton">Check it out!</Button>
 		// 	</CarouselCardText>
 		// </Box>
-		<Grid container spacing={0}  height={600}>
+		<Grid container spacing={0}  height={600} key={`carousel${index}`}>
 			<Grid item xs={5} alignSelf={"center"}>
 				<CardContent sx={{ p: 8, maxWidth: 500}}>
-					<Typography variant="h4" component="h1">
+					<Typography variant="h4" component="h1" paddingBottom={2}>
 						{item.name}
 					</Typography>
-					<Typography variant="subtitle1" component="h2">
+					<Typography variant="subtitle1" component="h2" paddingBottom={2}>
 		 			{item.description}
-		 				</Typography>
-		 				<StyledButton variant="outlined">Sobre nós</StyledButton>
+					</Typography>
+		 			{item.action}
 				</CardContent>
 			</Grid>
 			<Grid item xs={7}>
@@ -47,21 +46,21 @@ const CarouselCard = ({ index, item }: CarouselCardProps) => {
 	);
 };
 
-const CarouselCardText = styled("div")(
-	({ theme }) => `
-  background-color:rgba(0,0,0,.3);
-  align-self: end;
-  width: 100vw;
-  ${theme.breakpoints.down("md")} {  
-    padding: ${theme.spacing(2)};
-    height: 12rem;
-  }
-  ${theme.breakpoints.up("md")} {
-    padding: ${theme.spacing(8)};
-    height: 22rem;
-  }
-`
-);
+// const CarouselCardText = styled("div")(
+// 	({ theme }) => `
+//   background-color:rgba(0,0,0,.3);
+//   align-self: end;
+//   width: 100vw;
+//   ${theme.breakpoints.down("md")} {  
+//     padding: ${theme.spacing(2)};
+//     height: 12rem;
+//   }
+//   ${theme.breakpoints.up("md")} {
+//     padding: ${theme.spacing(8)};
+//     height: 22rem;
+//   }
+// `
+// );
 
 type CarouselCardProps = {
   index: string;

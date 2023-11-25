@@ -20,7 +20,7 @@ import {
 } from "@tanstack/react-table";
 import { Delete, Edit } from "@mui/icons-material";
 
-import Image from "next/image";
+// import Image from "next/image";
 
 import { DeleteModal } from "../modals/DeleteModal";
 import { TableActions } from "./TableActions";
@@ -49,7 +49,7 @@ export const UpdateTable = ({ updates, handleShowEditForm, handleDelete }: { upd
 				}),
 				columnHelper.accessor("image", {
 					id: "image",
-					cell: (info) => info.getValue() && <Image src={info.getValue()} width={50} height={50} />,
+					// cell: (info) => info.getValue() && <Image src={info.getValue()} width={50} height={50} />,
 					header: () => <span>Image</span>
 				}),
 				columnHelper.accessor("content", {

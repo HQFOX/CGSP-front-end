@@ -119,7 +119,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               							<Stack spacing={2}>
               								<Stack direction="row" gap={1}>
               									<SquareFoot color="primary" />
-              									<StyledTypography variant="body2" color="text.secondary"> Áreas: </StyledTypography>
+              									<StyledTypography variant="body2" color="text.secondary"> {`${t("typologyDetails.area")}`}: </StyledTypography>
               								</Stack>
               								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.interiorArea")}: ${
               									typology.bathroomNumber
@@ -148,7 +148,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               						<Grid item>
               							<Stack direction="row" gap={1}>
               								<Garage color="primary" />
-              								<StyledTypography variant="body2" color="text.secondary">{`Garagem: ${
+              								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.garage")}: ${
               									typology.garageNumber
               								}`}</StyledTypography>
               							</Stack>
@@ -156,7 +156,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 									  <Grid item>
               							<Stack direction="row" gap={1}>
               								<Euro color="primary" />
-              								<StyledTypography variant="body2" color="text.secondary">{`Price: ${
+              								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.price")}: ${
               									typology.price
               								}`}</StyledTypography>
               							</Stack>

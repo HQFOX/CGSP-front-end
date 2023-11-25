@@ -43,7 +43,7 @@ const Home: NextPage<{updates : Update[] }> = ( data ) => {
 						[theme.breakpoints.down("md")]: { paddingLeft: theme.spacing(5), paddingRight: theme.spacing(15) },
 						pt: 6, pb: 6
 					})}>
-					<Box sx={{ pb: 4 }}>
+					<Box sx={{ pb: 4 }} id="aboutus">
 						<Typography variant="h4" component="h1">
 							{t("aboutUsTitle")}
 						</Typography>
