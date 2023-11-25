@@ -16,10 +16,11 @@ const removeDuplicates = (data?: (string | undefined)[]) => {
 };
 
 export interface DetailsProps {
-    project: Project
+    project: Project,
+	minimal?: boolean,
 }
 
-export const Details = ({ project } : DetailsProps) => {
+export const Details = ({ project, minimal = false } : DetailsProps) => {
 	const { t } = useTranslation(["projectpage", "common"]);
 	const [assignmentAnchorEl, setAssignmentAnchorEl] = React.useState<HTMLElement | null>(null);
 	const [constructionAnchorEl, setConstructionAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -207,12 +208,12 @@ export const Details = ({ project } : DetailsProps) => {
 					{t("projectDetails.assignedLots")}: {project.assignedLots}
 				</StyledTypography>
 			</Grid>
-			{project.assignmentStatus &&
+			{!minimal && project.assignmentStatus &&
             <Grid item>
             	<Typography variant="body2" color="text.secondary" component={"span"}>{t("projectDetails.assignmentStatus")}: </Typography>{assignmentChips(project.assignmentStatus)}
             </Grid>
 			}
-			{project.constructionStatus &&
+			{!minimal && project.constructionStatus &&
         <Grid item>
         	<Typography variant="body2" color="text.secondary" component={"span"}>{t("projectDetails.constructionStatus")}: </Typography>{constructionChips(project.constructionStatus)}
         </Grid>

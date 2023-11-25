@@ -12,7 +12,7 @@ import { HomeRounded, LocalPhone, Email } from "@mui/icons-material";
 
 const StyledFooter = styled("footer")(({ theme }) => ({
 	backgroundColor: theme.palette.primary.main,
-	color: theme.palette.secondary.light,
+	color: "white",
 	padding: theme.spacing(2)
 }));
 

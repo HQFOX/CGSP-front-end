@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Divider,  Typography } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import type { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 import { PageContainer } from "../components/pageContainer/PageContainer";
 import { ProjectInventory } from "../components/projects/projectInventory/ProjectInventory";
+import { Title } from "../components/Title";
 
 
 export const normalizeString = (value: string): string => {
@@ -24,9 +25,9 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 	return (
 		<PageContainer>
 			<Box sx={{ p:2, pb: 4 }}>
-				<Typography variant="h5" component="h1" fontWeight={600} fontSize={24}>
+				<Title variant="h5" component="h1" fontSize={24}>
 					{t("projectPageTitle")}
-				</Typography>
+				</Title>
 				<Divider />
 			</Box>
 			<ProjectInventory projects={data.projects}/>

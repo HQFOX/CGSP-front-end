@@ -5,6 +5,7 @@ import React from "react";
 import { StyledButton } from "../Button";
 import { Launch } from "@mui/icons-material";
 import router from "next/router";
+import { Title } from "../Title";
 
 const width = "40vw";
 
@@ -20,15 +21,16 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 		<Paper
 			sx={(theme) => ({
 				[theme.breakpoints.up("md")]: { width: width },
-				[theme.breakpoints.down("md")]: { width: "90vw" }
+				[theme.breakpoints.down("md")]: { width: "90vw" },
+				border: "1px solid rgb(237, 237, 237)", boxShadow: 0 
 			})}
-			elevation={4}>
+			>
 			<Box sx={{ p: 4 }}>
-				<Grid container>
-					<Grid item xs={11}>
-						<Typography variant={"h5"}>{post.title}</Typography>
+				<Grid container justifyContent={"space-between"}>
+					<Grid item>
+						<Title variant={"h5"}>{post.title}</Title>
 					</Grid>
-					<Grid item xs={1} alignSelf={"end"}>
+					<Grid item alignSelf={"end"}>
 						<Typography variant="body2" color="text.secondary" sx={{ textAlign: "right", mt: "auto"}}>
 							{date && `${date?.getUTCDate()}/${date?.getUTCMonth()}/${date?.getUTCFullYear()}`}
 						</Typography>

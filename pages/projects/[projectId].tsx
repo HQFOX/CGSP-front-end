@@ -45,6 +45,7 @@ import { StyledButton } from "../../components/Button";
 import { LatLngTuple } from "leaflet";
 import { Details } from "../../components/details/Details";
 import theme from "../../theme";
+import { Title } from "../../components/Title";
 
 const Map = dynamic(() => import("../../components/map/Map"), {
 	ssr: false,
@@ -78,9 +79,9 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 	return (
 		<PageContainer>
 			<Box sx={{ pb: 4 }}>
-				<Typography variant="h5" component="h1">
+				<Title variant="h5" component="h1">
 					{project.title}
-				</Typography>
+				</Title>
 				<Divider />
 			</Box>
 			<ProjectCarousel project={project} />

@@ -92,7 +92,7 @@ export const Controls = ({
 	};
 
 	return (
-		<Paper sx={{ ml: 1, mr: 1, p: 2, mb: 2 }}>
+		<Paper sx={{ ml: 1, mr: 1, p: 2, mb: 2, border: "1px solid rgb(237, 237, 237)", boxShadow: 0  }}>
 			<Grid container spacing={2}>
 				{onWildCardChange && 
                      <Grid item>

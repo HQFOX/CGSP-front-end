@@ -17,6 +17,7 @@ import CGSPCarousel from "../components/carousel/Carousel";
 import logo from "../public/logo.svg";
 import Updates from "../components/updates/Update";
 import theme from "../theme";
+import { Title } from "../components/Title";
 
 const Map = dynamic(() => import("../components/map/Map"), {
 	ssr: false
@@ -44,9 +45,9 @@ const Home: NextPage<{updates : Update[] }> = ( data ) => {
 						pt: 6, pb: 6
 					})}>
 					<Box sx={{ pb: 4 }} id="aboutus">
-						<Typography variant="h4" component="h1">
+						<Title variant="h4" component="h1" fontSize={24}>
 							{t("aboutUsTitle")}
-						</Typography>
+						</Title>
 						<Divider />
 					</Box>
 					<Typography variant="body2" color="text.secondary" style={{ whiteSpace: "pre-wrap" }}>
@@ -62,9 +63,9 @@ const Home: NextPage<{updates : Update[] }> = ( data ) => {
 						pb: 4,
 						pt: 4
 					})}>
-					<Typography variant="h5" component="h1">
+					<Title variant="h5" component="h1" fontSize={24}>
 						{t("howToGetThere")}:
-					</Typography>
+					</Title>
 					<Divider />
 					<Box id="map" style={{ height: 480}} sx={{pt: 2}}>
 						<Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>

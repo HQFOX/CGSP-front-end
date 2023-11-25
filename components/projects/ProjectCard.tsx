@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React from "react";
 import {
 	Card,
@@ -14,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { StyledButton } from "../Button";
 import router from "next/router";
 import { Details } from "../details/Details";
+import { Title } from "../Title";
 
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
@@ -22,8 +22,8 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 	
 
 	return (
-		<Card>
-			<CardHeader title={project.title} titleTypographyProps={{ sx:{fontWeight: 600, fontSize: "18px"}}} subheader={`${t("projectDetails.location")}: ${project.location}`} />
+		<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
+			<CardHeader title={<Title>{project.title}</Title>} subheader={`${t("projectDetails.location")}: ${project.location}`} />
 			<CardMedia>
 				<div style={{ position: "relative", overflow: "hidden", height: "400px" }}>
 					{ project.coverPhoto && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto.filename}`} alt={`cover image for ${project.title} project`} fill style={{ objectFit: "cover" }} />}
@@ -33,7 +33,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 				<Details project={project} />
 			</CardContent>
 			<CardActions>
-				<StyledButton color="primary" variant="contained" sx={{  fontWeight: "600"}} onClick={() => router.push(`projects/${project.id}`)}>
+				<StyledButton color="primary" variant="contained" sx={{  fontWeight: "600", boxShadow: 0}} onClick={() => router.push(`projects/${project.id}`)}>
 					{t("projectDetails.details")}
 				</StyledButton>
 			</CardActions>
