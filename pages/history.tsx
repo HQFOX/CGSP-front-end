@@ -3,10 +3,12 @@ import type { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { PageContainer } from "../components/pageContainer/PageContainer";
 import { Box, Divider, Typography } from "@mui/material";
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
+import { ProjectInventory } from "../components/projects/projectInventory/ProjectInventory";
 
-const History: NextPage = () => {
-	// const { t } = useTranslation(["projectpage", "common"]);
+const History: NextPage<{ projects: Project[] }> = (data) => {
+	
+	useTranslation(["projectpage", "common"]);
 	
 	return (
 		<PageContainer>
@@ -16,6 +18,7 @@ const History: NextPage = () => {
 				</Typography>
 				<Divider />
 			</Box>
+			<ProjectInventory projects={data.projects} history/>
 		</PageContainer>
 	);
 };

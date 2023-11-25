@@ -19,8 +19,12 @@ import {
 	useReactTable
 } from "@tanstack/react-table";
 import { Delete, Edit } from "@mui/icons-material";
+
+// import Image from "next/image";
+
 import { DeleteModal } from "../modals/DeleteModal";
 import { TableActions } from "./TableActions";
+
 
 
 
@@ -42,6 +46,11 @@ export const UpdateTable = ({ updates, handleShowEditForm, handleDelete }: { upd
 					id: "title",
 					cell: (info) => info.getValue(),
 					header: () => <span>Title</span>
+				}),
+				columnHelper.accessor("image", {
+					id: "image",
+					// cell: (info) => info.getValue() && <Image src={info.getValue()} width={50} height={50} />,
+					header: () => <span>Image</span>
 				}),
 				columnHelper.accessor("content", {
 					cell: (info) => <i>{info.getValue()}</i>,

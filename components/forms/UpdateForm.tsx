@@ -1,7 +1,6 @@
-import React from "react";
-import { CheckCircle, Close } from "@mui/icons-material";
+import React, { useState } from "react";
+
 import {
-	Button,
 	Container,
 	Grid,
 	Grow,
@@ -12,60 +11,101 @@ import {
 	TextField,
 	Typography
 } from "@mui/material";
-import { useFormik } from "formik";
-import { useState } from "react";
-import * as Yup from "yup";
-import { CancelModal } from "../modals/CancelModal";
 
-export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
+import { CheckCircle, Close } from "@mui/icons-material";
+
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+import { CancelModal } from "../modals/CancelModal";
+import { CGSPDropzone } from "../dropzone/Dropzone";
+import { StyledButton } from "../Button";
+import { AbstractFile } from "./types";
+import { getPresignedUrl, submitFile } from "./utils";
+
+export const UpdateForm = ({
+	 projects, 
+	 onCancel, 
+	 onSubmit, 
+	 update
+	 }	: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
+
+	const [files, setFiles] = useState<AbstractFile[]>(update?.files ?? []);
+
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
 
+	const handleAddFile = async (newfiles: File[]) => {
+		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setFiles([...files, value])));
+	};
+
+	const handleDeleteFile = () => {
+		setFiles([]);
+	};
+
 	const formik = useFormik({
 		initialValues: {
 			id: update ? update.id : "0",
-			title: update ? update.title : "",
-			content: update ? update.content : "",
-			projectId: ""
+			title: update?.title ? update.title : "teste",
+			content: update?.content ? update.content : "teste",
+			project: update?.project ? update.project : null,
+			
 		},
 		validationSchema: Yup.object({
 			title: Yup.string().required("Obrigatório"),
 			content: Yup.string(),
-			projectId: Yup.string()
 		}),
 		onSubmit: async (values) => {
-			const jsonData = JSON.stringify(values);
 
-			const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
+			// if(files.length > 0){
 
-			console.log(console.log(jsonData));
+			Promise.all(files.map( async (file) => submitFile(file)))
+				.then( async res => {
+					console.log(res);
+					
+					const valuesWithImage = {...values, files: files.map( file => { return { "filename": file.filename};})};
 
-			const options = {
-				// The method is POST because we are sending data.
-				method: update ? "PUT" : "POST",
-				// Tell the server we're sending JSON.
-				headers: {
-					"Content-Type": "application/json"
-				},
-				// Body of the request is the JSON data we created above.
-				body: jsonData
-			};
+					postUpdate(valuesWithImage);
+				})
+				.catch( error => console.log(error));
+				
+			// }
+			// else{
+			// 	postUpdate(values);
+			// }
 
-			const response = await fetch(endpoint, options);
-
-			if (response.status == 200) {
-				setSubmitted(true);
-				onSubmit();
-			}
-			const result = response.json();
-			console.log(result);
 		}
 	});
 
 	const handleClose = (confirm: boolean) => {
 		setCancelModal(false);
 		confirm && onCancel();
+	};
+
+	const postUpdate = (values: unknown) => {
+
+		const jsonData = JSON.stringify(values);
+
+		const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
+
+		const options = {
+			method: update ? "PUT" : "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: jsonData
+		};
+
+		fetch(endpoint, options).then( () => {
+			setSubmitted(true);
+			onSubmit();
+
+		}).catch( error => {
+			console.log(error);
+		});
+
+
 	};
 
 	return (
@@ -105,6 +145,15 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 								/>
 							</Grid>
 							<Grid item xs={12}>
+								<Typography variant="h6">Adicionar Foto à Atualização</Typography>
+								<CGSPDropzone
+									maxContent={1}
+									files={files}
+									onAddFile={handleAddFile}
+									onDeleteFile={handleDeleteFile}
+								/>
+							</Grid>
+							<Grid item xs={12}>
 								<TextField
 									id="content"
 									name="content"
@@ -114,37 +163,38 @@ export const UpdateForm = ({ projects, onCancel, onSubmit, update }: { projects?
 									error={formik.touched.content && Boolean(formik.errors.content)}
 									helperText={formik.touched.content && formik.errors.content}
 									fullWidth
+									multiline
 								/>
 							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									id="projectId"
-									name="projectId"
-									label={"projectId"}
+									name="project.projectId"
+									label={"Projeto Relacionado: "}
 									select
-									value={formik.values.projectId}
+									value={formik.values.project?.projectId}
 									onChange={formik.handleChange}
-									error={formik.touched.projectId && Boolean(formik.errors.projectId)}
-									helperText={formik.touched.projectId && formik.errors.projectId}
+									// error={formik.touched.project?.projectId && Boolean(formik.errors.project?.projectId)}
+									// helperText={formik.touched.project?.projectId && formik.errors.project?.projectId}
 									fullWidth>
 									{projects &&
-                  projects.length > 0 &&
-                  projects.map((option) => (
-                  	<MenuItem key={option.id} value={option.id}>
-                  		{option.title}
-                  	</MenuItem>
-                  ))}
+										projects.length > 0 &&
+										projects.map((option) => (
+											<MenuItem key={option.id} value={option.id}>
+												{option.title}
+											</MenuItem>
+										))}
 								</TextField>
 							</Grid>
 							<Grid item ml="auto">
-								<Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
+								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
 									{"Submit"}
-								</Button>
+								</StyledButton>
 							</Grid>
 							<Grid item>
-								<Button variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
-                  Cancel
-								</Button>
+								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
+                 					 Cancel
+								</StyledButton>
 							</Grid>
 						</Grid>
 					</form>

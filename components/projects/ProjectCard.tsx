@@ -1,68 +1,39 @@
+/* eslint-disable indent */
 import React from "react";
 import {
 	Card,
-	CardActionArea,
 	CardActions,
 	CardContent,
 	CardHeader,
 	CardMedia,
-	Grid,
-	Typography
 } from "@mui/material";
 import Image from "next/image";
-import example from "../../public/carousel1.jpg";
-import { Home, HomeWork, HowToReg } from "@mui/icons-material";
-import { useTranslation } from "react-i18next";
-import styled from "@emotion/styled";
-import { StyledButton } from "../Button";
 
-const StyledTypography = styled(Typography)({
-	display: "flex",
-	alignItems: "end"
-});
+import { useTranslation } from "react-i18next";
+
+import { StyledButton } from "../Button";
+import router from "next/router";
+import { Details } from "../details/Details";
+
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
 	const { t } = useTranslation(["projectpage", "common"]);
+	
+	
 
 	return (
 		<Card>
-			<CardActionArea>
-				<CardHeader title={project.title} subheader={`${t("projectDetails.location")}: ${project.location}`} />
-				<CardMedia>
-					<div style={{ position: "relative", overflow: "hidden", height: "400px" }}>
-						<Image src={example} alt={`cover image for ${project.title} project`} fill={true} style={{ objectFit: "cover" }} />
-					</div>
-				</CardMedia>
-				<CardContent>
-					<Grid container>
-						<Grid item md={6}>
-							<StyledTypography variant="body2" color="text.secondary">
-								<HomeWork sx={{ marginRight: "5px" }} />
-								{t("projectDetails.typologies")}: {project.typologies?.map( details => details.typology + " " )}
-							</StyledTypography>
-						</Grid>
-						<Grid item md={6}>
-							<StyledTypography variant="body2" color="text.secondary">
-								<Home sx={{ marginRight: "5px" }} />
-								{t("projectDetails.lots")}: {project.lots}
-							</StyledTypography>
-						</Grid>
-						<Grid item md={6}>
-							<StyledTypography variant="body2" color="text.secondary">
-								<HowToReg sx={{ marginRight: "5px" }} />
-								{t("projectDetails.assignedLots")}: {project.assignedLots}
-							</StyledTypography>
-						</Grid>
-					</Grid>
-					<StyledTypography variant="body2" color="text.secondary">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-					</StyledTypography>
-				</CardContent>
-			</CardActionArea>
+			<CardHeader title={project.title} titleTypographyProps={{ sx:{fontWeight: 600, fontSize: "18px"}}} subheader={`${t("projectDetails.location")}: ${project.location}`} />
+			<CardMedia>
+				<div style={{ position: "relative", overflow: "hidden", height: "400px" }}>
+					{ project.coverPhoto && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto.filename}`} alt={`cover image for ${project.title} project`} fill style={{ objectFit: "cover" }} />}
+				</div>
+			</CardMedia>
+			<CardContent>
+				<Details project={project} />
+			</CardContent>
 			<CardActions>
-				<StyledButton color="primary" variant="contained" sx={{  fontWeight: "600"}}>
+				<StyledButton color="primary" variant="contained" sx={{  fontWeight: "600"}} onClick={() => router.push(`projects/${project.id}`)}>
 					{t("projectDetails.details")}
 				</StyledButton>
 			</CardActions>

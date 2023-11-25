@@ -1,4 +1,6 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from "react";
+
 import {
 	Box,
 	Divider,
@@ -13,18 +15,11 @@ import {
 	AccordionDetails,
 	styled
 } from "@mui/material";
-import type { NextPage } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { EnrollmentModal } from "../../components/modals/enrollmentModal/enrollmentModal";
-import ProjectCarousel from "../../components/projectCarousel/ProjectCarousel";
-import TabPanel from "../../components/tabpanel/TabPanel";
-import { UpdateStepper } from "../../components/updateStepper/UpdateStepper";
-import dynamic from "next/dynamic";
-import { Loading } from "../../components/loading/Loading";
+
 import {
 	Bathtub,
+	Dashboard,
+	Euro,
 	ExpandMore,
 	Garage,
 	Home,
@@ -33,8 +28,23 @@ import {
 	HowToReg,
 	SquareFoot
 } from "@mui/icons-material";
+
+import type { NextPage } from "next";
+import dynamic from "next/dynamic";
+
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "react-i18next";
+
+import { EnrollmentModal } from "../../components/modals/enrollmentModal/enrollmentModal";
+import ProjectCarousel from "../../components/projects/projectCarousel/ProjectCarousel";
+import TabPanel from "../../components/tabpanel/TabPanel";
+import { UpdateStepper } from "../../components/updateStepper/UpdateStepper";
+import { Loading } from "../../components/loading/Loading";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { StyledButton } from "../../components/Button";
+import { LatLngTuple } from "leaflet";
+import { Details } from "../../components/details/Details";
+import theme from "../../theme";
 
 const Map = dynamic(() => import("../../components/map/Map"), {
 	ssr: false,
@@ -52,7 +62,7 @@ const StyledTypography = styled(Typography)({
 
 const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data) => {
 	const { t } = useTranslation(["projectpage", "common"]);
-	const [value, setValue] = useState(3);
+	const [value, setValue] = useState(2);
 	const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false);
 
 	const project: Project = data.project;
@@ -76,49 +86,31 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 			<ProjectCarousel project={project} />
 			<Paper sx={{ mt: 4 }}>
 				<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-					<Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+					<Tabs value={value} onChange={handleChange}>
 						<StyledTab label={t("tabsTitle.details")} />
-						<StyledTab label={t("tabsTitle.enroll")} />
+						{/* <StyledTab label={t("tabsTitle.enroll")} /> */}
 						<StyledTab label={t("tabsTitle.updates")} />
 						<StyledTab label={t("tabsTitle.location")} />
 					</Tabs>
 				</Box>
 				<Grid container p={5}>
 					<TabPanel index={0} value={value}>
-						<Grid container>
-              				<Grid item md={6}>
-              					<StyledTypography variant="body2" color="text.secondary">
-              						<HomeWork sx={{ marginRight: "5px" }} />
-              						{t("projectDetails.typologies")}:{" "}
-              						{project.typologies?.map((details) => details.typology + " ")}
-              					</StyledTypography>
-              				</Grid>
-              				<Grid item md={6}>
-              					<StyledTypography variant="body2" color="text.secondary">
-              						<Home sx={{ marginRight: "5px" }} />
-              						{t("projectDetails.lots")}: {project.lots}
-              					</StyledTypography>
-              				</Grid>
-              				<Grid item md={6}>
-              					<StyledTypography variant="body2" color="text.secondary">
-              						<HowToReg sx={{ marginRight: "5px" }} />
-              						{t("projectDetails.assignedLots")}: {project.assignedLots}
-              					</StyledTypography>
-              				</Grid>
-              			</Grid>
-              			<StyledTypography variant="body2" color="text.secondary">
+						<Details project={project} />
+              			{/* <StyledTypography variant="body2" color="text.secondary">
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                       incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
                       nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              			</StyledTypography>
+              			</StyledTypography> */}
 						{project.typologies != null &&
               project.typologies.map((typology, index) => {
               	return (
-              			<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0}>
+              			<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0} >
               				<AccordionSummary
               					expandIcon={<ExpandMore />}
               					aria-controls="panel1a-content"
-              					id="panel1a-header">
+              					id="panel1a-header"
+              					sx={{ backgroundColor: theme.palette.secondary.light}}
+              				>
               					<Typography>{typology.typology}</Typography>
               				</AccordionSummary>
               				<AccordionDetails>
@@ -127,7 +119,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               							<Stack spacing={2}>
               								<Stack direction="row" gap={1}>
               									<SquareFoot color="primary" />
-              									<StyledTypography variant="body2" color="text.secondary"> Áreas: </StyledTypography>
+              									<StyledTypography variant="body2" color="text.secondary"> {`${t("typologyDetails.area")}`}: </StyledTypography>
               								</Stack>
               								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.interiorArea")}: ${
               									typology.bathroomNumber
@@ -156,16 +148,34 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               						<Grid item>
               							<Stack direction="row" gap={1}>
               								<Garage color="primary" />
-              								<StyledTypography variant="body2" color="text.secondary">{"Garagem: Sim"}</StyledTypography>
+              								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.garage")}: ${
+              									typology.garageNumber
+              								}`}</StyledTypography>
               							</Stack>
               						</Grid>
+									  <Grid item>
+              							<Stack direction="row" gap={1}>
+              								<Euro color="primary" />
+              								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.price")}: ${
+              									typology.price
+              								}`}</StyledTypography>
+              							</Stack>
+              						</Grid>
+									  {/* <Grid item>
+              							<Stack direction="row" gap={1}>
+              								<Dashboard color="primary" />
+              								<StyledTypography variant="body2" color="text.secondary">{`Plant: ${
+              									typology.plant
+              								}`}</StyledTypography>
+              							</Stack>
+              						</Grid> */}
               					</Grid>
               				</AccordionDetails>
               			</Accordion>
               	);
               })}
 					</TabPanel>
-					<TabPanel index={1} value={value}>
+					{/* <TabPanel index={1} value={value}>
 						<Box>
 							<Typography>
                 Id labore officia amet consectetur aliqua culpa incididunt cillum non duis pariatur.
@@ -200,14 +210,14 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 								</Grid>
 							</Grid>
 						</Box>
-					</TabPanel>
-					<TabPanel index={2} value={value}>
+					</TabPanel> */}
+					<TabPanel index={1} value={value}>
 						<UpdateStepper updates={data.project.updates} />
 					</TabPanel>
-					<TabPanel index={3} value={value}>
+					<TabPanel index={2} value={value}>
 						<Box>
 							<div id="map" style={{ height: 480 }}>
-								<Map centerCoordinates={project.coordinates} markers={[project.coordinates]} />
+								<Map centerCoordinates={project.coordinates as LatLngTuple} markers={[project.coordinates] as LatLngTuple[]} />
 							</div>
 						</Box>
 					</TabPanel>

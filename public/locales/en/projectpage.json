@@ -12,20 +12,45 @@
         "details": "details",
         "lots": "Lots",
         "assignedLots": "Assigned Lots",
-        "location": "Location"
+        "location": "Location",
+        "garage": "Garage",
+        "assignmentStatus": "Assignment Status",
+        "constructionStatus": "Construction Status"
     },
     "typologyDetails" : {
         "typology" : "Typology",
         "bedrooms" : "Bedrooms",
         "bathrooms" : "Bathrooms",
+        "area" : "Areas",
         "interiorArea" : "Interior Area",
         "exteriorArea" : "Exterior Area",
-        "details": "details"
+        "details": "details",
+        "price": "Price"
     },
     "status" : {
         "completed" : "Completed",
         "building" : "Building",
         "open" : "Open"
+    },
+    "assignmentStatus" : {
+        "WAITING" : "Waiting",
+        "ONGOING" : "Ongoing",
+        "CONCLUDED" : "Concluded",
+        "info" : {
+            "WAITING" : "At the moment the lot assignment to members is not available.",
+            "ONGOING" : "The lot assignment process is underway.",
+            "CONCLUDED" : "All of the lots from this project have been assigned."
+        }
+    },
+    "constructionStatus" : {
+        "ALLOTMENTPERMIT" : "Allotment Permit Approved",
+        "BUILDINGPERMIT" : "Construction Permit Approved",
+        "CONCLUDED" : "Concluded",
+        "info" : {
+            "ALLOTMENTPERMIT" : "It is necesseary to obtain the Building Permit to begin the construction of the lots of this project.",
+            "BUILDINGPERMIT" : "The Building process of the lots of this project is underway.",
+            "CONCLUDED" : "The Building process of this project has been concluded."
+        }
     },
     "preEnroll" : "Pre-Enroll",
     "form" : {

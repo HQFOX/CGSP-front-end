@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { StyledButton } from "../Button";
 
-export const DeleteModal = ({open, data, handleClose }:{open: boolean, data?: Update, handleClose: (confirm: boolean) => void}) => {
+export const DeleteModal = ({open, data, handleClose }:{open: boolean, data?: Update | Project, handleClose: (confirm: boolean) => void}) => {
 
 	return (
 		<Dialog
@@ -32,10 +33,10 @@ export const DeleteModal = ({open, data, handleClose }:{open: boolean, data?: Up
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>
-				<Button variant="contained" autoFocus onClick={() => handleClose(false)}>Não</Button>
-				<Button variant="outlined" onClick={() => handleClose(true)}>
+				<StyledButton variant="contained" autoFocus onClick={() => handleClose(false)}>Não</StyledButton>
+				<StyledButton variant="outlined" onClick={() => handleClose(true)}>
                     Sim
-				</Button>
+				</StyledButton>
 			</DialogActions>
 		</Dialog>
 	);

@@ -59,11 +59,11 @@ const Header = ({ admin = false, setOpen }: HeaderProps) => {
 			headerText: t("updates"),
 			path: "/updates"
 		},
-		{
-			id: 5,
-			headerText: t("faq"),
-			path: "/faq"
-		}
+		// {
+		// 	id: 5,
+		// 	headerText: t("faq"),
+		// 	path: "/faq"
+		// }
 	];
 
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -179,7 +179,7 @@ const Header = ({ admin = false, setOpen }: HeaderProps) => {
 						{pages.map((page) => (
 							<Link key={page.id} href={page.path} passHref>
 								<Button 
-									sx={{ padding: "13px", display: "block", borderRadius: "60px", color: "white", textTransform: "none", textAlign: "center", fontWeight: "700"}}
+									sx={{ paddingLeft: "15px", paddingRight: "15px", paddingTop: "7px", paddingBottom: "7px", display: "block", borderRadius: "60px", color: "white", textTransform: "none", textAlign: "center", fontWeight: "700"}}
 									disableElevation variant='contained'>
 									{page.headerText}
 								</Button>

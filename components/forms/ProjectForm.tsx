@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from "react";
+import React , { KeyboardEvent, useRef, useState } from "react";
+
 import {
-	Button,
 	Chip,
 	Grid,
 	MenuItem,
@@ -18,30 +18,50 @@ import {
 	Stack,
 	IconButton,
 	Box,
+	InputLabel,
+	FormControl,
 } from "@mui/material";
-import { useFormik } from "formik";
-import { KeyboardEvent, useRef, useState } from "react";
-import * as Yup from "yup";
-import { CGSPDropzone } from "../dropzone/Dropzone";
 import { CheckCircle, Close, ExpandMore } from "@mui/icons-material";
-import { CancelModal } from "../modals/CancelModal";
+
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
 import dynamic from "next/dynamic";
+
+import { CGSPDropzone } from "../dropzone/Dropzone";
+import { CancelModal } from "../modals/CancelModal";
+import { StyledButton } from "../Button";
+import { getPresignedUrl, submitFile } from "./utils";
+import { AbstractFile } from "./types";
+import { useTranslation } from "react-i18next";
 
 const Map = dynamic(() => import("../map/Map"), {
 	ssr: false
 },
 );
 
-export const uploadImages = (path: string, files: File[]) => {
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const submitImage = (file: File): boolean => {
+	return true;
+};
+
+export const uploadImages = (path: string, files: File[]): boolean => {
 	// Todo: this is a simulation and should be replaced
 
 	files.map((file) => {
-		console.log(file);
+		if(!submitImage(file))
+			return false;
 	});
+	return true;
 };
 
 export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project, onCancel: () => void, onSubmit: () => void}) => {
-	const [file, setFile] = useState<File[]>([]);
+
+	const { t } = useTranslation(["projectpage", "common"]);
+
+	const [files, setFiles] = useState<AbstractFile[]>(project?.files ?? []);
+	const [coverPhoto, setCoverPhoto] = useState<AbstractFile[]>([]);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitted, setSubmitted] = useState(false);
@@ -50,71 +70,64 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 
 	const formik = useFormik({
 		initialValues: {
-			title: project ? project.title : "Projeto",
-			status: project ? project.status : "",
-			location: project ? project.location :"Évora",
+			title: project?.title ?? "Projeto",
+			assignmentStatus: "WAITING" ?? "",
+			constructionStatus: "ALLOTMENTPERMIT" ?? "",
+			location: project?.location ?? "Évora",
 			lots: project ? project.lots :"10",
 			assignedLots: project ? project.assignedLots :"0",
 			typology: [] as { index: ""; typology: "" }[],
 			typologies: [] as { bedroomNumber: ""; bathroomNumber: "" }[],
-			latitude: project ? project.coordinates[0] : 38.56633674453089,
-			longitude: project ? project.coordinates[1] : -7.925327404275489
+			latitude: project?.coordinates ? project.coordinates[0] : 38.56633674453089,
+			longitude: project?.coordinates ? project.coordinates[1] : -7.925327404275489,
+			files: [] as { filename: string }[]
 		},
 		validationSchema: Yup.object({
 			title: Yup.string().required("Obrigatório"),
-			status: Yup.string().required("Obrigatório"),
 			location: Yup.string().required("Obrigatório"),
 			lots: Yup.string().required("Obrigatório"),
 			assignedLots: Yup.string(),
 			typology: Yup.array().of(
 				Yup.object().shape({
 					index: Yup.string(),
-					typology: Yup.string()
+					typology: Yup.string(),
 				})
 			),
 			typologies: Yup.array().of(
 				Yup.object().shape({
-					bedroomNumber: Yup.string().required("Obrigatório"),
-					bathroomNumber: Yup.string().required("Obrigatório")
+					// bedroomNumber: Yup.string().required("Obrigatório"),
+					// bathroomNumber: Yup.string().required("Obrigatório")
 				})
 			),
 			latitude: Yup.number().required("Obrigatório"),
 			longitude: Yup.number().required("Obrigatório")
 		}),
 		onSubmit: async (values) => {
-			const formatValue = {
-				title: values.title,
-				status: values.status,
-				location: values.location,
-				lots: values.lots,
-				assignedLots: values.assignedLots,
-				typologies: values.typologies,
-				coordinates: [values.latitude, values.longitude]
-			};
 
-			const jsonData = JSON.stringify(formatValue);
+			Promise.all(coverPhoto.map( async (file) => submitFile(file))).then( async () => {
+				
+				Promise.all(files.map( async (file) => submitFile(file)))
+					.then( async res => {
+						console.log(res);
 
-			const endpoint = project ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}` : `${process.env.NEXT_PUBLIC_API_URL}/project` ;
+						const formatValue = {
+							title: values.title,
+							assignmentStatus: values.assignmentStatus,
+							constructionStatus: values.constructionStatus,
+							location: values.location,
+							lots: values.lots,
+							assignedLots: values.assignedLots,
+							typologies: values.typologies,
+							coordinates: [values.latitude, values.longitude],
+							coverPhoto: coverPhoto.map( cover => { return { "filename": cover.filename };})[0],
+							files: files.map( file => { return { "filename": file.filename};})
+						};
+		
+						postProject(formatValue);
+					})
+					.catch( error => console.log(error));
+			});
 
-			const options = {
-				// The method is POST because we are sending data.
-				method: project ? "PUT" : "POST",
-				// Tell the server we're sending JSON.
-				headers: {
-					"Content-Type": "application/json"
-				},
-				// Body of the request is the JSON data we created above.
-				body: jsonData
-			};
-
-			const response = await fetch(endpoint, options);
-
-			if (response.status == 200) {
-				setSubmitted(true);
-				onSubmit();
-			}
-			const result = response.json();
-			console.log(result);
 		}
 	});
 
@@ -138,17 +151,52 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		e.key === "Enter" ? handleTypologyAdd(e.target.value) : undefined;
 	};
 
-	const handleAddFile = (files: File[]) => {
-		setFile([...files]);
+	const handleAddFile = async (newfiles: File[]) => {
+		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setFiles([...files, value])));
 	};
 
-	const handleDeleteFile = () => {
-		setFile([]);
+	const handleDeleteFile = (file: AbstractFile) => {
+		setFiles(files.filter( item => item != file));
+	};
+
+	const handleAddCover = async (newfiles: File[]) => {
+		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setCoverPhoto([...files, value])));
+	};
+
+	const handleDeleteCover = () => {
+		setCoverPhoto([]);
 	};
 
 	const handleClose = (confirm: boolean) => {
 		setCancelModal(false);
 		confirm && onCancel();
+	};
+
+	const postProject = (values: unknown) => {
+		const jsonData = JSON.stringify(values);
+
+		console.log(jsonData);
+
+		const endpoint = project ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}` : `${process.env.NEXT_PUBLIC_API_URL}/project` ;
+
+		const options = {
+			method: project ? "PUT" : "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: jsonData
+		};
+
+		fetch(endpoint, options).then( (response) => {
+			if(response.ok){
+				setSubmitted(true);
+				onSubmit();
+			}
+			throw new Error("Error submitting Project:" + response);
+
+		}).catch( error => {
+			console.log(error);
+		});
 	};
 
 	return (
@@ -188,19 +236,40 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								/>
 							</Grid>
 							<Grid item xs={4}>
-								{/* <InputLabel id="status-select-dropdown">Status</InputLabel> */}
-								<Select
-									labelId="status-select-dropdown-label"
-									id="status-select-dropdown"
-									name="status"
-									value={formik.values.status}
-									error={formik.touched.status && Boolean(formik.errors.status)}
-									onChange={formik.handleChange}
-									sx={{ width: "100%" }}>
-									<MenuItem value={"Status"}>Status</MenuItem>
-									<MenuItem value={"Completed"}>Completo</MenuItem>
-									<MenuItem value={"History"}>Histórico</MenuItem>
-								</Select>
+								<FormControl sx={{ width: "100%"}}>
+									<InputLabel id="assignment-status-select-dropdown-label">Assignment Status</InputLabel>
+									<Select
+										label="Assignment Status"
+										labelId="assignment-status-select-dropdown-label"
+										id="assignment-status-select-dropdown"
+										name="assignmentStatus"
+										value={formik.values.assignmentStatus}
+										error={formik.touched.assignmentStatus && Boolean(formik.errors.assignmentStatus)}
+										onChange={formik.handleChange}
+										sx={{ width: "100%" }}>
+										<MenuItem value={"WAITING"}>{t("assignmentStatus.WAITING")}</MenuItem>
+										<MenuItem value={"ONGOING"}>{t("assignmentStatus.ONGOING")}</MenuItem>
+										<MenuItem value={"CONCLUDED"}>{t("assignmentStatus.CONCLUDED")}</MenuItem>
+									</Select>
+								</FormControl>
+							</Grid>
+							<Grid item xs={4}>
+								<FormControl sx={{ width: "100%"}}>
+									<InputLabel id="construction-status-select-dropdown-label">Construction Status</InputLabel>
+									<Select
+										label="Construction Status"
+										labelId="construction-status-select-dropdown-label"
+										id="construction-status-select-dropdown"
+										name="constructionStatus"
+										value={formik.values.constructionStatus}
+										error={formik.touched.constructionStatus && Boolean(formik.errors.constructionStatus)}
+										onChange={formik.handleChange}
+										sx={{ width: "100%" }}>
+										<MenuItem value={"ALLOTMENTPERMIT"}>{t("constructionStatus.ALLOTMENTPERMIT")}</MenuItem>
+										<MenuItem value={"BUILDINGPERMIT"}>{t("constructionStatus.BUILDINGPERMIT")}</MenuItem>
+										<MenuItem value={"CONCLUDED"}>{t("constructionStatus.CONCLUDED")}</MenuItem>
+									</Select>
+								</FormControl>
 							</Grid>
 							<Grid item xs={4}>
 								<TextField
@@ -354,21 +423,30 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								<Typography variant="h6">Adicionar Foto de Capa</Typography>
 								<CGSPDropzone
 									maxContent={1}
-									files={file}
+									files={coverPhoto}
+									onAddFile={handleAddCover}
+									onDeleteFile={handleDeleteCover}
+								/>
+							</Grid>
+							<Grid item xs={6}></Grid>
+							<Grid item xs={12}>
+								<Typography variant="h6">Adicionar Fotos</Typography>
+								<CGSPDropzone
+									maxContent={3}
+									files={files}
 									onAddFile={handleAddFile}
 									onDeleteFile={handleDeleteFile}
 								/>
 							</Grid>
-							<Grid item xs={6}></Grid>
 							<Grid item ml="auto">
-								<Button type="submit" variant="contained" color="primary" value="submit" fullWidth>
+								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
 									{"Submit"}
-								</Button>
+								</StyledButton>
 							</Grid>
 							<Grid item>
-								<Button variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
+								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
                   Cancel
-								</Button>
+								</StyledButton>
 							</Grid>
 						</Grid>
 					</form>

@@ -1,15 +1,21 @@
 import React from "react";
+
+import { Box, Divider, Typography } from "@mui/material";
+
 import type { NextPage } from "next";
+import dynamic from "next/dynamic";
+import Image from "next/image";
+
 import styles from "../styles/Home.module.css";
+
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
+import styled from "@emotion/styled";
+
 import CGSPCarousel from "../components/carousel/Carousel";
-import { Box, Divider, Typography } from "@mui/material";
-import Image from "next/image";
 import logo from "../public/logo.svg";
 import Updates from "../components/updates/Update";
-import dynamic from "next/dynamic";
-import styled from "@emotion/styled";
 import theme from "../theme";
 
 const Map = dynamic(() => import("../components/map/Map"), {
@@ -18,7 +24,7 @@ const Map = dynamic(() => import("../components/map/Map"), {
 );
 
 const StyledMain = styled("main")({
-	backgroundColor: theme.palette.secondary.main
+	backgroundColor: "white",
 });
 
 
@@ -30,20 +36,20 @@ const Home: NextPage<{updates : Update[] }> = ( data ) => {
 	return (
 		<StyledMain className={styles.container && styles.main}>
 			<CGSPCarousel />
-			<Box sx={{backgroundColor: theme.bg.main, mt: 8}}>
+			<Box sx={{backgroundColor: "rgb(249, 249, 249)", mt: 8}}>
 				<Box
 					sx={(theme) => ({
 						[theme.breakpoints.up("md")]: { paddingLeft: theme.spacing(15), paddingRight: theme.spacing(15) },
 						[theme.breakpoints.down("md")]: { paddingLeft: theme.spacing(5), paddingRight: theme.spacing(15) },
 						pt: 6, pb: 6
 					})}>
-					<Box sx={{ pb: 4 }}>
-						<Typography variant="h4" component="h1" style={{ textAlign: "center" }}>
+					<Box sx={{ pb: 4 }} id="aboutus">
+						<Typography variant="h4" component="h1">
 							{t("aboutUsTitle")}
 						</Typography>
 						<Divider />
 					</Box>
-					<Typography variant="h6" component="h2" style={{ whiteSpace: "pre-wrap" }}>
+					<Typography variant="body2" color="text.secondary" style={{ whiteSpace: "pre-wrap" }}>
 						{t("aboutUsText")}
 					</Typography>
 				</Box>

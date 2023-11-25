@@ -1,4 +1,5 @@
 import React, { ReactNode, SetStateAction } from "react";
+
 import { ArrowBackIos } from "@mui/icons-material";
 import {
 	Box,
@@ -13,7 +14,10 @@ import {
 	Typography,
 	styled
 } from "@mui/material";
+
 import Link from "next/link";
+import { useRouter } from "next/router";
+
 import theme from "../../theme";
 
 export interface VerticalNavigationProps {
@@ -29,11 +33,14 @@ const drawerWidth = 240;
 export const StyledListItemButton = styled(ListItemButton)({
 	":hover" : {
 		backgroundColor: "#FF7F514D",
-	}
+	},
 
 });
 
 export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationProps) => {
+
+	const router = useRouter();
+
 	return (
 		<Drawer
 			variant={"persistent"}
@@ -64,7 +71,7 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
             pages.map((page) => (
             	<ListItem key={page.id}>
             		<Link key={page.id} href={page.path} passHref style={{ width: "100%"}}>
-            			<StyledListItemButton >
+            			<StyledListItemButton selected={router.pathname === page.path}>
             				<ListItemIcon>{page.icon}</ListItemIcon>
             				<ListItemText>{page.text}</ListItemText>
             			</StyledListItemButton>

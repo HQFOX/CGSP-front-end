@@ -15,10 +15,10 @@ export const UpdateStepper = ({updates}:{updates?: Update[]}) => {
     
 	const Seperator = () => (
 		<>
-			<Grid item xs={6} height={100} borderRight={"1px solid black"} alignItems="center">
+			<Grid item xs={6} height={50} borderRight={"1px solid black"} alignItems="center">
 
 			</Grid>
-			<Grid item xs={6} height={100} alignItems="center">
+			<Grid item xs={6} height={50} alignItems="center">
 
 			</Grid>
 		</>   

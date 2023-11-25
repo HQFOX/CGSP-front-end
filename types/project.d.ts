@@ -1,9 +1,17 @@
+type ProjectFile = {
+  filename: string
+};
+
 type Project = {
   id: string;
   title: string;
   location?: string;
   status?: "completed" | "building" | "open";
-  coordinates?: any;
+  assignmentStatus?: AssignmentStatusType;
+  constructionStatus?: ConstructionStatusType;
+  coordinates?: [float,float];
+  coverPhoto?: ProjectFile;
+  files?: ProjectFile[];
   lots?: number;
   assignedLots?: number;
   typologies?: TypologyDetails[];
@@ -12,8 +20,12 @@ type Project = {
 
 type TypologyDetails = {
   typology?: string;
+  type?: string;
   bedroomNumber?: string;
   bathroomNumber?: string; 
+  garageNumber?: string; 
+  price?: number; 
+  plant?: string; 
 }
 
 type ProjectDetails = {
@@ -21,3 +33,7 @@ type ProjectDetails = {
   bedroomNumber: string;
   bathroomNumber: string;
 }
+
+type AssignmentStatusType = "WAITING" | "ONGOING" | "CONCLUDED";
+
+type ConstructionStatusType = "ALLOTMENTPERMIT" | "BUILDINGPERMIT" | "CONCLUDED";
