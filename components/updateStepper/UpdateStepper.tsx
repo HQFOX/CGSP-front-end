@@ -24,10 +24,10 @@ export const UpdateStepper = ({updates}:{updates?: Update[]}) => {
 		</>   
 	);
 
-	const LeftRow = ({post, icon}:{ post: Update, icon: React.ReactNode}) => (
+	const LeftRow = ({post, icon, index}:{ post: Update, icon: React.ReactNode, index: number}) => (
 		<>
 			<Grid item xs={6} display={"flex"} justifyContent="right" height={40} alignItems="center">
-				<Button style={{textTransform: "none"}} onClick={() => handleShowUpdateDialog(post)}>{post.title}</Button>
+				<Button style={{textTransform: "none"}} onClick={() => handleShowUpdateDialog(post)}>{`${index}. ${post.title}`}</Button>
 				{icon}
 			</Grid>
 			<Grid item xs={6} alignItems="center">
@@ -37,13 +37,13 @@ export const UpdateStepper = ({updates}:{updates?: Update[]}) => {
 		</>
 	);
 
-	const RightRow = ({post, icon}:{ post: Update, icon: React.ReactNode}) => (
+	const RightRow = ({post, icon, index}:{ post: Update, icon: React.ReactNode, index: number}) => (
 		<>
 			<Grid item xs={6} display={"flex"} height={40} alignItems="center">
 
 			</Grid><Grid item xs={6} display={"flex"} height={40} alignItems="center">
 				{icon}
-				<Button style={{ textTransform: "none" }} onClick={() => handleShowUpdateDialog(post)}>{post.title}</Button>
+				<Button style={{ textTransform: "none" }} onClick={() => handleShowUpdateDialog(post)}>{`${index}. ${post.title}`}</Button>
 			</Grid>
 		</>
 	);
@@ -63,11 +63,16 @@ export const UpdateStepper = ({updates}:{updates?: Update[]}) => {
 						icon={index === 0 ?
 							<FlagCircle color="primary" style={{position: "relative", right: "-11px"}}/> : 
 							<Circle color="primary" style={{position: "relative", right: "-11px"}}/>} 
+						index={index+1}
 					/>
 				)
 				:
 				updateRender.push(
-					<RightRow post={update} key={index+"row"} icon={<Circle color="primary" style={{ position: "relative", left: "-13px" }} />}/>
+					<RightRow 
+						post={update} 
+						key={index+"row"} 
+						icon={<Circle color="primary" style={{ position: "relative", left: "-13px" }} />} 
+						index={index+1}/>
 				);
                     
 			updateRender.push(<Seperator key={index+"seperator"} />);

@@ -33,6 +33,7 @@ const pages = [
 ];
 
 export const Layout = ({ isAdmin, children } : { isAdmin?: boolean, children: ReactElement}) => {
+	
 	const [open, setOpen] = useState<boolean>(isAdmin ? true : false);
   
 	return (
@@ -44,7 +45,7 @@ export const Layout = ({ isAdmin, children } : { isAdmin?: boolean, children: Re
 			</Head>
 			<Header admin={isAdmin} setOpen={setOpen} />
 			{children}
-			<Footer />
+			{ !isAdmin && <Footer />}
 			{ isAdmin ? <VerticalNavigation open={open} pages={pages} setOpen={setOpen} /> : <></>}
 		</div>
 	);
