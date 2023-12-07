@@ -63,7 +63,7 @@ const StyledTypography = styled(Typography)({
 
 const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data) => {
 	const { t } = useTranslation(["projectpage", "common"]);
-	const [value, setValue] = useState(2);
+	const [value, setValue] = useState(0);
 	const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false);
 
 	const project: Project = data.project;
@@ -89,9 +89,9 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 				<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 					<Tabs value={value} onChange={handleChange}>
 						<StyledTab label={t("tabsTitle.details")} />
-						{/* <StyledTab label={t("tabsTitle.enroll")} /> */}
+						<StyledTab label={t("tabsTitle.enroll")} />
 						<StyledTab label={t("tabsTitle.updates")} />
-						<StyledTab label={t("tabsTitle.location")} />
+						{/* <StyledTab label={t("tabsTitle.location")} /> */}
 					</Tabs>
 				</Box>
 				<Grid container p={5}>
@@ -176,7 +176,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               	);
               })}
 					</TabPanel>
-					{/* <TabPanel index={1} value={value}>
+					<TabPanel index={1} value={value}>
 						<Box>
 							<Typography>
                 Id labore officia amet consectetur aliqua culpa incididunt cillum non duis pariatur.
@@ -211,18 +211,16 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 								</Grid>
 							</Grid>
 						</Box>
-					</TabPanel> */}
-					<TabPanel index={1} value={value}>
-						<UpdateStepper updates={data.project.updates} />
 					</TabPanel>
 					<TabPanel index={2} value={value}>
-						<Box>
-							<div id="map" style={{ height: 480 }}>
-								<Map centerCoordinates={project.coordinates as LatLngTuple} markers={[project.coordinates] as LatLngTuple[]} />
-							</div>
-						</Box>
+						<UpdateStepper updates={data.project.updates} />
 					</TabPanel>
 				</Grid>
+			</Paper>
+			<Paper sx={{ mt: 4, border: "1px solid rgb(237, 237, 237)", boxShadow: 0 }}>
+				<div id="map" style={{ height: 480 }}>
+					<Map centerCoordinates={project.coordinates as LatLngTuple} markers={[project.coordinates] as LatLngTuple[]} />
+				</div>
 			</Paper>
 		</PageContainer>
 	);
