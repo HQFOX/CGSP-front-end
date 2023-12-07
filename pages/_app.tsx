@@ -8,11 +8,14 @@ import { appWithTranslation } from "next-i18next";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Loading } from "../components/loading/Loading";
+import { AuthContext } from "../components/AuthContext";
 
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
+
+	const [currentUser, setCurrentUser] = useState<User | undefined>();
 
 	const [isAdmin] = useState(true);
 
@@ -53,15 +56,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   
 	return (
 		<ThemeProvider theme={theme}>
-			<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-				integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-				crossOrigin=""/>
-			<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-				integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-				crossOrigin=""></script>
-			<Layout isAdmin={isAdminRoute}>
-				{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
-			</Layout>
+			<AuthContext.Provider value={{currentUser, setCurrentUser}}>
+				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+					integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+					crossOrigin=""/>
+				<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+					crossOrigin=""></script>
+				<Layout isAdmin={isAdminRoute}>
+					{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
+				</Layout>
+			</AuthContext.Provider>
 		</ThemeProvider>
 	);
 }
