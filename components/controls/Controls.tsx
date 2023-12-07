@@ -1,6 +1,6 @@
 import React from "react";
-import { Button, Checkbox, FormControlLabel, FormGroup, Grid, IconButton, Paper, Popper, Slider, Stack, Typography } from "@mui/material";
-import { GridView, MapOutlined, Search, Tune } from "@mui/icons-material";
+import { Box, Button, Checkbox, FormControlLabel, FormGroup, Grid, IconButton, Paper, Popper, Slider, Stack, Typography } from "@mui/material";
+import { Close, GridView, MapOutlined, Search, Tune } from "@mui/icons-material";
 import Dropdown from "../dropdown/Dropdown";
 import { useTranslation } from "next-i18next";
 import { ViewType } from "../../pages/projects";
@@ -32,8 +32,8 @@ export interface ControlProps {
     onStatusChange?: (status: string) => void,
     onLocationChange?: (location: string) => void,
 	onPriceRangeChange?: (range: number[]) => void,
-	onTypologyChange?: (typology: string, checked: boolean) => void,
-	onTypeChange?: (type: string, checked: boolean) => void,
+	onTypologyChange?: (typology: string, checked: boolean, type: "typologies" | "types") => void,
+	// onTypeChange?: (type: string, checked: boolean) => void,
 	onAssignmentStatusChange?: (status: AssignmentStatusType, checked: boolean) => void,
 	onConstructionStatusChange?: (status: ConstructionStatusType, checked: boolean) => void,
 }
@@ -52,7 +52,7 @@ export const Controls = ({
 	onLocationChange,
 	onPriceRangeChange = () => {},
 	onTypologyChange = () => {},
-	onTypeChange = () => {},
+	// onTypeChange = () => {},
 	onAssignmentStatusChange = () => {},
 	onConstructionStatusChange = () => {},
 }: ControlProps) => {
@@ -76,11 +76,11 @@ export const Controls = ({
 	};
 
 	const handleTypologyChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-		onTypologyChange(event.target.name, checked);
+		onTypologyChange(event.target.name, checked, "typologies");
 	};
 
 	const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-		onTypeChange(event.target.name, checked);
+		onTypologyChange(event.target.name, checked, "types");
 	};
 
 	const handleAssignmentStatusChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
@@ -129,19 +129,6 @@ export const Controls = ({
                     <ViewListOutlined />
                 </IconButton>
             </Grid> */}
-				{/* {onStatusChange &&
-                    <Grid item>
-                    	<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-                    		<b></b>{"Estado de Construção"}:{" "}
-                    	</Typography>
-                    	<Dropdown
-                    		label={"Status"}
-                    		displayValue={search.status}
-                    		options={status}
-                    		valueChange={onStatusChange}
-                    	/>
-                    </Grid>
-				} */}
 				{onLocationChange && 
                     <Grid item>
                     	<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
@@ -157,39 +144,66 @@ export const Controls = ({
 				}
 				<Grid item>
 					<Button startIcon={<Tune />} sx={{ textTransform: "capitalize" }} onClick={handleClick}>{t("filters")}</Button>
-					<Popper id={id} open={open} anchorEl={anchorEl} placement="bottom-start">
-						<Paper sx={{p: 4}} >
+					<Popper id={id} open={open} anchorEl={anchorEl} placement="bottom">
+						<Paper sx={{p: 6}} >
+							<IconButton
+								aria-label="close"
+								onClick={() => setAnchorEl(null)}
+								sx={{
+									position: "absolute",
+									right: 8,
+									top: 8,
+								}}
+							>
+								<Close />
+							</IconButton>
 							<Stack spacing={2} >
-								<div>
-									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-										{t("projectDetails.constructionStatus")}:{" "}
-									</Typography>
-									<FormGroup>
+								{/* <div> */}
+								<FormGroup>
+									<FormControlLabel control={
+										<Checkbox 
+											name={"all"} 
+											checked={search.constructionStatus.length === constructionsStatus.length} 
+											indeterminate={search.constructionStatus.length > 0 && search.constructionStatus.length < constructionsStatus.length}
+											onChange={handleConstructionStatusChange}
+											
+										/>}
+									    label={t("projectDetails.constructionStatus")} />
+									<Box ml={3} component={FormGroup}>
 										{constructionsStatus.map( (status, index) => (
 											<FormControlLabel control={<Checkbox name={status} onChange={handleConstructionStatusChange} checked={search.constructionStatus.includes(status)}/>} label={t(`constructionStatus.${status}`)} key={index} />
 										))}
-									</FormGroup>
-								</div>
+									</Box>
+								</FormGroup>
+								{/* </div> */}
 								<div>
-									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-										{t("projectDetails.assignmentStatus")}:{" "}
-									</Typography>
-									<FormGroup>
+									<FormControlLabel control={
+										<Checkbox 
+											name={"all"} 
+											checked={search.assignmentStatus.length === assignmentStatus.length} 
+											indeterminate={search.assignmentStatus.length > 0 && search.assignmentStatus.length < assignmentStatus.length}
+											onChange={handleAssignmentStatusChange}
+										/>} label={t("projectDetails.assignmentStatus")} />
+									<Box ml={3} component={FormGroup}>
 										{assignmentStatus.map( (status, index) => (
 											<FormControlLabel control={<Checkbox name={status} onChange={handleAssignmentStatusChange} checked={search.assignmentStatus.includes(status)}/>} label={t(`assignmentStatus.${status}`)} key={index} />
 										))}
-									</FormGroup>
+									</Box>
 								</div>
 								<div>
-									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-										{t("projectDetails.typologies")}:{" "}
-									</Typography>
-									<FormGroup row>
+									<FormControlLabel control={
+										<Checkbox 
+											name={"all"}
+											onChange={handleTypologyChange}
+											checked={search.typologies.length === typologies.length && search.types.length === types.length} 
+											indeterminate={search.typologies.length > 0 && search.typologies.length <= typologies.length || search.types.length > 0 && search.types.length <= types.length}
+										/>} label={t("projectDetails.typologies")} />
+									<Box ml={3} component={FormGroup} row>
 										{typologies.map( (typology, index) => <FormControlLabel control={<Checkbox onChange={handleTypologyChange} name={typology}/>} label={typology} key={index} checked={search.typologies.includes(typology)}/>)}
-									</FormGroup>
-									<FormGroup row>
+									</Box>
+									<Box ml={3} component={FormGroup} row>
 										{types.map( (type, index) => <FormControlLabel control={<Checkbox onChange={handleTypeChange} name={type} />} label={type} key={index} checked={search.types.includes(type)}/>)}
-									</FormGroup>
+									</Box>
 								</div>
 								<div>
 									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">

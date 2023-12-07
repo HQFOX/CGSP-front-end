@@ -79,10 +79,13 @@ export interface ProjectInventoryProps {
     history?: boolean,
 }
 
+const constructionStatusValues: ConstructionStatusType[] = ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"];
+
+const assignmentStatusValues: AssignmentStatusType[] = ["WAITING","ONGOING","CONCLUDED"];
+
 export const ProjectInventory = ({
 	projects = [],
 	history = false,
-
 }: ProjectInventoryProps) => {
 	const router = useRouter();
 
@@ -268,47 +271,62 @@ export const ProjectInventory = ({
 		setSearch((search) => ({ ...search, wildcard: wildcard }));
 	};
 
-	const onTypologyChange = (param: string, checked: boolean) => {
-		if(!checked)
-		{
-			setSearch((search) => ({ ...search, typologies: search.typologies.filter( value => value !== param)}));
-		}
-		else
-		{
-			setSearch((search) => ({ ...search, typologies: [...search.typologies, param]}));
-		}
-	};
-
-	const onTypeChange = (param: string, checked: boolean) => {
-		if(!checked)
-		{
-			setSearch((search) => ({ ...search, types: search.types.filter( value => value !== param)}));
-		}
-		else
-		{
-			setSearch((search) => ({ ...search, types: [...search.types, param]}));
-		}
-	};
-
-	const onAssignmentStatusChange = (param: AssignmentStatusType, checked: boolean) => {
-		if(!checked)
-		{
-			setSearch((search) => ({ ...search, assignmentStatus: search.assignmentStatus.filter( value => value !== param)}));
-		}
-		else
-		{
-			setSearch((search) => ({ ...search, assignmentStatus: [...search.assignmentStatus, param]}));
+	const onTypologyChange = (param: string, checked: boolean, type: "typologies" | "types") => {
+		if(param == "all"){
+			if(!checked){
+				setSearch((search) => ({ ...search, typologies: []}));
+				setSearch((search) => ({ ...search, types: []}));
+			} else {
+				setSearch((search) => ({ ...search, typologies: getTypologies(projects)}));
+				setSearch((search) => ({ ...search, types: getTypes(projects)}));
+			}
+		} else {
+			if(!checked)
+			{
+				setSearch((search) => ({ ...search, [type]: search[type].filter( value => value !== param)}));
+			}
+			else
+			{
+				setSearch((search) => ({ ...search, [type]: [...search[type], param]}));
+			}
 		}
 	};
 
-	const onConstructionStatusChange = (param: ConstructionStatusType, checked: boolean) => {
-		if(!checked)
-		{
-			setSearch((search) => ({ ...search, constructionStatus: search.constructionStatus.filter( value => value !== param)}));
+	const onAssignmentStatusChange = (param: AssignmentStatusType | "all", checked: boolean) => {
+		if(param == "all"){
+			if(!checked){
+				setSearch((search) => ({ ...search, assignmentStatus: []}));
+			} else {
+				setSearch((search) => ({ ...search, assignmentStatus: assignmentStatusValues}));
+			}
+		} else {
+			if(!checked)
+			{
+				setSearch((search) => ({ ...search, assignmentStatus: search.assignmentStatus.filter( value => value !== param)}));
+			}
+			else
+			{
+				setSearch((search) => ({ ...search, assignmentStatus: [...search.assignmentStatus, param]}));
+			}
 		}
-		else
-		{
-			setSearch((search) => ({ ...search, constructionStatus: [...search.constructionStatus, param]}));
+	};
+
+	const onConstructionStatusChange = (param: ConstructionStatusType | "all", checked: boolean) => {
+		if(param == "all"){
+			if(!checked){
+				setSearch((search) => ({ ...search, constructionStatus: []}));
+			} else {
+				setSearch((search) => ({ ...search, constructionStatus: constructionStatusValues}));
+			}
+		} else{
+			if(!checked)
+			{
+				setSearch((search) => ({ ...search, constructionStatus: search.constructionStatus.filter( value => value !== param)}));
+			}
+			else
+			{
+				setSearch((search) => ({ ...search, constructionStatus: [...search.constructionStatus, param]}));
+			}
 		}
 	};
 
@@ -328,7 +346,6 @@ export const ProjectInventory = ({
 				onLocationChange={onLocationChange} 
 				onPriceRangeChange={onPriceRangeChange}
 				onTypologyChange={onTypologyChange}
-				onTypeChange={onTypeChange}
 				onAssignmentStatusChange={onAssignmentStatusChange}
 				onConstructionStatusChange={onConstructionStatusChange}
 			/>
