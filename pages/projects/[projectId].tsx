@@ -178,22 +178,10 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					</TabPanel>
 					<TabPanel index={1} value={value}>
 						<Box>
-							<Typography>
-                Id labore officia amet consectetur aliqua culpa incididunt cillum non duis pariatur.
-                Labore pariatur cillum sit ad reprehenderit eiusmod esse consequat ullamco ullamco.
-                Commodo voluptate veniam veniam nulla non aute culpa ea irure amet sint
-                exercitation. Ipsum labore magna sint incididunt sint adipisicing esse nisi minim
-                non deserunt. Nulla eiusmod magna et enim dolor ullamco mollit ea aute ex magna non.
-                Do sit ut adipisicing do minim quis labore id ea tempor sint est. Ad qui cillum amet
-                anim ad.
-								<br />
-                In est quis minim esse eu aliquip nostrud labore sunt adipisicing adipisicing.
-                Pariatur aute ad deserunt ut consequat laboris ut voluptate laboris fugiat sint. Eu
-                aute ex ipsum occaecat consectetur reprehenderit cupidatat sunt. Dolore nisi ullamco
-                cillum mollit cillum Lorem. Cillum quis magna veniam officia voluptate Lorem nisi
-                culpa sit consequat excepteur cupidatat. Labore anim eu tempor quis duis fugiat
-                ullamco ipsum adipisicing consequat excepteur. Fugiat mollit aute nulla veniam
-                cillum qui occaecat deserunt pariatur id laborum cillum adipisicing culpa.
+							<Typography sx={{ textIndent: 20}} color="text.secondary">
+							Aqui é possível fazer uma pré-inscrição neste projeto. Esta pré-inscrição é apenas uma demonstração de interesse e não constitui uma reserva de uma habitação, servindo como uma uma maneira de subscrever às atualizações do projeto e um pedido de contacto feito à equipa da cooperativa que irá responder assim que possível.<br />
+							Por ser natural existirem algumas questões, nós recomendamos também o encontro direto com a nossa equipa na sede.
+
 							</Typography>
 							<Grid container justifyContent={"flex-end"} paddingTop={4}>
 								<Grid item sm={2}>
@@ -201,7 +189,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 										variant="contained"
 										color="primary"
 										onClick={() => setShowEnrollmentModal(true)}>
-                    Pre-Enroll
+                    Pre-Inscrição
 									</StyledButton>
 									<EnrollmentModal
 										open={showEnrollmentModal}
