@@ -40,10 +40,10 @@ const postLogin = async (values: { username: string; password: string; }) => {
 	return res;
 };
 
-const getUser = async () => {
+const getUser = async (username: string) => {
 
 
-	const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/user/profile`;
+	const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/user/${username}`;
 
 	const options = {
 		method: "GET",
@@ -54,7 +54,7 @@ const getUser = async () => {
 
 	const res = await fetch(endpoint, options).then( (response) => {
 		if(response.ok){
-			return response.text();
+			return response.json();
 		}
 		else {
 			throw new Error("Error Login" + response);
@@ -64,7 +64,10 @@ const getUser = async () => {
 		console.log(error);
 	});
 
-	return res;
+	if(res)
+		return res as User;
+
+	return undefined;
 };
 
 export const LoginForm = () => {
@@ -88,13 +91,16 @@ export const LoginForm = () => {
 		onSubmit: async (values) => {
 			setSubmitting(true);
 			await postLogin(values).then( async response => {
-				// console.log(response);
 				response && Cookies.set("token", response, { expires: 2 });
-				console.log(await getUser());
-				setCurrentUser({username: "Henrique", email: "henrique.raposo@mail.com"});
-				setSuccess(true);
-				router.push("admin/projects");
-				
+				const user = await getUser(values.username);
+				if(user){
+					setCurrentUser(user);
+					setSuccess(true);
+					router.push("admin/projects");
+				}
+				else{
+					setSuccess(false);
+				}
 			});
 			setSubmitting(false);
 		}

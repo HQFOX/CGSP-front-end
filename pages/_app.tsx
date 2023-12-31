@@ -17,7 +17,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	const [currentUser, setCurrentUser] = useState<User | undefined>();
 
-	const [isAdmin] = useState(true);
+	const [isAdmin, setIsAdmin] = useState(false);
+
+	useEffect(() => (
+		currentUser ? setIsAdmin(true) : setIsAdmin(false)
+	), [currentUser]);
 
 	const checkAdminRoute = () => {
 		if(router.pathname.includes("/admin") && isAdmin){
@@ -63,7 +67,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
 					crossOrigin=""></script>
-				<Layout isAdmin={isAdminRoute}>
+				<Layout isAdmin={isAdmin && isAdminRoute}>
 					{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
 				</Layout>
 			</AuthContext.Provider>

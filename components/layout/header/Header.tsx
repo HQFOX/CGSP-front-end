@@ -10,14 +10,13 @@ import {
 	Toolbar
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import logo from "../../../public/logo.svg";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ArrowForwardIos } from "@mui/icons-material";
 
 const StyledAppBar = styled(AppBar)(
 	({ theme }) => `
@@ -25,12 +24,7 @@ const StyledAppBar = styled(AppBar)(
 `
 );
 
-export type HeaderProps = {
-  admin?: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-};
-
-const Header = ({ admin = false, setOpen }: HeaderProps) => {
+const Header = () => {
 	const { t } = useTranslation("header");
 	const router = useRouter();
 
@@ -89,13 +83,6 @@ const Header = ({ admin = false, setOpen }: HeaderProps) => {
 		<StyledAppBar position="sticky">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
-					{admin ? (
-						<IconButton onClick={() => setOpen(true)} sx={{ height: "40px", width: "40px" }}>
-							<ArrowForwardIos />
-						</IconButton>
-					) : (
-						<></>
-					)}
 					<Box
 						component="a"
 						href="/"
