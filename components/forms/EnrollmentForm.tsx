@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {  useFormik } from "formik";
-import { Box, Grid, Grow, Stack, TextField, Typography, styled } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Grid, Grow, Stack, TextField, Typography, styled } from "@mui/material";
 import theme from "../../theme";
 import { CheckCircle, ErrorOutline } from "@mui/icons-material";
 import * as Yup from "yup";
 import { StyledButton } from "../Button";
+import { useFetch } from "./utils";
+import { Loading } from "../loading/Loading";
 
 export const SuccessMessage = ({email}:{email: string}) => {
 	const { t } = useTranslation(["projectpage"]);
@@ -50,29 +52,55 @@ const StyledBox = styled(Box)({
 
 export const EnrollmentForm = ({project} : {project: Project}) => {
 	const { t } = useTranslation(["projectpage", "common"]);
-	const [showForm, setShowForm] = useState<boolean>(true);
-	const [successMessage, setSuccessMessage] = useState<boolean>(false);
+
+	const [submitting, setSubmitting] = useState(false);
+
+	const [success, setSuccess] = useState(false);
+
 	const [errorMessage] = useState<boolean>(false);
 
 	const formik = useFormik({
 		initialValues: {
+			id: 0,
 			firstName: "",
 			lastName: "",
 			email: "",
 			telephoneNumber: "",
+			projectId: project.id,
+			status: "Waiting",
+			subscribedUpdates: false,
 		},
 		validationSchema: Yup.object({
 			firstName: Yup.string().required("Obrigatório"),
 			lastName: Yup.string().notRequired(),
 			email: Yup.string().email("Invalid email address").required("Obrigatório"),
 			telephoneNumber: Yup.string().notRequired(),
+			subscribedUpdates: Yup.boolean()
 		}),
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		onSubmit: values => {
-			// alert(JSON.stringify(values, null, 2));
-			setSuccessMessage(true);
-			setShowForm(false);
-			// setErrorMessage(true)
+		onSubmit: async (values) => {
+			setSubmitting(true);
+
+			const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/enroll`;
+
+			await useFetch("POST",endpoint,values,false).then( (response) => {
+				if(response.ok){
+					setSuccess(true);
+
+					return response.json();
+				}
+				else {
+					throw new Error("Enrollment Post " + response.status);
+				}
+			}).catch( error => {
+				setSuccess(false);
+				// setError("Erro a submeter Atualização");
+				console.log(error);
+			});
+
+			setSubmitting(false);
+
+
 		},
 	});
 
@@ -86,7 +114,7 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
 						<Typography variant="h4" >{project.title}</Typography>
 					</Grid>
 				</Grid>
-				{showForm && 
+				{!success && 
             <Grid container rowSpacing={2} columnSpacing={2} mt={4}>
             	<Grid item xs={12} md={6}>
             		<TextField
@@ -133,16 +161,27 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
             			fullWidth />
             	</Grid>
             	<Grid item xs={12}>
+            		<FormControlLabel control={
+            			<Checkbox
+            				name="subscribedUpdates"
+            				onChange={formik.handleChange}
+            				checked={formik.values.subscribedUpdates}
+            			/>
+            		}
+            			label={"Subscribe to Updates"} />
+            	</Grid>
+            	<Grid item xs={12}>
             		<StyledButton type="submit" variant='contained' color='primary' value="submit" fullWidth>{t("form.submit")}</StyledButton>
             		<Typography variant="body2" sx={{ marginTop: "10px" }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+					Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e , se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site. Não são utilizados para qualquer outro fim comercial. 
             		</Typography>
             	</Grid>
             </Grid>  
 				}
-				<>
-					{errorMessage && !showForm && <ErrorMessage />}
-					{successMessage && !showForm && <SuccessMessage email={formik.values.email} />}                
+				<>	
+					{submitting && <Loading />}
+					{errorMessage && <ErrorMessage />}
+					{success && <SuccessMessage email={formik.values.email} />}                
 				</>
 			</StyledBox>
 		</form>

@@ -12,21 +12,13 @@ import { StyledButton } from "../Button";
 import { Loading } from "../loading/Loading";
 import { AuthContext } from "../AuthContext";
 import { useRouter } from "next/router";
+import { useFetch } from "./utils";
 
 const postLogin = async (values: { username: string; password: string; }) => {
-	const jsonData = JSON.stringify(values);
 
 	const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/generateToken`;
 
-	const options = {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json"
-		},
-		body: jsonData
-	};
-
-	const res = await fetch(endpoint, options).then( (response) => {
+	const res = await useFetch("POST", endpoint, values).then( (response) => {
 		if(response.ok){
 			return response.text();
 		}
@@ -42,17 +34,9 @@ const postLogin = async (values: { username: string; password: string; }) => {
 
 const getUser = async (username: string) => {
 
-
 	const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/user/${username}`;
 
-	const options = {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${Cookies.get("token")}`,
-		},
-	};
-
-	const res = await fetch(endpoint, options).then( (response) => {
+	const res = await useFetch("GET",endpoint, null , true).then( (response) => {
 		if(response.ok){
 			return response.json();
 		}
@@ -77,7 +61,7 @@ export const LoginForm = () => {
 	const [submitting, setSubmitting] = useState(false);
 	const [success, setSuccess] = useState(false);
 
-	const { setCurrentUser } = useContext(AuthContext);
+	const { setUser: setCurrentUser } = useContext(AuthContext);
 
 	const formik = useFormik({
 		initialValues: {
@@ -91,8 +75,11 @@ export const LoginForm = () => {
 		onSubmit: async (values) => {
 			setSubmitting(true);
 			await postLogin(values).then( async response => {
+
+				Cookies.remove("token");
 				response && Cookies.set("token", response, { expires: 2 });
 				const user = await getUser(values.username);
+
 				if(user){
 					setCurrentUser(user);
 					setSuccess(true);

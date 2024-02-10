@@ -5,7 +5,7 @@ import Dropdown from "../dropdown/Dropdown";
 import { useTranslation } from "next-i18next";
 import { ViewType } from "../../pages/projects";
 import styled from "@emotion/styled";
-import { SearchParams } from "../projects/projectInventory/ProjectInventory";
+import { SearchParams } from "../projects/projectInventory/utils";
 
 const StyledInput = styled.input({
 	fontSize: "1rem",
@@ -21,7 +21,7 @@ const StyledInput = styled.input({
 export interface ControlProps {
     search: SearchParams
     view?: ViewType
-    locations?: string[],
+    districts?: string[],
 	assignmentStatus?: AssignmentStatusType[]
 	constructionsStatus?: ConstructionStatusType[]
 	priceRange?: number[],
@@ -30,7 +30,7 @@ export interface ControlProps {
     onWildCardChange?: (wildcard: string) => void,
     onViewChange?: (view: ViewType) => void,
     onStatusChange?: (status: string) => void,
-    onLocationChange?: (location: string) => void,
+    onDistrictChange?: (district: string) => void,
 	onPriceRangeChange?: (range: number[]) => void,
 	onTypologyChange?: (typology: string, checked: boolean, type: "typologies" | "types") => void,
 	// onTypeChange?: (type: string, checked: boolean) => void,
@@ -41,7 +41,7 @@ export interface ControlProps {
 export const Controls = ({
 	search,
 	view = "card",
-	locations = [],
+	districts = [],
 	assignmentStatus = ["WAITING","ONGOING","CONCLUDED"],
 	constructionsStatus= ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"],
 	priceRange = [0,0],
@@ -49,7 +49,7 @@ export const Controls = ({
 	types = [],
 	onWildCardChange,
 	onViewChange,
-	onLocationChange,
+	onDistrictChange: onDistrictChange,
 	onPriceRangeChange = () => {},
 	onTypologyChange = () => {},
 	// onTypeChange = () => {},
@@ -129,16 +129,16 @@ export const Controls = ({
                     <ViewListOutlined />
                 </IconButton>
             </Grid> */}
-				{onLocationChange && 
+				{onDistrictChange && 
                     <Grid item>
                     	<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
                     		{t("locationFilterLabel")}:{" "}
                     	</Typography>
                     	<Dropdown
-                    		label={"Location"}
-                    		displayValue={search.location}
-                    		options={locations}
-                    		valueChange={onLocationChange}
+                    		label={"District"}
+                    		displayValue={search.district}
+                    		options={districts}
+                    		valueChange={onDistrictChange}
                     	/>
                     </Grid>
 				}
@@ -158,7 +158,6 @@ export const Controls = ({
 								<Close />
 							</IconButton>
 							<Stack spacing={2} >
-								{/* <div> */}
 								<FormGroup>
 									<FormControlLabel control={
 										<Checkbox 
@@ -175,7 +174,6 @@ export const Controls = ({
 										))}
 									</Box>
 								</FormGroup>
-								{/* </div> */}
 								<div>
 									<FormControlLabel control={
 										<Checkbox 

@@ -13,7 +13,8 @@ import {
 	Accordion,
 	AccordionSummary,
 	AccordionDetails,
-	styled
+	styled,
+	Link
 } from "@mui/material";
 
 import {
@@ -162,14 +163,14 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               								}`}</StyledTypography>
               							</Stack>
               						</Grid>
-									  {/* <Grid item>
+									  <Grid item>
               							<Stack direction="row" gap={1}>
               								<Dashboard color="primary" />
-              								<StyledTypography variant="body2" color="text.secondary">{`Plant: ${
-              									typology.plant
-              								}`}</StyledTypography>
+              							<Link href={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto?.filename}`} target="_blank" rel="noreferrer" variant="body2" color="text.secondary">
+              									{"Planta"}
+              							</Link>
               							</Stack>
-              						</Grid> */}
+              						</Grid>
               					</Grid>
               				</AccordionDetails>
               			</Accordion>

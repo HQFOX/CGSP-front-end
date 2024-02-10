@@ -9,28 +9,24 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Loading } from "../components/loading/Loading";
 import { AuthContext } from "../components/AuthContext";
+import { AuthenticationGuard } from "../components/AuthenticationGuard";
 
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 	const [loading, setLoading] = useState(false);
 
-	const [currentUser, setCurrentUser] = useState<User | undefined>();
+	const [user, setUser] = useState<User | undefined>();
 
-	const [isAdmin, setIsAdmin] = useState(false);
+	const [isAuth, setIsAuth] = useState(false);
 
-	useEffect(() => (
-		currentUser ? setIsAdmin(true) : setIsAdmin(false)
-	), [currentUser]);
 
 	const checkAdminRoute = () => {
-		if(router.pathname.includes("/admin") && isAdmin){
+		if(router.pathname.includes("/admin")){
 			return true;
 		}
 		return false;
 	};
-
-	const [isAdminRoute, setAdminRoute] = useState(checkAdminRoute());
 
 	const handleStop = () => {
 		setLoading(false);
@@ -41,8 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 	};
 
 	useEffect(() => {
-
-		setAdminRoute(checkAdminRoute());
  
 		router.events.on("routeChangeStart", handleStart);
 		router.events.on("routeChangeComplete", handleStop);
@@ -60,16 +54,24 @@ function MyApp({ Component, pageProps }: AppProps) {
   
 	return (
 		<ThemeProvider theme={theme}>
-			<AuthContext.Provider value={{currentUser, setCurrentUser}}>
+			<AuthContext.Provider value={{user: user, setUser: setUser, isAuth, setIsAuth}}>
 				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
 					integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
 					crossOrigin=""/>
 				<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
 					crossOrigin=""></script>
-				<Layout isAdmin={isAdmin && isAdminRoute}>
-					{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
-				</Layout>
+				{checkAdminRoute() ? 
+					<AuthenticationGuard guardType={checkAdminRoute() ? "authenticated" : "unauthenticated"} >
+						<Layout isAdmin={true}>
+							{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
+						</Layout>
+					</AuthenticationGuard>
+					:
+					<Layout isAdmin={false}>
+						{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
+					</Layout>
+				}
 			</AuthContext.Provider>
 		</ThemeProvider>
 	);

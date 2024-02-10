@@ -3,7 +3,7 @@
     "allm" : "all",
     "allf" : "all",
     "searchPlaceholder" : "Search for a project",
-    "locationFilterLabel" : "Locations",
+    "locationFilterLabel" : "Districts",
     "projectStatusFilterLabel" : "Project Status",
     "filters" : "filters",
     "projectDetails" : {
@@ -12,7 +12,7 @@
         "details": "details",
         "lots": "Lots",
         "assignedLots": "Assigned Lots",
-        "location": "Location",
+        "district": "District",
         "garage": "Garage",
         "assignmentStatus": "Assignment Status",
         "constructionStatus": "Construction Status"

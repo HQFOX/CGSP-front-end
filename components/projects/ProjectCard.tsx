@@ -23,7 +23,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
 	return (
 		<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-			<CardHeader title={<Title>{project.title}</Title>} subheader={`${t("projectDetails.location")}: ${project.location}`} />
+			<CardHeader title={<Title>{project.title}</Title>} subheader={`${t("projectDetails.district")}: ${project.district}`} />
 			<CardMedia>
 				<div style={{ position: "relative", overflow: "hidden", height: "400px" }}>
 					{ project.coverPhoto && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto.filename}`} alt={`cover image for ${project.title} project`} fill style={{ objectFit: "cover" }} />}

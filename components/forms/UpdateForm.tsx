@@ -21,7 +21,8 @@ import { CancelModal } from "../modals/CancelModal";
 import { CGSPDropzone } from "../dropzone/Dropzone";
 import { StyledButton } from "../Button";
 import { AbstractFile } from "./types";
-import { getPresignedUrl, submitFile } from "./utils";
+import { getPresignedUrl , submitFile, useFetch } from "./utils";
+import { Loading } from "../loading/Loading";
 
 export const UpdateForm = ({
 	 projects, 
@@ -34,7 +35,11 @@ export const UpdateForm = ({
 
 	const [cancelModal, setCancelModal] = useState(false);
 
-	const [submitted, setSubmitted] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
+
+	const [success, setSuccess] = useState(false);
+
+	const [error, setError] = useState<string | undefined>(undefined);
 
 	const handleAddFile = async (newfiles: File[]) => {
 		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setFiles([...files, value])));
@@ -46,9 +51,9 @@ export const UpdateForm = ({
 
 	const formik = useFormik({
 		initialValues: {
-			id: update ? update.id : "0",
-			title: update?.title ? update.title : "teste",
-			content: update?.content ? update.content : "teste",
+			id: update?.id ?? "0",
+			title: update?.title ?? "teste",
+			content: update?.content ?? "",
 			project: update?.project ? update.project : null,
 			
 		},
@@ -57,8 +62,6 @@ export const UpdateForm = ({
 			content: Yup.string(),
 		}),
 		onSubmit: async (values) => {
-
-			// if(files.length > 0){
 
 			Promise.all(files.map( async (file) => submitFile(file)))
 				.then( async res => {
@@ -70,11 +73,6 @@ export const UpdateForm = ({
 				})
 				.catch( error => console.log(error));
 				
-			// }
-			// else{
-			// 	postUpdate(values);
-			// }
-
 		}
 	});
 
@@ -83,50 +81,53 @@ export const UpdateForm = ({
 		confirm && onCancel();
 	};
 
-	const postUpdate = (values: unknown) => {
-
-		const jsonData = JSON.stringify(values);
+	const postUpdate = async (values: unknown) => {
 
 		const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
 
-		const options = {
-			method: update ? "PUT" : "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: jsonData
-		};
-
-		fetch(endpoint, options).then( () => {
-			setSubmitted(true);
-			onSubmit();
-
+		const res = await useFetch("POST", endpoint,values).then( (response) => {
+			if(response.ok){
+				setSuccess(true);
+				onSubmit();
+				return response.json();
+			}
+			else {
+				throw new Error("Update Post " + response.status);
+			}
 		}).catch( error => {
+			setSuccess(false);
+			setError("Erro a submeter Atualização");
 			console.log(error);
 		});
+
+		setSubmitting(false);
+
+		if(res)
+			return res as Update;
+		return undefined;
 
 
 	};
 
 	return (
-		<Paper sx={{ mt: 4 }}>
+		<Paper sx={{ mt: 4 , minHeight: 600}}>
 			<Container>
 				<Grid container pt={2}>
 					<Grid item mt={4}>
 						<Typography variant={"h5"}>{ update ? "Editar Update": "Adicionar Update"}</Typography>
 					</Grid>
 					<Grid item ml="auto">
-						<IconButton onClick={() => {submitted ? onCancel() : setCancelModal(true);}}>
+						<IconButton onClick={() => {success ? onCancel() : setCancelModal(true);}}>
 							<Close />
 						</IconButton>
 					</Grid>
 				</Grid>
-				{submitted ? (
+				{success ? (
 					<Grow in={true}>
 						<Stack alignContent={"center"} pt={6} sx={{ textAlign: "center" }}>
 							<CheckCircle color={"success"} style={{ fontSize: "120px", margin: "auto" }} />
-							<Typography variant="h5">Novo Update Adicionado</Typography>
-							<Typography variant="subtitle1"></Typography>
+							<Typography variant="h5">{ update ? "Atualização Editada": "Nova Atualização Adicionada"}</Typography>
+							<Typography variant="subtitle1" color="text.secondary">Confirme na tabela de atualizações ou na página pública de atualizações</Typography>
 						</Stack>
 					</Grow>
 				) : (
@@ -174,8 +175,6 @@ export const UpdateForm = ({
 									select
 									value={formik.values.project?.projectId}
 									onChange={formik.handleChange}
-									// error={formik.touched.project?.projectId && Boolean(formik.errors.project?.projectId)}
-									// helperText={formik.touched.project?.projectId && formik.errors.project?.projectId}
 									fullWidth>
 									{projects &&
 										projects.length > 0 &&
@@ -187,13 +186,16 @@ export const UpdateForm = ({
 								</TextField>
 							</Grid>
 							<Grid item ml="auto">
+								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{error}</Typography>}
+							</Grid>
+							<Grid item >
 								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
-									{"Submit"}
+									{"Submeter"}
 								</StyledButton>
 							</Grid>
 							<Grid item>
 								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
-                 					 Cancel
+                 					 Cancelar
 								</StyledButton>
 							</Grid>
 						</Grid>

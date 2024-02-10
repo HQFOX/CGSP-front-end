@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React , { KeyboardEvent, useRef, useState } from "react";
+import React , { KeyboardEvent, useCallback, useRef, useState } from "react";
 
 import {
 	Chip,
@@ -31,30 +31,19 @@ import dynamic from "next/dynamic";
 import { CGSPDropzone } from "../dropzone/Dropzone";
 import { CancelModal } from "../modals/CancelModal";
 import { StyledButton } from "../Button";
-import { getPresignedUrl, submitFile } from "./utils";
+import { getPresignedUrl, submitFile, useFetch } from "./utils";
 import { AbstractFile } from "./types";
 import { useTranslation } from "react-i18next";
+import { Loading } from "../loading/Loading";
+import { LatLngTuple } from "leaflet";
 
 const Map = dynamic(() => import("../map/Map"), {
 	ssr: false
 },
 );
 
+// const districtList = [ "Évora", "Beja", "Portalegre", "Setubal" , "Aveiro", "Braga", ""
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const submitImage = (file: File): boolean => {
-	return true;
-};
-
-export const uploadImages = (path: string, files: File[]): boolean => {
-	// Todo: this is a simulation and should be replaced
-
-	files.map((file) => {
-		if(!submitImage(file))
-			return false;
-	});
-	return true;
-};
 
 export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project, onCancel: () => void, onSubmit: () => void}) => {
 
@@ -62,9 +51,14 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 
 	const [files, setFiles] = useState<AbstractFile[]>(project?.files ?? []);
 	const [coverPhoto, setCoverPhoto] = useState<AbstractFile[]>([]);
+	const [plants, setPlants] = useState<AbstractFile[]>([]);
 	const [cancelModal, setCancelModal] = useState(false);
 
-	const [submitted, setSubmitted] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
+
+	const [success, setSuccess] = useState(false);
+
+	const [error, setError] = useState<string | undefined>(undefined);
 
 	const ref = useRef(null);
 
@@ -73,18 +67,19 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			title: project?.title ?? "Projeto",
 			assignmentStatus: "WAITING" ?? "",
 			constructionStatus: "ALLOTMENTPERMIT" ?? "",
-			location: project?.location ?? "Évora",
+			district: project?.district ?? "Évora",
+			county: project?.county ?? "",
 			lots: project ? project.lots :"10",
 			assignedLots: project ? project.assignedLots :"0",
 			typology: [] as { index: ""; typology: "" }[],
-			typologies: [] as { bedroomNumber: ""; bathroomNumber: "" }[],
+			typologies: [] as { bedroomNumber: ""; bathroomNumber: ""; garageNumber: ""; area: ""; price: ""; plant: []; }[],
 			latitude: project?.coordinates ? project.coordinates[0] : 38.56633674453089,
 			longitude: project?.coordinates ? project.coordinates[1] : -7.925327404275489,
 			files: [] as { filename: string }[]
 		},
 		validationSchema: Yup.object({
 			title: Yup.string().required("Obrigatório"),
-			location: Yup.string().required("Obrigatório"),
+			district: Yup.string().required("Obrigatório"),
 			lots: Yup.string().required("Obrigatório"),
 			assignedLots: Yup.string(),
 			typology: Yup.array().of(
@@ -114,7 +109,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							title: values.title,
 							assignmentStatus: values.assignmentStatus,
 							constructionStatus: values.constructionStatus,
-							location: values.location,
+							district: values.district,
 							lots: values.lots,
 							assignedLots: values.assignedLots,
 							typologies: values.typologies,
@@ -131,6 +126,15 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		}
 	});
 
+	const onCoordinateChange = useCallback(async (values: LatLngTuple) => {
+
+		const geoApiInfo = await fetch(`https://json.geoapi.pt/gps/${values[0]},${values[1]}`).then( res => (res.ok ? res.json() : undefined));
+
+		if(geoApiInfo){
+			formik.setValues({...formik.values,latitude: values[0],  longitude: values[1], district: geoApiInfo.distrito, county: geoApiInfo.concelho});
+		}
+	},[formik.values]);
+
 	const handleTypologyDelete = (index: string | undefined) => {
 		formik.setValues({
 			...formik.values,
@@ -143,7 +147,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		formik.setValues({
 			...formik.values,
 			typology: formik.values.typology.concat(newTypology as { index: ""; typology: "" }),
-			typologies: formik.values.typologies.concat({ bedroomNumber: "", bathroomNumber: "" })
+			typologies: formik.values.typologies.concat({ bedroomNumber: "", bathroomNumber: "", garageNumber: "", area: "", price: "", plant: [] })
 		});
 	};
 
@@ -167,36 +171,43 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		setCoverPhoto([]);
 	};
 
+	const handleAddPlant = async (newfiles: File[]) => {
+		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setPlants([...files, value])));
+	};
+
+	const handleDeletePlant = () => {
+		setPlants([]);
+	};
+
 	const handleClose = (confirm: boolean) => {
 		setCancelModal(false);
 		confirm && onCancel();
 	};
 
-	const postProject = (values: unknown) => {
-		const jsonData = JSON.stringify(values);
-
-		console.log(jsonData);
+	const postProject = async (values: unknown) => {
 
 		const endpoint = project ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}` : `${process.env.NEXT_PUBLIC_API_URL}/project` ;
 
-		const options = {
-			method: project ? "PUT" : "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: jsonData
-		};
-
-		fetch(endpoint, options).then( (response) => {
+		const res = await useFetch(project ? "PUT" : "POST", endpoint, values, true).then( (response) => {
 			if(response.ok){
-				setSubmitted(true);
+				setSuccess(true);
 				onSubmit();
+				return response.json();
 			}
-			throw new Error("Error submitting Project:" + response);
-
+			else {
+				throw new Error("Project Post " + response.status);
+			}
 		}).catch( error => {
+			setSuccess(false);
+			setError("Erro a submeter Projeto");
 			console.log(error);
 		});
+
+		setSubmitting(false);
+
+		if(res)
+			return res as Project;
+		return undefined;
 	};
 
 	return (
@@ -204,15 +215,15 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			<Container>
 				<Grid container pt={2}>
 					<Grid item mt={4}>
-						<Typography variant={"h5"}>{ project ? "Editar Projeto": "Adicionar Projeto"}</Typography>
+						<Typography variant={"h4"}>{ project ? "Editar Projeto": "Adicionar Projeto"}</Typography>
 					</Grid>
 					<Grid item ml="auto">
-						<IconButton onClick={() => {submitted ? onCancel() : setCancelModal(true);}}>
+						<IconButton onClick={() => {success ? onCancel() : setCancelModal(true);}}>
 							<Close />
 						</IconButton>
 					</Grid>
 				</Grid>
-				{submitted ? (
+				{success ? (
 					<Grow in={true}>
 						<Stack alignContent={"center"} pt={6} sx={{ textAlign: "center" }}>
 							<CheckCircle color={"success"} style={{ fontSize: "120px", margin: "auto" }} />
@@ -223,6 +234,9 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 				) : (
 					<form onSubmit={formik.handleSubmit}>
 						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
+							<Grid item xs={12}>
+								<Typography variant={"h6"}>Detalhes do Projeto</Typography>
+							</Grid>
 							<Grid item xs={12}>
 								<TextField
 									id="title"
@@ -237,7 +251,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							</Grid>
 							<Grid item xs={4}>
 								<FormControl sx={{ width: "100%"}}>
-									<InputLabel id="assignment-status-select-dropdown-label">Assignment Status</InputLabel>
+									<InputLabel id="assignment-status-select-dropdown-label">Estado de Atribuição</InputLabel>
 									<Select
 										label="Assignment Status"
 										labelId="assignment-status-select-dropdown-label"
@@ -255,7 +269,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							</Grid>
 							<Grid item xs={4}>
 								<FormControl sx={{ width: "100%"}}>
-									<InputLabel id="construction-status-select-dropdown-label">Construction Status</InputLabel>
+									<InputLabel id="construction-status-select-dropdown-label">Estado de Construção</InputLabel>
 									<Select
 										label="Construction Status"
 										labelId="construction-status-select-dropdown-label"
@@ -275,7 +289,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								<TextField
 									id="lots"
 									name="lots"
-									label={"Lots"}
+									label={"Lotes"}
 									value={formik.values.lots}
 									onChange={formik.handleChange}
 									error={formik.touched.lots && Boolean(formik.errors.lots)}
@@ -287,13 +301,16 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								<TextField
 									id="assignedLots"
 									name="assignedLots"
-									label={"Assigned Lots"}
+									label={"Lotes Atribuídos"}
 									value={formik.values.assignedLots}
 									onChange={formik.handleChange}
 									error={formik.touched.assignedLots && Boolean(formik.errors.assignedLots)}
 									helperText={formik.touched.assignedLots && formik.errors.assignedLots}
 									fullWidth
 								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Typography variant={"h6"}>Tipologias</Typography>
 							</Grid>
 							<Grid item xs={12}>
 								<Autocomplete
@@ -318,7 +335,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 										<TextField
 											ref={ref}
 											{...params}
-											label={"typology"}
+											label={"tipologia"}
 											onKeyDown={(e) => handleKeyDown(e)}
 										/>
 									)}
@@ -330,8 +347,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 										<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0}>
 											<AccordionSummary
 												expandIcon={<ExpandMore />}
-												aria-controls="panel1a-content"
-												id="panel1a-header">
+												aria-controls={`${typology}-content-${index}`}
+												id={`${typology}-header-${index}`}>
 												<Typography>{typology.typology}</Typography>
 											</AccordionSummary>
 											<AccordionDetails>
@@ -372,25 +389,77 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 															fullWidth
 														/>
 													</Grid>
+													<Grid item xs={12}>
+														<TextField
+															id="garageNumber"
+															name={`typologies[${index}].garageNumber`}
+															label={"Garagens"}
+															value={formik.values.typologies.at(index)?.garageNumber || ""}
+															onChange={formik.handleChange}
+															fullWidth
+														/>
+													</Grid>
+													<Grid item xs={12}>
+														<TextField
+															id="area"
+															name={`typologies[${index}].area`}
+															label={"Area"}
+															value={formik.values.typologies.at(index)?.area || ""}
+															onChange={formik.handleChange}
+															fullWidth
+														/>
+													</Grid>
+													<Grid item xs={12}>
+														<TextField
+															id="price"
+															name={`typologies[${index}].price`}
+															label={"Preço"}
+															value={formik.values.typologies.at(index)?.price || ""}
+															onChange={formik.handleChange}
+															fullWidth
+														/>
+													</Grid>
+													<Grid item xs={12}>
+														<Typography variant="h6">Adicionar Planta</Typography>
+														<CGSPDropzone
+															maxContent={1}
+															files={files}
+															onAddFile={handleAddPlant}
+															onDeleteFile={handleDeletePlant}
+														/>
+													</Grid>
 												</Grid>
 											</AccordionDetails>
 										</Accordion>
 									);
 								})}
 							</Grid>
-							<Grid item xs={4}>
-								<TextField
-									id="location"
-									name="location"
-									label={"Localização (Cidade)"}
-									value={formik.values.location}
+							<Grid item xs={12}>
+								<Typography variant={"h6"}>Localização</Typography>
+							</Grid>
+							<Grid item xs={3}>
+								<Autocomplete
+									id="district"
+									options={["Évora", "Beja", "Portalegre"]}
+									value={formik.values.district}
 									onChange={formik.handleChange}
-									error={formik.touched.location && Boolean(formik.errors.location)}
-									helperText={formik.touched.location && formik.errors.location}
+									fullWidth
+									renderInput={(params) => <TextField {...params} label={"Distrito"} error={formik.touched.district && Boolean(formik.errors.district)} helperText={formik.touched.district && formik.errors.district}/>}
+								/>
+							</Grid>
+							<Grid item xs={3}>
+								<TextField
+									id="county"
+									name="county"
+									label={"Concelho"}
+									value={formik.values.county}
+									onChange={formik.handleChange}
+									error={formik.touched.county && Boolean(formik.errors.county)}
+									helperText={formik.touched.county && formik.errors.county}
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={4}>
+							<Grid item xs={3}>
 								<TextField
 									id="latitude"
 									name="latitude"
@@ -402,7 +471,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={4}>
+							<Grid item xs={3}>
 								<TextField
 									id="longitude"
 									name="longitude"
@@ -414,12 +483,13 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={12}>
+								<Typography>Arraste o Marcador para preencher automaticamente</Typography>
 								<Box id="map" style={{ height: 480}} sx={{pt: 2}}>
-									<Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [formik.values.latitude, formik.values.longitude] ]}/>
+									<Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [formik.values.latitude, formik.values.longitude] ]} onCoordinateChange={onCoordinateChange}/>
 								</Box>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={12}>
 								<Typography variant="h6">Adicionar Foto de Capa</Typography>
 								<CGSPDropzone
 									maxContent={1}
@@ -439,13 +509,16 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								/>
 							</Grid>
 							<Grid item ml="auto">
+								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{error}</Typography>}
+							</Grid>
+							<Grid item >
 								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
-									{"Submit"}
+									{"Submeter"}
 								</StyledButton>
 							</Grid>
 							<Grid item>
 								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
-                  Cancel
+                  					Cancelar
 								</StyledButton>
 							</Grid>
 						</Grid>

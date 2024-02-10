@@ -13,6 +13,7 @@ import { AccountCircle, ArrowForwardIos, Logout } from "@mui/icons-material";
 import { AuthContext } from "../../AuthContext";
 import { LogOutModal } from "../../modals/LogOutModal";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const StyledAppBar = styled(AppBar)(
 	({ theme }) => `
@@ -29,13 +30,14 @@ const AdminHeader = ({ setOpen }: HeaderProps) => {
 
 	const router = useRouter();
 
-	const {currentUser , setCurrentUser }= useContext(AuthContext);
+	const {user: currentUser , setUser: setCurrentUser }= useContext(AuthContext);
 
 	const [logOutModal, setLogOutModal] = useState(false);
 
 	const handleClose = (confirm: boolean) => {
 		setLogOutModal(false);
 		if(confirm) {
+			Cookies.remove("token");
 			setCurrentUser();
 			router.push("/");
 		}

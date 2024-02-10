@@ -3,7 +3,7 @@
     "allm" : "todos",
     "allf" : "todas",
     "searchPlaceholder" : "Pesquise um projeto",
-    "locationFilterLabel" : "Localizações",
+    "locationFilterLabel" : "Distritos",
     "projectStatusFilterLabel" : "Estado do Projeto",
     "filters" : "filtros",
     "projectDetails" : {
@@ -12,7 +12,7 @@
         "details": "detalhes",
         "lots": "Lotes",
         "assignedLots": "Lotes Atribuídos",
-        "location": "Localização",
+        "district": "Distrito",
         "assignmentStatus": "Estado de Atribuição",
         "constructionStatus": "Estado de Construção",
         "price": "Preço"

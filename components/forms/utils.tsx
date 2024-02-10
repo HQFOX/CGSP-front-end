@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { AbstractFile } from "./types";
 
 export const submitFile = async (file : AbstractFile) => {
@@ -51,5 +52,23 @@ export const getPresignedUrl = async (file: File) => {
 		console.log(result);
 		return result;
 	}
+};
+
+export const useFetch = (method = "GET",  endpoint: string, values?: unknown, auth: boolean = false) => {
+
+	const body = values ? JSON.stringify(values) : null;
+
+	const cookie = auth ? { Authorization : `Bearer ${Cookies.get("token")}`} : null;
+
+	const options = {
+		method: method,
+		headers: {
+			"Content-Type": "application/json",
+			...cookie,
+		},
+		body
+	};
+
+	return fetch(endpoint, options);
 };
 

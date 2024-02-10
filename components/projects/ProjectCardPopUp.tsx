@@ -18,7 +18,7 @@ export const ProjectCardPopUp = ({ project }: ProjectCardPopUpProps) => {
 
 	return (
 		<Card sx={{ minWidth: 275, boxShadow: "none" }}>
-			<CardHeader title={project.title} subheader={`${t("projectDetails.location")}: ${project.location}`} />
+			<CardHeader title={project.title} subheader={`${t("projectDetails.district")}: ${project.district}`} />
 			<CardMedia>
 				<div style={{ position: "relative", overflow: "hidden", height: "170px" }}>
 					{ project.coverPhoto && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto.filename}`} alt={`cover image for ${project.title} project`} fill style={{ objectFit: "cover" }} />}

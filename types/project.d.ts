@@ -5,7 +5,8 @@ type ProjectFile = {
 type Project = {
   id: string;
   title: string;
-  location?: string;
+  district?: string;
+  county?: string;
   status?: "completed" | "building" | "open";
   assignmentStatus?: AssignmentStatusType;
   constructionStatus?: ConstructionStatusType;

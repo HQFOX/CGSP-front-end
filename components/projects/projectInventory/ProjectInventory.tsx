@@ -5,79 +5,24 @@ import { Controls } from "../../controls/Controls";
 import { Fade, Grid } from "@mui/material";
 import ProjectCard from "../ProjectCard";
 import dynamic from "next/dynamic";
+import { SearchParams, ViewType, getPriceRange, getTypes, getTypologies, normalizeString } from "./utils";
+import { LatLngTuple } from "leaflet";
+import { Beja, Evora, Portalegre } from "../../map/districtdata";
 
 const Map = dynamic(() => import("../../map/Map"), {
 	ssr: false
 });
 
-export const normalizeString = (value: string): string => {
-	return value.normalize("NFD").replace(/\p{Diacritic}/gu, "");
-};
-
-const getPriceRange = (projects: Project[]) => {
-	const priceRange: (number | undefined)[] = [undefined,undefined];
-
-	projects.map((project) => {
-		project.typologies?.map((typology) => {
-			if(typology.price){
-				if(priceRange[0] == undefined || priceRange[0] > typology.price)
-					priceRange[0] = typology.price;
-				if(priceRange[1] == undefined || priceRange[1] < typology.price)
-					priceRange[1] = typology.price;
-			}
-		});
-	});
-	console.log(priceRange);
-	return priceRange as number[];
-};
-
-const getTypologies = (projects: Project[]) => {
-	const typologies = new Set<string>();
-
-	projects.map( (project) => {
-		project.typologies?.map( (typology) => {
-			if(typology.typology){
-				typologies.add(typology.typology);
-			}
-		});
-	});
-
-	return [...typologies];
-};
-
-const getTypes = (projects: Project[]) => {
-	const types = new Set<string>();
-
-	projects.map( (project) => {
-		project.typologies?.map( (typology) => {
-			if(typology.type){
-				types.add(typology.type);
-			}
-		});
-	});
-
-	return [...types];
-};
-
-
-export type SearchParams = {
-	title: string;
-	location: string;
-	status: string;
-	assignmentStatus: AssignmentStatusType[];
-	constructionStatus: ConstructionStatusType[];
-	priceRange: number[];
-	typologies: string[];
-	types: string[];
-	wildcard: string;
-  };
-
-export type ViewType = "card" | "list" | "map";
-
 export interface ProjectInventoryProps {
     projects: Project[],
     history?: boolean,
 }
+
+const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
+	"Évora" : Evora.geojson.properties.centros.centro.reverse() as LatLngTuple,
+	"Beja": Beja.geojson.properties.centros.centro.reverse() as LatLngTuple,
+	"Portalegre": Portalegre.geojson.properties.centros.centro.reverse() as LatLngTuple,
+};
 
 const constructionStatusValues: ConstructionStatusType[] = ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"];
 
@@ -93,7 +38,7 @@ export const ProjectInventory = ({
 
 	const [search, setSearch] = useState<SearchParams>({
 		title: "",
-		location: t("allf"),
+		district: t("allf"),
 		status: t("allm"),
 		assignmentStatus: ["WAITING","ONGOING","CONCLUDED"],
 		constructionStatus: ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"],
@@ -109,6 +54,10 @@ export const ProjectInventory = ({
 
 	const [view, setView] = useState<ViewType>("card");
 
+	const [centerCoordinates, setCenterCoordinates] = useState<LatLngTuple>([38.56633674453089, -7.925327404275489]);
+
+	const [zoom, setZoom] = useState<number>(6);
+
 	const handleClick = (projectId: string) => {
 		router.push(`projects/${projectId}`);
 	};
@@ -118,12 +67,12 @@ export const ProjectInventory = ({
 
 	},[projectSearchResults]);
 
-	const filterResultsByLocation = (location: string, projects: Project[]): Project[] => {
+	const filterResultsByLocation = (district: string, projects: Project[]): Project[] => {
 		let result: Project[] = projects;
-		if (location !== t("allf")) {
+		if (district !== t("allf")) {
 			result = projects.filter(
 				(project) =>
-					project.location && project.location.toLowerCase().includes(location.toLowerCase())
+					project.district && project.district.toLowerCase().includes(district.toLowerCase())
 			);
 			return result;
 		}
@@ -159,8 +108,8 @@ export const ProjectInventory = ({
 			);
 			const resultLocation = projects.filter(
 				(project) =>
-					project.location &&
-          normalizeString(project.location.toLowerCase()).includes(
+					project.district &&
+          normalizeString(project.district.toLowerCase()).includes(
           	normalizeString(param.toLowerCase())
           )
 			);
@@ -212,7 +161,7 @@ export const ProjectInventory = ({
 
 	useMemo(() => {
 		let results = projects;
-		results = filterResultsByLocation(search.location, results);
+		results = filterResultsByLocation(search.district, results);
 		results = filterResultsByTitle(search.title, results);
 		results = filterResultsByStatus(search.status, results);
 		results = filterResultsByWildCard(search.wildcard, results);
@@ -225,18 +174,20 @@ export const ProjectInventory = ({
 	}, [search, projects]);
 
 
-	const locations = (projectData: Project[]): string[] => {
-		const locationSet: string[] = [t("allf")];
+	const districts = (projectData: Project[]): string[] => {
+		const districtSet: string[] = [t("allf")];
 		projectData.map((project) => {
-			if (project.location && !locationSet.includes(project.location)) {
-				locationSet.push(project.location);
+			if (project.district && !districtSet.includes(project.district)) {
+				districtSet.push(project.district);
 			}
 		});
-		return locationSet;
+		return districtSet;
 	};
 
-	const onLocationChange = (location: string) => {
-		setSearch((search) => ({ ...search, location: location }));
+	const onDistrictChange = (district: string) => {
+		setSearch((search) => ({ ...search, district: district }));
+		setCenterCoordinates(districtCenterCoordinates[district] ?? [38.56633674453089, -7.925327404275489]);
+		setZoom(districtCenterCoordinates[district] == undefined ? 6 : 9);
 	};
 
 	const onViewChange = (view: ViewType) => {
@@ -336,14 +287,14 @@ export const ProjectInventory = ({
 			<Controls
 				search={search}
 				view={view}
-				locations={locations(projects)}
+				districts={districts(projects)}
 				priceRange={getPriceRange(projects)}
 				typologies={getTypologies(projects)}
 				types={getTypes(projects)}
 				onWildCardChange={onWildCardChange}
 				onViewChange={onViewChange}
 				onStatusChange={history ? undefined : onStatusChange}
-				onLocationChange={onLocationChange} 
+				onDistrictChange={onDistrictChange} 
 				onPriceRangeChange={onPriceRangeChange}
 				onTypologyChange={onTypologyChange}
 				onAssignmentStatusChange={onAssignmentStatusChange}
@@ -362,14 +313,14 @@ export const ProjectInventory = ({
 			{view === "map" && (
 				<div id="map" style={{ height: 480, padding: "8px" }}>
 					<Map
-						centerCoordinates={[38.56633674453089, -7.925327404275489]}
-						// markers={projectSearchResults.map((project) => project.coordinates)}
+						centerCoordinates={centerCoordinates}
 						projects={projectSearchResults}
-						zoom={6}
+						zoom={zoom}
+						currentDistrict={search.district}
+						changeView
 					/>
 				</div>
 			)}
-			{/* {view === "list" && <ProjectTable />} */}
 		</>
 	);
 };
