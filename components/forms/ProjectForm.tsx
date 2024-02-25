@@ -427,7 +427,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									id="district"
 									options={districtList}
 									value={formik.values.district}
-									onChange={(e,value,reason) => handleDistrictChange(value, reason === "selectOption")}
+									onChange={(e,value) => handleDistrictChange(value)}
 									fullWidth
 									renderInput={(params) => <TextField {...params} label={"Distrito"} error={formik.touched.district && Boolean(formik.errors.district)} helperText={formik.touched.district && formik.errors.district} />} />
 							</Grid><Grid item xs={3}>
