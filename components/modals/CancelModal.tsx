@@ -3,7 +3,7 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, I
 import { Close } from "@mui/icons-material";
 import { StyledButton } from "../Button";
 
-export const CancelModal = ({open, handleClose }:{open: boolean, handleClose: (confirm: boolean) => void}) => {
+export const CancelModal = ({open, title, handleClose }:{open: boolean, title: string, handleClose: (confirm: boolean) => void}) => {
 
 	return (
 		<Dialog
@@ -13,7 +13,7 @@ export const CancelModal = ({open, handleClose }:{open: boolean, handleClose: (c
 			aria-describedby="alert-dialog-description"
 		>
 			<DialogTitle id="alert-dialog-title">
-				{"Cancelar Criação de Update"}
+				{title}
 			</DialogTitle>
 			<IconButton
 				aria-label="close"

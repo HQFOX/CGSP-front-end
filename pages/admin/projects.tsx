@@ -9,12 +9,14 @@ import { Loading } from "../../components/loading/Loading";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { ProjectTable } from "../../components/tables/ProjectTable";
 import { StyledButton } from "../../components/Button";
+import { useFetch } from "../../components/forms/utils";
 
 const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 	const [projects, setProjects] = useState<Project[]>(data.projects);
 	const [editProject, setEditProject ] = useState<Project | undefined>();
 	const [showAddProjectForm, setShowAddProjectForm] = useState(false);
 	const [showEditProjectForm, setShowEditProjectForm] = useState(false);
+
 
 	const refreshData = async () => {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/project`);
@@ -27,16 +29,19 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 
 	const handleDelete = async (id: string | undefined) => {
 		if (id) {
-			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/project/${id}`, {
-				method: "DELETE"
+			const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/project/${id}`;
+
+			await useFetch("DELETE", endpoint, undefined, true).then( (response) => {
+				if(response.ok){
+					console.log(`Project ${id} deleted`);
+					refreshData();
+				}
+				else {
+					throw new Error("Project Delete " + response.status);
+				}
+			}).catch( error => {
+				console.log(error);
 			});
-	
-			if (response.status == 200) {
-				console.log("item eliminado");
-				refreshData();
-			} else {
-				console.log(response);
-			}
 		}
 	};
 
@@ -50,23 +55,23 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 		<PageContainer>
 			<Box sx={{ pb: 4 }}>
 				<Typography variant="h5" component="h1">
-					Project Table
+					Projetos
 				</Typography>
 				<Divider />
 			</Box>
-			<ProjectTable projects={projects} handleShowProjectForm={(update) => handleShowProjectForm(update)} handleDelete={handleDelete}/>
 			{!showAddProjectForm && (
-				<Grid container direction={"row-reverse"} mt={2}>
+				<Grid container  mt={2} mb={2}>
 					<Grid item>
 						<StyledButton
 							startIcon={<Add />}
 							variant="contained"
 							onClick={() => setShowAddProjectForm(true)}>
-              				Add Project
+              				Adicionar Projecto
 						</StyledButton>
 					</Grid>
 				</Grid>
 			)}
+			<ProjectTable projects={projects} handleShowProjectForm={(update) => handleShowProjectForm(update)} handleDelete={handleDelete}/>
 			{showAddProjectForm && (
 				<Suspense fallback={<Loading />}>
 					<ProjectForm

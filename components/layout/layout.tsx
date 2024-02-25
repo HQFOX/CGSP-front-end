@@ -15,19 +15,19 @@ const pages = [
 	},
 	{
 		id: 2,
-		text: "Projects",
+		text: "Projetos",
 		path: "/admin/projects",
 		icon: <Foundation />
 	},
 	{
 		id: 3,
-		text: "Updates",
+		text: "Atualizações",
 		path: "/admin/updates",
 		icon: <Feed />
 	},
 	{
 		id: 4,
-		text: "Enroll Requests",
+		text: "Inscrições",
 		path: "/admin/enrollrequests",
 		icon: <AccountBox />
 	}

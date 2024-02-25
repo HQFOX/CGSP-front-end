@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { SearchParams, ViewType, getPriceRange, getTypes, getTypologies, normalizeString } from "./utils";
 import { LatLngTuple } from "leaflet";
 import { Beja, Evora, Portalegre } from "../../map/districtdata";
+import { Setubal } from "../../map/districtdata/Setubal";
 
 const Map = dynamic(() => import("../../map/Map"), {
 	ssr: false
@@ -18,10 +19,11 @@ export interface ProjectInventoryProps {
     history?: boolean,
 }
 
-const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
+export const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
 	"Évora" : Evora.geojson.properties.centros.centro.reverse() as LatLngTuple,
 	"Beja": Beja.geojson.properties.centros.centro.reverse() as LatLngTuple,
 	"Portalegre": Portalegre.geojson.properties.centros.centro.reverse() as LatLngTuple,
+	"Setúbal": Setubal.geojson.properties.centros.centro.reverse() as LatLngTuple,
 };
 
 const constructionStatusValues: ConstructionStatusType[] = ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"];
@@ -38,7 +40,7 @@ export const ProjectInventory = ({
 
 	const [search, setSearch] = useState<SearchParams>({
 		title: "",
-		district: t("allf"),
+		district: t("allm"),
 		status: t("allm"),
 		assignmentStatus: ["WAITING","ONGOING","CONCLUDED"],
 		constructionStatus: ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"],
@@ -69,7 +71,7 @@ export const ProjectInventory = ({
 
 	const filterResultsByLocation = (district: string, projects: Project[]): Project[] => {
 		let result: Project[] = projects;
-		if (district !== t("allf")) {
+		if (district !== t("allm")) {
 			result = projects.filter(
 				(project) =>
 					project.district && project.district.toLowerCase().includes(district.toLowerCase())
@@ -122,7 +124,7 @@ export const ProjectInventory = ({
 		let result: Project[] = projects;
 		
 		result = projects.filter( (project) => 
-			project.typologies ? project.typologies?.filter( (typology ) => typology.price && typology.price >= param[0] && typology.price <= param[1] ).length > 0 : false
+			project.typologies ? project.typologies?.filter( (typology ) => !typology.price || typology.price >= param[0] && typology.price <= param[1] ).length > 0 : false
 		);
 		return result;
 	};
@@ -175,7 +177,7 @@ export const ProjectInventory = ({
 
 
 	const districts = (projectData: Project[]): string[] => {
-		const districtSet: string[] = [t("allf")];
+		const districtSet: string[] = [t("allm")];
 		projectData.map((project) => {
 			if (project.district && !districtSet.includes(project.district)) {
 				districtSet.push(project.district);

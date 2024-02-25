@@ -202,7 +202,7 @@ export const UpdateForm = ({
 					</form>
 				)}
 			</Container>
-			<CancelModal open={cancelModal} handleClose={(confirm) => handleClose(confirm)}/>
+			<CancelModal open={cancelModal} handleClose={(confirm) => handleClose(confirm)}  title="Cancelar Criação de Update"/>
 		</Paper>
 	);
 };

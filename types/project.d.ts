@@ -22,17 +22,17 @@ type Project = {
 type TypologyDetails = {
   typology?: string;
   type?: string;
-  bedroomNumber?: string;
-  bathroomNumber?: string; 
-  garageNumber?: string; 
-  price?: number; 
+  bedroomNumber?: number;
+  bathroomNumber?: number; 
+  garageNumber?: number; 
+  price?: float; 
   plant?: string; 
 }
 
 type ProjectDetails = {
   typology: string;
-  bedroomNumber: string;
-  bathroomNumber: string;
+  bedroomNumber: number;
+  bathroomNumber: number;
 }
 
 type AssignmentStatusType = "WAITING" | "ONGOING" | "CONCLUDED";

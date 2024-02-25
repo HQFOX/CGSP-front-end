@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React , { KeyboardEvent, useCallback, useRef, useState } from "react";
+import React , { useCallback, useRef, useState } from "react";
 
 import {
 	Chip,
@@ -20,8 +20,12 @@ import {
 	Box,
 	InputLabel,
 	FormControl,
+	Stepper,
+	Step,
+	StepButton,
+	InputAdornment,
 } from "@mui/material";
-import { CheckCircle, Close, ExpandMore } from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos, CheckCircle, Close, ExpandMore } from "@mui/icons-material";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -36,22 +40,24 @@ import { AbstractFile } from "./types";
 import { useTranslation } from "react-i18next";
 import { Loading } from "../loading/Loading";
 import { LatLngTuple } from "leaflet";
+import { districtCenterCoordinates } from "../projects/projectInventory/ProjectInventory";
 
 const Map = dynamic(() => import("../map/Map"), {
 	ssr: false
 },
 );
 
-// const districtList = [ "Évora", "Beja", "Portalegre", "Setubal" , "Aveiro", "Braga", ""
+const districtList = [ "Évora", "Beja", "Portalegre", "Setúbal" , "Aveiro", "Braga" ];
 
+const steps = ["Detalhes", "Localização", "Tipologias", "Fotografias"];
 
 export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project, onCancel: () => void, onSubmit: () => void}) => {
 
 	const { t } = useTranslation(["projectpage", "common"]);
 
 	const [files, setFiles] = useState<AbstractFile[]>(project?.files ?? []);
-	const [coverPhoto, setCoverPhoto] = useState<AbstractFile[]>([]);
-	const [plants, setPlants] = useState<AbstractFile[]>([]);
+
+	const [typologyIndex, setTypologyIndex] = useState(0);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitting, setSubmitting] = useState(false);
@@ -60,19 +66,24 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 
 	const [error, setError] = useState<string | undefined>(undefined);
 
+	const [activeStep, setActiveStep] = React.useState(0);
+
+	const [centerCoordinates, setCenterCoordinates] = useState<LatLngTuple>([38.56633674453089, -7.925327404275489]);
+
 	const ref = useRef(null);
 
 	const formik = useFormik({
 		initialValues: {
-			title: project?.title ?? "Projeto",
-			assignmentStatus: "WAITING" ?? "",
-			constructionStatus: "ALLOTMENTPERMIT" ?? "",
-			district: project?.district ?? "Évora",
+			title: project?.title ?? "",
+			assignmentStatus: project?.assignmentStatus ?? "WAITING",
+			constructionStatus: project?.constructionStatus ?? "ALLOTMENTPERMIT",
+			coverPhoto: project?.coverPhoto as AbstractFile | undefined ?? undefined,
+			district: project?.district ?? "",
 			county: project?.county ?? "",
-			lots: project ? project.lots :"10",
-			assignedLots: project ? project.assignedLots :"0",
-			typology: [] as { index: ""; typology: "" }[],
-			typologies: [] as { bedroomNumber: ""; bathroomNumber: ""; garageNumber: ""; area: ""; price: ""; plant: []; }[],
+			lots: project ? project.lots : 0,
+			assignedLots: project ? project.assignedLots : 0,
+			typology: [] as { index: number; typology: string; }[], // TODO: add initial value
+			typologies: [] as { bedroomNumber?: number; bathroomNumber?: number; garageNumber?: number; area?: number; price?: number; plant? : AbstractFile}[],
 			latitude: project?.coordinates ? project.coordinates[0] : 38.56633674453089,
 			longitude: project?.coordinates ? project.coordinates[1] : -7.925327404275489,
 			files: [] as { filename: string }[]
@@ -80,8 +91,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		validationSchema: Yup.object({
 			title: Yup.string().required("Obrigatório"),
 			district: Yup.string().required("Obrigatório"),
-			lots: Yup.string().required("Obrigatório"),
-			assignedLots: Yup.string(),
+			lots: Yup.number().required("Obrigatório"),
+			assignedLots: Yup.number().required("Obrigatório"),
 			typology: Yup.array().of(
 				Yup.object().shape({
 					index: Yup.string(),
@@ -90,8 +101,12 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			),
 			typologies: Yup.array().of(
 				Yup.object().shape({
-					// bedroomNumber: Yup.string().required("Obrigatório"),
-					// bathroomNumber: Yup.string().required("Obrigatório")
+					bedroomNumber: Yup.number(),
+					bathroomNumber: Yup.number(),
+					garageNumber: Yup.number(),
+					area: Yup.number(),
+					price: Yup.number(),
+
 				})
 			),
 			latitude: Yup.number().required("Obrigatório"),
@@ -99,11 +114,17 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		}),
 		onSubmit: async (values) => {
 
-			Promise.all(coverPhoto.map( async (file) => submitFile(file))).then( async () => {
+			if(values.coverPhoto){
+				submitFile(values.coverPhoto);
+			}
 				
-				Promise.all(files.map( async (file) => submitFile(file)))
-					.then( async res => {
-						console.log(res);
+			Promise.all(files.map( async (file) => submitFile(file)))
+				.then( async res => {
+
+					Promise.all(values.typologies.map( (typ) => typ.plant &&
+							submitFile(typ.plant))).then( async plantRes => {
+
+
 
 						const formatValue = {
 							title: values.title,
@@ -114,28 +135,30 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							assignedLots: values.assignedLots,
 							typologies: values.typologies,
 							coordinates: [values.latitude, values.longitude],
-							coverPhoto: coverPhoto.map( cover => { return { "filename": cover.filename };})[0],
+							coverPhoto: values.coverPhoto,
 							files: files.map( file => { return { "filename": file.filename};})
 						};
-		
+								
+						console.log(formatValue);
 						postProject(formatValue);
-					})
-					.catch( error => console.log(error));
-			});
+
+					});
+				});
 
 		}
 	});
 
-	const onCoordinateChange = useCallback(async (values: LatLngTuple) => {
+	const onCoordinateChange = async (values: LatLngTuple) => {
 
 		const geoApiInfo = await fetch(`https://json.geoapi.pt/gps/${values[0]},${values[1]}`).then( res => (res.ok ? res.json() : undefined));
 
 		if(geoApiInfo){
 			formik.setValues({...formik.values,latitude: values[0],  longitude: values[1], district: geoApiInfo.distrito, county: geoApiInfo.concelho});
+			setCenterCoordinates(values);
 		}
-	},[formik.values]);
+	};
 
-	const handleTypologyDelete = (index: string | undefined) => {
+	const handleTypologyDelete = (index: number | undefined) => {
 		formik.setValues({
 			...formik.values,
 			typology: formik.values.typology.filter((value) => value.index != index)
@@ -143,16 +166,21 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 	};
 
 	const handleTypologyAdd = (option: string) => {
-		const newTypology = { index: formik.values.typology.length.toString(), typology: option };
+		const newIndex = typologyIndex + 1;
+		const newTypology = { index: newIndex, typology: option };
+		setTypologyIndex(newIndex);
 		formik.setValues({
 			...formik.values,
-			typology: formik.values.typology.concat(newTypology as { index: ""; typology: "" }),
-			typologies: formik.values.typologies.concat({ bedroomNumber: "", bathroomNumber: "", garageNumber: "", area: "", price: "", plant: [] })
+			typology: formik.values.typology.concat(newTypology as { index: number; typology: ""; plant?: AbstractFile }),
+			typologies: formik.values.typologies.concat({ bedroomNumber: 0, bathroomNumber: 0, garageNumber: 0, area: 0, price: 0})
 		});
 	};
 
-	const handleKeyDown = (e: KeyboardEvent<any>) => {
-		e.key === "Enter" ? handleTypologyAdd(e.target.value) : undefined;
+	const onTypologyChange = (e: React.SyntheticEvent, value: string[], reason: string) => {
+		console.log(value);
+		if((reason) === "selectOption" || reason === "createOption"){
+			handleTypologyAdd(value[value.length - 1]);
+		}
 	};
 
 	const handleAddFile = async (newfiles: File[]) => {
@@ -164,25 +192,89 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 	};
 
 	const handleAddCover = async (newfiles: File[]) => {
-		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setCoverPhoto([...files, value])));
+		newfiles.map( file =>  getPresignedUrl(file).then( value => {
+			if(value){
+				formik.setValues({
+					...formik.values,
+					coverPhoto: value
+				});
+			}}));
 	};
 
 	const handleDeleteCover = () => {
-		setCoverPhoto([]);
+		formik.setValues({
+			...formik.values,
+			coverPhoto: undefined
+		});
 	};
 
-	const handleAddPlant = async (newfiles: File[]) => {
-		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setPlants([...files, value])));
+	const handleAddPlant = async (newfiles: File[], index: number) => {
+
+		newfiles.map( file =>  getPresignedUrl(file).then( value => {
+			// value && setPlants([...files, value])
+			if(value){
+				const updatedTypologies = formik.values.typologies;
+
+				updatedTypologies[index] = {...updatedTypologies[index], plant: value };
+		
+				formik.setValues({
+					...formik.values,
+					typologies: updatedTypologies
+				});
+
+			}
+		
+		}));
+
+
 	};
 
-	const handleDeletePlant = () => {
-		setPlants([]);
+	const handleDeletePlant = (index: number) => {
+		const updatedTypologies = formik.values.typologies;
+
+		const updatedTypology = updatedTypologies[index];
+
+		delete updatedTypology.plant;
+
+		updatedTypologies[index] = updatedTypology;
+
+		formik.setValues({
+			...formik.values,
+			typologies: updatedTypologies
+		});
 	};
 
 	const handleClose = (confirm: boolean) => {
 		setCancelModal(false);
 		confirm && onCancel();
 	};
+
+	const handleDistrictChange = (district: string| null) => {
+		if(district && district != formik.values.district){
+			formik.setValues({
+				...formik.values,
+				district: district
+			});
+			if(districtList.includes(district)){
+				const newCoordinates = districtCenterCoordinates[district];
+				if(newCoordinates){
+					setCenterCoordinates(newCoordinates);
+				}
+			}
+		}
+	};
+
+	const handleBack = () => {
+		setActiveStep((prevActiveStep) => (prevActiveStep - 1 ) % steps.length);
+	};
+
+	const handleNext = () => {
+		setActiveStep((prevActiveStep) => (prevActiveStep + 1 ) % steps.length);
+	  };
+
+	  const handleStep = (step: number) => () => {
+		setActiveStep(step);
+	  };
 
 	const postProject = async (values: unknown) => {
 
@@ -195,6 +287,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 				return response.json();
 			}
 			else {
+				console.log(values);
 				throw new Error("Project Post " + response.status);
 			}
 		}).catch( error => {
@@ -235,9 +328,20 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 					<form onSubmit={formik.handleSubmit}>
 						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
 							<Grid item xs={12}>
-								<Typography variant={"h6"}>Detalhes do Projeto</Typography>
+								<Stepper nonLinear activeStep={activeStep}>
+									{steps.map((label, index) => (
+										<Step key={label}>
+											<StepButton onClick={handleStep(index)}>
+												{label}
+											</StepButton>
+										</Step>
+									))}
+								</Stepper>
 							</Grid>
-							<Grid item xs={12}>
+							{activeStep === 0 &&
+							<React.Fragment><Grid item xs={12}>
+								<Typography variant={"h6"}>Detalhes do Projeto</Typography>
+							</Grid><Grid item xs={12}>
 								<TextField
 									id="title"
 									name="title"
@@ -246,11 +350,9 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									onChange={formik.handleChange}
 									error={formik.touched.title && Boolean(formik.errors.title)}
 									helperText={formik.touched.title && formik.errors.title}
-									fullWidth
-								/>
-							</Grid>
-							<Grid item xs={4}>
-								<FormControl sx={{ width: "100%"}}>
+									fullWidth />
+							</Grid><Grid item xs={4}>
+								<FormControl sx={{ width: "100%" }}>
 									<InputLabel id="assignment-status-select-dropdown-label">Estado de Atribuição</InputLabel>
 									<Select
 										label="Assignment Status"
@@ -266,9 +368,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 										<MenuItem value={"CONCLUDED"}>{t("assignmentStatus.CONCLUDED")}</MenuItem>
 									</Select>
 								</FormControl>
-							</Grid>
-							<Grid item xs={4}>
-								<FormControl sx={{ width: "100%"}}>
+							</Grid><Grid item xs={4}>
+								<FormControl sx={{ width: "100%" }}>
 									<InputLabel id="construction-status-select-dropdown-label">Estado de Construção</InputLabel>
 									<Select
 										label="Construction Status"
@@ -284,8 +385,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 										<MenuItem value={"CONCLUDED"}>{t("constructionStatus.CONCLUDED")}</MenuItem>
 									</Select>
 								</FormControl>
-							</Grid>
-							<Grid item xs={4}>
+							</Grid><Grid item xs={4}>
 								<TextField
 									id="lots"
 									name="lots"
@@ -294,10 +394,9 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									onChange={formik.handleChange}
 									error={formik.touched.lots && Boolean(formik.errors.lots)}
 									helperText={formik.touched.lots && formik.errors.lots}
-									fullWidth
-								/>
-							</Grid>
-							<Grid item xs={4}>
+									type="number"
+									fullWidth />
+							</Grid><Grid item xs={4}>
 								<TextField
 									id="assignedLots"
 									name="assignedLots"
@@ -306,148 +405,32 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									onChange={formik.handleChange}
 									error={formik.touched.assignedLots && Boolean(formik.errors.assignedLots)}
 									helperText={formik.touched.assignedLots && formik.errors.assignedLots}
-									fullWidth
+									type="number"
+									fullWidth />
+							</Grid>
+							<Grid item xs={12}>
+								<Typography variant="h6">Adicionar Foto de Capa</Typography>
+								<CGSPDropzone
+									maxContent={1}
+									files={formik.values.coverPhoto ? [formik.values.coverPhoto] : undefined}
+									onAddFile={handleAddCover}
+									onDeleteFile={handleDeleteCover}
 								/>
 							</Grid>
-							<Grid item xs={12}>
-								<Typography variant={"h6"}>Tipologias</Typography>
-							</Grid>
-							<Grid item xs={12}>
-								<Autocomplete
-									multiple
-									options={[]}
-									freeSolo
-									value={formik.values.typology.map((element) => element.typology)}
-									renderTags={(value, getTagProps) =>
-										value.map((option, index) => (
-											// eslint-disable-next-line react/jsx-key
-											<Chip
-												variant="outlined"
-												label={option}
-												{...getTagProps({ index })}
-												onDelete={() =>
-													handleTypologyDelete(formik.values.typology.at(index)?.index)
-												}
-											/>
-										))
-									}
-									renderInput={(params) => (
-										<TextField
-											ref={ref}
-											{...params}
-											label={"tipologia"}
-											onKeyDown={(e) => handleKeyDown(e)}
-										/>
-									)}
-								/>
-							</Grid>
-							<Grid item xs={12}>
-								{formik.values.typology.map((typology, index) => {
-									return (
-										<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0}>
-											<AccordionSummary
-												expandIcon={<ExpandMore />}
-												aria-controls={`${typology}-content-${index}`}
-												id={`${typology}-header-${index}`}>
-												<Typography>{typology.typology}</Typography>
-											</AccordionSummary>
-											<AccordionDetails>
-												<Grid container rowSpacing={2}>
-													<Grid item xs={12}>
-														<TextField
-															id="bedroomNumber"
-															name={`typologies[${index}].bedroomNumber`}
-															label={"Número de quartos"}
-															value={formik.values.typologies.at(index)?.bedroomNumber || ""}
-															onChange={formik.handleChange}
-															// 							error={
-															// 								formik.touched.typologies?.at(index)?.bedroomNumber &&
-															// Boolean(formik.errors.typologies?.at(index)?.bedroomNumber)
-															// 							}
-															// 							helperText={
-															// 								formik.touched.typologies?.at(index)?.bedroomNumber &&
-															// formik.errors.typologies?.at(index)?.bedroomNumber
-															// 							}
-															fullWidth
-														/>
-													</Grid>
-													<Grid item xs={12}>
-														<TextField
-															id="bathroomNumber"
-															name={`typologies[${index}].bathroomNumber`}
-															label={"Número de casas de banho"}
-															value={formik.values.typologies.at(index)?.bathroomNumber || ""}
-															onChange={formik.handleChange}
-															// 							error={
-															// 								formik.touched.typologies?.at(index)?.bedroomNumber &&
-															// Boolean(formik.errors.typologies?.at(index)?.bathroomNumber)
-															// 							}
-															// 							helperText={
-															// 								formik.touched.typologies?.at(index)?.bedroomNumber &&
-															// formik.errors.typologies?.at(index)?.bathroomNumber
-															// 							}
-															fullWidth
-														/>
-													</Grid>
-													<Grid item xs={12}>
-														<TextField
-															id="garageNumber"
-															name={`typologies[${index}].garageNumber`}
-															label={"Garagens"}
-															value={formik.values.typologies.at(index)?.garageNumber || ""}
-															onChange={formik.handleChange}
-															fullWidth
-														/>
-													</Grid>
-													<Grid item xs={12}>
-														<TextField
-															id="area"
-															name={`typologies[${index}].area`}
-															label={"Area"}
-															value={formik.values.typologies.at(index)?.area || ""}
-															onChange={formik.handleChange}
-															fullWidth
-														/>
-													</Grid>
-													<Grid item xs={12}>
-														<TextField
-															id="price"
-															name={`typologies[${index}].price`}
-															label={"Preço"}
-															value={formik.values.typologies.at(index)?.price || ""}
-															onChange={formik.handleChange}
-															fullWidth
-														/>
-													</Grid>
-													<Grid item xs={12}>
-														<Typography variant="h6">Adicionar Planta</Typography>
-														<CGSPDropzone
-															maxContent={1}
-															files={files}
-															onAddFile={handleAddPlant}
-															onDeleteFile={handleDeletePlant}
-														/>
-													</Grid>
-												</Grid>
-											</AccordionDetails>
-										</Accordion>
-									);
-								})}
-							</Grid>
-							<Grid item xs={12}>
+							</React.Fragment>							
+							}
+							{activeStep == 1 && 
+							<React.Fragment><Grid item xs={12}>
 								<Typography variant={"h6"}>Localização</Typography>
-							</Grid>
-							<Grid item xs={3}>
+							</Grid><Grid item xs={3}>
 								<Autocomplete
 									id="district"
-									options={["Évora", "Beja", "Portalegre"]}
+									options={districtList}
 									value={formik.values.district}
-									onChange={formik.handleChange}
+									onChange={(e,value,reason) => handleDistrictChange(value, reason === "selectOption")}
 									fullWidth
-									renderInput={(params) => <TextField {...params} label={"Distrito"} error={formik.touched.district && Boolean(formik.errors.district)} helperText={formik.touched.district && formik.errors.district}/>}
-								/>
-							</Grid>
-							<Grid item xs={3}>
+									renderInput={(params) => <TextField {...params} label={"Distrito"} error={formik.touched.district && Boolean(formik.errors.district)} helperText={formik.touched.district && formik.errors.district} />} />
+							</Grid><Grid item xs={3}>
 								<TextField
 									id="county"
 									name="county"
@@ -456,10 +439,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									onChange={formik.handleChange}
 									error={formik.touched.county && Boolean(formik.errors.county)}
 									helperText={formik.touched.county && formik.errors.county}
-									fullWidth
-								/>
-							</Grid>
-							<Grid item xs={3}>
+									fullWidth />
+							</Grid><Grid item xs={3}>
 								<TextField
 									id="latitude"
 									name="latitude"
@@ -467,11 +448,9 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									value={formik.values.latitude}
 									onChange={formik.handleChange}
 									error={formik.touched.latitude && Boolean(formik.errors.latitude)}
-									// helperText={formik.touched.latitude && formik.errors.latitude}
-									fullWidth
-								/>
-							</Grid>
-							<Grid item xs={3}>
+									helperText={formik.touched.latitude && formik.errors.latitude}
+									fullWidth />
+							</Grid><Grid item xs={3}>
 								<TextField
 									id="longitude"
 									name="longitude"
@@ -479,34 +458,186 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									value={formik.values.longitude}
 									onChange={formik.handleChange}
 									error={formik.touched.longitude && Boolean(formik.errors.longitude)}
-									// helperText={formik.touched.longitude && formik.errors.longitude}
-									fullWidth
-								/>
-							</Grid>
-							<Grid item xs={12}>
+									helperText={formik.touched.longitude && formik.errors.longitude}
+									fullWidth />
+							</Grid><Grid item xs={12}>
 								<Typography>Arraste o Marcador para preencher automaticamente</Typography>
-								<Box id="map" style={{ height: 480}} sx={{pt: 2}}>
-									<Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [formik.values.latitude, formik.values.longitude] ]} onCoordinateChange={onCoordinateChange}/>
+								<Box id="map" style={{ height: 480 }} sx={{ pt: 2 }}>
+									<Map doubleClickZoom={false} scrollWheelZoom={true} centerCoordinates={centerCoordinates} markers={formik.values.latitude && formik.values.longitude ? [[formik.values.latitude, formik.values.longitude]] : []} onCoordinateChange={onCoordinateChange} changeView/>
 								</Box>
+							</Grid></React.Fragment>							
+							}
+							{activeStep == 2 && 
+								<React.Fragment><Grid item xs={12}>
+									<Typography variant={"h6"}>Tipologias</Typography>
+								</Grid><Grid item xs={12}>
+									<Autocomplete
+										multiple
+										options={["T0","T1","T2","T3","T4"]}
+										freeSolo
+										value={formik.values.typology.map((element) => element.typology)}
+										// defaultValue={formik.values.typology.map((element) => element.typology)}
+										onChange={ (e,v,r) => onTypologyChange(e,v,r)}
+										getOptionLabel={(option) => option}
+										renderTags={(value, getTagProps) => value.map((option, index) => (
+											// eslint-disable-next-line react/jsx-key
+											<Chip
+												variant="outlined"
+												label={option}
+												{...getTagProps({ index })}
+												onDelete={() => handleTypologyDelete(formik.values.typology.at(index)?.index)} />
+										))}
+										renderInput={(params) => (
+											<TextField
+												ref={ref}
+												{...params}
+												label={"tipologia"}
+												 />
+										)} />
+								</Grid><Grid item xs={12}>
+									{formik.values.typology.map((typology, index) => {
+										return (
+											<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0}>
+												<AccordionSummary
+													expandIcon={<ExpandMore />}
+													aria-controls={`${typology}-content-${index}`}
+													id={`${typology}-header-${index}`}>
+													<Typography>{typology.typology}</Typography>
+												</AccordionSummary>
+												<AccordionDetails>
+													<Grid container rowSpacing={4} columnSpacing={4}>
+														<Grid item xs={6}>
+															<TextField
+																id="bedroomNumber"
+																name={`typologies[${index}].bedroomNumber`}
+																label={"Número de quartos"}
+																value={formik.values.typologies.at(index)?.bedroomNumber}
+																onChange={formik.handleChange}
+																type="number"
+																error={
+																	formik.touched.typologies?.at(index)?.bedroomNumber &&
+																Boolean(formik.errors.typologies?.at(index)?.bedroomNumber)
+																}
+																helperText={
+																	formik.touched.typologies?.at(index)?.bedroomNumber &&
+																formik.errors.typologies?.at(index)?.bedroomNumber
+																}
+																fullWidth />
+														</Grid>
+														<Grid item xs={6}>
+															<TextField
+																id="bathroomNumber"
+																name={`typologies[${index}].bathroomNumber`}
+																label={"Número de casas de banho"}
+																value={formik.values.typologies.at(index)?.bathroomNumber}
+																onChange={formik.handleChange}
+																type="number"
+																error={
+																	formik.touched.typologies?.at(index)?.bathroomNumber &&
+																Boolean(formik.errors.typologies?.at(index)?.bathroomNumber)
+																}
+																helperText={
+																	formik.touched.typologies?.at(index)?.bathroomNumber &&
+																formik.errors.typologies?.at(index)?.bathroomNumber
+																}
+																fullWidth />
+														</Grid>
+														<Grid item xs={6}>
+															<TextField
+																id="garageNumber"
+																name={`typologies[${index}].garageNumber`}
+																label={"Garagens"}
+																value={formik.values.typologies.at(index)?.garageNumber}
+																onChange={formik.handleChange}
+																error={
+																	formik.touched.typologies?.at(index)?.garageNumber &&
+																Boolean(formik.errors.typologies?.at(index)?.garageNumber)
+																}
+																helperText={
+																	formik.touched.typologies?.at(index)?.garageNumber &&
+																formik.errors.typologies?.at(index)?.garageNumber
+																}
+																fullWidth />
+														</Grid>
+														<Grid item xs={6}>
+															<TextField
+																id="area"
+																name={`typologies[${index}].area`}
+																label={"Area"}
+																value={formik.values.typologies.at(index)?.area}
+																onChange={formik.handleChange}
+																fullWidth
+																type="number"
+																InputProps={{
+																	endAdornment: <InputAdornment position="start">{"\u33A1"}</InputAdornment>,
+																}}
+																error={
+																	formik.touched.typologies?.at(index)?.area &&
+																Boolean(formik.errors.typologies?.at(index)?.area)
+																}
+																helperText={
+																	formik.touched.typologies?.at(index)?.area &&
+																formik.errors.typologies?.at(index)?.area
+																}
+															/>
+														</Grid>
+														<Grid item xs={6}>
+															<TextField
+																id="price"
+																name={`typologies[${index}].price`}
+																label={"Preço"}
+																value={formik.values.typologies.at(index)?.price}
+																onChange={formik.handleChange}
+																fullWidth
+																type="number"
+																InputProps={{
+																	endAdornment: <InputAdornment position="start">€</InputAdornment>,
+																  }}
+																  error={
+																	formik.touched.typologies?.at(index)?.price &&
+																Boolean(formik.errors.typologies?.at(index)?.price)
+																}
+																helperText={
+																	formik.touched.typologies?.at(index)?.price &&
+																formik.errors.typologies?.at(index)?.price
+																}
+															/>
+														</Grid>
+														<Grid item xs={12}>
+															<Typography variant="h6">Adicionar Planta</Typography>
+															<CGSPDropzone
+																maxContent={1}
+																files={formik.values.typologies.at(index)?.plant != undefined ? [formik.values.typologies.at(index)?.plant] : undefined }
+																onAddFile={ (files) => handleAddPlant(files,index)}
+																onDeleteFile={ () => handleDeletePlant(index)} />
+														</Grid>
+													</Grid>
+												</AccordionDetails>
+											</Accordion>
+										);
+									})}
+								</Grid></React.Fragment>
+							}
+							{activeStep == 3 && 
+								<Grid item xs={12}>
+									<Typography variant="h6">Adicionar Fotos</Typography>
+									<CGSPDropzone
+										maxContent={3}
+										files={files}
+										onAddFile={handleAddFile}
+										onDeleteFile={handleDeleteFile}
+									/>
+								</Grid>
+							}
+							<Grid item xs={6}>
+								<StyledButton variant="contained" color="primary" disabled={activeStep == 0} onClick={handleBack} startIcon={<ArrowBackIos />}>
+									Passo Anterior
+								</StyledButton>
 							</Grid>
-							<Grid item xs={12}>
-								<Typography variant="h6">Adicionar Foto de Capa</Typography>
-								<CGSPDropzone
-									maxContent={1}
-									files={coverPhoto}
-									onAddFile={handleAddCover}
-									onDeleteFile={handleDeleteCover}
-								/>
-							</Grid>
-							<Grid item xs={6}></Grid>
-							<Grid item xs={12}>
-								<Typography variant="h6">Adicionar Fotos</Typography>
-								<CGSPDropzone
-									maxContent={3}
-									files={files}
-									onAddFile={handleAddFile}
-									onDeleteFile={handleDeleteFile}
-								/>
+							<Grid item textAlign="end" xs={6}>
+								<StyledButton variant="contained" color="primary" disabled={activeStep == steps.length -1} onClick={handleNext} endIcon={<ArrowForwardIos />}>
+									Próximo Passo
+								</StyledButton>
 							</Grid>
 							<Grid item ml="auto">
 								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{error}</Typography>}
@@ -525,7 +656,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 					</form>
 				)}
 			</Container>
-			<CancelModal open={cancelModal} handleClose={(confirm) => handleClose(confirm)}/>
+			<CancelModal open={cancelModal} handleClose={(confirm) => handleClose(confirm)} title="Cancelar Criação de Projeto"/>
 		</Paper>
 	);
 };

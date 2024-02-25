@@ -9,6 +9,7 @@ import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { Add } from "@mui/icons-material";
 import { Loading } from "../../components/loading/Loading";
 import { StyledButton } from "../../components/Button";
+import { useFetch } from "../../components/forms/utils";
 
 const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data) => {
 	const [updates, setUpdates] = useState<Update[]>(data.updates);
@@ -27,16 +28,19 @@ const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data)
 
 	const handleDelete = async (id: string | undefined) => {
 		if (id) {
-			const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/update/${id}`, {
-				method: "DELETE"
+			const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/update/${id}`;
+
+			await useFetch("DELETE", endpoint, undefined, true).then( (response) => {
+				if(response.ok){
+					console.log(`Project ${id} deleted`);
+					refreshData();
+				}
+				else {
+					throw new Error("Update Delete " + response.status);
+				}
+			}).catch( error => {
+				console.log(error);
 			});
-	
-			if (response.status == 200) {
-				console.log("item eliminado");
-				refreshData();
-			} else {
-				console.log(response);
-			}
 		}
 	};
 

@@ -59,11 +59,13 @@ export const useFetch = (method = "GET",  endpoint: string, values?: unknown, au
 	const body = values ? JSON.stringify(values) : null;
 
 	const cookie = auth ? { Authorization : `Bearer ${Cookies.get("token")}`} : null;
+	
+	const headers = method === "POST" ? { "Content-Type": "application/json" } : null;
 
 	const options = {
 		method: method,
 		headers: {
-			"Content-Type": "application/json",
+			...headers,
 			...cookie,
 		},
 		body

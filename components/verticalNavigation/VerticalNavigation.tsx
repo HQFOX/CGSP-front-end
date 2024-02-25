@@ -1,6 +1,6 @@
 import React, { ReactNode, SetStateAction } from "react";
 
-import { ArrowBackIos } from "@mui/icons-material";
+import { ArrowBackIosNew } from "@mui/icons-material";
 import {
 	Box,
 	Divider,
@@ -58,10 +58,10 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
 				<Typography
 					variant={"h5"}
 					sx={{ marginTop: "auto", padding: "5px", verticalAlign: "bottom" }}>
-          Menu
+         			 Menu
 				</Typography>
-				<IconButton onClick={() => setOpen(!open)} size="large">
-					<ArrowBackIos />
+				<IconButton onClick={() => setOpen(!open)}>
+					<ArrowBackIosNew />
 				</IconButton>
 			</Box>
 			<Divider />

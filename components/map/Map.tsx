@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MapContainer, Pane, TileLayer, useMap, Polygon } from "react-leaflet";
+import { MapContainer, Pane, TileLayer, useMap, Polygon, useMapEvents, MapContainerProps } from "react-leaflet";
 
 import RoomIcon from "@mui/icons-material/Room";
 
@@ -14,14 +14,13 @@ import { Beja } from "./districtdata/Beja";
 import { Portalegre } from "./districtdata/Portalegre";
 import { Evora } from "./districtdata/Evora";
 
-interface MapProps {
+interface MapProps extends MapContainerProps {
     centerCoordinates: LatLngTuple,
     markers?: LatLngTuple[],
-    zoom?: number,
 	projects?: Project[],
 	onCoordinateChange?: (values: LatLngTuple) => void,
 	currentDistrict?: string,
-	changeView?: boolean
+	changeView?: boolean,
 }
 
 const iconMarkup = renderToStaticMarkup(
@@ -41,14 +40,14 @@ const styles = {
 	 }
 };
 
-
-
 const ChangeView = ({ centerCoordinates, zoom} : { centerCoordinates: LatLngTuple, zoom: number}) => {
 	const map = useMap();	
 	map.setView(centerCoordinates, zoom);
 
 	return null;
 };
+
+
 
 const renderPanel = (district?: string) => {
 	switch(district) {
@@ -66,7 +65,7 @@ const renderPanel = (district?: string) => {
 // const panel = useMemo(() => renderPanel(search.district),[search.district]);
 
 
-const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [], onCoordinateChange , currentDistrict, changeView = false, children}: MapProps) => {
+const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [], onCoordinateChange = () => {}, currentDistrict, changeView = false, scrollWheelZoom= false, ...others}: MapProps ) => {
 
 	const username = "hqfox";
 
@@ -78,8 +77,17 @@ const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [], onCoor
 
 	// treatArray(shape);
 
+	const ClickListener = () => {
+		useMapEvents({
+			dblclick: (e) => {
+				onCoordinateChange([e.latlng.lat,e.latlng.lng]);
+			},
+		});
+		return null;
+	};
+
 	return (
-		<MapContainer center={centerCoordinates} zoom={zoom} scrollWheelZoom={false} style={{ width: "100%", height: "100%" }}>
+		<MapContainer center={centerCoordinates} zoom={zoom} scrollWheelZoom={scrollWheelZoom} style={{ width: "100%", height: "100%" }} {...others}>
 			<TileLayer
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 				url={url}
@@ -98,6 +106,7 @@ const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [], onCoor
 			<Pane name="districts">
 				{renderPanel(currentDistrict)}
 			</Pane>
+			<ClickListener />
 		</MapContainer>
 	);
 };
