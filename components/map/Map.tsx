@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
 import { MapContainer, Pane, TileLayer, useMap, Polygon, useMapEvents, MapContainerProps } from "react-leaflet";
 
@@ -21,6 +21,8 @@ interface MapProps extends MapContainerProps {
 	onCoordinateChange?: (values: LatLngTuple) => void,
 	currentDistrict?: string,
 	changeView?: boolean,
+	draggable?: boolean,
+	popupContent? : ReactNode,
 }
 
 const iconMarkup = renderToStaticMarkup(
@@ -65,7 +67,18 @@ const renderPanel = (district?: string) => {
 // const panel = useMemo(() => renderPanel(search.district),[search.district]);
 
 
-const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [], onCoordinateChange = () => {}, currentDistrict, changeView = false, scrollWheelZoom= false, ...others}: MapProps ) => {
+const Map = ({ 
+	centerCoordinates, 
+	markers = [],
+	 zoom = 13, 
+	 projects = [], 
+	 onCoordinateChange = () => {}, 
+	 currentDistrict, 
+	 changeView = false, 
+	 scrollWheelZoom= false, 
+	 dragabble= false,
+	 popupContent, ...others
+}: MapProps ) => {
 
 	const username = "hqfox";
 
@@ -95,7 +108,8 @@ const Map = ({ centerCoordinates, markers = [], zoom = 13, projects = [], onCoor
 			/>
 			{ changeView && <ChangeView centerCoordinates={centerCoordinates} zoom={zoom}/>}
 			{ markers.map( (marker, index) => (
-				<CGSPMarker coordinates={marker} key={index} draggable setCoordinates={onCoordinateChange}>
+				<CGSPMarker coordinates={marker} key={index} draggable={dragabble} setCoordinates={onCoordinateChange}>
+					{popupContent}
 				</CGSPMarker>
 			))}
 			{ projects.map( (project, index) => (

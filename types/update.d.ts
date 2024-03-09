@@ -2,7 +2,7 @@ type Update = {
   id?: string;
   title: string;
   content?: string;
-  creationDate?: string;
+  createdOn?: string;
   image?: string;
   files: {filename: string}[]
   project?: {

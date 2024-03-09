@@ -14,7 +14,7 @@ import {
 	AccordionSummary,
 	AccordionDetails,
 	styled,
-	Link
+	Link as MuiLink
 } from "@mui/material";
 
 import {
@@ -27,10 +27,12 @@ import {
 	HomeWork,
 	Hotel,
 	HowToReg,
+	OpenInNew,
 	SquareFoot
 } from "@mui/icons-material";
 
-import type { NextPage } from "next";
+import { NextPage } from "next";
+import Link from "next/link";
 import dynamic from "next/dynamic";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -166,9 +168,9 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 									  <Grid item>
               							<Stack direction="row" gap={1}>
               								<Dashboard color="primary" />
-              							<Link href={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto?.filename}`} target="_blank" rel="noreferrer" variant="body2" color="text.secondary">
+              							<MuiLink href={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto?.filename}`} target="_blank" rel="noreferrer" variant="body2" color="text.secondary">
               									{"Planta"}
-              							</Link>
+              							</MuiLink>
               							</Stack>
               						</Grid>
               					</Grid>
@@ -208,7 +210,15 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 			</Paper>
 			<Paper sx={{ mt: 4, border: "1px solid rgb(237, 237, 237)", boxShadow: 0 }}>
 				<div id="map" style={{ height: 480 }}>
-					<Map centerCoordinates={project.coordinates as LatLngTuple} markers={[project.coordinates] as LatLngTuple[]} />
+					<Map 
+						centerCoordinates={project.coordinates as LatLngTuple} 
+						markers={[project.coordinates] as LatLngTuple[]} 
+						popupContent={
+							<Link target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${project.coordinates[0]}%2C${project.coordinates[1]}`} passHref>
+								<StyledButton endIcon={<OpenInNew />}>Ver No Google Maps</StyledButton>
+							</Link>
+						}
+					/>
 				</div>
 			</Paper>
 		</PageContainer>

@@ -17,7 +17,10 @@ import CGSPCarousel from "../components/carousel/Carousel";
 import logo from "../public/logo.svg";
 import theme from "../theme";
 import { Title } from "../components/Title";
-import { Architecture, BookmarkAdd, Construction, Description, Group, MeetingRoom, PersonAdd, Savings } from "@mui/icons-material";
+import { Architecture, BookmarkAdd, Construction, Description, Group, MeetingRoom, OpenInNew, PersonAdd, Savings } from "@mui/icons-material";
+import { StyledButton } from "../components/Button";
+import Link from "next/link";
+import { LatLngTuple } from "leaflet";
 
 const Map = dynamic(() => import("../components/map/Map"), {
 	ssr: false
@@ -28,7 +31,7 @@ const StyledMain = styled("main")({
 	backgroundColor: "white",
 });
 
-
+const CGSPcenterCoordinates: LatLngTuple = [38.56633674453089, -7.925327404275489];
 
 
 
@@ -197,7 +200,15 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 					</Title>
 					<Divider />
 					<Box id="map" style={{ height: 480}} sx={{pt: 2}}>
-						<Map centerCoordinates={[38.56633674453089, -7.925327404275489]} markers={[ [38.56633674453089, -7.925327404275489] ]}/>
+						<Map 
+							centerCoordinates={CGSPcenterCoordinates} 
+							markers={[ CGSPcenterCoordinates ]} 
+							popupContent={
+								<Link target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${CGSPcenterCoordinates[0]}%2C${CGSPcenterCoordinates[1]}`} passHref>
+									<StyledButton endIcon={<OpenInNew />}>Ver No Google Maps</StyledButton>
+								</Link>
+							}
+						/>
 					</Box>
 				</Box>
 			</Box>

@@ -56,7 +56,7 @@ export const UpdateTable = ({ updates, handleShowEditForm, handleDelete }: { upd
 					cell: (info) => <i>{info.getValue()}</i>,
 					header: () => <span>Content</span>
 				}),
-				columnHelper.accessor("creationDate", {
+				columnHelper.accessor("createdOn", {
 					cell: (info) => <span>{info.getValue()}</span>,
 					header: () => <span>Date</span>
 				}),

@@ -11,7 +11,7 @@ const width = "40vw";
 
 const UpdateCard = ({ post }: UpdateCardProps) => {
 
-	const date = post.creationDate? new Date(post.creationDate) : undefined;
+	const date = post.createdOn? new Date(post.createdOn) : undefined;
 
 	const handleClick = (projectId?: string) => {
 		projectId && router.push(`projects/${projectId}`);
