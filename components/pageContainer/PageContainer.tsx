@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import theme from "../../theme";
 
 const StyledMain = styled.main({
-	minHeight: "70dvh",
+	minHeight: "90dvh",
 	backgroundColor: theme.bg.main
 });
 

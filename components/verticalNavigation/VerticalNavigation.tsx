@@ -43,8 +43,9 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
 
 	return (
 		<Drawer
-			variant={"persistent"}
+			variant={"temporary"}
 			open={open}
+			onClose={() => setOpen(false)}
 			sx={{
 				width: `${drawerWidth}px`,
 				flexShrink: 0,
@@ -70,7 +71,7 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
 					{pages &&
             pages.map((page) => (
             	<ListItem key={page.id}>
-            		<Link key={page.id} href={page.path} passHref style={{ width: "100%"}}>
+            		<Link key={page.id} href={page.path} passHref style={{ width: "100%"}} onClick={() => setOpen(false)}>
             			<StyledListItemButton selected={router.pathname === page.path}>
             				<ListItemIcon>{page.icon}</ListItemIcon>
             				<ListItemText>{page.text}</ListItemText>

@@ -1,10 +1,17 @@
 import React, { useEffect } from "react";
+
+import Image from "next/image";
+
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TablePagination, IconButton, Typography } from "@mui/material";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import { Delete, Edit } from "@mui/icons-material";
+
+import { useTranslation } from "react-i18next";
+
 import { DeleteModal } from "../modals/DeleteModal";
 import { TableActions } from "../updates/TableActions";
-import { useTranslation } from "react-i18next";
+
+import { formatDate } from "../../utils/utils";
 
 export const ProjectTable = ({ projects, handleShowProjectForm, handleDelete }: { projects: Project[], handleShowProjectForm: (update: Project) => void, handleDelete: (id: string | undefined) => void}) => {
 	const [data, setData ] = React.useState(projects);
@@ -25,6 +32,11 @@ export const ProjectTable = ({ projects, handleShowProjectForm, handleDelete }: 
 					id: "title",
 					cell: (info) => <Typography>{info.getValue()}</Typography>,
 					header: () => <Typography>Título</Typography>
+				}),
+				columnHelper.accessor("coverPhoto", {
+					id: "coverPhoto",
+					cell: (info) => <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.filename}`} alt={""} width={50} height={50} />,
+					header: () => <Typography>Imagem</Typography>
 				}),
 				columnHelper.accessor("assignmentStatus", {
 					cell: (info) => <Typography>{t(`assignmentStatus.${info.getValue()}`)}</Typography>,
@@ -49,6 +61,10 @@ export const ProjectTable = ({ projects, handleShowProjectForm, handleDelete }: 
 				columnHelper.accessor("assignedLots", {
 					cell: (info) => <Typography>{info.getValue()}</Typography>,
 					header: () => <Typography>Lotes Atríbuidos</Typography>
+				}),
+				columnHelper.accessor("createdOn", {
+					cell: (info) => <Typography>{formatDate(info.getValue())}</Typography>,
+					header: () => <Typography>Data</Typography>
 				}),
 				columnHelper.display({
 					id: "actions",
@@ -103,9 +119,9 @@ export const ProjectTable = ({ projects, handleShowProjectForm, handleDelete }: 
 					</TableHead>
 					<TableBody>
 						{table.getRowModel().rows.map((row) => (
-							<TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+							<TableRow key={row.id} sx={{ "&:last-child td, &:last-child tr": { border: 0 } }}>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell component="th" scope="row" key={cell.id}>
+									<TableCell scope="row" key={cell.id} style={{textAlign: cell.column.id === "actions" ? "end": "inherit"}}>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}

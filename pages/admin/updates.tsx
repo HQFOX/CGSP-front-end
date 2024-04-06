@@ -46,39 +46,46 @@ const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data)
 
 	const handleShowEditForm = (update: Update) => { 
 		setEditUpdate(update); 
-		setShowEditUpdateForm(true); window.document.getElementById("editupdateform")?.scrollIntoView({behavior: "smooth"});
+		setShowEditUpdateForm(true); window.document.getElementById("editupdateform")?.scrollIntoView({behavior: "smooth", block: "start"});
+	};
+
+	const handleShowAddForm = () => {
+		setShowAddUpdateForm(true);
+		window.document.getElementById("addupdateform")?.scrollIntoView({behavior: "smooth", block: "start",});
 	};
 
 	return (
 		<PageContainer>
 			<Box sx={{ pb: 4 }}>
 				<Typography variant="h5" component="h1">
-					Administração de Atualizações
+					Atualizações
 				</Typography>
 				<Divider />
 			</Box>
-			<UpdateTable updates={updates} handleShowEditForm={(update) => handleShowEditForm(update)} handleDelete={handleDelete} />
 			{!showAddUpdateForm && (
-				<Grid container direction={"row-reverse"} mt={2}>
+				<Grid container mt={2} mb={2} >
 					<Grid item>
 						<StyledButton
 							startIcon={<Add />}
 							variant="contained"
-							onClick={() => setShowAddUpdateForm(true)}>
-							Add Update
+							onClick={handleShowAddForm}>
+							Criar Atualização
 						</StyledButton>
 					</Grid>
 				</Grid>
 			)}
-			{showAddUpdateForm && (
-				<Suspense fallback={<Loading />}>
-					<UpdateForm
-						projects={data.projects}
-						onCancel={() => setShowAddUpdateForm(false)}
-						onSubmit={() => refreshData()}
-					/>
-				</Suspense>
-			)}
+			<UpdateTable updates={updates} handleShowEditForm={(update) => handleShowEditForm(update)} handleDelete={handleDelete} />
+			<div id="addupdateform">
+				{showAddUpdateForm && (
+					<Suspense fallback={<Loading />}>
+						<UpdateForm
+							projects={data.projects}
+							onCancel={() => setShowAddUpdateForm(false)}
+							onSubmit={() => refreshData()}
+						/>
+					</Suspense>
+				)}
+			</div>
 			<div id="editupdateform">
 				{showEditUpdateForm && (
 					<Suspense fallback={<Loading />}>

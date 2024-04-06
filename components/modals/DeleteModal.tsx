@@ -3,7 +3,7 @@ import { IconButton, Dialog, DialogActions, DialogContent, DialogContentText, Di
 import { Close } from "@mui/icons-material";
 import { StyledButton } from "../Button";
 
-export const DeleteModal = ({open, data, handleClose }:{open: boolean, data?: Update | Project, handleClose: (confirm: boolean) => void}) => {
+export const DeleteModal = ({open, data, handleClose }:{open: boolean, data?: Update | Project | EnrollRequest, handleClose: (confirm: boolean) => void}) => {
 
 	return (
 		<Dialog
@@ -28,8 +28,8 @@ export const DeleteModal = ({open, data, handleClose }:{open: boolean, data?: Up
 			</IconButton>
 			<DialogContent dividers>
 				<DialogContentText id="alert-dialog-description">
-                Tem a certeza que quer apagar o post {data?.title}? <br/>
-                Todos os dados perdidos.
+                Tem a certeza que quer apagar {data && "title" in data ? data?.title : data?.firstName}? <br/>
+                Todos os dados serão perdidos.
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>

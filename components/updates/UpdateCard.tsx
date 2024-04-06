@@ -1,17 +1,17 @@
-/* eslint-disable indent */
-import { Typography, Paper, Box, Divider, Grid } from "@mui/material";
-import Image from "next/image";
 import React from "react";
-import { StyledButton } from "../Button";
+import { Typography, Paper, Box, Divider, Grid } from "@mui/material";
 import { Launch } from "@mui/icons-material";
+
+import Image from "next/image";
 import router from "next/router";
+
+import { StyledButton } from "../Button";
 import { Title } from "../Title";
+import { formatDate } from "../../utils/utils";
 
 const width = "40vw";
 
 const UpdateCard = ({ post }: UpdateCardProps) => {
-
-	const date = post.createdOn? new Date(post.createdOn) : undefined;
 
 	const handleClick = (projectId?: string) => {
 		projectId && router.push(`projects/${projectId}`);
@@ -24,7 +24,7 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 				[theme.breakpoints.down("md")]: { width: "90vw" },
 				border: "1px solid rgb(237, 237, 237)", boxShadow: 0 
 			})}
-			>
+		>
 			<Box sx={{ p: 4 }}>
 				<Grid container justifyContent={"space-between"}>
 					<Grid item>
@@ -32,7 +32,7 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 					</Grid>
 					<Grid item alignSelf={"end"}>
 						<Typography variant="body2" color="text.secondary" sx={{ textAlign: "right", mt: "auto"}}>
-							{date && `${date?.getUTCDate()}/${date?.getUTCMonth()}/${date?.getUTCFullYear()}`}
+							{formatDate(post.createdOn)}
 						</Typography>
 					</Grid>
 					<Grid item xs={12}>
@@ -55,11 +55,6 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 					{post.content}
 				</Typography>
 			</Box>
-			{/* <Grid container direction={"row-reverse"}>
-				<Grid item padding={2} >
-					<StyledButton variant="contained" endIcon={<Launch />}>Ver Projeto</StyledButton>
-				</Grid>
-			</Grid> */}
 		</Paper>
 	);
 };

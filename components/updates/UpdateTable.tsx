@@ -1,4 +1,7 @@
 import React, { useEffect } from "react";
+
+import Image from "next/image";
+
 import {
 	TableContainer,
 	Paper,
@@ -8,7 +11,8 @@ import {
 	TableCell,
 	TableBody,
 	IconButton,
-	TablePagination
+	TablePagination,
+	Typography
 } from "@mui/material";
 import {
 	createColumnHelper,
@@ -24,6 +28,7 @@ import { Delete, Edit } from "@mui/icons-material";
 
 import { DeleteModal } from "../modals/DeleteModal";
 import { TableActions } from "./TableActions";
+import { formatDate } from "../../utils/utils";
 
 
 
@@ -44,21 +49,21 @@ export const UpdateTable = ({ updates, handleShowEditForm, handleDelete }: { upd
 			[
 				columnHelper.accessor("title", {
 					id: "title",
-					cell: (info) => info.getValue(),
-					header: () => <span>Title</span>
+					cell: (info) => <Typography>{info.getValue()}</Typography>,
+					header: () => <Typography>Título</Typography>
 				}),
-				columnHelper.accessor("image", {
-					id: "image",
-					// cell: (info) => info.getValue() && <Image src={info.getValue()} width={50} height={50} />,
-					header: () => <span>Image</span>
+				columnHelper.accessor("files", {
+					id: "files",
+					cell: (info) => <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.[0].filename}`} alt={""} width={50} height={50} />,
+					header: () => <Typography>Imagem</Typography>
 				}),
 				columnHelper.accessor("content", {
-					cell: (info) => <i>{info.getValue()}</i>,
-					header: () => <span>Content</span>
+					cell: (info) => <Typography>{info.getValue()}</Typography>,
+					header: () => <Typography>Conteúdo</Typography>
 				}),
 				columnHelper.accessor("createdOn", {
-					cell: (info) => <span>{info.getValue()}</span>,
-					header: () => <span>Date</span>
+					cell: (info) => <Typography>{formatDate(info.getValue())}</Typography>,
+					header: () => <Typography>Data</Typography>
 				}),
 				columnHelper.display({
 					id: "actions",
@@ -113,9 +118,9 @@ export const UpdateTable = ({ updates, handleShowEditForm, handleDelete }: { upd
 					</TableHead>
 					<TableBody>
 						{table.getRowModel().rows.map((row) => (
-							<TableRow key={row.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+							<TableRow key={row.id} sx={{ "&:last-child td, &:last-child tr": { border: 0 } }}>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell component="th" scope="row" key={cell.id}>
+									<TableCell scope="row" key={cell.id} style={{textAlign: cell.column.id === "actions" ? "end": "inherit"}}>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}
@@ -132,12 +137,13 @@ export const UpdateTable = ({ updates, handleShowEditForm, handleDelete }: { upd
 					table.setPageIndex(page);
 				}}
 				rowsPerPage={pageSize}
-				rowsPerPageOptions={[5, 10, 25, { label: "All", value: data.length }]}
+				rowsPerPageOptions={[5, 10, 25, { label: "Todas", value: data.length }]}
 				onRowsPerPageChange={e => {
 					const size = e.target.value ? Number(e.target.value) : 10;
 					table.setPageSize(size);
 				}}
 				ActionsComponent={TableActions}
+				labelRowsPerPage={"Atualizações por página"}
 			/>
 			<DeleteModal open={deleteModal.open} data={deleteModal.data} handleClose={(confirm) =>handleDeleteClose(confirm)}/>
 		</div>
