@@ -37,7 +37,7 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
-	const res = await fetch(`${process.env.API_URL}/project`);
+	const res = await fetch(`${process.env.API_URL}/project/current`);
 	const projects = (await res.json()) as Project[];
 
 	return {
