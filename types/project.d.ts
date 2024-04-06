@@ -17,6 +17,7 @@ type Project = {
   assignedLots?: number;
   typologies?: TypologyDetails[];
   updates?: Updates[];
+  createdOn?: string;
 };
 
 type TypologyDetails = {

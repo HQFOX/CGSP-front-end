@@ -25,11 +25,11 @@ import { getPresignedUrl , submitFile, useFetch } from "./utils";
 import { Loading } from "../loading/Loading";
 
 export const UpdateForm = ({
+	 update,
 	 projects, 
 	 onCancel, 
 	 onSubmit, 
-	 update
-	 }	: { projects?: Project[], onCancel: () => void, onSubmit: () => void, update?: Update }) => {
+	 }	: { update?: Update, projects?: Project[], onCancel: () => void, onSubmit: () => void }) => {
 
 	const [files, setFiles] = useState<AbstractFile[]>(update?.files ?? []);
 
@@ -52,9 +52,10 @@ export const UpdateForm = ({
 	const formik = useFormik({
 		initialValues: {
 			id: update?.id ?? "0",
-			title: update?.title ?? "teste",
+			title: update?.title ?? "",
 			content: update?.content ?? "",
 			project: update?.project ? update.project : null,
+			createdOn: update?.createdOn ? new Date(update.createdOn).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
 			
 		},
 		validationSchema: Yup.object({
@@ -62,6 +63,10 @@ export const UpdateForm = ({
 			content: Yup.string(),
 		}),
 		onSubmit: async (values) => {
+
+			setSubmitting(true);
+
+			values = {...values, createdOn: new Date(values.createdOn).toISOString()};
 
 			Promise.all(files.map( async (file) => submitFile(file)))
 				.then( async res => {
@@ -85,13 +90,14 @@ export const UpdateForm = ({
 
 		const endpoint = update ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}` : `${process.env.NEXT_PUBLIC_API_URL}/update`;
 
-		const res = await useFetch("POST", endpoint,values).then( (response) => {
+		const res = await useFetch("POST", endpoint,values, true).then( (response) => {
 			if(response.ok){
 				setSuccess(true);
 				onSubmit();
 				return response.json();
 			}
 			else {
+				console.log(response);
 				throw new Error("Update Post " + response.status);
 			}
 		}).catch( error => {
@@ -114,7 +120,7 @@ export const UpdateForm = ({
 			<Container>
 				<Grid container pt={2}>
 					<Grid item mt={4}>
-						<Typography variant={"h5"}>{ update ? "Editar Update": "Adicionar Update"}</Typography>
+						<Typography variant={"h5"}>{ update ? "Editar Atualização": "Criar Atualização"}</Typography>
 					</Grid>
 					<Grid item ml="auto">
 						<IconButton onClick={() => {success ? onCancel() : setCancelModal(true);}}>
@@ -137,7 +143,7 @@ export const UpdateForm = ({
 								<TextField
 									id="title"
 									name="title"
-									label={"title"}
+									label={"Título"}
 									value={formik.values.title}
 									onChange={formik.handleChange}
 									error={formik.touched.title && Boolean(formik.errors.title)}
@@ -158,16 +164,17 @@ export const UpdateForm = ({
 								<TextField
 									id="content"
 									name="content"
-									label={"content"}
+									label={"Conteúdo"}
 									value={formik.values.content}
 									onChange={formik.handleChange}
 									error={formik.touched.content && Boolean(formik.errors.content)}
 									helperText={formik.touched.content && formik.errors.content}
 									fullWidth
 									multiline
+									minRows={3}
 								/>
 							</Grid>
-							<Grid item xs={12}>
+							<Grid item xs={6}>
 								<TextField
 									id="projectId"
 									name="project.projectId"
@@ -175,7 +182,9 @@ export const UpdateForm = ({
 									select
 									value={formik.values.project?.projectId}
 									onChange={formik.handleChange}
-									fullWidth>
+									fullWidth
+									helperText="Projeto sobre ao qual esta atualização se refere."
+								>
 									{projects &&
 										projects.length > 0 &&
 										projects.map((option) => (
@@ -184,6 +193,18 @@ export const UpdateForm = ({
 											</MenuItem>
 										))}
 								</TextField>
+							</Grid>
+							<Grid item xs={6}>
+								<TextField
+									id="createdOn"
+									name="createdOn"
+									label={"Data de Lançamento da Atualização"}
+									onChange={formik.handleChange}
+									value={formik.values.createdOn}
+									type="date"
+									fullWidth
+									helperText="Se este campo não for alterado a data será a de criação."
+								/>							
 							</Grid>
 							<Grid item ml="auto">
 								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{error}</Typography>}
