@@ -214,7 +214,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 						centerCoordinates={project.coordinates as LatLngTuple} 
 						markers={[project.coordinates] as LatLngTuple[]} 
 						popupContent={
-							<Link target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${project.coordinates[0]}%2C${project.coordinates[1]}`} passHref>
+							<Link target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${project.coordinates?.[0]}%2C${project.coordinates?.[1]}`} passHref>
 								<StyledButton endIcon={<OpenInNew />}>Ver No Google Maps</StyledButton>
 							</Link>
 						}

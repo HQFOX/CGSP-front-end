@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React , { useCallback, useRef, useState } from "react";
+import React , { useRef, useState } from "react";
 
 import {
 	Chip,
@@ -51,6 +51,10 @@ const districtList = [ "Évora", "Beja", "Portalegre", "Setúbal" , "Aveiro", "B
 
 const steps = ["Detalhes", "Localização", "Tipologias", "Fotografias"];
 
+interface TypologyDetailsForm extends TypologyDetails {
+	index: number;
+}
+
 export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project, onCancel: () => void, onSubmit: () => void}) => {
 
 	const { t } = useTranslation(["projectpage", "common"]);
@@ -74,6 +78,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 
 	const formik = useFormik({
 		initialValues: {
+			id: project?.id ?? "0",
 			title: project?.title ?? "",
 			assignmentStatus: project?.assignmentStatus ?? "WAITING",
 			constructionStatus: project?.constructionStatus ?? "ALLOTMENTPERMIT",
@@ -83,8 +88,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			lots: project ? project.lots : 0,
 			assignedLots: project ? project.assignedLots : 0,
 			createdOn: project?.createdOn ? new Date(project.createdOn).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
-			typology: [] as { index: number; typology: string; }[], // TODO: add initial value
-			typologies: [] as { bedroomNumber?: number; bathroomNumber?: number; garageNumber?: number; area?: number; price?: number; plant? : AbstractFile}[],
+			// typology: [] as { index: number; typology: string; }[], // TODO: add initial value
+			typologies: project?.typologies?.map( (value, index) => ({...value, index: index})) ?? [] as TypologyDetailsForm[],
 			latitude: project?.coordinates ? project.coordinates[0] : 38.56633674453089,
 			longitude: project?.coordinates ? project.coordinates[1] : -7.925327404275489,
 			files: [] as { filename: string }[]
@@ -102,6 +107,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			),
 			typologies: Yup.array().of(
 				Yup.object().shape({
+					typology: Yup.string(),
 					bedroomNumber: Yup.number(),
 					bathroomNumber: Yup.number(),
 					garageNumber: Yup.number(),
@@ -165,23 +171,23 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 	const handleTypologyDelete = (index: number | undefined) => {
 		formik.setValues({
 			...formik.values,
-			typology: formik.values.typology.filter((value) => value.index != index)
+			typologies: formik.values.typologies.filter((value) => value.index != index)
 		});
 	};
 
 	const handleTypologyAdd = (option: string) => {
+		console.log(option);
 		const newIndex = typologyIndex + 1;
 		const newTypology = { index: newIndex, typology: option };
 		setTypologyIndex(newIndex);
 		formik.setValues({
 			...formik.values,
-			typology: formik.values.typology.concat(newTypology as { index: number; typology: ""; plant?: AbstractFile }),
-			typologies: formik.values.typologies.concat({ bedroomNumber: 0, bathroomNumber: 0, garageNumber: 0, area: 0, price: 0})
+			// typology: formik.values.typology.concat(newTypology as { index: number; typology: ""; plant?: AbstractFile }),
+			typologies: [...formik.values.typologies,{ ...newTypology, bedroomNumber: 0, bathroomNumber: 0, garageNumber: 0, area: 0, price: 0} as TypologyDetailsForm],
 		});
 	};
 
 	const onTypologyChange = (e: React.SyntheticEvent, value: string[], reason: string) => {
-		console.log(value);
 		if((reason) === "selectOption" || reason === "createOption"){
 			handleTypologyAdd(value[value.length - 1]);
 		}
@@ -281,9 +287,11 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 
 	const postProject = async (values: unknown) => {
 
+		console.log(values);
+
 		const endpoint = project ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}` : `${process.env.NEXT_PUBLIC_API_URL}/project` ;
 
-		const res = await useFetch(project ? "PUT" : "POST", endpoint, values, true).then( (response) => {
+		const res = await useFetch("POST", endpoint, values, true).then( (response) => {
 			if(response.ok){
 				setSuccess(true);
 				onSubmit();
@@ -323,7 +331,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 					<Grow in={true}>
 						<Stack alignContent={"center"} pt={6} sx={{ textAlign: "center" }}>
 							<CheckCircle color={"success"} style={{ fontSize: "120px", margin: "auto" }} />
-							<Typography variant="h5">Novo Projeto Adicionado</Typography>
+							<Typography variant="h5">{project ? "Projeto Editado" : "Novo Projeto Adicionado"}</Typography>
 							<Typography variant="subtitle1"></Typography>
 						</Stack>
 					</Grow>
@@ -479,7 +487,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							</Grid><Grid item xs={12}>
 								<Typography>Arraste o Marcador para preencher automaticamente</Typography>
 								<Box id="map" style={{ height: 480 }} sx={{ pt: 2 }}>
-									<Map doubleClickZoom={false} scrollWheelZoom={true} centerCoordinates={centerCoordinates} markers={formik.values.latitude && formik.values.longitude ? [[formik.values.latitude, formik.values.longitude]] : []} onCoordinateChange={onCoordinateChange} changeView/>
+									<Map doubleClickZoom={false} scrollWheelZoom={true} centerCoordinates={centerCoordinates} markers={formik.values.latitude && formik.values.longitude ? [[formik.values.latitude, formik.values.longitude]] : []} onCoordinateChange={onCoordinateChange} changeView draggable zoom={13}/>
 								</Box>
 							</Grid></React.Fragment>							
 							}
@@ -493,7 +501,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 											multiple
 											options={["T0","T1","T2","T3","T4"]}
 											freeSolo
-											value={formik.values.typology.map((element) => element.typology)}
+											value={formik.values.typologies.map((element) => element.typology)}
 											// defaultValue={formik.values.typology.map((element) => element.typology)}
 											onChange={ (e,v,r) => onTypologyChange(e,v,r)}
 											getOptionLabel={(option) => option}
@@ -503,7 +511,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 													variant="outlined"
 													label={option}
 													{...getTagProps({ index })}
-													onDelete={() => handleTypologyDelete(formik.values.typology.at(index)?.index)} />
+													onDelete={() => handleTypologyDelete(formik.values.typologies.at(index)?.index)} />
 											))}
 											renderInput={(params) => (
 												<TextField
@@ -515,7 +523,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 											)} />
 									</Grid>
 									<Grid item xs={12}>
-										{formik.values.typology.map((typology, index) => {
+										{formik.values.typologies.map((typology, index) => {
 											return (
 												<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0}>
 													<AccordionSummary
