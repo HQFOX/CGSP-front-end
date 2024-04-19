@@ -201,6 +201,7 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 					<Divider />
 					<Box id="map" style={{ height: 480}} sx={{pt: 2}}>
 						<Map 
+							zoom={13}
 							centerCoordinates={CGSPcenterCoordinates} 
 							markers={[ CGSPcenterCoordinates ]} 
 							popupContent={

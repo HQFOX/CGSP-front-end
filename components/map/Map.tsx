@@ -2,12 +2,9 @@ import React, { ReactNode } from "react";
 
 import { MapContainer, Pane, TileLayer, useMap, Polygon, useMapEvents, MapContainerProps } from "react-leaflet";
 
-import RoomIcon from "@mui/icons-material/Room";
+import { LatLngExpression, LatLngTuple } from "leaflet";
 
-import { LatLngTuple, divIcon } from "leaflet";
-import { renderToStaticMarkup } from "react-dom/server";
 
-import theme from "../../theme";
 import { ProjectCardPopUp } from "../projects/ProjectCardPopUp";
 import { CGSPMarker } from "./Marker";
 import { Beja } from "./districtdata/Beja";
@@ -25,24 +22,9 @@ interface MapProps extends MapContainerProps {
 	popupContent? : ReactNode,
 }
 
-const iconMarkup = renderToStaticMarkup(
-	<RoomIcon style={{ color: theme.palette.primary.main, fontSize: 50, position: "absolute", top: "-27px", left: "-20px" }}/>
-);
-const customMarkerIcon = divIcon({
-	html: iconMarkup
-});
 
-const styles = {
-	root: { 
-		margin: 0,
-		".leaflet-popup-content p" : {
-			margin: 0,
-		}
-		 
-	 }
-};
 
-const ChangeView = ({ centerCoordinates, zoom} : { centerCoordinates: LatLngTuple, zoom: number}) => {
+const ChangeView = ({ centerCoordinates, zoom} : { centerCoordinates: LatLngTuple, zoom?: number}) => {
 	const map = useMap();	
 	map.setView(centerCoordinates, zoom);
 
@@ -54,29 +36,26 @@ const ChangeView = ({ centerCoordinates, zoom} : { centerCoordinates: LatLngTupl
 const renderPanel = (district?: string) => {
 	switch(district) {
 	case("Évora"): 
-		return <Polygon positions={Evora.geojson.geometry.coordinates[0].map(innerArray => innerArray.slice().reverse())} pathOptions={{ color: "#FF7F51", fillColor: "#48bce5"}}/>;
+		return <Polygon positions={Evora.geojson.geometry.coordinates[0].map(innerArray => innerArray.slice().reverse()) as LatLngExpression[]} pathOptions={{ color: "#FF7F51", fillColor: "#48bce5"}}/>;
 	case("Beja"):
-		return <Polygon positions={Beja.geojson.geometry.coordinates[0].map(innerArray => innerArray.slice().reverse())} pathOptions={{ color: "#FF7F51", fillColor: "#48bce5"}}/>;
+		return <Polygon positions={Beja.geojson.geometry.coordinates[0].map(innerArray => innerArray.slice().reverse()) as LatLngExpression[]} pathOptions={{ color: "#FF7F51", fillColor: "#48bce5"}}/>;
 	case("Portalegre"):
-		return <Polygon positions={Portalegre.geojson.geometry.coordinates[0].map(innerArray => innerArray.slice().reverse())} pathOptions={{ color: "#FF7F51", fillColor: "#48bce5"}}/>;
+		return <Polygon positions={Portalegre.geojson.geometry.coordinates[0].map(innerArray => innerArray.slice().reverse()) as LatLngExpression[]} pathOptions={{ color: "#FF7F51", fillColor: "#48bce5"}}/>;
 	default:
 		return <></>;
 	}
 };
 
-// const panel = useMemo(() => renderPanel(search.district),[search.district]);
-
 
 const Map = ({ 
 	centerCoordinates, 
 	markers = [],
-	 zoom = 13, 
 	 projects = [], 
 	 onCoordinateChange = () => {}, 
 	 currentDistrict, 
 	 changeView = false, 
 	 scrollWheelZoom= false, 
-	 dragabble= false,
+	 draggable= false,
 	 popupContent, ...others
 }: MapProps ) => {
 
@@ -88,7 +67,6 @@ const Map = ({
 
 	const url = `https://api.mapbox.com/styles/v1/${username}/${style_id}/tiles/256/{z}/{x}/{y}@2x?access_token=${access_token}`;
 
-	// treatArray(shape);
 
 	const ClickListener = () => {
 		useMapEvents({
@@ -100,15 +78,15 @@ const Map = ({
 	};
 
 	return (
-		<MapContainer center={centerCoordinates} zoom={zoom} scrollWheelZoom={scrollWheelZoom} style={{ width: "100%", height: "100%" }} {...others}>
+		<MapContainer center={centerCoordinates} scrollWheelZoom={scrollWheelZoom} style={{ width: "100%", height: "100%" }} {...others}>
 			<TileLayer
 				attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 				url={url}
 
 			/>
-			{ changeView && <ChangeView centerCoordinates={centerCoordinates} zoom={zoom}/>}
+			{ changeView && <ChangeView centerCoordinates={centerCoordinates}/>}
 			{ markers.map( (marker, index) => (
-				<CGSPMarker coordinates={marker} key={index} draggable={dragabble} setCoordinates={onCoordinateChange}>
+				<CGSPMarker coordinates={marker} key={index} draggable={draggable} setCoordinates={onCoordinateChange}>
 					{popupContent}
 				</CGSPMarker>
 			))}
