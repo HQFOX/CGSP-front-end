@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { ReactNode, useMemo, useRef } from "react";
 
 import { ClassNames } from "@emotion/react";
 import { LatLngTuple, divIcon } from "leaflet";
-import { Marker, Popup } from "react-leaflet";
+import { Marker, Popup, MarkerProps as LeafletMarkerProps } from "react-leaflet";
 
 import RoomIcon from "@mui/icons-material/Room";
 
@@ -27,7 +28,7 @@ const styles = {
 	 }
 };
 
-export interface MarkerProps {
+export interface MarkerProps extends Omit<LeafletMarkerProps, "position"> {
     coordinates : LatLngTuple,
     draggable? : boolean,
     setCoordinates? : (position: LatLngTuple) => void,
@@ -40,6 +41,7 @@ export const CGSPMarker = ({
 	draggable = false,
 	setCoordinates = () => {},
 	children,
+	...others
 }: MarkerProps) => {
 
 	const markerRef = useRef(null);
@@ -49,7 +51,8 @@ export const CGSPMarker = ({
 			dragend() {
 				const marker = markerRef.current;
 				if (marker != null) {
-                    const LatLngTuple = marker.getLatLng();
+					// @ts-ignore
+					const LatLngTuple = marker.getLatLng();
 					setCoordinates([LatLngTuple.lat, LatLngTuple.lng]);
 				}
 			}
@@ -58,7 +61,7 @@ export const CGSPMarker = ({
 	);
 
 	return (
-		<Marker position={coordinates} icon={customMarkerIcon} draggable={draggable} eventHandlers={eventHandlers} ref={markerRef}>
+		<Marker position={coordinates} icon={customMarkerIcon} draggable={draggable} eventHandlers={eventHandlers} ref={markerRef} {...others}>
 			<ClassNames>
 				{({ css }) => (
 					<Popup className={css(styles.root)}>

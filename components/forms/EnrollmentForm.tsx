@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import {  useFormik } from "formik";
 import { Box, Checkbox, FormControlLabel, Grid, Grow, Stack, TextField, Typography, styled } from "@mui/material";
 import theme from "../../theme";
@@ -43,10 +43,10 @@ const StyledBox = styled(Box)({
 	textAlign: "center",
 	display: "flex",
 	width: 700,
-	padding: 90,
+	padding: 50,
 	[theme.breakpoints.down("md")]: {
 		width: "auto",
-		padding: 40
+		padding: 20
 	}
 });
 
@@ -109,13 +109,13 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
 			<StyledBox>
 				<Grid container columnSpacing={2}>
 					<Grid item xs={12} maxHeight={150} >
-						<Typography variant="h2" >{t("preEnroll")}</Typography>
+						<Typography variant="h4" component={"h1"} >{t("preEnroll")}</Typography>
 						<hr/>
-						<Typography variant="h4" >{project.title}</Typography>
+						<Typography variant="h5" component={"h2"} >{project.title}</Typography>
 					</Grid>
 				</Grid>
 				{!success && 
-            <Grid container rowSpacing={2} columnSpacing={2} mt={4}>
+            <Grid container rowSpacing={2} columnSpacing={2} mt={2}>
             	<Grid item xs={12} md={6}>
             		<TextField
             			id="first-name"
@@ -173,7 +173,7 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
             	<Grid item xs={12}>
             		<StyledButton type="submit" variant='contained' color='primary' value="submit" fullWidth>{t("form.submit")}</StyledButton>
             		<Typography variant="body2" sx={{ marginTop: "10px" }}>
-					Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e , se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site. Não são utilizados para qualquer outro fim comercial. 
+            			{t("form.notice")}
             		</Typography>
             	</Grid>
             </Grid>  

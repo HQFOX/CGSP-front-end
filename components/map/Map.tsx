@@ -56,7 +56,8 @@ const Map = ({
 	 changeView = false, 
 	 scrollWheelZoom= false, 
 	 draggable= false,
-	 popupContent, ...others
+	 popupContent = undefined,
+	  ...others
 }: MapProps ) => {
 
 	const username = "hqfox";
@@ -86,7 +87,7 @@ const Map = ({
 			/>
 			{ changeView && <ChangeView centerCoordinates={centerCoordinates}/>}
 			{ markers.map( (marker, index) => (
-				<CGSPMarker coordinates={marker} key={index} draggable={draggable} setCoordinates={onCoordinateChange}>
+				<CGSPMarker coordinates={marker} key={index} draggable={draggable} setCoordinates={onCoordinateChange} >
 					{popupContent}
 				</CGSPMarker>
 			))}

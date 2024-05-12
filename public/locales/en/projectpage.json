@@ -53,13 +53,15 @@
         }
     },
     "preEnroll" : "Pre-Enroll",
+    "preEnrollDescription" : "Here you can pre-enroll for this project. This pre-enroll is only an expression of interest and does not constitute a reservation of a home. It serves as a way of subscribing to updates on the project and a request to contact the cooperative's team, who will respond as soon as possible. \n As there are bound to be some questions, we also recommend meeting directly with our team at the head office.",
     "form" : {
         "firstName": "First Name",
         "lastName": "Surname",
         "email": "Email",
         "telephoneNumber": "Telephone Number",
         "submit": "Submit",
-        "required": "Required"
+        "required": "Required",
+        "notice": "The data you fill in will only be used as a means of communicating about this project and, if you choose, to notify you of any updates about it posted on our website.\n They are not used for any other commercial purpose."
     },
     "successMessage" : {
         "success" : "Pre-Enroll request successfully submitted.",

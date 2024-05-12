@@ -1,9 +1,9 @@
 import React from "react";
 import { Box, Divider } from "@mui/material";
 import type { NextPage } from "next";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
-import { useTranslation } from "react-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 import { PageContainer } from "../components/pageContainer/PageContainer";
 import { ProjectInventory } from "../components/projects/projectInventory/ProjectInventory";

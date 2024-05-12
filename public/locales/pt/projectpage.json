@@ -54,13 +54,15 @@
         }
     },
     "preEnroll" : "Pré-Inscrição",
+    "preEnrollDescription" : "Aqui é possível fazer uma pré-inscrição neste projeto. Esta pré-inscrição é apenas uma demonstração de interesse e não constitui uma reserva de uma habitação, servindo como uma uma maneira de subscrever às atualizações do projeto e um pedido de contacto feito à equipa da cooperativa que irá responder assim que possível. \n Por ser natural existirem algumas questões, nós recomendamos também o encontro direto com a nossa equipa na sede.",
     "form" : {
         "firstName": "Primeiro Nome",
         "lastName": "Último Nome",
         "email": "Email",
         "telephoneNumber": "Número de telefone",
         "submit": "submeter",
-        "required": "Obrigatório"
+        "required": "Obrigatório",
+        "notice": "Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e , se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site.\n Não são utilizados para qualquer outro fim comercial."
     },
     "successMessage" : {
         "success" : "Pedido de Pré-Inscrição submetido com successo.",

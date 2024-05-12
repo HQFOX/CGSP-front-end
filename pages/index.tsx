@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Box, Card, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
-
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+
+import { Box, Card, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
 
 import styles from "../styles/Home.module.css";
 
@@ -50,23 +50,23 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 					})}>
 					<Box sx={{ pb: 4, textIndent: 35 }} id="aboutus">
 						<Title variant="h4" component="h1" fontSize={24}>
-							Quem Somos?
+							{t("whoAreWeTitle")}
 						</Title>
 						<Divider sx={{mb: 4}}/>
 						<Typography variant="body2" color="text.secondary">
-						A Cooperativa Giraldo Sem Pavor é uma cooperativa de construção e habitação sediada em Évora, desde xxxx, que opera na região do Alentejo.
+							{t("whoAreWeTextP1")}
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
-							Esta instituição emerge da união de vontades e interesses em resolver questões essenciais, como garantir habitação digna para famílias, indivíduos ou grupos ocasionais. A cooperativa procura proporcionar soluções sustentáveis e abrangentes, atendendo às necessidades fundamentais da comunidade.
+							{t("whoAreWeTextP2")}
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
-							Por conseguinte, o foco principal desta cooperativa é viabilizar aos seus cooperantes o acesso à habitação a custos controlados, resultando em preços mais acessíveis em comparação aos valores de mercado.
+							{t("whoAreWeTextP3")}
 						</Typography>
 						<Typography variant="body2" color="text.secondary">						
-							Dentro desse contexto, comprometemo-nos ativamente a estabelecer parcerias estratégicas com profissionais como arquitetos, empresas de construção e câmaras municipais. Através desta colaboração, procuramos não apenas desenhar, mas também concretizar projetos habitacionais inovadores e acessíveis. Os empreendimentos são cuidadosamente planeados, proporcionando não apenas casas, mas lares, nos quais os nossos cooperantes têm a oportunidade de se inscrever.						
+							{t("whoAreWeTextP4")}
 						</Typography>			
 						<div style={{ display: "flex", justifyContent: "center", paddingTop: "40px" }}>
-							<Image src={logo} alt="logo" width={200} height={60} />
+							<Image src={logo} alt="Cooperativa Giraldo Sem Pavor logo" width={200} height={60} />
 						</div>
 					</Box>
 				</Box>
@@ -80,49 +80,47 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 					})}>
 					<Box sx={{ pb: 4 }} id="aboutus">
 						<Title variant="h4" component="h1" fontSize={24}>
-							Como Funciona?
+							{t("howDoesItWorkTitle")}
 						</Title>
 						<Divider />
 					</Box>
 					<Grid container columnSpacing={2}>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title >Elaboração do Projeto</Title>}  avatar={<Architecture color="success" />}/>
+								<CardHeader title={<Title >{t("projectElaborationTitle")}</Title>}  avatar={<Architecture color="success" />}/>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-										Os terrenos são adquiridos pela cooperativa e é feito um projeto em conjunto com os Arquitetos.<br />
-										O projeto é submetido para aprovação pela Câmara.
+										{t("projectElaborationText")}
 									</Typography>
 								</CardContent>
 							</Card>
 						</Grid>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<><Title>Inscrição</Title></>} avatar={<PersonAdd color="success"/>}/>
+								<CardHeader title={<><Title>{t("inscriptionTitle")}</Title></>} avatar={<PersonAdd color="success"/>}/>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-										Os sócios inscrevem-se na cooperativa para a compra de casa, pagando uma verba de 2.5 € por mês , 25 € de Jóia e 100 € euros de capital social, que será reembolsado  um dia que o sócio desista dessa condição.
+										{t("inscriptionText")}
 									</Typography>
 								</CardContent>
 							</Card>
 						</Grid>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>Reserva</Title>} avatar={<BookmarkAdd color="success"/>}/>
+								<CardHeader title={<Title>{t("reservationTitle")}</Title>} avatar={<BookmarkAdd color="success"/>}/>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-										Quando o projeto de arquitetura é aprovado pela Câmara, os sócios são convidados a consultar o mesmo e a fazerem a sua reserva de habitação, caso assim decidam, mediante o pagamento de uma verba de cerca de 5.000,00€ que será reembolsado caso desistam posteriormente, ou descontado posteriormente no custo da habitação.
+										{t("reservationText")}
 									</Typography>
 								</CardContent>
 							</Card>
 						</Grid>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>Construção</Title>} avatar={<Construction color="success"/>} />
+								<CardHeader title={<Title>{t("constructionTitle")}</Title>} avatar={<Construction color="success"/>} />
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-										Após aprovação de Loteamento pela respetiva Câmara Municipal, pode começar a fase de construção.<br />
-										Nesta fase são disponibilizadas  atualizações da construção nesta plataforma. É também possível para os cooperantes agendar connosco  visitas guiadas aos locais de construção.
+										{t("projectElaborationText")}
 									</Typography>
 								</CardContent>
 							</Card>
@@ -139,47 +137,47 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 					})}>
 					<Box sx={{ pb: 4 }} id="aboutus">
 						<Title variant="h4" component="h1" fontSize={24}>
-							Vantagens
+							{t("advantagesTitle")}
 						</Title>
 						<Divider />
 					</Box>
 					<Grid container columnSpacing={2}>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title >Custos Controlados</Title>}  avatar={<Savings color="primary" />}/>
+								<CardHeader title={<Title >{t("controlledCostsTitle")}</Title>}  avatar={<Savings color="primary" />}/>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-										Por ser uma cooperativa de habitação e construção podemos beneficiar da taxa reduzida do Imposto sobre o Valor Acrescentado (IVA) e transmitir esse benefício ao cooperante.
+										{t("controlledCostsText")}
 									</Typography>
 								</CardContent>
 							</Card>
 						</Grid>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<><Title>Transparência</Title></>} avatar={<MeetingRoom color="primary"/>}/>
+								<CardHeader title={<Title>{t("transparencyTitle")}</Title>} avatar={<MeetingRoom color="primary"/>}/>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-											Todo processo pode ser acompanhado pelo cooperante através de atualizações, notificadas por email ou contacto telefónico, nesta plataforma.
+										{t("transparencyText")}
 									</Typography>
 								</CardContent>
 							</Card>
 						</Grid>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>Burocracia Simplificada</Title>} avatar={<Description color="primary"/>}/>
+								<CardHeader title={<Title>{t("bureaucracyTitle")}</Title>} avatar={<Description color="primary"/>}/>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-										O longo e difícil processo burocrático é integralmente tratado pela cooperativa.
+										{t("bureaucracyText")}
 									</Typography>
 								</CardContent>
 							</Card>
 						</Grid>
 						<Grid item xs={1} md={3}>
 							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>Sem Intermediários</Title>} avatar={<Group color="primary"/>} />
+								<CardHeader title={<Title>{t("middlemanTitle")}</Title>} avatar={<Group color="primary"/>} />
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
-										Contacto direto com o cliente.
+										{t("middlemanText")}
 									</Typography>
 								</CardContent>
 							</Card>

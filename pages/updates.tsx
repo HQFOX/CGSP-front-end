@@ -4,7 +4,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { PageContainer } from "../components/pageContainer/PageContainer";
 import { Box, Divider } from "@mui/material";
 import Updates from "../components/updates/Update";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Title } from "../components/Title";
 
 const UpdatePage: NextPage<{ updates: Update[]}> = (data) => {

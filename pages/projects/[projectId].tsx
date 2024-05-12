@@ -14,10 +14,12 @@ import {
 	AccordionSummary,
 	AccordionDetails,
 	styled,
-	Link as MuiLink
+	Link as MuiLink,
+	IconButton
 } from "@mui/material";
 
 import {
+	ArrowBackIosNew,
 	Bathtub,
 	Dashboard,
 	Euro,
@@ -34,9 +36,10 @@ import {
 import { NextPage } from "next";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 import { EnrollmentModal } from "../../components/modals/enrollmentModal/enrollmentModal";
 import ProjectCarousel from "../../components/projects/projectCarousel/ProjectCarousel";
@@ -69,6 +72,8 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 	const [value, setValue] = useState(0);
 	const [showEnrollmentModal, setShowEnrollmentModal] = useState<boolean>(false);
 
+	const router = useRouter();
+
 	const project: Project = data.project;
 
 	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -82,7 +87,10 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 	return (
 		<PageContainer>
 			<Box sx={{ pb: 4 }}>
-				<Title variant="h5" component="h1" fontSize={24}>
+				<IconButton disableRipple onClick={() => router.back()} sx={{ paddingBottom: "13px"}}>
+					<ArrowBackIosNew />
+				</IconButton>
+				<Title variant="h5" component="h1" fontSize={24} display={"inline-block"} >
 					{project.title}
 				</Title>
 				<Divider />
@@ -111,8 +119,8 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               			<Accordion key={"typologyDetails" + index} defaultExpanded={index == 0} sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
               				<AccordionSummary
               					expandIcon={<ExpandMore />}
-              					aria-controls="panel1a-content"
-              					id="panel1a-header"
+              					aria-controls={`typology${index}-content`}
+              					id={`typology${index}-header`}
               					sx={{ backgroundColor: theme.palette.secondary.light}}
               				>
               					<Typography>{typology.typology}</Typography>
@@ -168,7 +176,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 									  <Grid item>
               							<Stack direction="row" gap={1}>
               								<Dashboard color="primary" />
-              							<MuiLink href={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto?.filename}`} target="_blank" rel="noreferrer" variant="body2" color="text.secondary">
+              							<MuiLink href={`${process.env.NEXT_PUBLIC_S3_URL}${typology.plant?.filename}`} target="_blank" rel="noreferrer" variant="body2" color="text.secondary">
               									{"Planta"}
               							</MuiLink>
               							</Stack>
@@ -182,9 +190,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					<TabPanel index={1} value={value}>
 						<Box>
 							<Typography sx={{ textIndent: 20}} color="text.secondary">
-							Aqui é possível fazer uma pré-inscrição neste projeto. Esta pré-inscrição é apenas uma demonstração de interesse e não constitui uma reserva de uma habitação, servindo como uma uma maneira de subscrever às atualizações do projeto e um pedido de contacto feito à equipa da cooperativa que irá responder assim que possível.<br />
-							Por ser natural existirem algumas questões, nós recomendamos também o encontro direto com a nossa equipa na sede.
-
+			  					{t("preEnrollDescription")}
 							</Typography>
 							<Grid container justifyContent={"flex-end"} paddingTop={4}>
 								<Grid item sm={2}>
@@ -192,7 +198,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 										variant="contained"
 										color="primary"
 										onClick={() => setShowEnrollmentModal(true)}>
-                    Pre-Inscrição
+										{t("preEnroll")}
 									</StyledButton>
 									<EnrollmentModal
 										open={showEnrollmentModal}
@@ -211,6 +217,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 			<Paper sx={{ mt: 4, border: "1px solid rgb(237, 237, 237)", boxShadow: 0 }}>
 				<div id="map" style={{ height: 480 }}>
 					<Map 
+						zoom={13}
 						centerCoordinates={project.coordinates as LatLngTuple} 
 						markers={[project.coordinates] as LatLngTuple[]} 
 						popupContent={

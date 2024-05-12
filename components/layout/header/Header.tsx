@@ -91,7 +91,7 @@ const Header = () => {
 							p: 2,
 							display: { xs: "none", md: "flex" }
 						}}>
-						<Image src={logo} alt="logo" width={180} height={60} />
+						<Image src={logo} alt="Cooperativa Giraldo Sem Pavor logo" width={180} height={60} />
 					</Box>
 					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 						<IconButton
@@ -166,6 +166,7 @@ const Header = () => {
 						{pages.map((page) => (
 							<Link key={page.id} href={page.path} passHref>
 								<Button 
+									tabIndex={-1}
 									sx={{ paddingLeft: "15px", paddingRight: "15px", paddingTop: "7px", paddingBottom: "7px", display: "block", borderRadius: "60px", color: "white", textTransform: "none", textAlign: "center", fontWeight: "700"}}
 									disableElevation variant='contained'>
 									{page.headerText}
