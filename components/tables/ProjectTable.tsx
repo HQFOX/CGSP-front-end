@@ -35,7 +35,7 @@ export const ProjectTable = ({ projects, handleShowProjectForm, handleDelete }: 
 				}),
 				columnHelper.accessor("coverPhoto", {
 					id: "coverPhoto",
-					cell: (info) => <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.filename}`} alt={""} width={50} height={50} />,
+					cell: (info) => info.getValue()?.filename && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.filename}`} alt={""} width={50} height={50} />,
 					header: () => <Typography>Imagem</Typography>
 				}),
 				columnHelper.accessor("assignmentStatus", {
@@ -64,7 +64,7 @@ export const ProjectTable = ({ projects, handleShowProjectForm, handleDelete }: 
 				}),
 				columnHelper.accessor("createdOn", {
 					cell: (info) => <Typography>{formatDate(info.getValue())}</Typography>,
-					header: () => <Typography>Data</Typography>
+					header: () => <Typography>Data de Criação</Typography>
 				}),
 				columnHelper.display({
 					id: "actions",

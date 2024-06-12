@@ -1,12 +1,16 @@
+import React, { useEffect, useMemo, useState } from "react";
+
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useState } from "react";
-import { Controls } from "../../controls/Controls";
-import { Fade, Grid } from "@mui/material";
-import ProjectCard from "../ProjectCard";
 import dynamic from "next/dynamic";
-import { SearchParams, ViewType, getPriceRange, getTypes, getTypologies, normalizeString } from "./utils";
+
+import { Fade, Grid } from "@mui/material";
+
 import { LatLngTuple } from "leaflet";
+
+import { Controls } from "../../controls/Controls";
+import ProjectCard from "../ProjectCard";
+import { SearchParams, ViewType, getPriceRange, getTypes, getTypologies, normalizeString } from "./utils";
 import { Beja, Evora, Portalegre } from "../../map/districtdata";
 import { Setubal } from "../../map/districtdata/Setubal";
 
@@ -137,14 +141,6 @@ export const ProjectInventory = ({
 		return result;
 	};
 
-	const filterResultsByType = (param: string[], projects: Project[]) => {
-		let result: Project[] = projects;
-		
-		result = projects.filter( (project) => project.typologies && project.typologies.some( typology => typology.type && param.includes(typology.type)));
-		
-		return result;
-	};
-
 	const filterResultsByAssignmentStatus = (param: string[], projects: Project[]) => {
 		let result: Project[] = projects;
 		
@@ -169,7 +165,7 @@ export const ProjectInventory = ({
 		results = filterResultsByWildCard(search.wildcard, results);
 		results = filterResultsByPrice(search.priceRange, results);
 		results = filterResultsByTypology(search.typologies, results);
-		results = filterResultsByType(search.types, results);
+		// results = filterResultsByType(search.types, results);
 		results = filterResultsByAssignmentStatus(search.assignmentStatus, results);
 		results = filterResultsByConstructionStatus(search.constructionStatus, results);
 		setProjectSearchResults(results);

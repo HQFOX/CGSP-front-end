@@ -95,7 +95,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 				</Title>
 				<Divider />
 			</Box>
-			<ProjectCarousel project={project} />
+			{ project.coverPhoto && project.files && <ProjectCarousel project={project} />}
 			<Paper sx={{ mt: 4, border: "1px solid rgb(237, 237, 237)", boxShadow: 0 }}>
 				<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 					<Tabs value={value} onChange={handleChange}>
@@ -127,60 +127,60 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               				</AccordionSummary>
               				<AccordionDetails>
               					<Grid container columnSpacing={4} columns={1}>
-              						<Grid item>
+              						{ typology.livingArea && typology.totalLotArea && <Grid item>
               							<Stack spacing={2}>
               								<Stack direction="row" gap={1}>
               									<SquareFoot color="primary" />
               									<StyledTypography variant="body2" color="text.secondary"> {`${t("typologyDetails.area")}`}: </StyledTypography>
               								</Stack>
-              								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.interiorArea")}: ${
-              									typology.bathroomNumber
-              								} \u33A1`}</StyledTypography>
-              								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.exteriorArea")}: ${
-              									typology.bathroomNumber
-              								} \u33A1`}</StyledTypography>
+              								{ typology.livingArea && <StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.interiorArea")}: ${
+              									typology.livingArea
+              								} \u33A1`}</StyledTypography>}
+              								{ typology.totalLotArea && <StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.exteriorArea")}: ${
+              									typology.totalLotArea
+              								} \u33A1`}</StyledTypography>}
               							</Stack>
-              						</Grid>
-              						<Grid item>
+              						</Grid>}
+              						{ typology.bedroomNumber && <Grid item>
               							<Stack direction="row" gap={1}>
               								<Hotel color="primary" />
               								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.bedrooms")}: ${
               									typology.bedroomNumber
               								}`}</StyledTypography>
               							</Stack>
-              						</Grid>
-              						<Grid item>
+              						</Grid>}
+              						{ typology.bathroomNumber && <Grid item>
               							<Stack direction="row" gap={1}>
               								<Bathtub color="primary" />
               								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.bathrooms")}: ${
               									typology.bathroomNumber
               								}`}</StyledTypography>
               							</Stack>
-              						</Grid>
-              						<Grid item>
+              						</Grid>}
+              						{ typology.garageNumber && <Grid item>
               							<Stack direction="row" gap={1}>
               								<Garage color="primary" />
               								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.garage")}: ${
               									typology.garageNumber
               								}`}</StyledTypography>
               							</Stack>
-              						</Grid>
-									  <Grid item>
+              						</Grid>}
+              						{ typology.price && <Grid item>
               							<Stack direction="row" gap={1}>
               								<Euro color="primary" />
               								<StyledTypography variant="body2" color="text.secondary">{`${t("typologyDetails.price")}: ${
-              									typology.price
+              									new Intl.NumberFormat("eu", { style: "currency", "currency": "EUR"}).format(typology.price)
               								}`}</StyledTypography>
               							</Stack>
-              						</Grid>
-									  <Grid item>
+              						</Grid>}	
+              						{ typology.plant && <Grid item>
               							<Stack direction="row" gap={1}>
               								<Dashboard color="primary" />
               							<MuiLink href={`${process.env.NEXT_PUBLIC_S3_URL}${typology.plant?.filename}`} target="_blank" rel="noreferrer" variant="body2" color="text.secondary">
               									{"Planta"}
               							</MuiLink>
               							</Stack>
-              						</Grid>
+              						</Grid>}
               					</Grid>
               				</AccordionDetails>
               			</Accordion>

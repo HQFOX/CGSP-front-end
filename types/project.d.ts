@@ -18,6 +18,8 @@ type Project = {
   typologies?: TypologyDetails[];
   updates?: Updates[];
   createdOn?: string;
+  enrollRequests?: EnrollRequest[];
+  enrollRequestsCount?: number;
 };
 
 type TypologyDetails = {
@@ -27,7 +29,9 @@ type TypologyDetails = {
   bathroomNumber?: number; 
   garageNumber?: number; 
   price?: float; 
-  plant?: string; 
+  plant?: ProjectFile;
+  totalLotArea?:number;
+  livingArea?:number;  
 }
 
 type ProjectDetails = {

@@ -29,7 +29,6 @@ export const getPriceRange = (projects: Project[]) => {
 			}
 		});
 	});
-	console.log(priceRange);
 	return priceRange as number[];
 };
 

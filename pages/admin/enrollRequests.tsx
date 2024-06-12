@@ -1,6 +1,5 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Box, Divider, Grid, Typography } from "@mui/material";
-import type { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { EnrollRequestTable } from "../../components/enrollrequests/EnrollRequestTable";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
@@ -10,11 +9,50 @@ import { useFetch } from "../../components/forms/utils";
 import { Loading } from "../../components/loading/Loading";
 import { EnrollRequestForm } from "../../components/forms/EnrollRequestForm";
 
-const EnrollRequestsAdmin: NextPage<{ requests: EnrollRequest[], projects: Project[] }> = (data) => {
-	const [requests, setRequests] = useState<EnrollRequest[]>(data.requests);
+const EnrollRequestsAdmin = () => {
+	const [requests, setRequests] = useState<EnrollRequest[]>([]);
+	const [projects, setProjects] = useState<Project[]>([]);
 	const [editRequest, setEditRequest ] = useState<EnrollRequest | undefined>();
 	const [showAddRequestForm, setShowAddRequestForm] = useState(false);
 	const [showEditRequestForm, setShowEditRequestForm] = useState(false);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = useFetch("GET",`${process.env.NEXT_PUBLIC_API_URL}/enroll`, null,true)
+				.then( res => {
+			 if(res.ok){
+						return res.json() as unknown as EnrollRequest[];
+			 }
+			 else {
+						throw new Error("Error fetching requests " + res.status);
+					}
+				});
+
+			setRequests(await data);
+		};
+		fetchData().catch((e) => {
+			console.error("An error occurred while fetching the data: ", e);
+		});
+
+		const fetchProjects = async () => {
+			const data = useFetch("GET",`${process.env.NEXT_PUBLIC_API_URL}/project/current`, null,true)
+				.then( res => {
+			 if(res.ok){
+						return res.json() as unknown as Project[];
+			 }
+			 else {
+						throw new Error("Error fetching projects " + res.status);
+					}
+				});
+
+			setProjects(await data);
+		};
+		fetchProjects().catch((e) => {
+			console.error("An error occurred while fetching the data: ", e);
+		});
+
+	},[]);
+	
 
 	const refreshData = async () => {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/enroll`);
@@ -72,7 +110,7 @@ const EnrollRequestsAdmin: NextPage<{ requests: EnrollRequest[], projects: Proje
 			{showAddRequestForm && (
 				<Suspense fallback={<Loading />}>
 					<EnrollRequestForm
-						projects={data.projects}
+						projects={projects}
 						onCancel={() => setShowAddRequestForm(false)}
 						onSubmit={() => refreshData()}
 					/>
@@ -83,7 +121,7 @@ const EnrollRequestsAdmin: NextPage<{ requests: EnrollRequest[], projects: Proje
 					<Suspense fallback={<Loading />}>
 						<EnrollRequestForm
 							request={editRequest}
-							projects={data.projects}
+							projects={projects}
 							onCancel={() => setShowEditRequestForm(false)}
 							onSubmit={() => refreshData()}						/>
 					</Suspense>
@@ -95,18 +133,9 @@ const EnrollRequestsAdmin: NextPage<{ requests: EnrollRequest[], projects: Proje
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
-	const res = await fetch(`${process.env.API_URL}/enroll`);
-	const requests = (await res.json()) as EnrollRequest[];
-
-	const projectRes = await fetch(`${process.env.API_URL}/project`);
-	const projects = (await projectRes.json()) as Project[];
-
-	console.log(projects);
 
 	return {
 		props: {
-			requests,
-			projects,
 			...(await serverSideTranslations(ctx.locale, ["common", "footer", "header"]))
 		}
 	};

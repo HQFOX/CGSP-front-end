@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React , { useRef, useState } from "react";
+import React , { ReactNode, useRef, useState } from "react";
+
+import Link from "next/link";
 
 import {
 	Chip,
@@ -25,9 +28,9 @@ import {
 	StepButton,
 	InputAdornment,
 } from "@mui/material";
-import { ArrowBackIos, ArrowForwardIos, CheckCircle, Close, ExpandMore } from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos, CheckCircle, Close, ExpandMore, OpenInNew } from "@mui/icons-material";
 
-import { useFormik } from "formik";
+import { FormikErrors, useFormik } from "formik";
 import * as Yup from "yup";
 
 import dynamic from "next/dynamic";
@@ -37,7 +40,7 @@ import { CancelModal } from "../modals/CancelModal";
 import { StyledButton } from "../Button";
 import { getPresignedUrl, submitFile, useFetch } from "./utils";
 import { AbstractFile } from "./types";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 import { Loading } from "../loading/Loading";
 import { LatLngTuple } from "leaflet";
 import { districtCenterCoordinates } from "../projects/projectInventory/ProjectInventory";
@@ -51,9 +54,19 @@ const districtList = [ "Évora", "Beja", "Portalegre", "Setúbal" , "Aveiro", "B
 
 const steps = ["Detalhes", "Localização", "Tipologias", "Fotografias"];
 
-interface TypologyDetailsForm extends TypologyDetails {
+interface TypologyDetailsForm extends Omit<TypologyDetails, "plant"> {
 	index: number;
+	plant?: AbstractFile
 }
+
+const getErrorMessage = (errors: FormikErrors<any>) => {
+	const result = [];
+	for (const [key, value] of Object.entries(errors)) {
+		console.log(`${key}: ${value}`);
+		result.push(`Erro no campo ${key}. `);
+	}
+	return result;
+};
 
 export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project, onCancel: () => void, onSubmit: () => void}) => {
 
@@ -88,8 +101,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			lots: project ? project.lots : 0,
 			assignedLots: project ? project.assignedLots : 0,
 			createdOn: project?.createdOn ? new Date(project.createdOn).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
-			// typology: [] as { index: number; typology: string; }[], // TODO: add initial value
-			typologies: project?.typologies?.map( (value, index) => ({...value, index: index})) ?? [] as TypologyDetailsForm[],
+			typologies: (project?.typologies?.map( (value, index) => ({...value, index: index})) ?? []) as TypologyDetailsForm[],
 			latitude: project?.coordinates ? project.coordinates[0] : 38.56633674453089,
 			longitude: project?.coordinates ? project.coordinates[1] : -7.925327404275489,
 			files: [] as { filename: string }[]
@@ -97,22 +109,17 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		validationSchema: Yup.object({
 			title: Yup.string().required("Obrigatório"),
 			district: Yup.string().required("Obrigatório"),
-			lots: Yup.number().required("Obrigatório"),
-			assignedLots: Yup.number().required("Obrigatório"),
-			typology: Yup.array().of(
-				Yup.object().shape({
-					index: Yup.string(),
-					typology: Yup.string(),
-				})
-			),
+			lots: Yup.number().typeError("Este valor tem que ser um número").required("Obrigatório"),
+			assignedLots: Yup.number().typeError("Este valor tem que ser um número").required("Obrigatório"),
 			typologies: Yup.array().of(
 				Yup.object().shape({
 					typology: Yup.string(),
-					bedroomNumber: Yup.number(),
-					bathroomNumber: Yup.number(),
-					garageNumber: Yup.number(),
-					area: Yup.number(),
-					price: Yup.number(),
+					bedroomNumber: Yup.number().typeError("Este valor tem que ser um número").nullable(),
+					bathroomNumber: Yup.number().typeError("Este valor tem que ser um número").nullable(),
+					garageNumber: Yup.number().typeError("Este valor tem que ser um número").nullable(),
+					totalLotArea: Yup.number().typeError("Este valor tem que ser um número").nullable(),
+					livingArea: Yup.number().typeError("Este valor tem que ser um número").nullable(),
+					price: Yup.number().typeError("Este valor tem que ser um número").nullable(),
 
 				})
 			),
@@ -130,10 +137,10 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 			}
 				
 			Promise.all(files.map( async (file) => submitFile(file)))
-				.then( async res => {
+				.then( async () => {
 
 					Promise.all(values.typologies.map( (typ) => typ.plant &&
-							submitFile(typ.plant))).then( async plantRes => {
+							submitFile(typ.plant))).then( async () => {
 
 						const formatValue = {
 							title: values.title,
@@ -176,20 +183,18 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 	};
 
 	const handleTypologyAdd = (option: string) => {
-		console.log(option);
 		const newIndex = typologyIndex + 1;
 		const newTypology = { index: newIndex, typology: option };
 		setTypologyIndex(newIndex);
 		formik.setValues({
 			...formik.values,
-			// typology: formik.values.typology.concat(newTypology as { index: number; typology: ""; plant?: AbstractFile }),
-			typologies: [...formik.values.typologies,{ ...newTypology, bedroomNumber: 0, bathroomNumber: 0, garageNumber: 0, area: 0, price: 0} as TypologyDetailsForm],
+			typologies: [...formik.values.typologies,{ ...newTypology, bedroomNumber: undefined, bathroomNumber: undefined, garageNumber: undefined, totalLotArea: undefined, livingArea: undefined, price: undefined, plant: undefined} as TypologyDetailsForm],
 		});
 	};
 
-	const onTypologyChange = (e: React.SyntheticEvent, value: string[], reason: string) => {
-		if((reason) === "selectOption" || reason === "createOption"){
-			handleTypologyAdd(value[value.length - 1]);
+	const onTypologyChange = (_e: React.SyntheticEvent, value: (string | undefined)[], reason: string) => {
+		if((reason) === "selectOption" || reason === "createOption" && typeof value[value.length - 1] === "string"){
+			handleTypologyAdd(value[value.length - 1] as string);
 		}
 	};
 
@@ -298,13 +303,11 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 				return response.json();
 			}
 			else {
-				console.log(values);
 				throw new Error("Project Post " + response.status);
 			}
-		}).catch( error => {
+		}).catch( () => {
 			setSuccess(false);
 			setError("Erro a submeter Projeto");
-			console.log(error);
 		});
 
 		setSubmitting(false);
@@ -360,7 +363,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									value={formik.values.title}
 									onChange={formik.handleChange}
 									error={formik.touched.title && Boolean(formik.errors.title)}
-									helperText={formik.touched.title && formik.errors.title}
+									helperText={formik.errors.title}
 									fullWidth />
 							</Grid><Grid item xs={4}>
 								<FormControl sx={{ width: "100%" }}>
@@ -404,8 +407,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									value={formik.values.lots}
 									onChange={formik.handleChange}
 									error={formik.touched.lots && Boolean(formik.errors.lots)}
-									helperText={formik.touched.lots && formik.errors.lots}
-									type="number"
+									helperText={formik.errors.lots}
 									fullWidth />
 							</Grid>
 							<Grid item xs={4}>
@@ -416,8 +418,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									value={formik.values.assignedLots}
 									onChange={formik.handleChange}
 									error={formik.touched.assignedLots && Boolean(formik.errors.assignedLots)}
-									helperText={formik.touched.assignedLots && formik.errors.assignedLots}
-									type="number"
+									helperText={formik.errors.assignedLots}
 									fullWidth />
 							</Grid>
 							<Grid item xs={6}>
@@ -451,7 +452,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									id="district"
 									options={districtList}
 									value={formik.values.district}
-									onChange={(e,value) => handleDistrictChange(value)}
+									onChange={(_e,value) => handleDistrictChange(value)}
 									fullWidth
 									renderInput={(params) => <TextField {...params} label={"Distrito"} error={formik.touched.district && Boolean(formik.errors.district)} helperText={formik.touched.district && formik.errors.district} />} />
 							</Grid><Grid item xs={3}>
@@ -472,7 +473,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									value={formik.values.latitude}
 									onChange={formik.handleChange}
 									error={formik.touched.latitude && Boolean(formik.errors.latitude)}
-									helperText={formik.touched.latitude && formik.errors.latitude}
+									helperText={formik.touched.latitude && formik.errors.latitude as ReactNode}
 									fullWidth />
 							</Grid><Grid item xs={3}>
 								<TextField
@@ -482,12 +483,26 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									value={formik.values.longitude}
 									onChange={formik.handleChange}
 									error={formik.touched.longitude && Boolean(formik.errors.longitude)}
-									helperText={formik.touched.longitude && formik.errors.longitude}
+									helperText={formik.touched.longitude && formik.errors.longitude as ReactNode}
 									fullWidth />
 							</Grid><Grid item xs={12}>
 								<Typography>Arraste o Marcador para preencher automaticamente</Typography>
 								<Box id="map" style={{ height: 480 }} sx={{ pt: 2 }}>
-									<Map doubleClickZoom={false} scrollWheelZoom={true} centerCoordinates={centerCoordinates} markers={formik.values.latitude && formik.values.longitude ? [[formik.values.latitude, formik.values.longitude]] : []} onCoordinateChange={onCoordinateChange} changeView draggable zoom={13}/>
+									<Map 
+										doubleClickZoom={false} 
+										scrollWheelZoom={true} 
+										centerCoordinates={centerCoordinates} 
+										markers={formik.values.latitude && formik.values.longitude ? [[formik.values.latitude, formik.values.longitude]] : []} 
+										onCoordinateChange={onCoordinateChange} 
+										changeView 
+										draggable 
+										zoom={13}
+										popupContent={
+											<Link target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${formik.values.latitude}%2C${formik.values.longitude}`} passHref>
+												<StyledButton endIcon={<OpenInNew />}>Ver No Google Maps</StyledButton>
+											</Link>
+										}
+									/>
 								</Box>
 							</Grid></React.Fragment>							
 							}
@@ -499,11 +514,13 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									<Grid item xs={12}>
 										<Autocomplete
 											multiple
-											options={["T0","T1","T2","T3","T4"]}
+											options={["T0","T1","T2","T3","T4","T5"]}
+											// eslint-disable-next-line @typescript-eslint/no-unused-vars
+											isOptionEqualToValue={(_option, _value) => false}
 											freeSolo
-											value={formik.values.typologies.map((element) => element.typology)}
+											value={(formik.values.typologies.map((element) => element.typology)).filter( element => typeof element === "string") as string[]}
 											// defaultValue={formik.values.typology.map((element) => element.typology)}
-											onChange={ (e,v,r) => onTypologyChange(e,v,r)}
+											onChange={onTypologyChange}
 											getOptionLabel={(option) => option}
 											renderTags={(value, getTagProps) => value.map((option, index) => (
 												// eslint-disable-next-line react/jsx-key
@@ -518,7 +535,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 													ref={ref}
 													{...params}
 													label={"tipologia"}
-													helperText="Adicione uma tipologia para fornecer mais detalhes."
+													helperText="Adicione uma tipologia para fornecer mais detalhes. Pode seleccionar uma da lista ou introduzir uma nova."
 												/>
 											)} />
 									</Grid>
@@ -541,14 +558,14 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 																	label={"Número de quartos"}
 																	value={formik.values.typologies.at(index)?.bedroomNumber}
 																	onChange={formik.handleChange}
-																	type="number"
 																	error={
 																		formik.touched.typologies?.at(index)?.bedroomNumber &&
+																		// @ts-ignore 
 																Boolean(formik.errors.typologies?.at(index)?.bedroomNumber)
 																	}
 																	helperText={
-																		formik.touched.typologies?.at(index)?.bedroomNumber &&
-																formik.errors.typologies?.at(index)?.bedroomNumber
+																		// @ts-ignore 
+																		formik.errors.typologies?.at(index)?.bedroomNumber
 																	}
 																	fullWidth />
 															</Grid>
@@ -559,14 +576,14 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 																	label={"Número de casas de banho"}
 																	value={formik.values.typologies.at(index)?.bathroomNumber}
 																	onChange={formik.handleChange}
-																	type="number"
 																	error={
 																		formik.touched.typologies?.at(index)?.bathroomNumber &&
+																		// @ts-ignore 
 																Boolean(formik.errors.typologies?.at(index)?.bathroomNumber)
 																	}
 																	helperText={
-																		formik.touched.typologies?.at(index)?.bathroomNumber &&
-																formik.errors.typologies?.at(index)?.bathroomNumber
+																		// @ts-ignore 
+																		formik.errors.typologies?.at(index)?.bathroomNumber
 																	}
 																	fullWidth />
 															</Grid>
@@ -579,33 +596,56 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 																	onChange={formik.handleChange}
 																	error={
 																		formik.touched.typologies?.at(index)?.garageNumber &&
+																		// @ts-ignore 
 																Boolean(formik.errors.typologies?.at(index)?.garageNumber)
 																	}
 																	helperText={
-																		formik.touched.typologies?.at(index)?.garageNumber &&
-																formik.errors.typologies?.at(index)?.garageNumber
+																		// @ts-ignore 
+																		formik.errors.typologies?.at(index)?.garageNumber
 																	}
 																	fullWidth />
 															</Grid>
-															<Grid item xs={6}>
+															<Grid item xs={3}>
 																<TextField
-																	id="area"
-																	name={`typologies[${index}].area`}
-																	label={"Area"}
-																	value={formik.values.typologies.at(index)?.area}
+																	id="totalLotArea"
+																	name={`typologies[${index}].totalLotArea`}
+																	label={"Área Total do Lote"}
+																	value={formik.values.typologies.at(index)?.totalLotArea}
 																	onChange={formik.handleChange}
 																	fullWidth
-																	type="number"
 																	InputProps={{
 																		endAdornment: <InputAdornment position="start">{"\u33A1"}</InputAdornment>,
 																	}}
 																	error={
-																		formik.touched.typologies?.at(index)?.area &&
-																Boolean(formik.errors.typologies?.at(index)?.area)
+																		formik.touched.typologies?.at(index)?.totalLotArea &&
+																		// @ts-ignore 
+																		Boolean(formik.errors.typologies?.at(index)?.totalLotArea)
 																	}
 																	helperText={
-																		formik.touched.typologies?.at(index)?.area &&
-																formik.errors.typologies?.at(index)?.area
+																		// @ts-ignore 
+																		formik.errors.typologies?.at(index)?.totalLotArea
+																	}
+																/>
+															</Grid>
+															<Grid item xs={3}>
+																<TextField
+																	id="livingArea"
+																	name={`typologies[${index}].livingArea`}
+																	label={"Área Útil"}
+																	value={formik.values.typologies.at(index)?.livingArea}
+																	onChange={formik.handleChange}
+																	fullWidth
+																	InputProps={{
+																		endAdornment: <InputAdornment position="start">{"\u33A1"}</InputAdornment>,
+																	}}
+																	error={
+																		formik.touched.typologies?.at(index)?.livingArea &&
+																		// @ts-ignore 
+																Boolean(formik.errors.typologies?.at(index)?.livingArea)
+																	}
+																	helperText={
+																		// @ts-ignore 
+																		formik.errors.typologies?.at(index)?.livingArea
 																	}
 																/>
 															</Grid>
@@ -617,17 +657,17 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 																	value={formik.values.typologies.at(index)?.price}
 																	onChange={formik.handleChange}
 																	fullWidth
-																	type="number"
 																	InputProps={{
 																		endAdornment: <InputAdornment position="start">€</InputAdornment>,
 																  }}
 																  error={
 																		formik.touched.typologies?.at(index)?.price &&
+																		// @ts-ignore 
 																Boolean(formik.errors.typologies?.at(index)?.price)
 																	}
 																	helperText={
-																		formik.touched.typologies?.at(index)?.price &&
-																formik.errors.typologies?.at(index)?.price
+																		// @ts-ignore 
+																		formik.errors.typologies?.at(index)?.price
 																	}
 																/>
 															</Grid>
@@ -635,7 +675,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 																<Typography variant="h6">Adicionar Planta</Typography>
 																<CGSPDropzone
 																	maxContent={1}
-																	files={formik.values.typologies.at(index)?.plant != undefined ? [formik.values.typologies.at(index)?.plant] : undefined }
+																	files={formik.values.typologies.at(index)?.plant ? [formik.values.typologies.at(index)?.plant] as AbstractFile[] : undefined }
 																	onAddFile={ (files) => handleAddPlant(files,index)}
 																	onDeleteFile={ () => handleDeletePlant(index)} />
 															</Grid>
@@ -670,10 +710,10 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								</StyledButton>
 							</Grid>
 							<Grid item ml="auto">
-								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{error}</Typography>}
+								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{ !formik.isValid ? getErrorMessage(formik.errors) : error}</Typography>}
 							</Grid>
 							<Grid item >
-								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
+								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth disabled={!formik.isValid}>
 									{"Submeter"}
 								</StyledButton>
 							</Grid>

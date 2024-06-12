@@ -14,6 +14,20 @@ import { useTranslation } from "react-i18next";
 import { StyledButton } from "../../Button";
 import theme from "../../../theme";
 
+const allPhotos = (project?: Project): ProjectFile[] => {
+	const result = [];
+	if(project){
+		if(project.coverPhoto){
+			result.push(project.coverPhoto);
+		}
+		if(project.files){
+			result.push(...project.files);
+		}
+	}
+
+	return result;
+};
+
 const ProjectCarousel = ({ project } : { project?: Project}) => {
 	const [index, setIndex] = useState(0);
 	const [openModal, setOpenModal] = useState(false);
@@ -37,9 +51,8 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 	};
 
 	const carouselItems = () => {
-		const allPhotos =  project?.files ?  [project?.coverPhoto, ...(project?.files ?? [])] : [ project?.coverPhoto ] ;
 
-		return allPhotos.map((file, index) => ( file &&
+		return allPhotos(project).map((file, index) => ( file &&
 			<ProjectCarouselCard
 				key={`file${index}`}
 				index={index.toString()}
