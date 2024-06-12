@@ -193,7 +193,7 @@ export const Details = ({ project, minimal = false } : DetailsProps) => {
 			<Grid item>
 				<StyledTypography variant="body2" color="text.secondary">
 					<HomeWorkOutlined sx={{ marginRight: "5px" }} />
-					{t("projectDetails.typologies")}: {removeDuplicates(project.typologies?.map( details => details.typology + " "))} {removeDuplicates(project.typologies?.map( details => details.type + ""))}
+					{t("projectDetails.typologies")}: {removeDuplicates(project.typologies?.filter( details => details.typology).map( details => details.typology + " "))} {removeDuplicates(project.typologies?.filter( details => details.type).map( details => details.type + ""))}
 				</StyledTypography>
 			</Grid>
 			<Grid item textAlign={"center"}>
