@@ -2,5 +2,5 @@ type CarouselItem = {
   name: string;
   description: string;
   action: ReactElement;
-  image: unknown;
+  image: StaticImageData;
 };
