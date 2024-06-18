@@ -70,7 +70,7 @@ const Footer = () => {
 					</StyledStack>
 					<StyledStack direction="row" gap={1} side="right">
 						<Email/>
-						<Typography variant="subtitle1" component={"span"}>{t("email")}: cchegiraldosp@sapo.pt</Typography>
+						<Typography variant="subtitle1" component={"span"}>{t("email")}: geral@cchegiraldosp.pt</Typography>
 					</StyledStack>
 				</StyledItem>
 			</Grid>
