@@ -8,6 +8,13 @@ const nextConfig = {
 	i18n,
 	images: {
 		domains: ["cgsp-bucket.s3.eu-west-3.amazonaws.com"],
+		remotePatterns: [
+			{
+			  protocol: "https",
+			  hostname: "cgsp-bucket.s3.eu-west-3.amazonaws.com",
+			  port: "",
+			},
+		  ],
 	},
 };
 
