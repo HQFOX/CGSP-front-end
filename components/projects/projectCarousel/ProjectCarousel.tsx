@@ -24,12 +24,12 @@ const allPhotos = (project?: Project): ProjectFile[] => {
 			result.push(...project.files);
 		}
 	}
-
 	return result;
 };
 
 const ProjectCarousel = ({ project } : { project?: Project}) => {
 	const [index, setIndex] = useState(0);
+	const [files] = useState(allPhotos(project));
 	const [openModal, setOpenModal] = useState(false);
 	const [autoPlay, setAutoPlay] = useState(true);
 	const { t } = useTranslation(["projectpage"]);
@@ -52,7 +52,7 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 
 	const carouselItems = () => {
 
-		return allPhotos(project).map((file, index) => ( file &&
+		return files.map((file, index) => ( file &&
 			<ProjectCarouselCard
 				key={`file${index}`}
 				index={index.toString()}
@@ -98,7 +98,7 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 				open={openModal}
 				modalOpen={() => handleOpenModal(index)}
 				modalClose={handleCloseModal}
-				files={project?.files ?? []}
+				files={files}
 				index={index}
 				autoPlay={autoPlay}
 				handleCarouselItemChange={handleCarouselItemChange}
