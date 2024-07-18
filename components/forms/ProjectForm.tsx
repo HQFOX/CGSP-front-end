@@ -690,7 +690,6 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								<Grid item xs={12}>
 									<Typography variant="h6">Adicionar Fotos</Typography>
 									<CGSPDropzone
-										maxContent={3}
 										files={files}
 										onAddFile={handleAddFile}
 										onDeleteFile={handleDeleteFile}
