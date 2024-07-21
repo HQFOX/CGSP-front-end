@@ -9,7 +9,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Loading } from "../components/loading/Loading";
 import { AuthContext } from "../components/AuthContext";
-import { AuthenticationGuard } from "../components/AuthenticationGuard";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { getUser } from "../components/forms/utils";
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -24,13 +26,23 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const checkAdminRoute = () =>
 		router.pathname.includes("/admin");
 
-	const handleStop = () => {
+	const handleStop = () =>
 		setLoading(false);
-	};
 
-	const handleStart = () => {
+	const handleStart = () => 
 		setLoading(true);
-	};
+
+	useMemo(() => {
+		if(!user){
+			const cookie = Cookies.get("token");
+			if(cookie){
+				const decodedCookie: { sub: string, iat: number, exp: number} = jwtDecode(cookie);
+				if(decodedCookie.sub) {
+					getUser(decodedCookie.sub).then( (value) => {setUser(value);setIsAuth(true);});
+				}
+			}
+		}
+	},[user,setUser,isAuth]);
 
 	useEffect(() => {
  
@@ -59,11 +71,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
 					crossOrigin=""></script>
-				<AuthenticationGuard guardType={checkAdminRoute() ? "authenticated" : "unauthenticated"} >
-					<Layout isAdmin={checkAdminRoute()}>
-						{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
-					</Layout>
-				</AuthenticationGuard>
+				<Layout isAdmin={checkAdminRoute()}>
+					{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
+				</Layout>
 			</AuthContext.Provider>
 		</ThemeProvider>
 	);
