@@ -12,7 +12,7 @@ import { StyledButton } from "../Button";
 import { Loading } from "../loading/Loading";
 import { AuthContext } from "../AuthContext";
 import { useRouter } from "next/router";
-import { useFetch } from "./utils";
+import { getUser, useFetch } from "./utils";
 
 const postLogin = async (values: { username: string; password: string; }) => {
 
@@ -30,28 +30,6 @@ const postLogin = async (values: { username: string; password: string; }) => {
 	});
 
 	return res;
-};
-
-const getUser = async (username: string) => {
-
-	const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/user/${username}`;
-
-	const res = await useFetch("GET",endpoint, null , true).then( (response) => {
-		if(response.ok){
-			return response.json();
-		}
-		else {
-			throw new Error("Error Login" + response);
-		}
-
-	}).catch( error => {
-		console.log(error);
-	});
-
-	if(res)
-		return res as User;
-
-	return undefined;
 };
 
 export const LoginForm = () => {

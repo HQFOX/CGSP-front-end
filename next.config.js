@@ -7,7 +7,6 @@ const nextConfig = {
 	reactStrictMode: true,
 	i18n,
 	images: {
-		domains: ["cgsp-bucket.s3.eu-west-3.amazonaws.com"],
 		remotePatterns: [
 			{
 			  protocol: "https",

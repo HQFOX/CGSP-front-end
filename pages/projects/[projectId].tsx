@@ -42,7 +42,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
 import { EnrollmentModal } from "../../components/modals/enrollmentModal/enrollmentModal";
-import ProjectCarousel from "../../components/projects/projectCarousel/ProjectCarousel";
+import { ProjectCarousel } from "../../components/projects/projectCarousel/ProjectCarousel";
 import TabPanel from "../../components/tabpanel/TabPanel";
 import { UpdateStepper } from "../../components/updateStepper/UpdateStepper";
 import { Loading } from "../../components/loading/Loading";

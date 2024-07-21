@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { AddPhotoAlternate, Cancel } from "@mui/icons-material";
 import { Grid, IconButton, Typography } from "@mui/material";
@@ -43,6 +43,17 @@ const Container = styled.div`
 	min-height: 200px;
   `;
 
+const DeleteButton = styled(IconButton)({
+	position: "absolute",
+	top: "-16px",
+	right: "-16px",
+	backgroundColor: "#F5F5F580"
+});
+
+const ImageFrame = styled("div")({
+	position: "relative", width: 100, height: 100 , border: "1px solid #F5F5F5"
+});
+
 export type CGSPDropzoneProps = {
   label?: string;
   maxContent?: number;
@@ -62,19 +73,17 @@ export const CGSPDropzone = ({
 
 	const [disabled, setDisabled] = useState(false);
 
-	useEffect(() => {
+	useMemo(() => {
 		setDisabled(files && files.length >= maxContent ? true : false);
 	},[files]);
 
 	const handleAddFile = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-		console.log(acceptedFiles);
 		setErrors([]);
 		if (acceptedFiles.length > 0) onAddFile(acceptedFiles);
 		if (fileRejections.length > 0) setErrors(fileRejections[0].errors);
 	};
 
 	const {
-		// acceptedFiles, 
 		getRootProps, 
 		getInputProps, 
 		isFocused,
@@ -111,31 +120,25 @@ export const CGSPDropzone = ({
 					))}
 				</Container>
 			</Grid>
-			<Grid item>
-				{ files && files?.length > 0 && files.map( (file, index) =>
-					<div key={index} style={{ position: "relative" }}>
-						<div style={{ position: "relative", width: 100, height: 100 , border: "1px solid #F5F5F5"}}>
+			{ files && files?.length > 0 && files.map( (file, index) =>
+				<Grid item xs={2} key={index} spacing={2}>
+					<div style={{ position: "relative" }}>
+						<ImageFrame>
 							<Image
 								src={file.file ? URL.createObjectURL(file.file) : `${process.env.NEXT_PUBLIC_S3_URL}${file.filename}`}
 								fill
 								style={{objectFit: "contain"}}
 								alt="submitted image" />
-							<IconButton
+							<DeleteButton
 								aria-label="delete"
-								sx={{
-									position: "absolute",
-									top: "-16px",
-									right: "-16px",
-									backgroundColor: "#F5F5F580"
-								}}
 								color="secondary"
 								onClick={(e) => handleDeleteFile(e, file)}>
 								<Cancel />
-							</IconButton>
-						</div>
+							</DeleteButton>
+						</ImageFrame>
 					</div>
-				)}
-			</Grid>
+				</Grid>
+			)}
 		</Grid>
 	);
 };

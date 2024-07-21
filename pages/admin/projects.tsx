@@ -65,18 +65,18 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 						<StyledButton
 							startIcon={<Add />}
 							variant="contained"
-							onClick={() => setShowAddProjectForm(true)}>
+							onClick={() => setShowAddProjectForm(true)} disabled={showAddProjectForm || showEditProjectForm}>
               				Adicionar Projecto
 						</StyledButton>
 					</Grid>
 				</Grid>
 			)}
-			<ProjectTable projects={projects} handleShowProjectForm={(update) => handleShowProjectForm(update)} handleDelete={handleDelete}/>
+			<ProjectTable projects={projects} handleShowProjectForm={handleShowProjectForm} handleDelete={handleDelete}/>
 			{showAddProjectForm && (
 				<Suspense fallback={<Loading />}>
 					<ProjectForm
 						onCancel={() => setShowAddProjectForm(false)}
-						onSubmit={() => refreshData()}
+						onSubmit={refreshData}
 					/>
 				</Suspense>
 			)}
@@ -86,7 +86,7 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 						<ProjectForm
 							project={editProject}
 							onCancel={() => setShowEditProjectForm(false)}
-							onSubmit={() => refreshData()}						/>
+							onSubmit={refreshData}						/>
 					</Suspense>
 				)}
 			</div>

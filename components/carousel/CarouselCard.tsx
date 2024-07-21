@@ -40,7 +40,7 @@ const CarouselCard = ({ index, item }: CarouselCardProps) => {
 				</CardContent>
 			</Grid>
 			<Grid item xs={7}>
-				<Image width={1500} height={600} src={item.image.src} alt="" style={{ maxWidth: "70dvw", objectFit: "contain"}}/>
+				<Image width={1500} height={600} src={item.image.src} alt="" style={{ maxWidth: "70dvw", objectFit: "contain"}} priority/>
 			</Grid>
 		</Grid>
 	);

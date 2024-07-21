@@ -14,53 +14,50 @@ import { useTranslation } from "react-i18next";
 import { StyledButton } from "../../Button";
 import theme from "../../../theme";
 
-const allPhotos = (project?: Project): ProjectFile[] => {
-	const result = [];
-	if(project){
-		if(project.coverPhoto){
-			result.push(project.coverPhoto);
-		}
-		if(project.files){
-			result.push(...project.files);
-		}
+const styles = {
+	indicator: {
+		marginTop: "1em"
+	},
+	activeIndicator: {
+		color: theme.palette.primary.main,
 	}
+};
+
+const allPhotos = (project: Project): ProjectFile[] => {
+	const result = [];
+
+	if(project.coverPhoto){
+		result.push(project.coverPhoto);
+	}
+	if(project.files){
+		result.push(...project.files);
+	}
+
 	return result;
 };
 
-const ProjectCarousel = ({ project } : { project?: Project}) => {
+export const ProjectCarousel = ({ project } : { project: Project}) => {
+	const { t } = useTranslation(["projectpage"]);
+	
 	const [index, setIndex] = useState(0);
 	const [files] = useState(allPhotos(project));
 	const [openModal, setOpenModal] = useState(false);
 	const [autoPlay, setAutoPlay] = useState(true);
-	const { t } = useTranslation(["projectpage"]);
+	
 
-
-	const handleOpenModal = (index: number) => {
-		setIndex(index);
-		setOpenModal(true);
-		setAutoPlay(false);
-	};
-
-	const handleCloseModal = () => {
-		setOpenModal(false);
-		setAutoPlay(true);
+	const handleShowModal = (index?: number) => {
+		if(openModal){
+			setOpenModal(false);
+			setAutoPlay(true);
+		} else {
+			index && setIndex(index);
+			setOpenModal(true);
+			setAutoPlay(false);
+		}
 	};
 
 	const handleCarouselItemChange = (index?: number) => {
-		index ? setIndex(index) : setIndex(0);
-	};
-
-	const carouselItems = () => {
-
-		return files.map((file, index) => ( file &&
-			<ProjectCarouselCard
-				key={`file${index}`}
-				index={index.toString()}
-				item={`${process.env.NEXT_PUBLIC_S3_URL}${file.filename}`}
-				handleOpenModal={() => handleOpenModal(index)}
-				handleCloseModal={handleCloseModal}
-			/>
-		));
+		setIndex(index ?? 0);
 	};
 
 	return (
@@ -69,35 +66,37 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 				<Carousel
 					fullHeightHover
 					indicatorContainerProps={{
-						style: {
-							marginTop: "1em"
-						}
+						style: styles.indicator
 					}}
 					activeIndicatorIconButtonProps={{
-						style: {
-							color: theme.palette.primary.main,
-						}
+						style: styles.activeIndicator
 					}}
 					index={index}
-					// eslint-disable-next-line @typescript-eslint/no-unused-vars
-					onChange={(now?: number, next?) => handleCarouselItemChange(now)}
+					onChange={handleCarouselItemChange}
 					autoPlay={autoPlay}>
-					{carouselItems()}
+					{files.map((file, index) => ( file.filename &&
+			<ProjectCarouselCard
+				key={file.filename}
+				index={index}
+				item={`${process.env.NEXT_PUBLIC_S3_URL}${file.filename}`}
+				handleShowModal={handleShowModal}
+			/>
+					))}
 				</Carousel>
 				<CardActions>
 					<StyledButton
 						style={{ marginLeft: "auto" }}
 						variant={"outlined"}
 						startIcon={<Fullscreen />}
-						onClick={() => handleOpenModal(index)}>
+						onClick={() => handleShowModal(index)}>
 						{t("photoCategories.fullscreen")}
 					</StyledButton>
 				</CardActions>
 			</Card>
 			<ProjectModal
 				open={openModal}
-				modalOpen={() => handleOpenModal(index)}
-				modalClose={handleCloseModal}
+				modalOpen={() => handleShowModal(index)}
+				modalClose={handleShowModal}
 				files={files}
 				index={index}
 				autoPlay={autoPlay}
@@ -106,5 +105,3 @@ const ProjectCarousel = ({ project } : { project?: Project}) => {
 		</>
 	);
 };
-
-export default ProjectCarousel;

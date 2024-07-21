@@ -168,7 +168,7 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
             				checked={formik.values.subscribedUpdates}
             			/>
             		}
-            			label={"Subscribe to Updates"} />
+            			label={t("form.updateCheckbox")} />
             	</Grid>
             	<Grid item xs={12}>
             		<StyledButton type="submit" variant='contained' color='primary' value="submit" fullWidth>{t("form.submit")}</StyledButton>

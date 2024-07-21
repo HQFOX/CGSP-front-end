@@ -91,7 +91,7 @@ const Header = () => {
 							p: 2,
 							display: { xs: "none", md: "flex" }
 						}}>
-						<Image src={logo} alt="Cooperativa Giraldo Sem Pavor logo" width={180} height={60} />
+						<Image src={logo} alt="Cooperativa Giraldo Sem Pavor logo" width={180} height={60} priority/>
 					</Box>
 					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 						<IconButton

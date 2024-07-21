@@ -61,6 +61,7 @@
         "telephoneNumber": "Telephone Number",
         "submit": "Submit",
         "required": "Required",
+        "updateCheckbox": "Subscribe to Updates",
         "notice": "The data you fill in will only be used as a means of communicating about this project and, if you choose, to notify you of any updates about it posted on our website.\n They are not used for any other commercial purpose."
     },
     "successMessage" : {

@@ -6,7 +6,7 @@ import {
 import Image from "next/image";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const ProjectCarouselCard = ({ index, item, handleOpenModal, handleCloseModal }: CarouselCardProps) => {
+const ProjectCarouselCard = ({ index, item, handleShowModal }: CarouselCardProps) => {
 	
 	return (
 		<CardMedia>
@@ -15,18 +15,17 @@ const ProjectCarouselCard = ({ index, item, handleOpenModal, handleCloseModal }:
 					alt=""
 					src={item}
 					fill={true} style={{ objectFit: "cover" }}
-					onClick={handleOpenModal}
+					onClick={() => handleShowModal(index)}
 				/>
 			</div>
 		</CardMedia>
 	);
 };
 
-type CarouselCardProps = {
-  index: string;
+export interface CarouselCardProps {
+  index: number;
   item: string;
-  handleOpenModal: () => void;
-  handleCloseModal: () => void;
-};
+  handleShowModal: (index: number) => void;
+}
 
 export default ProjectCarouselCard;

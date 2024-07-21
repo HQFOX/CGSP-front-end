@@ -39,7 +39,7 @@
         "CONCLUDED" : "Concluída",
         "info" : {
             "WAITING" : "De momento a atribuição de lotes deste projeto aos sócios não está disponível.",
-            "ONGOING" : "A atribuição de lotes aos sócios deste projeto está a decorrer.",
+            "ONGOING" : "A atribuição de lotes aos sócios inscritos projeto está a decorrer.",
             "CONCLUDED" : "Todas os lotes deste projeto foram atribuídos."
         }
     },
@@ -49,7 +49,7 @@
         "CONCLUDED" : "Concluída",
         "info" : {
             "ALLOTMENTPERMIT" : "É necessária a aprovação do Alvará de Loteamento para começar a construção dos lotes deste projeto.",
-            "BUILDINGPERMIT" : "O processo dos lotes deste projeto construção está a decorrer.",
+            "BUILDINGPERMIT" : "O processo de construção dos lotes deste projeto está a decorrer.",
             "CONCLUDED" : "O processo de construção foi terminado."
         }
     },
@@ -62,7 +62,8 @@
         "telephoneNumber": "Número de telefone",
         "submit": "submeter",
         "required": "Obrigatório",
-        "notice": "Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e , se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site.\n Não são utilizados para qualquer outro fim comercial."
+        "updateCheckbox": "Subscrever a atualizações",
+        "notice": "Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e, se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site.\n Não são utilizados para qualquer outro fim comercial."
     },
     "successMessage" : {
         "success" : "Pedido de Pré-Inscrição submetido com successo.",

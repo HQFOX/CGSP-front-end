@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Layout from "../components/layout/layout";
@@ -21,12 +21,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const [isAuth, setIsAuth] = useState(false);
 
 
-	const checkAdminRoute = () => {
-		if(router.pathname.includes("/admin")){
-			return true;
-		}
-		return false;
-	};
+	const checkAdminRoute = () =>
+		router.pathname.includes("/admin");
 
 	const handleStop = () => {
 		setLoading(false);
@@ -51,27 +47,23 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	},[router]);
 
+	const authProviderValue = useMemo(() => ({ user, setUser, isAuth, setIsAuth }), [user, isAuth, router]);
+
   
 	return (
 		<ThemeProvider theme={theme}>
-			<AuthContext.Provider value={{user: user, setUser: setUser, isAuth, setIsAuth}}>
+			<AuthContext.Provider value={authProviderValue}>
 				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
 					integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
 					crossOrigin=""/>
 				<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
 					crossOrigin=""></script>
-				{checkAdminRoute() ? 
-					<AuthenticationGuard guardType={checkAdminRoute() ? "authenticated" : "unauthenticated"} >
-						<Layout isAdmin={true}>
-							{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
-						</Layout>
-					</AuthenticationGuard>
-					:
-					<Layout isAdmin={false}>
+				<AuthenticationGuard guardType={checkAdminRoute() ? "authenticated" : "unauthenticated"} >
+					<Layout isAdmin={checkAdminRoute()}>
 						{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
 					</Layout>
-				}
+				</AuthenticationGuard>
 			</AuthContext.Provider>
 		</ThemeProvider>
 	);
