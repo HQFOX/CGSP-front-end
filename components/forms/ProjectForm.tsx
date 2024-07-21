@@ -292,8 +292,6 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 
 	const postProject = async (values: unknown) => {
 
-		console.log(values);
-
 		const endpoint = project ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}` : `${process.env.NEXT_PUBLIC_API_URL}/project` ;
 
 		const res = await useFetch("POST", endpoint, values, true).then( (response) => {

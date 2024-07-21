@@ -32,7 +32,6 @@ const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data)
 
 			await useFetch("DELETE", endpoint, undefined, true).then( (response) => {
 				if(response.ok){
-					console.log(`Project ${id} deleted`);
 					refreshData();
 				}
 				else {

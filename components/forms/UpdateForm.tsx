@@ -69,8 +69,7 @@ export const UpdateForm = ({
 			values = {...values, createdOn: new Date(values.createdOn).toISOString()};
 
 			Promise.all(files.map( async (file) => submitFile(file)))
-				.then( async res => {
-					console.log(res);
+				.then( async () => {
 					
 					const valuesWithImage = {...values, files: files.map( file => { return { "filename": file.filename};})};
 
@@ -97,7 +96,6 @@ export const UpdateForm = ({
 				return response.json();
 			}
 			else {
-				console.log(response);
 				throw new Error("Update Post " + response.status);
 			}
 		}).catch( error => {

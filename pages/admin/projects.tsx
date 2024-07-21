@@ -99,10 +99,6 @@ export const getServerSideProps = async (ctx: any) => {
 	const res = await fetch(`${process.env.API_URL}/project`);
 	const projects = (await res.json()) as Project[];
 
-	const res2 = await fetch(`${process.env.API_URL}/info`);
-	console.log(await res2.ok);
-
-
 	return {
 		props: {
 			projects,

@@ -16,8 +16,6 @@ export const EnrollRequestForm = ({
 	onSubmit
 }: { request?: EnrollRequest, projects: Project[], onCancel: () => void, onSubmit: () => void}) => {
 
-	console.log(projects);
-
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitting, setSubmitting] = useState(false);
@@ -69,7 +67,6 @@ export const EnrollRequestForm = ({
 				return response.json();
 			}
 			else {
-				console.log(response);
 				throw new Error("Enroll request Post " + response.status);
 			}
 		}).catch( error => {
