@@ -121,7 +121,7 @@ export const CGSPDropzone = ({
 				</Container>
 			</Grid>
 			{ files && files?.length > 0 && files.map( (file, index) =>
-				<Grid item xs={2} key={index} spacing={2}>
+				<Grid item xs={2} key={index}>
 					<div style={{ position: "relative" }}>
 						<ImageFrame>
 							<Image

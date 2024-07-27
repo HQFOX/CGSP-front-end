@@ -1,6 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { Box, Divider, Grid, Typography } from "@mui/material";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { EnrollRequestTable } from "../../components/enrollrequests/EnrollRequestTable";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { Add } from "@mui/icons-material";
@@ -129,16 +128,6 @@ const EnrollRequestsAdmin = () => {
 			</div>
 		</PageContainer>
 	);
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getServerSideProps = async (ctx: any) => {
-
-	return {
-		props: {
-			...(await serverSideTranslations(ctx.locale, ["common", "footer", "header"]))
-		}
-	};
 };
 
 export default EnrollRequestsAdmin;

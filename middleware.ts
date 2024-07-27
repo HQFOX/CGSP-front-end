@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
  
 export function middleware(request: NextRequest) {
-	const user = request.cookies.get("token")?.value;
+	const user = request.cookies.get("cgsptoken")?.value;
 	if(!user)
 		return NextResponse.redirect(new URL("/login", request.url));
 }

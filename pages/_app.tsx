@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	useMemo(() => {
 		if(!user){
-			const cookie = Cookies.get("token");
+			const cookie = Cookies.get("cgsptoken");
 			if(cookie){
 				const decodedCookie: { sub: string, iat: number, exp: number} = jwtDecode(cookie);
 				if(decodedCookie.sub) {

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Box, Divider, Typography } from "@mui/material";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import { BasicChart } from "../../components/charts/BasicChart";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
 import { useFetch } from "../../components/forms/utils";
 import { Loading } from "../../components/loading/Loading";
-import { Box, Divider, Typography } from "@mui/material";
+
 
 const DashBoard = () => {
 

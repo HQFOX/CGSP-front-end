@@ -71,7 +71,6 @@ export const EnrollRequestTable = ({ requests, handleShowEditForm, handleDelete 
 							<IconButton
 								onClick={() => {
 									handleShowEditForm(element.row.original);
-									console.log(element.row.original);
 								}}>
 								<Edit />
 							</IconButton>

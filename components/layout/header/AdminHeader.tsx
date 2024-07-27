@@ -37,7 +37,7 @@ const AdminHeader = ({ setOpen }: HeaderProps) => {
 	const handleClose = (confirm: boolean) => {
 		setLogOutModal(false);
 		if(confirm) {
-			Cookies.remove("token");
+			Cookies.remove("cgsptoken");
 			setCurrentUser();
 			router.push("/");
 		}

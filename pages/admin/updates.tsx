@@ -1,12 +1,14 @@
-import React from "react";
-import { Box, Divider, Grid, Typography } from "@mui/material";
+import React, { Suspense, useState } from "react";
 import type { NextPage } from "next";
+
+import { Box, Divider, Grid, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
+
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import { UpdateTable } from "../../components/updates/UpdateTable";
 import { UpdateForm } from "../../components/forms/UpdateForm";
-import { Suspense, useState } from "react";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
-import { Add } from "@mui/icons-material";
 import { Loading } from "../../components/loading/Loading";
 import { StyledButton } from "../../components/Button";
 import { useFetch } from "../../components/forms/utils";

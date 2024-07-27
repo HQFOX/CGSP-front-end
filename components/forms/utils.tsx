@@ -49,7 +49,6 @@ export const getPresignedUrl = async (file: File) => {
 	if (response.status == 200) {
 		const result = (await response.json()) as AbstractFile;
 		result.file = file;
-		console.log(result);
 		return result;
 	}
 };
@@ -78,7 +77,7 @@ export const useFetch = (method = "GET",  endpoint: string, values?: unknown, au
 
 	const body = values ? JSON.stringify(values) : null;
 
-	const cookie = auth ? { Authorization : `Bearer ${Cookies.get("token")}`} : null;
+	const cookie = auth ? { Authorization : `Bearer ${Cookies.get("cgsptoken")}`} : null;
 	
 	const headers = method === "POST" ? { "Content-Type": "application/json" } : null;
 

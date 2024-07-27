@@ -1,8 +1,7 @@
-import React from "react";
+import React, { Suspense, useState } from "react";
 import { Box, Divider, Grid, Typography } from "@mui/material";
 import type { NextPage } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { Suspense, useState } from "react";
 import { ProjectForm } from "../../components/forms/ProjectForm";
 import { Add } from "@mui/icons-material";
 import { Loading } from "../../components/loading/Loading";

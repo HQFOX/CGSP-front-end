@@ -54,8 +54,8 @@ export const LoginForm = () => {
 			setSubmitting(true);
 			await postLogin(values).then( async response => {
 
-				Cookies.remove("token");
-				response && Cookies.set("token", response, { expires: 2 });
+				Cookies.remove("cgsptoken");
+				response && Cookies.set("cgsptoken", response, { expires: 2 });
 				const user = await getUser(values.username);
 
 				if(user){
