@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 
+import { Container, Grid, IconButton, MenuItem, Paper, TextField, Typography } from "@mui/material";
+import { CheckCircle, Close } from "@mui/icons-material";
+
 import { useFormik } from "formik";
 import * as Yup from "yup";
+
 import { CancelModal } from "../modals/CancelModal";
-import { Container, Grid, Grow, IconButton, MenuItem, Paper, Stack, TextField, Typography } from "@mui/material";
-import { CheckCircle, Close } from "@mui/icons-material";
+
 import { Loading } from "../loading/Loading";
 import { StyledButton } from "../Button";
 import { useFetch } from "./utils";
+import { SuccessMessage } from "./SuccessMessage";
 
 export const EnrollRequestForm = ({
 	request,
@@ -98,13 +102,7 @@ export const EnrollRequestForm = ({
 					</Grid>
 				</Grid>
 				{success ? (
-					<Grow in={true}>
-						<Stack alignContent={"center"} pt={6} sx={{ textAlign: "center" }}>
-							<CheckCircle color={"success"} style={{ fontSize: "120px", margin: "auto" }} />
-							<Typography variant="h5">{ request ? "Atualização Editada": "Nova Atualização Adicionada"}</Typography>
-							<Typography variant="subtitle1" color="text.secondary">Confirme na tabela de Inscrições</Typography>
-						</Stack>
-					</Grow>
+					<SuccessMessage title={ request ? "Atualização Editada": "Nova Atualização Adicionada"} subtitle="Confirme na tabela de Inscrições"/>
 				) : (
 					<form onSubmit={formik.handleSubmit}>
 						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
@@ -162,7 +160,7 @@ export const EnrollRequestForm = ({
 									value={formik.values.projectId}
 									onChange={formik.handleChange}
 									fullWidth
-									helperText="Projeto ao qual esta pessoa se deseja inscriver."
+									helperText="Projeto ao qual esta pessoa se deseja inscrever."
 								>
 									{projects &&
 										projects.length > 0 &&

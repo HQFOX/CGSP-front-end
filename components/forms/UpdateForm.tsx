@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import {
 	Container,
 	Grid,
-	Grow,
 	IconButton,
 	MenuItem,
 	Paper,
-	Stack,
 	TextField,
 	Typography
 } from "@mui/material";
@@ -23,6 +21,7 @@ import { StyledButton } from "../Button";
 import { AbstractFile } from "./types";
 import { getPresignedUrl , submitFile, useFetch } from "./utils";
 import { Loading } from "../loading/Loading";
+import { SuccessMessage } from "./SuccessMessage";
 
 export const UpdateForm = ({
 	 update,
@@ -127,13 +126,7 @@ export const UpdateForm = ({
 					</Grid>
 				</Grid>
 				{success ? (
-					<Grow in={true}>
-						<Stack alignContent={"center"} pt={6} sx={{ textAlign: "center" }}>
-							<CheckCircle color={"success"} style={{ fontSize: "120px", margin: "auto" }} />
-							<Typography variant="h5">{ update ? "Atualização Editada": "Nova Atualização Adicionada"}</Typography>
-							<Typography variant="subtitle1" color="text.secondary">Confirme na tabela de atualizações ou na página pública de atualizações</Typography>
-						</Stack>
-					</Grow>
+					<SuccessMessage title={ update ? "Atualização Editada": "Nova Atualização Adicionada"} subtitle={"Confirme na tabela de atualizações ou na página pública de atualizações"}/>
 				) : (
 					<form onSubmit={formik.handleSubmit}>
 						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>

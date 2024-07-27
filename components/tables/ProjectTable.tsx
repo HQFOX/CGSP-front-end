@@ -6,7 +6,7 @@ import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
 import { Delete, Edit } from "@mui/icons-material";
 
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 import { DeleteModal } from "../modals/DeleteModal";
 import { TableActions } from "../updates/TableActions";
@@ -35,7 +35,7 @@ export const ProjectTable = ({ projects, handleShowProjectForm, handleDelete }: 
 				}),
 				columnHelper.accessor("coverPhoto", {
 					id: "coverPhoto",
-					cell: (info) => info.getValue()?.filename && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.filename}`} alt={""} width={50} height={50} />,
+					cell: (info) => info.getValue()?.filename && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.filename}`} alt={""} width={50} height={50} priority />,
 					header: () => <Typography>Imagem</Typography>
 				}),
 				columnHelper.accessor("assignmentStatus", {

@@ -43,8 +43,8 @@ export const LoginForm = () => {
 
 	const formik = useFormik({
 		initialValues: {
-			username: "Henrique",
-			password: "123",
+			username: "",
+			password: "",
 		},
 		validationSchema: Yup.object({
 			username: Yup.string().required("Obrigatório"),
@@ -112,7 +112,7 @@ export const LoginForm = () => {
 								hidden/>
 						</Grid>
 						<Grid item>
-							{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <></>}
+							{submitting ? <Loading /> : success && <CheckCircle color={"success"} style={{ fontSize: "50px" }} />}
 						</Grid>
 						<Grid item ml="auto">
 							<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>

@@ -17,8 +17,6 @@ import {
 	AccordionSummary,
 	Paper,
 	Container,
-	Grow,
-	Stack,
 	IconButton,
 	Box,
 	InputLabel,
@@ -44,6 +42,7 @@ import { useTranslation } from "next-i18next";
 import { Loading } from "../loading/Loading";
 import { LatLngTuple } from "leaflet";
 import { districtCenterCoordinates } from "../projects/projectInventory/ProjectInventory";
+import { SuccessMessage } from "./SuccessMessage";
 
 const Map = dynamic(() => import("../map/Map"), {
 	ssr: false
@@ -59,11 +58,10 @@ interface TypologyDetailsForm extends Omit<TypologyDetails, "plant"> {
 	plant?: AbstractFile
 }
 
-const getErrorMessage = (errors: FormikErrors<any>) => {
+const getErrorMessage = (errors: FormikErrors<any>,t? : any) => {
 	const result = [];
-	for (const [key, value] of Object.entries(errors)) {
-		console.log(`${key}: ${value}`);
-		result.push(`Erro no campo ${key}. `);
+	for (const key of Object.keys(errors)) {
+		result.push(`Erro no campo ${t(`projectDetails.${key}`)}. `);
 	}
 	return result;
 };
@@ -198,16 +196,16 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		}
 	};
 
-	const handleAddFile = async (newfiles: File[]) => {
-		newfiles.map( file =>  getPresignedUrl(file).then( value => value && setFiles([...files, value])));
+	const handleAddFile = async (newFiles: File[]) => {
+		newFiles.map( file =>  getPresignedUrl(file).then( value => value && setFiles([...files, value])));
 	};
 
 	const handleDeleteFile = (file: AbstractFile) => {
 		setFiles(files.filter( item => item != file));
 	};
 
-	const handleAddCover = async (newfiles: File[]) => {
-		newfiles.map( file =>  getPresignedUrl(file).then( value => {
+	const handleAddCover = async (newFiles: File[]) => {
+		newFiles.map( file =>  getPresignedUrl(file).then( value => {
 			if(value){
 				formik.setValues({
 					...formik.values,
@@ -223,9 +221,9 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 		});
 	};
 
-	const handleAddPlant = async (newfiles: File[], index: number) => {
+	const handleAddPlant = async (newFiles: File[], index: number) => {
 
-		newfiles.map( file =>  getPresignedUrl(file).then( value => {
+		newFiles.map( file =>  getPresignedUrl(file).then( value => {
 			if(value){
 				const updatedTypologies = formik.values.typologies;
 
@@ -312,7 +310,6 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 
 		if(res)
 			return res as Project;
-		return undefined;
 	};
 
 	return (
@@ -329,13 +326,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 					</Grid>
 				</Grid>
 				{success ? (
-					<Grow in={true}>
-						<Stack alignContent={"center"} pt={6} sx={{ textAlign: "center" }}>
-							<CheckCircle color={"success"} style={{ fontSize: "120px", margin: "auto" }} />
-							<Typography variant="h5">{project ? "Projeto Editado" : "Novo Projeto Adicionado"}</Typography>
-							<Typography variant="subtitle1"></Typography>
-						</Stack>
-					</Grow>
+					<SuccessMessage title={project ? "Projeto Editado" : "Novo Projeto Adicionado"} />
 				) : (
 					<form onSubmit={formik.handleSubmit}>
 						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
@@ -448,6 +439,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 							</Grid><Grid item xs={3}>
 								<Autocomplete
 									id="district"
+									freeSolo
 									options={districtList}
 									value={formik.values.district}
 									onChange={(_e,value) => handleDistrictChange(value)}
@@ -484,7 +476,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 									helperText={formik.touched.longitude && formik.errors.longitude as ReactNode}
 									fullWidth />
 							</Grid><Grid item xs={12}>
-								<Typography>Arraste o Marcador para preencher automaticamente</Typography>
+								<Typography variant="body2">Arraste o Marcador ou clique duas vezes no mapa para preencher automaticamente.</Typography>
 								<Box id="map" style={{ height: 480 }} sx={{ pt: 2 }}>
 									<Map 
 										doubleClickZoom={false} 
@@ -533,7 +525,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 													ref={ref}
 													{...params}
 													label={"tipologia"}
-													helperText="Adicione uma tipologia para fornecer mais detalhes. Pode seleccionar uma da lista ou introduzir uma nova."
+													helperText="Adicione uma tipologia para fornecer mais detalhes. Pode selecionar uma da lista ou introduzir uma nova."
 												/>
 											)} />
 									</Grid>
@@ -708,7 +700,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: { project?: Project
 								</StyledButton>
 							</Grid>
 							<Grid item ml="auto">
-								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{ !formik.isValid ? getErrorMessage(formik.errors) : error}</Typography>}
+								{submitting ? <Loading /> : success ?  <CheckCircle color={"success"} style={{ fontSize: "50px" }} />: <Typography color={"error"}>{ !formik.isValid ? getErrorMessage(formik.errors,t) : error}</Typography>}
 							</Grid>
 							<Grid item >
 								<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth disabled={!formik.isValid}>

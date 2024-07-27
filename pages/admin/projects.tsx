@@ -1,7 +1,10 @@
 import React, { Suspense, useState } from "react";
-import { Box, Divider, Grid, Typography } from "@mui/material";
 import type { NextPage } from "next";
+
+import { Box, Divider, Grid, Typography } from "@mui/material";
+
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import { ProjectForm } from "../../components/forms/ProjectForm";
 import { Add } from "@mui/icons-material";
 import { Loading } from "../../components/loading/Loading";
@@ -15,7 +18,6 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 	const [editProject, setEditProject ] = useState<Project | undefined>();
 	const [showAddProjectForm, setShowAddProjectForm] = useState(false);
 	const [showEditProjectForm, setShowEditProjectForm] = useState(false);
-
 
 	const refreshData = async () => {
 		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/project`);
@@ -32,7 +34,6 @@ const ProjectAdmin: NextPage<{ projects: Project[] }> = (data) => {
 
 			await useFetch("DELETE", endpoint, undefined, true).then( (response) => {
 				if(response.ok){
-					console.log(`Project ${id} deleted`);
 					refreshData();
 				}
 				else {
