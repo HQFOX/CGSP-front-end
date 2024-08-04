@@ -1,17 +1,15 @@
-import React from "react";
+import React, { useState, ReactElement } from "react";
 
 import type { NextPage } from "next";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
-import { Box, Card, CardContent, CardHeader, Divider, Grid, Typography } from "@mui/material";
+import { Avatar, Box, CardContent, CardHeader, Divider, Grid, styled, Typography } from "@mui/material";
 
 import styles from "../styles/Home.module.css";
 
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
-import styled from "@emotion/styled";
 
 import CGSPCarousel from "../components/carousel/Carousel";
 import logo from "../public/logo.svg";
@@ -21,6 +19,7 @@ import { Architecture, BookmarkAdd, Construction, Description, Group, MeetingRoo
 import { StyledButton } from "../components/Button";
 import Link from "next/link";
 import { LatLngTuple } from "leaflet";
+import { StyledCard } from "../components/StyledCard";
 
 const Map = dynamic(() => import("../components/map/Map"), {
 	ssr: false
@@ -31,7 +30,29 @@ const StyledMain = styled("main")({
 	backgroundColor: "white",
 });
 
+
+
+
 const CGSPcenterCoordinates: LatLngTuple = [38.56633674453089, -7.925327404275489];
+
+const HoverCard = ({title, color, icon, children}: {title: ReactElement, color: string, icon: ReactElement, children: ReactElement}) => {
+	const [hovered, setHovered] = useState(false);
+
+	const handleMouseEnter = () => setHovered(true);
+	const handleMouseLeave = () => setHovered(false);
+
+	return (
+		<StyledCard
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+			variant="outlined"
+		>
+			<CardHeader title={<Title >{title}</Title>}  
+				avatar={<Avatar sx={{color: hovered ? "white" : color, bgcolor: hovered ? color : "white", transition: "0.3s", boxShadow: "0 5px 8px 0 rgba(0,0,0,.09)",}}>{icon}</Avatar>}/>
+			{children}
+		</StyledCard>
+	);
+};
 
 
 
@@ -84,46 +105,42 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 						</Title>
 						<Divider />
 					</Box>
-					<Grid container columnSpacing={2}>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title >{t("projectElaborationTitle")}</Title>}  avatar={<Architecture color="success" />}/>
+					<Grid container spacing={2}>
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard  title={<Title >{t("projectElaborationTitle")}</Title>} icon={<Architecture color="inherit" fontSize="large"/>} color={theme.palette.success.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("projectElaborationText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<><Title>{t("inscriptionTitle")}</Title></>} avatar={<PersonAdd color="success"/>}/>
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard title={<Title>{t("inscriptionTitle")}</Title>} icon={<PersonAdd color="inherit" fontSize="large"/>} color={theme.palette.success.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("inscriptionText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>{t("reservationTitle")}</Title>} avatar={<BookmarkAdd color="success"/>}/>
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard title={<Title>{t("reservationTitle")}</Title>} icon={<BookmarkAdd color="inherit" fontSize="large"/>} color={theme.palette.success.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("reservationText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>{t("constructionTitle")}</Title>} avatar={<Construction color="success"/>} />
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard title={<Title>{t("reservationTitle")}</Title>} icon={<Construction color="inherit" fontSize="large"/>} color={theme.palette.success.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("projectElaborationText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
 					</Grid>
 				</Box>
@@ -142,45 +159,41 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 						<Divider />
 					</Box>
 					<Grid container columnSpacing={2}>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title >{t("controlledCostsTitle")}</Title>}  avatar={<Savings color="primary" />}/>
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard title={<Title >{t("controlledCostsTitle")}</Title>} icon={<Savings color="inherit" fontSize="large"/>} color={theme.palette.primary.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("controlledCostsText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>{t("transparencyTitle")}</Title>} avatar={<MeetingRoom color="primary"/>}/>
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard title={<Title>{t("transparencyTitle")}</Title>} icon={<MeetingRoom color="inherit" fontSize="large"/>} color={theme.palette.primary.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("transparencyText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>{t("bureaucracyTitle")}</Title>} avatar={<Description color="primary"/>}/>
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard title={<Title>{t("bureaucracyTitle")}</Title>} icon={<Description color="inherit" fontSize="large"/>} color={theme.palette.primary.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("bureaucracyText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
-						<Grid item xs={1} md={3}>
-							<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
-								<CardHeader title={<Title>{t("middlemanTitle")}</Title>} avatar={<Group color="primary"/>} />
+						<Grid item xs={12} sm={6} md={3}>
+							<HoverCard title={<Title>{t("middlemanTitle")}</Title>} icon={<Group color="inherit" fontSize="large"/>} color={theme.palette.primary.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("middlemanText")}
 									</Typography>
 								</CardContent>
-							</Card>
+							</HoverCard>
 						</Grid>
 					</Grid>
 				</Box>

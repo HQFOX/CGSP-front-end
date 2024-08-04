@@ -31,7 +31,7 @@
     "status" : {
         "completed" : "Terminado",
         "building" : "Em construção",
-        "open" : "Incrições Abertas"
+        "open" : "Inscrições Abertas"
     },
     "assignmentStatus" : {
         "WAITING" : "Em Espera",
@@ -40,7 +40,7 @@
         "info" : {
             "WAITING" : "De momento a atribuição de lotes deste projeto aos sócios não está disponível.",
             "ONGOING" : "A atribuição de lotes aos sócios inscritos projeto está a decorrer.",
-            "CONCLUDED" : "Todas os lotes deste projeto foram atribuídos."
+            "CONCLUDED" : "Todos os lotes deste projeto foram atribuídos."
         }
     },
     "constructionStatus" : {
@@ -66,12 +66,12 @@
         "notice": "Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e, se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site.\n Não são utilizados para qualquer outro fim comercial."
     },
     "successMessage" : {
-        "success" : "Pedido de Pré-Inscrição submetido com successo.",
+        "success" : "Pedido de Pré-Inscrição submetido com sucesso.",
         "confirmation" : "Um email de confirmação foi enviado para o email {{email}}",
         "contactSoon" : "Entraremos em contacto consigo em breve."
     },
     "errorMessage" : {
-        "error" : "Erro ao subemeter Pedido de Pré-Inscrição.",
+        "error" : "Erro ao submeter Pedido de Pré-Inscrição.",
         "reason" : "Por algum motivo o Pedido de Pré-Inscrição não foi submetido.",
         "trySoon" : "Por favor tente mais tarde."
     },

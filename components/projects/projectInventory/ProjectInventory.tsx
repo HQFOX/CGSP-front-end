@@ -124,38 +124,17 @@ export const ProjectInventory = ({
 		return result;
 	};
 
-	const filterResultsByPrice = (param: number[], projects: Project[]) => {
-		let result: Project[] = projects;
-		
-		result = projects.filter( (project) => 
-			project.typologies ? project.typologies?.filter( (typology ) => !typology.price || typology.price >= param[0] && typology.price <= param[1] ).length > 0 : false
-		);
-		return result;
-	};
+	const filterResultsByPrice = (param: number[], projects: Project[]) =>  projects.filter( (project) => 
+		project.typologies ? project.typologies?.filter( (typology ) => !typology.price || typology.price >= param[0] && typology.price <= param[1] ).length > 0 : false
+	);
 
-	const filterResultsByTypology = (param: string[], projects: Project[]) => {
-		let result: Project[] = projects;
-		
-		result = projects.filter( (project) => project.typologies && project.typologies.some( typology => typology.typology && param.includes(typology.typology)));
-		
-		return result;
-	};
+	const filterResultsByTypology = (param: string[], projects: Project[]) => 
+		projects.filter( (project) => project.typologies && project.typologies.some( typology => typology.typology && param.includes(typology.typology)));
 
-	const filterResultsByAssignmentStatus = (param: string[], projects: Project[]) => {
-		let result: Project[] = projects;
-		
-		result = projects.filter( (project) => project.assignmentStatus && param.includes(project.assignmentStatus));
-		
-		return result;
-	};
-
-	const filterResultsByConstructionStatus = (param: string[], projects: Project[]) => {
-		let result: Project[] = projects;
-		
-		result = projects.filter( (project) => project.constructionStatus && param.includes(project.constructionStatus));
-		
-		return result;
-	};
+	const filterResultsByAssignmentStatus = (param: string[], projects: Project[]) => projects.filter( (project) => 
+		project.assignmentStatus && param.includes(project.assignmentStatus));
+	const filterResultsByConstructionStatus = (param: string[], projects: Project[]) => projects.filter( (project) => 
+		project.constructionStatus && param.includes(project.constructionStatus));
 
 	useMemo(() => {
 		let results = projects;
@@ -301,9 +280,9 @@ export const ProjectInventory = ({
 			<Grid container>
 				{view === "card" &&
                         projectSearchResults.map((project, i) => (
-                        	<Fade key={i} in={animationStart} style={{ transitionDelay: animationStart ? `${i}00ms` : "0ms" }} unmountOnExit>
-                        		<Grid key={i} item xs={12} md={6} p={1} onClick={() => handleClick(project.id)}>
-                        			<ProjectCard key={i} project={project} />
+                        	<Fade key={project.id} in={animationStart} style={{ transitionDelay: animationStart ? `${i}00ms` : "0ms" }} unmountOnExit>
+                        		<Grid  item xs={12} md={6} p={1} onClick={() => handleClick(project.id)}>
+                        			<ProjectCard key={project.id} project={project} />
                         		</Grid>
                         	</Fade>
                         ))}

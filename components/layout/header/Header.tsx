@@ -24,6 +24,16 @@ const StyledAppBar = styled(AppBar)(
 `
 );
 
+const StyledHeaderButton = styled(Button)({
+	padding: "7px 15px 7px 15px",
+	display: "block", 
+	borderRadius: "60px", 
+	color: "white", 
+	textTransform: "none", 
+	textAlign: "center", 
+	fontWeight: "700"
+});
+
 const Header = () => {
 	const { t } = useTranslation("header");
 	const router = useRouter();
@@ -53,11 +63,6 @@ const Header = () => {
 			headerText: t("updates"),
 			path: "/updates"
 		},
-		// {
-		// 	id: 5,
-		// 	headerText: t("faq"),
-		// 	path: "/faq"
-		// }
 	];
 
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -165,15 +170,13 @@ const Header = () => {
 					<Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
 						{pages.map((page) => (
 							<Link key={page.id} href={page.path} passHref>
-								<Button 
+								<StyledHeaderButton 
 									tabIndex={-1}
-									sx={{ paddingLeft: "15px", paddingRight: "15px", paddingTop: "7px", paddingBottom: "7px", display: "block", borderRadius: "60px", color: "white", textTransform: "none", textAlign: "center", fontWeight: "700"}}
 									disableElevation variant='contained'>
 									{page.headerText}
-								</Button>
+								</StyledHeaderButton>
 							</Link>
 						))}
-						{/* <Box sx={{ mr: 0, justifyContent: "center" }}> */}
 						<Button
 							id="languageDropdown"
 							aria-haspopup="true"
@@ -191,13 +194,12 @@ const Header = () => {
 							MenuListProps={{
 								"aria-labelledby": "languageDropdown"
 							}}>
-							{locales?.map((locale, index) => (
-								<MenuItem key={index} onClick={() => handleClose(locale)}>
+							{locales?.map((locale) => (
+								<MenuItem key={locale} onClick={() => handleClose(locale)}>
 									{t(`languages.${locale}`)}
 								</MenuItem>
 							))}
 						</Menu>
-						{/* </Box> */}
 					</Box>
 				</Toolbar>
 			</Container>

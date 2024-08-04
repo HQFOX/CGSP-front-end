@@ -1,6 +1,5 @@
 import React from "react";
 import {
-	Card,
 	CardActions,
 	CardContent,
 	CardHeader,
@@ -14,7 +13,14 @@ import { StyledButton } from "../Button";
 import router from "next/router";
 import { Details } from "../details/Details";
 import { Title } from "../Title";
+import { StyledCard } from "../StyledCard";
+import styled from "@emotion/styled";
 
+const StyledDiv = styled("div")({
+	position: "relative", 
+	overflow: "hidden", 
+	height: "400px"
+});
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
 	const { t } = useTranslation(["projectpage", "common"]);
@@ -22,12 +28,12 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 	
 
 	return (
-		<Card sx={{ border: "1px solid rgb(237, 237, 237)", boxShadow: 0}}>
+		<StyledCard variant="outlined">
 			<CardHeader title={<Title>{project.title}</Title>} subheader={`${t("projectDetails.district")}: ${project.district}`} />
 			<CardMedia>
-				<div style={{ position: "relative", overflow: "hidden", height: "400px" }}>
+				<StyledDiv>
 					{ project.coverPhoto && <Image src={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto.filename}`} alt={`cover image for ${project.title} project`} fill style={{ objectFit: "cover" }} />}
-				</div>
+				</StyledDiv>
 			</CardMedia>
 			<CardContent>
 				<Details project={project} />
@@ -37,7 +43,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 					{t("projectDetails.details")}
 				</StyledButton>
 			</CardActions>
-		</Card>
+		</StyledCard>
 	);
 };
 
