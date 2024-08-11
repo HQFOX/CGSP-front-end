@@ -5,7 +5,6 @@ export const normalizeString = (value: string): string => {
 export type SearchParams = {
 	title: string;
     district: string;
-	status: string;
 	assignmentStatus: AssignmentStatusType[];
 	constructionStatus: ConstructionStatusType[];
 	priceRange: number[];

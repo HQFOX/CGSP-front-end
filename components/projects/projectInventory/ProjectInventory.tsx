@@ -45,12 +45,11 @@ export const ProjectInventory = ({
 	const [search, setSearch] = useState<SearchParams>({
 		title: "",
 		district: t("allm"),
-		status: t("allm"),
-		assignmentStatus: ["WAITING","ONGOING","CONCLUDED"],
-		constructionStatus: ["ALLOTMENTPERMIT", "BUILDINGPERMIT", "CONCLUDED"],
-		priceRange: getPriceRange(projects),
-		typologies: getTypologies(projects),
-		types: getTypes(projects),
+		assignmentStatus: [],
+		constructionStatus: [],
+		priceRange: [],
+		typologies: [],
+		types: [],
 		wildcard: ""
 	});
 
@@ -78,18 +77,7 @@ export const ProjectInventory = ({
 		if (district !== t("allm")) {
 			result = projects.filter(
 				(project) =>
-					project.district && project.district.toLowerCase().includes(district.toLowerCase())
-			);
-			return result;
-		}
-		return result;
-	};
-
-	const filterResultsByStatus = (status: string, projects: Project[]): Project[] => {
-		let result: Project[] = projects;
-		if (status !== t("allm")) {
-			result = projects.filter(
-				(project) => project.status && project.status.toLowerCase().includes(status.toLowerCase())
+					project.district?.toLowerCase().includes(district.toLowerCase())
 			);
 			return result;
 		}
@@ -140,13 +128,11 @@ export const ProjectInventory = ({
 		let results = projects;
 		results = filterResultsByLocation(search.district, results);
 		results = filterResultsByTitle(search.title, results);
-		results = filterResultsByStatus(search.status, results);
 		results = filterResultsByWildCard(search.wildcard, results);
-		results = filterResultsByPrice(search.priceRange, results);
-		results = filterResultsByTypology(search.typologies, results);
-		// results = filterResultsByType(search.types, results);
-		results = filterResultsByAssignmentStatus(search.assignmentStatus, results);
-		results = filterResultsByConstructionStatus(search.constructionStatus, results);
+		if( search.priceRange.length > 0) results = filterResultsByPrice(search.priceRange, results);
+		if(search.typologies.length > 0) results = filterResultsByTypology(search.typologies, results);
+		if(search.assignmentStatus.length > 0) results = filterResultsByAssignmentStatus(search.assignmentStatus, results);
+		if(search.constructionStatus.length > 0) results = filterResultsByConstructionStatus(search.constructionStatus, results);
 		setProjectSearchResults(results);
 	}, [search, projects]);
 
@@ -187,14 +173,14 @@ export const ProjectInventory = ({
 		}
 	};
 
-	const onPriceRangeChange = (range: number[]) => {
-		setSearch((search) => ({ ...search, priceRange: range }));
+	const onPriceRangeChange = (checked: boolean, range?: number[]) => {
+		if(checked && range)
+			setSearch((search) => ({ ...search, priceRange: range }));
+		else { 
+			setSearch((search => ({...search, priceRange: []})));
+		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const onTitleChange = (title: string) => {
-		setSearch((search) => ({ ...search, title: title }));
-	};
 	const onWildCardChange = (wildcard: string) => {
 		setSearch((search) => ({ ...search, wildcard: wildcard }));
 	};

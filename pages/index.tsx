@@ -47,7 +47,7 @@ const HoverCard = ({title, color, icon, children}: {title: ReactElement, color: 
 			onMouseLeave={handleMouseLeave}
 			variant="outlined"
 		>
-			<CardHeader title={<Title >{title}</Title>}  
+			<CardHeader title={<Title component={"span"}>{title}</Title>}  
 				avatar={<Avatar sx={{color: hovered ? "white" : color, bgcolor: hovered ? color : "white", transition: "0.3s", boxShadow: "0 5px 8px 0 rgba(0,0,0,.09)",}}>{icon}</Avatar>}/>
 			{children}
 		</StyledCard>

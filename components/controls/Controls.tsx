@@ -31,7 +31,7 @@ export interface ControlProps {
     onViewChange?: (view: ViewType) => void,
     onStatusChange?: (status: string) => void,
     onDistrictChange?: (district: string) => void,
-	onPriceRangeChange?: (range: number[]) => void,
+	onPriceRangeChange?: (checked: boolean, range?: number[]) => void,
 	onTypologyChange?: (typology: string, checked: boolean, type: "typologies" | "types") => void,
 	// onTypeChange?: (type: string, checked: boolean) => void,
 	onAssignmentStatusChange?: (status: AssignmentStatusType, checked: boolean) => void,
@@ -68,11 +68,11 @@ export const Controls = ({
 	const open = Boolean(anchorEl);
 	const id = open ? "simple-popper" : undefined;
 
-	// const [priceRangeS, setPriceRange] = React.useState<number[]>(priceRange);
+	const [priceRangeState, setPriceRangeState] = React.useState<number[]>(priceRange);
 
-	const handleChange = (event: Event, newValue: number | number[]) => {
-		if(newValue instanceof Array)
-			onPriceRangeChange(newValue);
+	const handleChange = (event: unknown, checked: boolean, newValue?: number | number[]) => {
+		if( newValue instanceof Array ) setPriceRangeState(newValue);
+		onPriceRangeChange(checked, priceRangeState);
 	};
 
 	const handleTypologyChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
@@ -121,14 +121,6 @@ export const Controls = ({
                     	</IconButton>
                     </Grid>
 				}
-				{/* <Grid item>
-                <IconButton
-                    aria-label="list view"
-                    onClick={() => handleViewChange("list")}
-                    color={view === "list" ? "primary" : "default"}>
-                    <ViewListOutlined />
-                </IconButton>
-            </Grid> */}
 				{onDistrictChange && 
                     <Grid item>
                     	<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
@@ -204,13 +196,16 @@ export const Controls = ({
 									</Box>
 								</div>
 								<div>
-									<Typography sx={{ mr: 1, verticalAlign: "middle" }} component={"span"} variant="body1">
-										{t("projectDetails.price")}
-									</Typography>
+									<FormControlLabel control={
+										<Checkbox 
+											name=""
+											onChange={(e, checked) => handleChange(e,checked )}
+											checked={search.priceRange.length > 0} 
+										/>} label={t("projectDetails.price")} />
 									<Slider
 										getAriaLabel={() => "price range"}
-										value={search.priceRange}
-										onChange={handleChange}
+										value={priceRangeState}
+										onChange={(event, value) => handleChange(event, true,  value)}
 										valueLabelDisplay="auto"
 										marks={[{value: priceRange[0], label: priceRange[0]}, {value: priceRange[1], label: priceRange[1]}]}
 										min={priceRange[0]}
