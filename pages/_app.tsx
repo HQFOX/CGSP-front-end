@@ -1,16 +1,21 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
+
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { ThemeProvider } from "@emotion/react";
+
+import { appWithTranslation } from "next-i18next";
+
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Layout from "../components/layout/layout";
-import { ThemeProvider } from "@emotion/react";
 import theme from "../theme";
-import { appWithTranslation } from "next-i18next";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Loading } from "../components/loading/Loading";
 import { AuthContext } from "../components/AuthContext";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
+
 import { getUser } from "../components/forms/utils";
 
 
@@ -71,6 +76,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
 					crossOrigin=""></script>
+				{!checkAdminRoute && <GoogleAnalytics gaId={process.env.NEXT_GOOGLEID ?? ""} />}
 				<Layout isAdmin={checkAdminRoute()}>
 					{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
 				</Layout>

@@ -20,6 +20,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
+    "@next/third-parties": "^14.2.5",
     "@tanstack/react-table": "^8.17.3",
     "aws-sdk": "^2.1648.0",
     "echarts": "^5.5.0",
