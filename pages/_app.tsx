@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect, useState } from "react";
 
-// import { GoogleAnalytics } from "@next/third-parties/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { ThemeProvider } from "@emotion/react";
 
 import { appWithTranslation } from "next-i18next";
@@ -76,7 +76,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
 					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
 					crossOrigin=""></script>
-				{/* {!checkAdminRoute() && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLEID ?? ""} />} */}
+				{!checkAdminRoute() && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLEID ?? ""} />}
 				<Layout isAdmin={checkAdminRoute()}>
 					{loading ? <Loading height='70vh'/> : <Component {...pageProps} />}
 				</Layout>
