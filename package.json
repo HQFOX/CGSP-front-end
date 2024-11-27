@@ -12,7 +12,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docker-build": "npm run build && docker build -t nextapp .",
+    "docker-push": "npm run docker-build && docker image push hqfox/nextapp"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -23,6 +25,7 @@
     "@next/third-parties": "^14.2.5",
     "@tanstack/react-table": "^8.17.3",
     "aws-sdk": "^2.1648.0",
+    "cgsp-front-end": "file:",
     "echarts": "^5.5.0",
     "formik": "^2.4.6",
     "i18next": "^23.11.5",

@@ -230,12 +230,14 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
-  
-	const res = await fetch(`${process.env.API_URL}/update`);
-	const updates = (await res.json()) as Update[];
 
+	const res = fetch(`${process.env.API_URL}/update`)
+		.then( res => res.ok ? res.json().then( data => data) : console.log(res.statusText));
+  
+
+	const updates = res ? await res as Update[] : [];
 	return { props: { 
-		updates,
+		updates: updates,
 		...(await serverSideTranslations(ctx.locale, ["common", "footer", "header", "homepage"]))
 	}};
 };
