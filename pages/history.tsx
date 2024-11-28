@@ -39,9 +39,14 @@ const History: NextPage<{ projects: Project[] }> = (data) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
-	const res = await fetch(`${process.env.API_URL}/project/history`);
-	const projects = (await res.json()) as Project[];
-
+	const res = await fetch(`${process.env.API_URL}/project/history`)
+	.then(res => {
+		if(res.ok) {
+			return res.json().then(data => data)
+		}
+		console.error("Error fetching projects")
+	})
+	const projects = res ? await res as Project[] : [];
 	return {
 		props: {
 			projects,

@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 
 import { Container, Grid, IconButton, Paper, TextField, Typography } from "@mui/material";
-import { CheckCircle, Close } from "@mui/icons-material";
+import { CheckCircle, Close, Error as ErrorIcone } from "@mui/icons-material";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -38,6 +38,7 @@ export const LoginForm = () => {
 
 	const [submitting, setSubmitting] = useState(false);
 	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState(false)
 
 	const { setUser: setCurrentUser } = useContext(AuthContext);
 
@@ -51,6 +52,7 @@ export const LoginForm = () => {
 			password: Yup.string().required("Obrigatório")
 		}),
 		onSubmit: async (values) => {
+			setError(false);
 			setSubmitting(true);
 			await postLogin(values).then( async response => {
 
@@ -65,11 +67,23 @@ export const LoginForm = () => {
 				}
 				else{
 					setSuccess(false);
+					setError(true);
 				}
 			});
 			setSubmitting(false);
+			setError(true);
 		}
 	});
+
+	const statusIcon = useMemo(() => {
+		if(submitting)
+			return <Loading />
+		
+		if(success)
+			return <CheckCircle color={"success"} style={{ fontSize: "50px" }} />
+		if(error)
+			return <ErrorIcone color={"error"} style={{ fontSize: "40px" }} />
+	},[submitting, success, error])
 
 	return (
 		<Paper sx={{ mt: 4, maxWidth: "40dvw"}}>
@@ -79,7 +93,7 @@ export const LoginForm = () => {
 						<Typography variant={"h5"}>{"Login"}</Typography>
 					</Grid>
 					<Grid item ml="auto">
-						<IconButton>
+						<IconButton onClick={() => router.push("/")}>
 							<Close />
 						</IconButton>
 					</Grid>
@@ -112,11 +126,11 @@ export const LoginForm = () => {
 								hidden/>
 						</Grid>
 						<Grid item>
-							{submitting ? <Loading /> : success && <CheckCircle color={"success"} style={{ fontSize: "50px" }} />}
+							{statusIcon}
 						</Grid>
 						<Grid item ml="auto">
 							<StyledButton type="submit" variant="contained" color="primary" value="submit" fullWidth>
-								{"Log in"}
+								{"Login"}
 							</StyledButton>
 						</Grid>
 					</Grid>

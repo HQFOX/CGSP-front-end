@@ -28,9 +28,15 @@ const UpdatePage: NextPage<{ updates: Update[]}> = (data) => {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
-	const res = await fetch(`${process.env.API_URL}/update`);
-	const updates = (await res.json()) as Update[];
+	const res = fetch(`${process.env.API_URL}/update`)
+	.then( res => { 
+		if(res.ok) { 
+			return res.json().then( data => data)
+		}
+		console.error("Error fetching updates")
+	})
 
+	const updates = res ? await res as Update[] : [];
 	return {
 		props: {
 			updates,

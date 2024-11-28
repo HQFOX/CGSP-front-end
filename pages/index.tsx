@@ -232,12 +232,17 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 export const getServerSideProps = async (ctx: any) => {
 
 	const res = fetch(`${process.env.API_URL}/update`)
-		.then( res => res.ok ? res.json().then( data => data) : console.log(res.statusText));
+		.then( res => { 
+			if(res.ok) { 
+				return res.json().then( data => data)
+			}
+			console.error("Error fetching updates")
+		})
   
 
 	const updates = res ? await res as Update[] : [];
 	return { props: { 
-		updates: updates,
+		updates,
 		...(await serverSideTranslations(ctx.locale, ["common", "footer", "header", "homepage"]))
 	}};
 };

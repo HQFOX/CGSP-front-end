@@ -1,0 +1,10 @@
+
+User-agent: *
+Disallow: /login
+
+User-agent: *
+Disallow: /admin
+
+# Allow all crawlers
+User-agent: *
+Allow: /
