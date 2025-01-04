@@ -80,7 +80,7 @@ export const CGSPDropzone = ({
 	const handleAddFile = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
 		setErrors([]);
 		if (acceptedFiles.length > 0) onAddFile(acceptedFiles);
-		if (fileRejections.length > 0) setErrors(fileRejections[0].errors);
+		if (fileRejections.length > 0) setErrors(fileRejections[0].errors as any);
 	};
 
 	const {

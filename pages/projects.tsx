@@ -44,7 +44,7 @@ export const getServerSideProps = async (ctx: any) => {
 		}
 		console.error("Error fetching projects")
 	})
-	const projects = res ? await res as Project[] : [];
+	const projects = await res ?? [];
 	return {
 		props: {
 			projects,

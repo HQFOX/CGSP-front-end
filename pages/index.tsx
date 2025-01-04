@@ -240,7 +240,7 @@ export const getServerSideProps = async (ctx: any) => {
 		})
   
 
-	const updates = res ? await res as Update[] : [];
+	const updates = await res ?? [];
 	return { props: { 
 		updates,
 		...(await serverSideTranslations(ctx.locale, ["common", "footer", "header", "homepage"]))
