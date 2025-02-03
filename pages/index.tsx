@@ -134,7 +134,7 @@ const Home: NextPage<{updates : Update[] }> = ( ) => {
 							</HoverCard>
 						</Grid>
 						<Grid item xs={12} sm={6} md={3}>
-							<HoverCard title={<Title>{t("reservationTitle")}</Title>} icon={<Construction color="inherit" fontSize="large"/>} color={theme.palette.success.main}>
+							<HoverCard title={<Title>{t("constructionTitle")}</Title>} icon={<Construction color="inherit" fontSize="large"/>} color={theme.palette.success.main}>
 								<CardContent>
 									<Typography variant="body2" color="text.secondary">
 										{t("projectElaborationText")}

@@ -9,10 +9,10 @@ const StyledMain = styled.main({
 	backgroundColor: theme.bg.main
 });
 
-export const PageContainer = ({children}: {children?: ReactNode}) => {
+export const PageContainer = ({children, admin = false}: {children?: ReactNode, admin?: boolean}) => {
 	return (
 		<StyledMain>
-			<Container sx={{ pt: 10, pb: 10 }}>
+			<Container sx={{ pt: 10, pb: 10 }} maxWidth={admin ? "xl" : "lg"}>
 				{children}
 			</Container>
 		</StyledMain>

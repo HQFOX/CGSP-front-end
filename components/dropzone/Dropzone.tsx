@@ -94,7 +94,8 @@ export const CGSPDropzone = ({
 		disabled: disabled,
 		accept: {
 			  "image/jpeg": [],
-			  "image/png": []
+			  "image/png": [],
+			  "image/jpg": [],
 		}
 		  });
 

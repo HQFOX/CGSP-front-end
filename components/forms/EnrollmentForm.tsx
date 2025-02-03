@@ -77,7 +77,6 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
 			telephoneNumber: Yup.string().notRequired(),
 			subscribedUpdates: Yup.boolean()
 		}),
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		onSubmit: async (values) => {
 			setSubmitting(true);
 
@@ -86,7 +85,7 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
 			await useFetch("POST",endpoint,values,false).then( (response) => {
 				if(response.ok){
 					setSuccess(true);
-
+					setSubmitting(false);
 					return response.json();
 				}
 				else {
@@ -96,11 +95,10 @@ export const EnrollmentForm = ({project} : {project: Project}) => {
 				setSuccess(false);
 				// setError("Erro a submeter Atualização");
 				console.log(error);
+				setSubmitting(false);
 			});
 
 			setSubmitting(false);
-
-
 		},
 	});
 
