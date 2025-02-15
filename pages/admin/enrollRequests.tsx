@@ -1,12 +1,15 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { Box, Divider, Grid, Typography } from "@mui/material";
+
+import { Box, Divider, Grid2 as Grid, Typography } from "@mui/material";
+import { Add } from "@mui/icons-material";
+
 import { EnrollRequestTable } from "../../components/enrollrequests/EnrollRequestTable";
 import { PageContainer } from "../../components/pageContainer/PageContainer";
-import { Add } from "@mui/icons-material";
-import { StyledButton } from "../../components/Button";
+
 import { useFetch } from "../../components/forms/utils";
-import { Loading } from "../../components/loading/Loading";
 import { EnrollRequestForm } from "../../components/forms/EnrollRequestForm";
+
+import { StyledButton, Loading } from "../../components";
 
 const EnrollRequestsAdmin = () => {
 	const [requests, setRequests] = useState<EnrollRequest[]>([]);
@@ -20,7 +23,8 @@ const EnrollRequestsAdmin = () => {
 			const data = useFetch("GET",`${process.env.NEXT_PUBLIC_API_URL}/enroll`, null,true)
 				.then( res => {
 			 if(res.ok){
-						return res.json() as unknown as EnrollRequest[];
+				const response = res.json() as unknown as EnrollRequest[];
+				return response;
 			 }
 			 else {
 						throw new Error("Error fetching requests " + res.status);
@@ -34,10 +38,11 @@ const EnrollRequestsAdmin = () => {
 		});
 
 		const fetchProjects = async () => {
-			const data = useFetch("GET",`${process.env.NEXT_PUBLIC_API_URL}/project/current`, null,true)
+			const data = useFetch("GET",`${process.env.NEXT_PUBLIC_API_URL}/project`, undefined ,true)
 				.then( res => {
 			 if(res.ok){
-						return res.json() as unknown as Project[];
+				const response = res.json() as unknown as Project[];
+				return response;
 			 }
 			 else {
 						throw new Error("Error fetching projects " + res.status);
@@ -54,7 +59,7 @@ const EnrollRequestsAdmin = () => {
 	
 
 	const refreshData = async () => {
-		const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/enroll`);
+		const res = await useFetch("GET",`${process.env.NEXT_PUBLIC_API_URL}/enroll`, undefined, true);
 		if (res.status == 200) {
 			const request = (await res.json()) as EnrollRequest[];
 
@@ -86,7 +91,7 @@ const EnrollRequestsAdmin = () => {
 	};
 
 	return (
-		<PageContainer>
+		<PageContainer admin>
 			<Box sx={{ pb: 4 }}>
 				<Typography variant="h5" component="h1">
 					Tabela de Pedidos de Inscrição
@@ -95,7 +100,7 @@ const EnrollRequestsAdmin = () => {
 			</Box>
 			{!showAddRequestForm && (
 				<Grid container  mt={2} mb={2}>
-					<Grid item>
+					<Grid>
 						<StyledButton
 							startIcon={<Add />}
 							variant="contained"
@@ -105,7 +110,7 @@ const EnrollRequestsAdmin = () => {
 					</Grid>
 				</Grid>
 			)}
-			<EnrollRequestTable requests={requests} handleDelete={handleDelete} handleShowEditForm={handleShowEnrollRequestForm}/>
+			<EnrollRequestTable requests={requests} projects={projects} handleDelete={handleDelete} handleShowEditForm={handleShowEnrollRequestForm}/>
 			{showAddRequestForm && (
 				<Suspense fallback={<Loading />}>
 					<EnrollRequestForm

@@ -6,5 +6,6 @@ type EnrollRequest = {
     email?: string;
     projectId?: string;
     status?: string;
+    subscribedUpdates?: boolean;
     createdOn?: string;
 }

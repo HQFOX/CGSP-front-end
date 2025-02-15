@@ -17,21 +17,33 @@ import {
 	getCoreRowModel,
 	getFilteredRowModel,
 	getPaginationRowModel,
+	getSortedRowModel,
+	SortingState,
 	useReactTable
 } from "@tanstack/react-table";
 import { Delete, Edit } from "@mui/icons-material";
 
+import { SortAscending, SortDescending } from "@phosphor-icons/react";
+
 import { DeleteModal } from "../modals/DeleteModal";
 
 
-export const EnrollRequestTable = ({ requests, handleShowEditForm, handleDelete }: { requests: EnrollRequest[], handleShowEditForm: (request: EnrollRequest) => void, handleDelete: (id: string | undefined) => void}) => {
+export const EnrollRequestTable = ({ requests, projects, handleShowEditForm, handleDelete }: { requests: EnrollRequest[], projects: Project[], handleShowEditForm: (request: EnrollRequest) => void, handleDelete: (id: string | undefined) => void}) => {
 	const [data, setData ] = React.useState(requests);
+
+	const [sorting, setSorting] = React.useState<SortingState>([{ "id": "createdOn", "desc": true}])
 
 	useEffect(() => {
 		setData(requests);
 	},[requests]);
 
 	const [deleteModal, setDeleteModal] = React.useState<{open: boolean, data: EnrollRequest | undefined}>({ open: false, data: undefined});
+
+	const findProject = (id?: string) => {
+		if(!id) return "-"
+		const project = projects.find( p => p.id === id);
+		return project?.title ?? "-";
+	}
 
 	const columnHelper = createColumnHelper<EnrollRequest>();
 
@@ -56,9 +68,17 @@ export const EnrollRequestTable = ({ requests, handleShowEditForm, handleDelete 
 					cell: (info) => <Typography>{info.getValue()}</Typography>,
 					header: () => <Typography>Email</Typography>
 				}),
+				columnHelper.accessor("projectId", {
+					cell: (info) => <Typography>{findProject(info.getValue())}</Typography>,
+					header: () => <Typography>Project Id</Typography>
+				}),
 				columnHelper.accessor("status", {
 					cell: (info) => <Typography>{info.getValue()}</Typography>,
 					header: () => <Typography>Estado</Typography>
+				}),
+				columnHelper.accessor("subscribedUpdates", {
+					cell: (info) => <Typography>{info.getValue()?.toString() === "true" ? "Sim" : "Não"}</Typography>,
+					header: () => <Typography>Subscrito a atualizações</Typography>
 				}),
 				columnHelper.accessor("createdOn", {
 					cell: (info) => <Typography>{info.getValue()}</Typography>,
@@ -88,6 +108,11 @@ export const EnrollRequestTable = ({ requests, handleShowEditForm, handleDelete 
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(), //client-side sorting
+		onSortingChange: setSorting,
+		state: {
+			sorting,
+		  },
 	});
 
 	const { pageSize, pageIndex } = table.getState().pagination;
@@ -106,9 +131,19 @@ export const EnrollRequestTable = ({ requests, handleShowEditForm, handleDelete 
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => (
 									<TableCell key={header.id} component="th">
-										{header.isPlaceholder
-											? null
-											: flexRender(header.column.columnDef.header, header.getContext())}
+										<div onClick={header.column.getToggleSortingHandler()} style={{ display: "flex", justifyContent: "space-between", cursor: "pointer"}} className={
+                          header.column.getCanSort()
+                            ? 'cursor-pointer select-none'
+                            : ''
+                        }>
+											{header.isPlaceholder
+												? null
+												: flexRender(header.column.columnDef.header, header.getContext())}
+											{{
+                          asc: <SortAscending />,
+                          desc: <SortDescending /> ,
+                        }[header.column.getIsSorted() as string] ?? null}
+										</div>
 									</TableCell>
 								))}
 							</TableRow>

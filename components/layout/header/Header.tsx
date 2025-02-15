@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import theme from "../../../theme";
 
 const StyledAppBar = styled(AppBar)(
 	({ theme }) => `
@@ -80,8 +81,9 @@ const Header = () => {
 		setAnchorElNav(event.currentTarget);
 	};
 
-	const handleCloseNavMenu = () => {
+	const handleCloseNavMenu = (route?: string) => {
 		setAnchorElNav(null);
+		if(route) router.push(route)
 	};
 
 	return (
@@ -101,11 +103,12 @@ const Header = () => {
 					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 						<IconButton
 							size="large"
-							aria-label="account of current user"
+							aria-label="navigation menu"
 							aria-controls="menu-appbar"
 							aria-haspopup="true"
 							onClick={handleOpenNavMenu}
-							color="inherit">
+							color="primary"
+							>
 							<MenuIcon />
 						</IconButton>
 						<Menu
@@ -121,12 +124,12 @@ const Header = () => {
 								horizontal: "left"
 							}}
 							open={Boolean(anchorElNav)}
-							onClose={handleCloseNavMenu}
+							onClose={() => handleCloseNavMenu()}
 							sx={{
-								display: { xs: "block", md: "none" }
+								display: { xs: "block", md: "none" },
 							}}>
 							{pages.map((page) => (
-								<MenuItem key={page.headerText} onClick={handleCloseNavMenu}>
+								<MenuItem key={page.headerText} onClick={() => handleCloseNavMenu(page.path)}>
 									<Box textAlign="center">{page.headerText}</Box>
 								</MenuItem>
 							))}
