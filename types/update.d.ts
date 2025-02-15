@@ -4,9 +4,9 @@ type Update = {
   content?: string;
   createdOn?: string;
   image?: string;
-  files: {filename: string}[]
+  files: { filename: string }[];
   project?: {
-    projectId: string,
-    title: string,
-  } 
+    projectId: string;
+    title: string;
+  };
 };

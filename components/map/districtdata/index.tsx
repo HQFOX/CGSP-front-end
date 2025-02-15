@@ -1,3 +1,3 @@
-export * from "./Beja";
-export * from "./Evora";
-export * from "./Portalegre";
+export * from './Beja';
+export * from './Evora';
+export * from './Portalegre';
