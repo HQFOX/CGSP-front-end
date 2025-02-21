@@ -159,8 +159,8 @@ const basicChartOptions = (chartData: Project[]): ReactEChartsProps['option'] =>
     // @ts-ignore
     data: [
       [project.createdOn, 0],
-      ...project.enrollRequests.map((request, index) => [request.createdOn, index + 1]),
-      [new Date().toISOString().slice(0, 10), project.enrollRequests.length]
+      ...project.enrollRequests?.map((request, index) => [request.createdOn, index + 1]) ?? [],
+      [new Date().toISOString().slice(0, 10), project.enrollRequests?.length]
     ]
   }))
   // {
