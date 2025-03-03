@@ -60,7 +60,7 @@ export const LoginForm = () => {
         if (user) {
           setCurrentUser(user);
           setSuccess(true);
-          router.push('admin/projects');
+          router.push('admin/projects/current');
         } else {
           setSuccess(false);
           setError(true);
