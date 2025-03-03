@@ -20,6 +20,7 @@ type Project = {
   createdOn?: string;
   enrollRequests?: EnrollRequest[];
   enrollRequestsCount?: number;
+  priority?: number;
 };
 
 type TypologyDetails = {

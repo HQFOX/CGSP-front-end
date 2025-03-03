@@ -7,8 +7,9 @@ import { VerticalNavigation } from '../verticalNavigation/VerticalNavigation';
 import Footer from './footer/Footer';
 import AdminHeader from './header/AdminHeader';
 import Header from './header/Header';
+import { PageItem } from '../TreeList/TreeList';
 
-const pages = [
+const pages: PageItem[] = [
   {
     id: 1,
     text: 'Dashboard',
@@ -18,8 +19,24 @@ const pages = [
   {
     id: 2,
     text: 'Projetos',
-    path: '/admin/projects',
-    icon: <Foundation />
+    icon: <Foundation />,
+    children: [
+      {
+        id: 5,
+        text: "Criar Projeto",
+        path: '/admin/projects/create',
+      },
+      {
+        id: 6,
+        text: "Projetos Atuais",
+        path: '/admin/projects/current',
+      },
+      {
+        id: 7,
+        text: "Projetos Concluídos",
+        path: '/admin/projects/history',
+      },
+    ]
   },
   {
     id: 3,

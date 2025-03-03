@@ -9,5 +9,6 @@
     "endOfLine": "crlf",
     "importOrder": ["^react", "^(?!react)\\w+$","<THIRD_PARTY_MODULES>", "^components/(.*)$", "^[./]" ],
     "importOrderSeparation": true, 
-    "importOrderSortSpecifiers": true 
+    "importOrderSortSpecifiers": true ,
+    "editor.formatOnSave": true
   }
