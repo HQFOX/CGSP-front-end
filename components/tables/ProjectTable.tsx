@@ -92,9 +92,7 @@ const ProjectTable = ({
   handleUpdateProjectPriority,
 
 }: ProjectTableProps) => {
-  const [data, setData] = useState<Project[]>([]);
-
-  // const [sorting, setSorting] = React.useState<SortingState>([{ id: 'priority', desc: false}]);
+  const [data, setData] = useState<Project[]>(projects);
 
   const dataIds = useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id),
@@ -102,10 +100,6 @@ const ProjectTable = ({
   )
 
   const { t } = useTranslation(['projectpage', 'common']);
-
-  useMemo(() => {
-    setData(projects);
-  }, [projects]);
 
   const [deleteModal, setDeleteModal] = React.useState<{
     open: boolean;
@@ -194,7 +188,8 @@ const ProjectTable = ({
     getCoreRowModel: getCoreRowModel(),
     getRowId: row => row.id, 
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
+    autoResetPageIndex: false
   });
 
   const { pageSize, pageIndex } = table.getState().pagination;
@@ -208,6 +203,7 @@ const ProjectTable = ({
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
     if (active && over && active.id !== over.id) {
+
       setData((prevData) => {
         const oldIndex = prevData.findIndex((item) => item.id === active.id);
         const newIndex = prevData.findIndex((item) => item.id === over.id);
@@ -215,7 +211,7 @@ const ProjectTable = ({
         if (oldIndex !== -1 && newIndex !== -1) {
           const newData = arrayMove(prevData, oldIndex, newIndex);
           handleUpdateProjectPriority(newData);
-          return [...newData]; // Ensure React detects the change
+          return newData; // Ensure React detects the change
         }
     
         return prevData;
