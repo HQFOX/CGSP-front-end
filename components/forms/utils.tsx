@@ -80,7 +80,7 @@ export const useFetch = (
 
   const cookie = auth ? { Authorization: `Bearer ${Cookies.get('cgsptoken')}` } : null;
 
-  const headers = method === 'POST' ? { 'Content-Type': 'application/json' } : null;
+  const headers = values ? { 'Content-Type': 'application/json' } : null;
 
   const options = {
     method: method,

@@ -58,14 +58,21 @@ export const UpdateTable = ({
     }),
     columnHelper.accessor('files', {
       id: 'files',
-      cell: (info) => (
-        <Image
-          src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.[0].filename}`}
-          alt={''}
-          width={50}
-          height={50}
-        />
-      ),
+      cell: (info) => { 
+        const files = info.getValue();
+        if(Array.isArray(files)){
+          if(files[0]){
+            return (
+              <Image
+                src={`${process.env.NEXT_PUBLIC_S3_URL}${files[0].filename}`}
+                alt={''}
+                width={50}
+                height={50}
+              />
+            )
+          }
+        }
+      },
       header: () => <Typography>Imagem</Typography>
     }),
     columnHelper.accessor('content', {

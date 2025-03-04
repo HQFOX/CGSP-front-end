@@ -2,8 +2,10 @@ import React from 'react';
 
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import { cx } from '@emotion/css'
 
 import theme from '../../theme';
+import { styles } from './styles';
 
 const spinner = keyframes`
     0% {
@@ -33,10 +35,11 @@ const StyledSpinner = styled('div')({
 
 type LoadingProps = {
   height?: string;
+  icon?: boolean;
 };
 
-export const Loading = ({ height }: LoadingProps) => (
-  <StyledSpinnerContainer height={height}>
-    <StyledSpinner></StyledSpinner>
+export const Loading = ({ height, icon = false}: LoadingProps) => (
+  <StyledSpinnerContainer height={height} className="">
+    <StyledSpinner className={cx({ [styles.spinerIcon]: icon})}></StyledSpinner>
   </StyledSpinnerContainer>
 );

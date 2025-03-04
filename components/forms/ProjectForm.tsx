@@ -76,8 +76,8 @@ export const ProjectForm = ({
   onSubmit
 }: {
   project?: Project;
-  onCancel: () => void;
-  onSubmit: () => void;
+  onCancel?: () => void;
+  onSubmit?: () => void;
 }) => {
   const { t } = useTranslation(['projectpage', 'common']);
 
@@ -300,7 +300,7 @@ export const ProjectForm = ({
 
   const handleClose = (confirm: boolean) => {
     setCancelModal(false);
-    confirm && onCancel();
+    confirm && onCancel?.();
   };
 
   const handleDistrictChange = (district: string | null) => {
@@ -339,7 +339,7 @@ export const ProjectForm = ({
       .then((response) => {
         if (response.ok) {
           setSuccess(true);
-          onSubmit();
+          onSubmit?.();
           return response.json();
         } else {
           throw new Error('Project Post ' + response.status);
@@ -364,15 +364,15 @@ export const ProjectForm = ({
               {project ? 'Editar Projeto' : 'Adicionar Projeto'}
             </Typography>
           </Grid>
-          <Grid item ml="auto">
-            <IconButton
+          { onCancel ? (<Grid item ml="auto">
+             <IconButton
               onClick={() => {
                 success ? onCancel() : setCancelModal(true);
               }}
             >
               <Close />
             </IconButton>
-          </Grid>
+          </Grid>) : <></>}
         </Grid>
         {success ? (
           <SuccessMessage title={project ? 'Projeto Editado' : 'Novo Projeto Adicionado'} />
@@ -863,11 +863,11 @@ export const ProjectForm = ({
                   {'Submeter'}
                 </StyledButton>
               </Grid>
-              <Grid item>
+              { onCancel && <Grid item>
                 <StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
                   Cancelar
                 </StyledButton>
-              </Grid>
+              </Grid>}
             </Grid>
           </form>
         )}

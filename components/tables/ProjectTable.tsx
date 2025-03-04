@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { CSSProperties, useEffect, useId, useMemo, useState } from 'react';
 
-import { Delete, Edit } from '@mui/icons-material';
+import { Delete, DragIndicator, Edit } from '@mui/icons-material';
 import {
   IconButton,
   Paper,
@@ -19,6 +19,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  Row,
   useReactTable
 } from '@tanstack/react-table';
 import { useTranslation } from 'next-i18next';
@@ -27,23 +28,78 @@ import Image from 'next/image';
 import { formatDate } from '../../utils/utils';
 import { DeleteModal } from '../modals/DeleteModal';
 import { TableActions } from '../updates/TableActions';
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities'
+import { closestCenter, DndContext, DragEndEvent, KeyboardSensor, MouseSensor, TouchSensor, UniqueIdentifier, useSensor, useSensors } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { Loading } from '../loading/Loading';
 
-export const ProjectTable = ({
-  projects,
-  handleShowProjectForm,
-  handleDelete
-}: {
+// Cell Component
+const DragHandleCell = ({ rowId }: { rowId: string }) => {
+  const { attributes, listeners } = useSortable({
+    id: rowId,
+  })
+  return (
+    // Alternatively, you could set these attributes on the rows themselves
+    <IconButton {...attributes} {...listeners}>
+      <DragIndicator />
+    </IconButton>
+  )
+}
+
+const DraggableRow = ({ row }: { row: Row<Project>}) => {
+  const { transform, transition, setNodeRef, isDragging } = useSortable({
+    id: row.original.id
+  })
+
+  const style: CSSProperties = {
+    transform: CSS.Transform.toString(transform), //let dnd-kit do its thing
+    transition: transition,
+    opacity: isDragging ? 0.8 : 1,
+    zIndex: isDragging ? 1 : 0,
+    position: 'relative',
+    background: isDragging ? '#f0f0f0' : 'transparent', // Debugging visibility
+  }
+
+  return (
+    // connect row ref to dnd-kit, apply important styles
+    <TableRow
+       key={row.id} 
+       ref={setNodeRef} 
+       sx={{ '&:last-child td, &:last-child tr': { border: 0 } }} style={style}>
+      {row.getVisibleCells().map(cell => (
+        <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
+          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+        </TableCell>
+      ))}
+    </TableRow>
+  )
+}
+
+export interface ProjectTableProps {
   projects: Project[];
+  loading: boolean;
   handleShowProjectForm: (update: Project) => void;
   handleDelete: (id: string | undefined) => void;
-}) => {
-  const [data, setData] = React.useState(projects);
+  handleUpdateProjectPriority: (projects: Project[]) => void;
+}
+
+const ProjectTable = ({
+  projects,
+  loading = false,
+  handleShowProjectForm,
+  handleDelete,
+  handleUpdateProjectPriority,
+
+}: ProjectTableProps) => {
+  const [data, setData] = useState<Project[]>(projects);
+
+  const dataIds = useMemo<UniqueIdentifier[]>(
+    () => data?.map(({ id }) => id),
+    [data]
+  )
 
   const { t } = useTranslation(['projectpage', 'common']);
-
-  useEffect(() => {
-    setData(projects);
-  }, [projects]);
 
   const [deleteModal, setDeleteModal] = React.useState<{
     open: boolean;
@@ -52,7 +108,13 @@ export const ProjectTable = ({
 
   const columnHelper = createColumnHelper<Project>();
 
-  const columns = [
+  const columns = useMemo(() => { return [
+    columnHelper.accessor('priority', {
+      id: "priority",
+      cell: ({row}) =>  (<DragHandleCell rowId={row.id} />),
+      header: () => <Typography>Prioridade</Typography>,
+      size: 60,
+    }),
     columnHelper.accessor('title', {
       id: 'title',
       cell: (info) => <Typography>{info.getValue()}</Typography>,
@@ -94,7 +156,7 @@ export const ProjectTable = ({
     }),
     columnHelper.accessor('assignedLots', {
       cell: (info) => <Typography>{info.getValue()}</Typography>,
-      header: () => <Typography>Lotes Atríbuidos</Typography>
+      header: () => <Typography>Lotes Atribuidos</Typography>
     }),
     columnHelper.accessor('createdOn', {
       cell: (info) => <Typography>{formatDate(info.getValue())}</Typography>,
@@ -107,7 +169,6 @@ export const ProjectTable = ({
           <IconButton
             onClick={() => {
               handleShowProjectForm(element.row.original);
-              console.log(element.row.original);
             }}
           >
             <Edit />
@@ -119,13 +180,16 @@ export const ProjectTable = ({
       )
     })
   ];
+},[data])
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getRowId: row => row.id, 
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
+    getPaginationRowModel: getPaginationRowModel(),
+    autoResetPageIndex: false
   });
 
   const { pageSize, pageIndex } = table.getState().pagination;
@@ -135,10 +199,44 @@ export const ProjectTable = ({
     setDeleteModal({ ...deleteModal, open: false });
   };
 
+  // reorder rows after drag & drop
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+    if (active && over && active.id !== over.id) {
+
+      setData((prevData) => {
+        const oldIndex = prevData.findIndex((item) => item.id === active.id);
+        const newIndex = prevData.findIndex((item) => item.id === over.id);
+    
+        if (oldIndex !== -1 && newIndex !== -1) {
+          const newData = arrayMove(prevData, oldIndex, newIndex);
+          handleUpdateProjectPriority(newData);
+          return newData; // Ensure React detects the change
+        }
+    
+        return prevData;
+      });
+    }
+  }
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {})
+  )
+
   return (
-    <div>
+    <DndContext
+    id={"dndContext"}
+    collisionDetection={closestCenter}
+    modifiers={[restrictToVerticalAxis]}
+    onDragEnd={handleDragEnd}
+    sensors={sensors}
+    >
+      <div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        { loading ? <Loading height='100px'/> : 
+        <Table sx={{ minWidth: 650 }} aria-label="project table">
           <TableHead>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -153,21 +251,18 @@ export const ProjectTable = ({
             ))}
           </TableHead>
           <TableBody>
+            <SortableContext
+              key={data.map((d) => d.id).join(',')}
+              items={dataIds}
+              strategy={verticalListSortingStrategy}
+            >
             {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} sx={{ '&:last-child td, &:last-child tr': { border: 0 } }}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    scope="row"
-                    key={cell.id}
-                    style={{ textAlign: cell.column.id === 'actions' ? 'end' : 'inherit' }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
+              <DraggableRow key={row.id} row={row} />
             ))}
+            </SortableContext>
           </TableBody>
         </Table>
+        }
       </TableContainer>
       <TablePagination
         component="div"
@@ -190,6 +285,9 @@ export const ProjectTable = ({
         data={deleteModal.data}
         handleClose={(confirm) => handleDeleteClose(confirm)}
       />
-    </div>
+      </div>
+    </DndContext>
   );
 };
+
+export default ProjectTable;

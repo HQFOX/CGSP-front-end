@@ -1,4 +1,4 @@
-import React, { ReactNode, SetStateAction } from 'react';
+import React, { SetStateAction, useId } from 'react';
 
 import { ArrowBackIosNew } from '@mui/icons-material';
 import {
@@ -6,22 +6,17 @@ import {
   Divider,
   Drawer,
   IconButton,
-  List,
-  ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Typography,
   styled
 } from '@mui/material';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import theme from '../../theme';
+import { PageItem, TreeList } from '../TreeList/TreeList';
 
 export interface VerticalNavigationProps {
   open?: boolean;
-  pages?: { id: number; text: string; path: string; icon: ReactNode }[];
+  pages?: PageItem[];
   setOpen: (value: SetStateAction<boolean>) => void;
 }
 
@@ -34,7 +29,6 @@ export const StyledListItemButton = styled(ListItemButton)({
 });
 
 export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationProps) => {
-  const router = useRouter();
 
   return (
     <Drawer
@@ -71,27 +65,7 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
         </IconButton>
       </Box>
       <Divider />
-      <nav aria-label="admin page navigation">
-        <List>
-          {pages &&
-            pages.map((page) => (
-              <ListItem key={page.id}>
-                <Link
-                  key={page.id}
-                  href={page.path}
-                  passHref
-                  style={{ width: '100%' }}
-                  onClick={() => setOpen(false)}
-                >
-                  <StyledListItemButton selected={router.pathname === page.path}>
-                    <ListItemIcon>{page.icon}</ListItemIcon>
-                    <ListItemText>{page.text}</ListItemText>
-                  </StyledListItemButton>
-                </Link>
-              </ListItem>
-            ))}
-        </List>
-      </nav>
+      <TreeList pages={pages ?? []}/>
     </Drawer>
   );
 };
