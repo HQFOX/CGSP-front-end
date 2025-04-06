@@ -55,7 +55,7 @@ export const getPresignedUrl = async (file: File) => {
 export const getUser = async (username: string) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/user/${username}`;
 
-  const res = await useFetch('GET', endpoint, null, true)
+  const res = await dataFetch('GET', endpoint, null, true)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -70,7 +70,7 @@ export const getUser = async (username: string) => {
   if (res) return res as User;
 };
 
-export const useFetch = (
+export const dataFetch = (
   method = 'GET',
   endpoint: string,
   values?: unknown,

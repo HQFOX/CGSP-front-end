@@ -47,7 +47,7 @@ import { CancelModal } from '../modals/CancelModal';
 import { districtCenterCoordinates } from '../projects/projectInventory/ProjectInventory';
 import { SuccessMessage } from './SuccessMessage';
 import { AbstractFile } from './types';
-import { getPresignedUrl, submitFile, useFetch } from './utils';
+import { getPresignedUrl, submitFile, dataFetch as dataFetch } from './utils';
 
 const Map = dynamic(() => import('../map/Map'), {
   ssr: false
@@ -335,7 +335,7 @@ export const ProjectForm = ({
       ? `${process.env.NEXT_PUBLIC_API_URL}/project/${project.id}`
       : `${process.env.NEXT_PUBLIC_API_URL}/project`;
 
-    const res = await useFetch('POST', endpoint, values, true)
+    const res = await dataFetch('POST', endpoint, values, true)
       .then((response) => {
         if (response.ok) {
           setSuccess(true);

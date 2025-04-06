@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 
 import { LatLngTuple } from 'leaflet';
@@ -11,10 +10,7 @@ import {
   Euro,
   ExpandMore,
   Garage,
-  Home,
-  HomeWork,
   Hotel,
-  HowToReg,
   OpenInNew,
   SquareFoot
 } from '@mui/icons-material';

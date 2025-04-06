@@ -20,7 +20,7 @@ import { useTranslation } from 'next-i18next';
 import theme from '../../theme';
 import { StyledButton } from '../Button';
 import { Loading } from '../loading/Loading';
-import { useFetch } from './utils';
+import { dataFetch } from './utils';
 
 export const SuccessMessage = ({ email }: { email: string }) => {
   const { t } = useTranslation(['projectpage']);
@@ -97,7 +97,7 @@ export const EnrollmentForm = ({ project }: { project: Project }) => {
 
       const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/enroll`;
 
-      await useFetch('POST', endpoint, values, false)
+      await dataFetch('POST', endpoint, values, false)
         .then((response) => {
           if (response.ok) {
             setSuccess(true);

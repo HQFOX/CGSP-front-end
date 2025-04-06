@@ -12,7 +12,7 @@ import { Loading } from '../loading/Loading';
 import { CancelModal } from '../modals/CancelModal';
 import { SuccessMessage } from './SuccessMessage';
 import { AbstractFile } from './types';
-import { getPresignedUrl, submitFile, useFetch } from './utils';
+import { getPresignedUrl, submitFile, dataFetch } from './utils';
 
 export const UpdateForm = ({
   update,
@@ -89,7 +89,7 @@ export const UpdateForm = ({
       ? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}`
       : `${process.env.NEXT_PUBLIC_API_URL}/update`;
 
-    const res = await useFetch('POST', endpoint, values, true)
+    const res = await dataFetch('POST', endpoint, values, true)
       .then((response) => {
         if (response.ok) {
           setSuccess(true);

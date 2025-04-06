@@ -14,6 +14,7 @@ import Layout from '../components/layout/layout';
 import { Loading } from '../components/loading/Loading';
 import '../styles/globals.css';
 import theme from '../theme';
+import Script from 'next/script';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -58,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const authProviderValue = useMemo(
     () => ({ user, setUser, isAuth, setIsAuth }),
-    [user, isAuth, router]
+    [user, isAuth]
   );
 
   return (
@@ -70,11 +71,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
           crossOrigin=""
         />
-        <script
+        <Script
           src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
           integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
           crossOrigin=""
-        ></script>
+        ></Script>
         {!checkAdminRoute() && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLEID ?? ''} />}
         <Layout isAdmin={checkAdminRoute()}>
           {loading ? <Loading height="70vh" /> : <Component {...pageProps} />}

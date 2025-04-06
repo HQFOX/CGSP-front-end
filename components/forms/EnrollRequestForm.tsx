@@ -10,7 +10,7 @@ import { StyledButton } from '../Button';
 import { Loading } from '../loading/Loading';
 import { CancelModal } from '../modals/CancelModal';
 import { SuccessMessage } from './SuccessMessage';
-import { useFetch } from './utils';
+import { dataFetch } from './utils';
 
 export const EnrollRequestForm = ({
   request,
@@ -67,7 +67,7 @@ export const EnrollRequestForm = ({
       ? `${process.env.NEXT_PUBLIC_API_URL}/enroll/${request.id}`
       : `${process.env.NEXT_PUBLIC_API_URL}/enroll`;
 
-    const res = await useFetch('POST', endpoint, values, true)
+    const res = await dataFetch('POST', endpoint, values, true)
       .then((response) => {
         if (response.ok) {
           setSuccess(true);

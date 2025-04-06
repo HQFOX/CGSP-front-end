@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -43,7 +43,11 @@ const Header = () => {
 
   const locales = router.locales;
 
-  const [language] = useState(router.locale);
+  const [language,setLanguage] = useState(router.locale);
+
+  useEffect(() => {
+    setLanguage(router.locale)
+  },[router.locale])
 
   const pages = [
     {

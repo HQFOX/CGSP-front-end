@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import Carousel from 'react-material-ui-carousel';
 
 import { Fullscreen } from '@mui/icons-material';

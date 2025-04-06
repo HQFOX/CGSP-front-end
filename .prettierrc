@@ -2,6 +2,7 @@
     "plugins": ["@trivago/prettier-plugin-sort-imports"],
     "semi": true,
     "tabWidth": 2,
+    "prettier.useTabs": true,
     "printWidth": 100,
     "singleQuote": true,
     "trailingComma": "none",
@@ -10,5 +11,7 @@
     "importOrder": ["^react", "^(?!react)\\w+$","<THIRD_PARTY_MODULES>", "^components/(.*)$", "^[./]" ],
     "importOrderSeparation": true, 
     "importOrderSortSpecifiers": true ,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "bracketSpacing": true,
+    "proseWrap": "always"
   }

@@ -6,7 +6,7 @@ import { Box, Divider, Grid2 as Grid, Typography } from '@mui/material';
 import { Loading, StyledButton } from '../../components';
 import { EnrollRequestTable } from '../../components/enrollrequests/EnrollRequestTable';
 import { EnrollRequestForm } from '../../components/forms/EnrollRequestForm';
-import { useFetch } from '../../components/forms/utils';
+import { dataFetch } from '../../components/forms/utils';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 
 const EnrollRequestsAdmin = () => {
@@ -18,7 +18,7 @@ const EnrollRequestsAdmin = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = useFetch('GET', `${process.env.NEXT_PUBLIC_API_URL}/enroll`, null, true).then(
+      const data = dataFetch('GET', `${process.env.NEXT_PUBLIC_API_URL}/enroll`, null, true).then(
         (res) => {
           if (res.ok) {
             const response = res.json() as unknown as EnrollRequest[];
@@ -36,7 +36,7 @@ const EnrollRequestsAdmin = () => {
     });
 
     const fetchProjects = async () => {
-      const data = useFetch(
+      const data = dataFetch(
         'GET',
         `${process.env.NEXT_PUBLIC_API_URL}/project`,
         undefined,
@@ -58,7 +58,7 @@ const EnrollRequestsAdmin = () => {
   }, []);
 
   const refreshData = async () => {
-    const res = await useFetch('GET', `${process.env.NEXT_PUBLIC_API_URL}/enroll`, undefined, true);
+    const res = await dataFetch('GET', `${process.env.NEXT_PUBLIC_API_URL}/enroll`, undefined, true);
     if (res.status == 200) {
       const request = (await res.json()) as EnrollRequest[];
 
@@ -70,7 +70,7 @@ const EnrollRequestsAdmin = () => {
     if (id) {
       const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/enroll/${id}`;
 
-      await useFetch('DELETE', endpoint, undefined, true)
+      await dataFetch('DELETE', endpoint, undefined, true)
         .then((response) => {
           if (response.ok) {
             console.log(`EnrollRequest ${id} deleted`);

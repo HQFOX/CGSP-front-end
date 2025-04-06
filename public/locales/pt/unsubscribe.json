@@ -1,0 +1,9 @@
+{
+    "title": "Preferências Notificações Email",
+    "subtitle": "Aqui é possível mudar as preferência de notificações de email:",
+    "projectOption": "Parar de receber Notificações sobre este projeto.",
+    "allProjectOption": "Parar de receber Notificações sobre todos os projetos.",
+    "successTitle": "As suas preferências foram guardadas com sucesso.",
+    "successSubtitle": "Se isto foi um erro, ou se desejar receber notificações pode fazer um novo pedido de Inscrição no Projeto.",
+    "errorMessage": "Ocorreu um erro por favor tente mais tarde."
+}

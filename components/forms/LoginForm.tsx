@@ -11,12 +11,12 @@ import { useRouter } from 'next/router';
 import { AuthContext } from '../AuthContext';
 import { StyledButton } from '../Button';
 import { Loading } from '../loading/Loading';
-import { getUser, useFetch } from './utils';
+import { getUser, dataFetch } from './utils';
 
 const postLogin = async (values: { username: string; password: string }) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/generateToken`;
 
-  const res = await useFetch('POST', endpoint, values)
+  const res = await dataFetch('POST', endpoint, values)
     .then((response) => {
       if (response.ok) {
         return response.text();

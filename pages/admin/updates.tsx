@@ -8,7 +8,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { StyledButton } from '../../components/Button';
 import { UpdateForm } from '../../components/forms/UpdateForm';
-import { useFetch } from '../../components/forms/utils';
+import { dataFetch } from '../../components/forms/utils';
 import { Loading } from '../../components/loading/Loading';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 import { UpdateTable } from '../../components/updates/UpdateTable';
@@ -32,7 +32,7 @@ const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data)
     if (id) {
       const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/update/${id}`;
 
-      await useFetch('DELETE', endpoint, undefined, true)
+      await dataFetch('DELETE', endpoint, undefined, true)
         .then((response) => {
           if (response.ok) {
             refreshData();

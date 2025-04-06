@@ -4,7 +4,7 @@ import { Box, Divider, Typography } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BasicChart } from '../../components/charts/BasicChart';
-import { useFetch } from '../../components/forms/utils';
+import { dataFetch } from '../../components/forms/utils';
 import { Loading } from '../../components/loading/Loading';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 
@@ -13,7 +13,7 @@ const DashBoard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = useFetch(
+      const data = dataFetch(
         'GET',
         `${process.env.NEXT_PUBLIC_API_URL}/project/current`,
         null,

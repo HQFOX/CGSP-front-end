@@ -6,7 +6,7 @@ import { Add } from '@mui/icons-material';
 import ProjectTable from '../tables/ProjectTable';
 import { ProjectForm } from '../forms/ProjectForm';
 import { Loading } from '../loading/Loading';
-import { useFetch } from '../forms/utils';
+import { dataFetch } from '../forms/utils';
 import { UploadSimple } from '@phosphor-icons/react/dist/ssr';
 import router from 'next/router';
 
@@ -52,7 +52,7 @@ export const ProjectManager = ({
     if (id) {
       const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/project/${id}`;
 
-      await useFetch('DELETE', endpoint, undefined, true)
+      await dataFetch('DELETE', endpoint, undefined, true)
         .then((response) => {
           if (response.ok) {
             refreshData();
@@ -81,7 +81,7 @@ export const ProjectManager = ({
     const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/project/priority`
 
     // priorityList.forEach
-    const res = await useFetch('PATCH', endpoint, priorityList, true)
+    const res = await dataFetch('PATCH', endpoint, priorityList, true)
     .then((response) => {
       refreshData()
     })

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import {
   MapContainer,
   MapContainerProps,
@@ -16,6 +16,7 @@ import { CGSPMarker } from './Marker';
 import { Beja } from './districtdata/Beja';
 import { Evora } from './districtdata/Evora';
 import { Portalegre } from './districtdata/Portalegre';
+import { styles } from './styles';
 
 interface MapProps extends MapContainerProps {
   centerCoordinates: LatLngTuple;
@@ -41,7 +42,7 @@ const ChangeView = ({
   return null;
 };
 
-const renderPanel = (district?: string) => {
+const RenderPanel = ({district}:{district?: string}) => {
   switch (district) {
     case 'Évora':
       return (
@@ -111,11 +112,32 @@ const Map = ({
     return null;
   };
 
+  const mappedMarkers = useMemo(
+    () => markers.map((marker, index) => (
+      <CGSPMarker
+        coordinates={marker}
+        key={index}
+        draggable={draggable}
+        setCoordinates={onCoordinateChange}
+      >
+        {popupContent}
+      </CGSPMarker>
+    ))
+  ,[markers])
+
+  const mappedProjects = useMemo(
+    () => projects.map((project, index) => (
+      <CGSPMarker key={index} coordinates={project.coordinates as LatLngTuple}>
+        <ProjectCardPopUp project={project} />
+      </CGSPMarker>
+    ))
+  ,[projects])
+
   return (
     <MapContainer
       center={centerCoordinates}
       scrollWheelZoom={scrollWheelZoom}
-      style={{ width: '100%', height: '100%' }}
+      className={styles.container}
       {...others}
     >
       <TileLayer
@@ -123,22 +145,9 @@ const Map = ({
         url={url}
       />
       {changeView && <ChangeView centerCoordinates={centerCoordinates} />}
-      {markers.map((marker, index) => (
-        <CGSPMarker
-          coordinates={marker}
-          key={index}
-          draggable={draggable}
-          setCoordinates={onCoordinateChange}
-        >
-          {popupContent}
-        </CGSPMarker>
-      ))}
-      {projects.map((project, index) => (
-        <CGSPMarker key={index} coordinates={project.coordinates as LatLngTuple}>
-          <ProjectCardPopUp project={project} />
-        </CGSPMarker>
-      ))}
-      <Pane name="districts">{renderPanel(currentDistrict)}</Pane>
+      {mappedMarkers}
+      {mappedProjects}
+      <Pane name="districts"><RenderPanel district={currentDistrict} /></Pane>
       <ClickListener />
     </MapContainer>
   );
