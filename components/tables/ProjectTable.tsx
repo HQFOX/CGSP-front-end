@@ -180,7 +180,7 @@ const ProjectTable = ({
       )
     })
   ];
-},[data])
+},[columnHelper, handleShowProjectForm, t])
 
   const table = useReactTable({
     data,

@@ -9,7 +9,6 @@ import Image from 'next/image';
 import theme from '../../theme';
 import { AbstractFile } from '../forms/types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getColor = (props: any) => {
   if (props.isDragAccept) {
     return theme.palette.success.main;
@@ -76,7 +75,7 @@ export const CGSPDropzone = ({
 
   useMemo(() => {
     setDisabled(files && files.length >= maxContent ? true : false);
-  }, [files]);
+  }, [maxContent, files]);
 
   const handleAddFile = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
     setErrors([]);

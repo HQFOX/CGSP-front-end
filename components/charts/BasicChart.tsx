@@ -155,8 +155,6 @@ const basicChartOptions = (chartData: Project[]): ReactEChartsProps['option'] =>
     emphasis: {
       focus: 'series'
     },
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     data: [
       [project.createdOn, 0],
       ...project.enrollRequests?.map((request, index) => [request.createdOn, index + 1]) ?? [],

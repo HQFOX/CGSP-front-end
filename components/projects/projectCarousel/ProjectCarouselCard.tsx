@@ -2,8 +2,6 @@ import React from 'react';
 
 import { CardMedia } from '@mui/material';
 import Image from 'next/image';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ProjectCarouselCard = ({ index, item, handleShowModal }: CarouselCardProps) => {
   return (
     <CardMedia>
