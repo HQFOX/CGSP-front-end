@@ -23,7 +23,6 @@ const ProjectHistoryAdmin: NextPage<{ projects: Project[] }> = (data) => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
   const res = await fetch(`${process.env.API_URL}/project/history`);
   const projects = (await res.json()) as Project[];

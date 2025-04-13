@@ -279,7 +279,6 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (context: any) => {
   const id = context.params.projectId;
   const projectRes = await fetch(`${process.env.API_URL}/project/${id}`);

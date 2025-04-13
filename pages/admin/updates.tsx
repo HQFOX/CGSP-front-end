@@ -109,8 +109,6 @@ const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data)
     </PageContainer>
   );
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
   const res = await fetch(`${process.env.API_URL}/update`);
   const updates = (await res.json()) as Update[];

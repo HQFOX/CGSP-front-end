@@ -18,6 +18,8 @@ const TreeItem = ({id, icon, text, path, children, open: openProp = false}: Page
 
     const [open, setOpen] = useState(openProp);
 
+    const uniqueId = useId();
+
     const item = (<ListItem key={id}>
     <StyledListItemButton key={id + "button"} onClick={() => setOpen(!open)} selected={router.pathname === path}>
         { icon && <ListItemIcon>{icon}</ListItemIcon>}
@@ -40,7 +42,7 @@ const TreeItem = ({id, icon, text, path, children, open: openProp = false}: Page
         )
     }
     return (
-        <div key={useId()}>
+        <div key={uniqueId}>
         {item}
         {children && 
             <Collapse key={id + "collapse"} in={open} timeout="auto">
