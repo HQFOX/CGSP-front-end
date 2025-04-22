@@ -13,9 +13,9 @@
     "lots": "Lots",
     "assignedLots": "Assigned Lots",
     "district": "District",
-    "garage": "Garage",
     "assignmentStatus": "Assignment Status",
-    "constructionStatus": "Construction Status"
+    "constructionStatus": "Construction Status",
+    "price": "Price"
   },
   "typologyDetails": {
     "typology": "Typology",
@@ -24,8 +24,12 @@
     "area": "Areas",
     "interiorArea": "Interior Area",
     "exteriorArea": "Exterior Area",
+    "garage": "Garage",
     "details": "details",
-    "price": "Price"
+    "price": "Price",
+    "plant": "Plant",
+    "availableLotsTitle": "Available Lots",
+    "availableLotsCount": "{{assignedLots}} Assigned out of {{lots}}"
   },
   "status": {
     "completed": "Completed",
@@ -85,5 +89,8 @@
     "plant": "plant",
     "construction": "construction",
     "fullscreen": "fullscreen"
+  },
+  "map": {
+    "googleMapsLink": "See on Google Maps"
   }
 }
