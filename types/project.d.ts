@@ -33,6 +33,8 @@ type TypologyDetails = {
   plant?: ProjectFile;
   totalLotArea?: number;
   livingArea?: number;
+  lots?: number;
+  assignedLots?: number;
 };
 
 type ProjectDetails = {

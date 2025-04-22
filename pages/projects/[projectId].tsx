@@ -46,6 +46,7 @@ import { ProjectCarousel } from '../../components/projects/projectCarousel/Proje
 import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import theme from '../../theme';
+import { LotCounter } from '../../components/lotCounter/LotCounter';
 
 const Map = dynamic(() => import('../../components/map/Map'), {
   ssr: false,
@@ -109,6 +110,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               			</StyledTypography> */}
             {project.typologies != null &&
               project.typologies.map((typology, index) => {
+                console.log(typology)
                 return (
                   <Accordion
                     key={'typologyDetails' + index}
@@ -119,9 +121,12 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                       expandIcon={<ExpandMore />}
                       aria-controls={`typology${index}-content`}
                       id={`typology${index}-header`}
-                      sx={{ backgroundColor: theme.palette.secondary.light }}
+                      sx={{ backgroundColor: theme.palette.secondary.light}}
                     >
-                      <Typography>{typology.typology}</Typography>
+                      <div style={{ display: "flex", alignItems: "center"}}>
+                        <Typography marginRight={4}>{typology.typology}</Typography>
+                        <LotCounter lots={typology.lots} assignedLots={typology.assignedLots}/>
+                      </div>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Grid container columnSpacing={4} columns={1}>
@@ -218,7 +223,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                                 variant="body2"
                                 color="text.secondary"
                               >
-                                {'Planta'}
+                                {t('typologyDetails.plant')}
                               </MuiLink>
                             </Stack>
                           </Grid>
@@ -269,7 +274,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                 href={`https://www.google.com/maps/search/?api=1&query=${project.coordinates?.[0]}%2C${project.coordinates?.[1]}`}
                 passHref
               >
-                <StyledButton endIcon={<OpenInNew />}>Ver No Google Maps</StyledButton>
+                <StyledButton endIcon={<OpenInNew />}>{t('map.googleMapsLink')}</StyledButton>
               </Link>
             }
           />
