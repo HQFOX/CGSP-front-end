@@ -24,5 +24,11 @@
   "bureaucracyTitle": "Burocracia Simplificada",
   "bureaucracyText": "O longo e difícil processo burocrático é integralmente tratado pela cooperativa.",
   "middlemanTitle": "Sem Intermediários",
-  "middlemanText": "Contacto direto com o cliente."
+  "middlemanText": "Contacto direto com o cliente.",
+    "carousel": {
+    "aboutUs": "Sobre Nós",
+    "sinceText": "A desenhar e construir habitações para os seus sócios há mais de 40 anos.",
+    "updatesText": "Veja aqui as atualizações mais recentes sobre nós e os nossos projetos.",
+    "historyText": "Saiba mais detalhes sobre projetos concluídos da nossa cooperativa."
+  }
 }
