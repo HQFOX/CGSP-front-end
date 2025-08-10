@@ -1,69 +1,76 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 
-import { CardContent, Grid, Typography } from '@mui/material';
+import { CardContent, Grid2 as Grid, Grid2Props, Typography } from '@mui/material';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 import carousel2 from '../../public/carousel2.jpg';
 import carousel3 from '../../public/carousel3.jpg';
 import construcao3 from '../../public/construcao3.jpg';
 import projeccao0R from '../../public/projeccao0R.jpg';
 import theme from '../../theme';
-import { StyledButton } from '../Button';
-import { Title } from '../Title';
 
-const items = [
-  {
-    name: 'Giraldo Sem Pavor Cooperativa de Construção e Habitação',
-    description: 'A desenhar e construir habitações para os seus sócios há mais de 40 anos.',
-    action: (
-      <Link href="/#aboutus" passHref>
-        <StyledButton variant="outlined" color={'secondary'}>
-          Sobre nós
-        </StyledButton>
-      </Link>
-    ),
-    image: projeccao0R
-  },
-  {
-    name: 'Atualizações',
-    description: 'Veja aqui as atualizações mais recentes sobre nós e os nossos projetos.',
-    action: (
-      <Link href="/updates" passHref>
-        <StyledButton variant="outlined" color={'secondary'}>
-          Atualizações
-        </StyledButton>
-      </Link>
-    ),
-    image: construcao3
-  },
-  {
-    name: 'LOTEAMENTO MOINHO I - ÉVORA',
-    description: 'Veja aqui os detalhes sobre o nosso projeto mais recente.',
-    action: (
-      <Link href="/projects" passHref>
-        <StyledButton variant="outlined" color={'secondary'}>
-          Detalhes do Projeto
-        </StyledButton>
-      </Link>
-    ),
-    image: carousel2
-  },
-  {
-    name: 'Histórico',
-    description: 'Saiba mais detalhes sobre projetos concluídos da nossa cooperativa.',
-    action: (
-      <Link href="/history" passHref>
-        <StyledButton variant="outlined" color={'secondary'}>
-          Projetos Concluídos
-        </StyledButton>
-      </Link>
-    ),
-    image: carousel3
-  }
-];
+import { StyledButton, Title } from '..';
 
 const CGSPCarousel: React.FC = () => {
+  const { t } = useTranslation(['homepage', 'header']);
+
+  const items = [
+    {
+      name: 'Giraldo Sem Pavor Cooperativa de Construção e Habitação',
+      description: t("carousel.sinceText"),
+      action: (
+        <Link href="/#aboutus" passHref>
+          <StyledButton variant="outlined" color={'secondary'}>
+            {t("carousel.aboutUs")}
+          </StyledButton>
+        </Link>
+      ),
+      image: projeccao0R
+    },
+    {
+      name: t('header:updates'),
+      description: t('carousel.updatesText'),
+      action: (
+        <Link href="/updates" passHref>
+          <StyledButton variant="outlined" color={'secondary'}>
+            {t('header:updates')}
+          </StyledButton>
+        </Link>
+      ),
+      image: construcao3
+    },
+    {
+      name: 'LOTEAMENTO MOINHO I - ÉVORA',
+      description: t('carousel.historyText'),
+      action: (
+        <Link href="/projects" passHref>
+          <StyledButton variant="outlined" color={'secondary'}>
+            {t('header:history')}
+          </StyledButton>
+        </Link>
+      ),
+      image: carousel2
+    },
+    {
+      name: t('header:history'),
+      description: t('carousel.historyText'),
+      action: (
+        <Link href="/history" passHref>
+          <StyledButton variant="outlined" color={'secondary'}>
+            {t('header:history')}
+          </StyledButton>
+        </Link>
+      ),
+      image: carousel3
+    }
+  ];
+
+  const gridItemImageSectionProps: Grid2Props = { size: { xs: 12, md: 6, lg: 8}}
+
+  const gridItemTectSectionProps: Grid2Props = { size: { xs: 12, md: 6, lg: 4}, style:{ backgroundColor: theme.palette.primary.dark, alignContent: 'center' }}
+
   return (
     <Carousel
       fullHeightHover
@@ -88,11 +95,7 @@ const CGSPCarousel: React.FC = () => {
         height={'100%'}
       >
         <Grid
-          item
-          xs={12}
-          md={6}
-          lg={4}
-          style={{ backgroundColor: theme.palette.primary.dark, alignContent: 'center' }}
+        {...gridItemTectSectionProps}
         >
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={44} color={'white'}>
@@ -108,10 +111,7 @@ const CGSPCarousel: React.FC = () => {
           </CardContent>
         </Grid>
         <Grid
-          item
-          xs={12}
-          md={6}
-          lg={8}
+          {...gridItemImageSectionProps}
           sx={{
             backgroundImage: `url(${items[0].image.src})`,
             backgroundRepeat: 'no-repeat',
@@ -128,10 +128,7 @@ const CGSPCarousel: React.FC = () => {
         height={'100%'}
       >
         <Grid
-          item
-          xs={12}
-          md={6}
-          lg={8}
+          {...gridItemImageSectionProps}
           sx={{
             backgroundImage: `url(${items[1].image.src})`,
             backgroundRepeat: 'no-repeat',
@@ -140,11 +137,7 @@ const CGSPCarousel: React.FC = () => {
           }}
         ></Grid>
         <Grid
-          item
-          xs={12}
-          md={6}
-          lg={4}
-          style={{ backgroundColor: theme.palette.primary.dark, alignContent: 'center' }}
+          {...gridItemTectSectionProps}
         >
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={33} color={'white'}>
@@ -165,10 +158,7 @@ const CGSPCarousel: React.FC = () => {
         height={'100%'}
       >
         <Grid
-          item
-          xs={12}
-          md={6}
-          lg={8}
+          {...gridItemImageSectionProps}
           sx={{
             backgroundImage: `url(${items[3].image.src})`,
             backgroundRepeat: 'no-repeat',
@@ -177,11 +167,7 @@ const CGSPCarousel: React.FC = () => {
           }}
         ></Grid>
         <Grid
-          item
-          xs={12}
-          md={6}
-          lg={4}
-          style={{ backgroundColor: theme.palette.primary.dark, alignContent: 'center' }}
+          {...gridItemTectSectionProps}
         >
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={33} color={'white'}>
