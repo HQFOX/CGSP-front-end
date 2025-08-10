@@ -9,7 +9,6 @@ import { Popover, Typography, Zoom } from "@mui/material";
 import theme from "../../theme";
 import { useTranslation } from 'next-i18next';
 
-
 interface LotCounterProps {
     lots?: number;
     assignedLots?: number;
@@ -24,7 +23,6 @@ export const LotCounter = (props: LotCounterProps) => {
         threshold: 0,
       });
     
-
     if(!lots || assignedLots && assignedLots > lots){
         return;
     }
@@ -45,7 +43,7 @@ export const LotCounter = (props: LotCounterProps) => {
             <div style={{ display: "flex" }} role="group" aria-label={availableText} >
             {checks.map((check, index) => {
                 return (
-                    <Zoom in={inView} style={{ transitionDelay: `calc(100ms * ${index})`}}>
+                    <Zoom key={index} in={inView} style={{ transitionDelay: `calc(100ms * ${index})`}}>
                         {check ? <Square size={iconSize} weight="duotone" color={theme.palette.secondary.dark} /> : <Square size={iconSize} weight="duotone" color={theme.palette.success.dark} />}
                     </Zoom>
                 )
