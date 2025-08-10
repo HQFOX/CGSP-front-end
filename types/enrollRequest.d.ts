@@ -5,7 +5,7 @@ type EnrollRequest = {
   telephoneNumber?: string;
   email?: string;
   projectId?: string;
-  status?: string;
+  status?: "Approved" | "Waiting" | "Refused";
   subscribedUpdates?: boolean;
   createdOn?: string;
 };
