@@ -42,7 +42,7 @@ const ChangeView = ({
   return null;
 };
 
-const RenderPanel = ({district}:{district?: string}) => {
+const RenderPanel = ({ district }: { district?: string }) => {
   switch (district) {
     case 'Évora':
       return (
@@ -113,33 +113,35 @@ const Map = ({
   };
 
   const mappedMarkers = useMemo(
-    () => markers.map((marker, index) => (
-      <CGSPMarker
-        coordinates={marker}
-        key={index}
-        draggable={draggable}
-        setCoordinates={onCoordinateChange}
-      >
-        {popupContent}
-      </CGSPMarker>
-    ))
-  ,[draggable, onCoordinateChange, popupContent, markers])
+    () =>
+      markers.map((marker, index) => (
+        <CGSPMarker
+          coordinates={marker}
+          key={index}
+          draggable={draggable}
+          setCoordinates={onCoordinateChange}>
+          {popupContent}
+        </CGSPMarker>
+      )),
+    [draggable, onCoordinateChange, popupContent, markers]
+  );
 
   const mappedProjects = useMemo(
-    () => projects.map((project, index) => (
-      <CGSPMarker key={index} coordinates={project.coordinates as LatLngTuple}>
-        <ProjectCardPopUp project={project} />
-      </CGSPMarker>
-    ))
-  ,[projects])
+    () =>
+      projects.map((project, index) => (
+        <CGSPMarker key={index} coordinates={project.coordinates as LatLngTuple}>
+          <ProjectCardPopUp project={project} />
+        </CGSPMarker>
+      )),
+    [projects]
+  );
 
   return (
     <MapContainer
       center={centerCoordinates}
       scrollWheelZoom={scrollWheelZoom}
       className={styles.container}
-      {...others}
-    >
+      {...others}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url={url}
@@ -147,7 +149,9 @@ const Map = ({
       {changeView && <ChangeView centerCoordinates={centerCoordinates} />}
       {mappedMarkers}
       {mappedProjects}
-      <Pane name="districts"><RenderPanel district={currentDistrict} /></Pane>
+      <Pane name="districts">
+        <RenderPanel district={currentDistrict} />
+      </Pane>
       <ClickListener />
     </MapContainer>
   );

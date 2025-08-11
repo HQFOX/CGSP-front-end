@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import { AuthContext } from '../AuthContext';
 import { StyledButton } from '../Button';
 import { Loading } from '../loading/Loading';
-import { getUser, dataFetch } from './utils';
+import { dataFetch, getUser } from './utils';
 
 const postLogin = async (values: { username: string; password: string }) => {
   const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/auth/generateToken`;
@@ -126,8 +126,7 @@ export const LoginForm = () => {
                 variant="contained"
                 color="primary"
                 value="submit"
-                fullWidth
-              >
+                fullWidth>
                 {'Login'}
               </StyledButton>
             </Grid>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'next-i18next';
 import Carousel from 'react-material-ui-carousel';
 
 import { Fullscreen } from '@mui/icons-material';
 import { Card, CardActions } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 
 import theme from '../../../theme';
 import { StyledButton } from '../../Button';
@@ -68,8 +68,7 @@ export const ProjectCarousel = ({ project }: { project: Project }) => {
           }}
           index={index}
           onChange={handleCarouselItemChange}
-          autoPlay={autoPlay}
-        >
+          autoPlay={autoPlay}>
           {files.map(
             (file, index) =>
               file.filename && (
@@ -87,8 +86,7 @@ export const ProjectCarousel = ({ project }: { project: Project }) => {
             style={{ marginLeft: 'auto' }}
             variant={'outlined'}
             startIcon={<Fullscreen />}
-            onClick={() => handleShowModal(index)}
-          >
+            onClick={() => handleShowModal(index)}>
             {t('photoCategories.fullscreen')}
           </StyledButton>
         </CardActions>

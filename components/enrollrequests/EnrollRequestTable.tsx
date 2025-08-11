@@ -27,33 +27,37 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table';
-
 import { useTranslation } from 'next-i18next';
 
-import { DeleteModal } from '../modals/DeleteModal';
-import { Loading } from '../loading/Loading';
 import { dataFetch } from '../forms/utils';
+import { Loading } from '../loading/Loading';
+import { DeleteModal } from '../modals/DeleteModal';
 
-  const getStatusColor = (status: string) => {
-    switch(status){
-      case "Approved":
-        return "success"
-      case  "Waiting":
-        return "warning"
-      case "Refused":
-        return "error"
-      default:
-        return "info"
-    }
-      
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case 'Approved':
+      return 'success';
+    case 'Waiting':
+      return 'warning';
+    case 'Refused':
+      return 'error';
+    default:
+      return 'info';
   }
+};
 
-const StatusDropdown = ({status: statusProp, requestId}: {status: string, requestId: string}) => {
-    const { t } = useTranslation("enroll");
+const StatusDropdown = ({
+  status: statusProp,
+  requestId
+}: {
+  status: string;
+  requestId: string;
+}) => {
+  const { t } = useTranslation('enroll');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const [openMenu, setOpenMenu] = useState(false)
+  const [openMenu, setOpenMenu] = useState(false);
 
   const [status, setStatus] = useState(statusProp);
 
@@ -62,56 +66,66 @@ const StatusDropdown = ({status: statusProp, requestId}: {status: string, reques
   const [loading, setLoading] = useState(false);
 
   const handleOpen = (event: React.MouseEvent<any>) => {
-    setOpenMenu(true)
-    setAnchorEl(event.currentTarget)
-  }
+    setOpenMenu(true);
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = (value?: string) => {
-    setOpenMenu(false)
-    setAnchorEl(null)
-    if(value) {
-      setLoading(true)
-      setStatus(value)
+    setOpenMenu(false);
+    setAnchorEl(null);
+    if (value) {
+      setLoading(true);
+      setStatus(value);
 
       const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/enroll/${requestId}/status`;
 
-      const res = dataFetch('PUT', endpoint, { status: value }, true).then((response) => {
-        if(response.ok) {
+      const res = dataFetch('PUT', endpoint, { status: value }, true)
+        .then((response) => {
+          if (response.ok) {
             setLoading(false);
             setOldStatus(value);
             return response.json();
-        } else {
-          throw new Error('Error updating request status ' + response.status)
-        }
-      })
-      .catch((error) => {
-        setLoading(false);
-        setStatus(oldStatus);
-        console.log(error);
-      })
+          } else {
+            throw new Error('Error updating request status ' + response.status);
+          }
+        })
+        .catch((error) => {
+          setLoading(false);
+          setStatus(oldStatus);
+          console.log(error);
+        });
     }
-  }
+  };
 
-  const statusType = ["Waiting", "Approved", "Refused"];
+  const statusType = ['Waiting', 'Approved', 'Refused'];
 
   const chipIcon = useMemo(() => {
-    if(loading){
-      return <Loading height="16px" icon/>
-    } else{
-      return openMenu ? <CaretUp /> : <CaretDown />
+    if (loading) {
+      return <Loading height="16px" icon />;
+    } else {
+      return openMenu ? <CaretUp /> : <CaretDown />;
     }
-  },[loading, openMenu])
+  }, [loading, openMenu]);
 
   return (
     <>
-      <Chip icon={chipIcon} label={t(`status.${status}`)} size='small' color={getStatusColor(status)} onClick={(event) =>handleOpen(event)} />
-      <Menu open={openMenu} anchorEl={anchorEl} onClick={() =>handleClose()}>
+      <Chip
+        icon={chipIcon}
+        label={t(`status.${status}`)}
+        size="small"
+        color={getStatusColor(status)}
+        onClick={(event) => handleOpen(event)}
+      />
+      <Menu open={openMenu} anchorEl={anchorEl} onClick={() => handleClose()}>
         {statusType.map((el, index) => (
-          <MenuItem key={index} onClick={() => handleClose(el)}><Chip label={t(`status.${el}`)} size='small' color={getStatusColor(el)} /></MenuItem>)
-        )}
-      </Menu></>
-  )
-}
+          <MenuItem key={index} onClick={() => handleClose(el)}>
+            <Chip label={t(`status.${el}`)} size="small" color={getStatusColor(el)} />
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  );
+};
 
 export const EnrollRequestTable = ({
   requests,
@@ -126,7 +140,7 @@ export const EnrollRequestTable = ({
   searchValue?: string;
   handleShowEditForm: (request: EnrollRequest) => void;
   handleDelete: (id: string | undefined) => void;
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>
+  setSearchValue: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const [data, setData] = React.useState(requests);
 
@@ -174,7 +188,12 @@ export const EnrollRequestTable = ({
       header: () => <Typography>Projeto</Typography>
     }),
     columnHelper.accessor('status', {
-      cell: (info) => <StatusDropdown status={info.getValue() ?? ""} requestId={info.cell.row.original.id ?? ""} />,
+      cell: (info) => (
+        <StatusDropdown
+          status={info.getValue() ?? ''}
+          requestId={info.cell.row.original.id ?? ''}
+        />
+      ),
       header: () => <Typography>Estado</Typography>
     }),
     columnHelper.accessor('subscribedUpdates', {
@@ -184,13 +203,14 @@ export const EnrollRequestTable = ({
       header: () => <Typography>Subscrito a atualizações</Typography>
     }),
     columnHelper.accessor('createdOn', {
-      cell: (info) => { 
+      cell: (info) => {
         const value = info.getValue();
-        if(!value){
+        if (!value) {
           return;
         }
-        const date = new Date(value).toLocaleDateString()
-        return (<Typography>{date}</Typography>)},
+        const date = new Date(value).toLocaleDateString();
+        return <Typography>{date}</Typography>;
+      },
       header: () => <Typography>Data de Criação</Typography>
     }),
     columnHelper.display({
@@ -200,8 +220,7 @@ export const EnrollRequestTable = ({
           <IconButton
             onClick={() => {
               handleShowEditForm(element.row.original);
-            }}
-          >
+            }}>
             <Edit />
           </IconButton>
           <IconButton onClick={() => setDeleteModal({ data: element.row.original, open: true })}>
@@ -250,8 +269,7 @@ export const EnrollRequestTable = ({
                         justifyContent: 'space-between',
                         cursor: 'pointer'
                       }}
-                      className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
-                    >
+                      className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
@@ -272,8 +290,7 @@ export const EnrollRequestTable = ({
                   <TableCell
                     scope="row"
                     key={cell.id}
-                    style={{ textAlign: cell.column.id === 'actions' ? 'end' : 'inherit' }}
-                  >
+                    style={{ textAlign: cell.column.id === 'actions' ? 'end' : 'inherit' }}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { cx } from '@emotion/css';
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { cx } from '@emotion/css'
 
 import theme from '../../theme';
 import { styles } from './styles';
@@ -38,8 +38,8 @@ type LoadingProps = {
   icon?: boolean;
 };
 
-export const Loading = ({ height, icon = false}: LoadingProps) => (
+export const Loading = ({ height, icon = false }: LoadingProps) => (
   <StyledSpinnerContainer height={height} className="">
-    <StyledSpinner className={cx({ [styles.spinerIcon]: icon})}></StyledSpinner>
+    <StyledSpinner className={cx({ [styles.spinerIcon]: icon })}></StyledSpinner>
   </StyledSpinnerContainer>
 );

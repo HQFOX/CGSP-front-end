@@ -38,8 +38,7 @@ const Dropdown = ({ options, displayValue, label, valueChange }: DropdownProps) 
         aria-haspopup="true"
         onClick={handleClick}
         endIcon={open ? <ExpandLess /> : <ExpandMoreIcon />}
-        variant="outlined"
-      >
+        variant="outlined">
         {displayValue}
       </StyledButton>
       <Menu
@@ -49,8 +48,7 @@ const Dropdown = ({ options, displayValue, label, valueChange }: DropdownProps) 
         onClose={() => handleClose()}
         MenuListProps={{
           'aria-labelledby': label
-        }}
-      >
+        }}>
         {options?.map((option, index) => (
           <MenuItem key={index} onClick={() => handleClose(option)}>
             {option}
