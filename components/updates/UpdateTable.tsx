@@ -58,10 +58,10 @@ export const UpdateTable = ({
     }),
     columnHelper.accessor('files', {
       id: 'files',
-      cell: (info) => { 
+      cell: (info) => {
         const files = info.getValue();
-        if(Array.isArray(files)){
-          if(files[0]){
+        if (Array.isArray(files)) {
+          if (files[0]) {
             return (
               <Image
                 src={`${process.env.NEXT_PUBLIC_S3_URL}${files[0].filename}`}
@@ -69,7 +69,7 @@ export const UpdateTable = ({
                 width={50}
                 height={50}
               />
-            )
+            );
           }
         }
       },

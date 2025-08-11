@@ -1,24 +1,32 @@
 import React, { Suspense, useEffect, useState } from 'react';
 
-import { Add } from '@mui/icons-material';
-import { Box, CardContent, CardHeader, Divider, Grid2 as Grid, Stack, TextField, Typography } from '@mui/material';
+import { EChartsOption } from 'echarts';
 
+import { Add } from '@mui/icons-material';
+import {
+  Box,
+  CardContent,
+  CardHeader,
+  Divider,
+  Grid2 as Grid,
+  Stack,
+  TextField,
+  Typography
+} from '@mui/material';
+import NumberFlow from '@number-flow/react';
+import { TrendUp } from '@phosphor-icons/react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import NumberFlow from '@number-flow/react'
-
 import { Loading, StyledButton } from '../../components';
+import { StyledCard } from '../../components/StyledCard';
+import { Title } from '../../components/Title';
+import { EChartsWrapper } from '../../components/charts/EChartsWrapper';
+import { KpiPie } from '../../components/charts/PieChart';
 import { EnrollRequestTable } from '../../components/enrollrequests/EnrollRequestTable';
 import { EnrollRequestForm } from '../../components/forms/EnrollRequestForm';
 import { dataFetch } from '../../components/forms/utils';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
-import { StyledCard } from '../../components/StyledCard';
-import { Title } from '../../components/Title';
-import { TrendUp } from '@phosphor-icons/react';
 import theme from '../../theme';
-import { KpiPie } from '../../components/charts/PieChart';
-import { EChartsWrapper } from '../../components/charts/EChartsWrapper';
-import { EChartsOption } from 'echarts';
 
 const countFromLastWeek = (requests: EnrollRequest[]): number => {
   const now = new Date();
@@ -39,47 +47,45 @@ const countFromLastWeek = (requests: EnrollRequest[]): number => {
   const endOfLastWeek = new Date(startOfThisWeek);
 
   // Count timestamps that fall between start and end of last week
-  return requests.filter(request => {
-    if(request.createdOn){
-    const date = new Date(request.createdOn);
-    return date >= startOfLastWeek && date < endOfLastWeek;
+  return requests.filter((request) => {
+    if (request.createdOn) {
+      const date = new Date(request.createdOn);
+      return date >= startOfLastWeek && date < endOfLastWeek;
     }
   }).length;
-}
+};
 
-const Kpi = ({ total: totalProp, week}: {total: number, week: number}) => {
-
+const Kpi = ({ total: totalProp, week }: { total: number; week: number }) => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    setTotal(totalProp)
-  },[totalProp, setTotal])
+    setTotal(totalProp);
+  }, [totalProp, setTotal]);
 
   return (
     <StyledCard variant="outlined">
-      <CardHeader
-        title={<Title>Total de Pedidos:</Title>}
-      />
+      <CardHeader title={<Title>Total de Pedidos:</Title>} />
       <CardContent>
-        <div style={{ display: "flex", textAlign: "center", justifyContent: "space-between"}}>
-          <Typography fontSize={32} >{total}</Typography>
-          { week > 0 && <div>
-            <Typography variant={'body2'}>+<NumberFlow value={week} /> Esta semana</Typography>
-            <TrendUp color={theme.palette.success.main} />
-          </div>}
+        <div style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-between' }}>
+          <Typography fontSize={32}>{total}</Typography>
+          {week > 0 && (
+            <div>
+              <Typography variant={'body2'}>
+                +<NumberFlow value={week} /> Esta semana
+              </Typography>
+              <TrendUp color={theme.palette.success.main} />
+            </div>
+          )}
         </div>
-          
       </CardContent>
-      
     </StyledCard>
-  )
-}
+  );
+};
 
-const AnualChart = ({ requests}: { requests: EnrollRequest[]}) => {
-
+const AnualChart = ({ requests }: { requests: EnrollRequest[] }) => {
   const currentYear = new Date().getFullYear();
 
-  const option: EChartsOption  = {
+  const option: EChartsOption = {
     tooltip: {
       trigger: 'axis'
     },
@@ -96,38 +102,37 @@ const AnualChart = ({ requests}: { requests: EnrollRequest[]}) => {
     },
     yAxis: {
       axisTick: { length: 5 },
-      type: "value"
+      type: 'value'
     },
-      series: [{
-        type: "line",
-        data: requests.map((request,index) => ([request.createdOn,index]))
-    }],
+    series: [
+      {
+        type: 'line',
+        data: requests.map((request, index) => [request.createdOn, index])
+      }
+    ],
     dataZoom: [
-    {
-      type: 'slider',
-      xAxisIndex: 0, // explicitly apply to the first x-axis
-      startValue: `${currentYear}-01-01T00:00:00Z`,
-      endValue: `${currentYear}-12-31T23:59:59Z`
-    },
-    {
-      type: 'inside',
-      xAxisIndex: 0
-    }
-  ]
-  }
+      {
+        type: 'slider',
+        xAxisIndex: 0, // explicitly apply to the first x-axis
+        startValue: `${currentYear}-01-01T00:00:00Z`,
+        endValue: `${currentYear}-12-31T23:59:59Z`
+      },
+      {
+        type: 'inside',
+        xAxisIndex: 0
+      }
+    ]
+  };
 
   return (
     <StyledCard variant="outlined">
-      <CardHeader
-        title={<Title>Pedidos ao Long do Tempo:</Title>}
-      />
+      <CardHeader title={<Title>Pedidos ao Long do Tempo:</Title>} />
       <CardContent>
-          <EChartsWrapper option={option} style={{ height: "200px"}}/>
+        <EChartsWrapper option={option} style={{ height: '200px' }} />
       </CardContent>
-      
     </StyledCard>
-  )
-}
+  );
+};
 
 const EnrollRequestsAdmin = () => {
   const [requests, setRequests] = useState<EnrollRequest[]>([]);
@@ -135,9 +140,14 @@ const EnrollRequestsAdmin = () => {
   const [editRequest, setEditRequest] = useState<EnrollRequest | undefined>();
   const [showAddRequestForm, setShowAddRequestForm] = useState(false);
   const [showEditRequestForm, setShowEditRequestForm] = useState(false);
-  const [pieStats, setPieStats] = useState({ approved: 0, refused: 0, waiting: 0, numberOfSubscribed: 0})
+  const [pieStats, setPieStats] = useState({
+    approved: 0,
+    refused: 0,
+    waiting: 0,
+    numberOfSubscribed: 0
+  });
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -186,24 +196,28 @@ const EnrollRequestsAdmin = () => {
     let waiting = 0;
     let numberOfSubscribed = 0;
 
-    requests.forEach( request => {
-      if(request.status === "Approved"){
+    requests.forEach((request) => {
+      if (request.status === 'Approved') {
         approved++;
-      } else if(request.status === "Refused"){
+      } else if (request.status === 'Refused') {
         refused++;
-      } else{
+      } else {
         waiting++;
       }
-      if(request.subscribedUpdates){
+      if (request.subscribedUpdates) {
         numberOfSubscribed++;
       }
-      setPieStats({approved, refused, waiting, numberOfSubscribed})
-
-    })
-  },[requests])
+      setPieStats({ approved, refused, waiting, numberOfSubscribed });
+    });
+  }, [requests]);
 
   const refreshData = async () => {
-    const res = await dataFetch('GET', `${process.env.NEXT_PUBLIC_API_URL}/enroll`, undefined, true);
+    const res = await dataFetch(
+      'GET',
+      `${process.env.NEXT_PUBLIC_API_URL}/enroll`,
+      undefined,
+      true
+    );
     if (res.status == 200) {
       const request = (await res.json()) as EnrollRequest[];
 
@@ -242,17 +256,17 @@ const EnrollRequestsAdmin = () => {
       value: pieStats.approved,
       color: theme.palette.success.main
     },
-        {
+    {
       name: 'Recusados',
       value: pieStats.refused,
       color: theme.palette.secondary.dark
     },
-        {
+    {
       name: 'Em espera',
       value: pieStats.waiting,
       color: theme.palette.warning.main
     }
-  ]
+  ];
 
   const requestNotificationsPieData = [
     {
@@ -265,7 +279,7 @@ const EnrollRequestsAdmin = () => {
       value: requests.length - pieStats.numberOfSubscribed,
       color: theme.palette.secondary.dark
     }
-  ]
+  ];
 
   return (
     <PageContainer admin>
@@ -277,22 +291,46 @@ const EnrollRequestsAdmin = () => {
       </Box>
       <Grid container spacing={2} justifyContent="center">
         <Grid size={{ xs: 12, md: 3 }}>
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%"}}>
-            <KpiPie title={"Estado dos Pedidos"} data={requestStatusPieData}/>
-            <KpiPie title={"Subscrições a Notificações"} data={requestNotificationsPieData}/>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: '100%'
+            }}
+          >
+            <KpiPie title={'Estado dos Pedidos'} data={requestStatusPieData} />
+            <KpiPie title={'Subscrições a Notificações'} data={requestNotificationsPieData} />
           </div>
         </Grid>
         <Grid size={{ xs: 12, md: 7 }}>
-            <AnualChart requests={requests} />
+          <AnualChart requests={requests} />
         </Grid>
-        <Grid size={{ xs: 12, md: 2 }} >
-          <Kpi total={requests.length} week={countFromLastWeek(requests)}/>
+        <Grid size={{ xs: 12, md: 2 }}>
+          <Kpi total={requests.length} week={countFromLastWeek(requests)} />
         </Grid>
       </Grid>
       {!showAddRequestForm && (
-        <Grid container mt={2} mb={2} p={2} gap={1} style={{ backgroundColor: "white", border: "1px solid", borderColor: 'rgb(237, 237, 237)', alignItems: "center"}}>
+        <Grid
+          container
+          mt={2}
+          mb={2}
+          p={2}
+          gap={1}
+          style={{
+            backgroundColor: 'white',
+            border: '1px solid',
+            borderColor: 'rgb(237, 237, 237)',
+            alignItems: 'center'
+          }}
+        >
           <Grid>
-            <TextField label={"Pesquisar"} value={search} onChange={(e) => setSearch(e.target.value)} size='small'/>
+            <TextField
+              label={'Pesquisar'}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              size="small"
+            />
           </Grid>
           <Grid>
             <StyledButton
@@ -339,7 +377,6 @@ const EnrollRequestsAdmin = () => {
 };
 
 export const getServerSideProps = async (ctx: any) => {
-
   return {
     props: {
       ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'projectpage', 'enroll']))

@@ -29,7 +29,6 @@ export const StyledListItemButton = styled(ListItemButton)({
 });
 
 export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationProps) => {
-
   return (
     <Drawer
       variant={'temporary'}
@@ -65,7 +64,7 @@ export const VerticalNavigation = ({ open, pages, setOpen }: VerticalNavigationP
         </IconButton>
       </Box>
       <Divider />
-      <TreeList pages={pages ?? []}/>
+      <TreeList pages={pages ?? []} />
     </Drawer>
   );
 };

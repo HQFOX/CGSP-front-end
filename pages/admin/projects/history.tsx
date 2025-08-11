@@ -9,7 +9,6 @@ import { PageContainer } from '../../../components/pageContainer/PageContainer';
 import { ProjectManager } from '../../../components/projects/ProjectManager';
 
 const ProjectHistoryAdmin: NextPage<{ projects: Project[] }> = (data) => {
-
   return (
     <PageContainer>
       <Box sx={{ pb: 4 }}>
@@ -18,7 +17,7 @@ const ProjectHistoryAdmin: NextPage<{ projects: Project[] }> = (data) => {
         </Typography>
         <Divider />
       </Box>
-      <ProjectManager projects={data.projects} type='history' />
+      <ProjectManager projects={data.projects} type="history" />
     </PageContainer>
   );
 };

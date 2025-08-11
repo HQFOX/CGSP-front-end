@@ -1,8 +1,8 @@
 import React from 'react';
-import { useTranslation } from 'next-i18next';
 
 import styled from '@emotion/styled';
 import { CardActions, CardContent, CardHeader, CardMedia } from '@mui/material';
+import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import router from 'next/router';
 
@@ -46,8 +46,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           color="primary"
           variant="contained"
           sx={{ fontWeight: '600', boxShadow: 0 }}
-          onClick={() => router.push(`projects/${project.id}`)}
-        >
+          onClick={() => router.push(`projects/${project.id}`)}>
           {t('projectDetails.details')}
         </StyledButton>
       </CardActions>

@@ -24,8 +24,7 @@ export const LogOutModal = ({
       open={open}
       onClose={() => handleClose(false)}
       aria-labelledby="logout-dialog"
-      aria-describedby="logout-dialog"
-    >
+      aria-describedby="logout-dialog">
       <DialogTitle id="logout-dialog-title">Logout</DialogTitle>
       <IconButton
         aria-label="close"
@@ -34,8 +33,7 @@ export const LogOutModal = ({
           position: 'absolute',
           right: 8,
           top: 8
-        }}
-      >
+        }}>
         <Close />
       </IconButton>
       <DialogContent dividers>

@@ -129,15 +129,13 @@ export const Controls = ({
             <IconButton
               aria-label="map view"
               onClick={() => onViewChange('map')}
-              color={view === 'map' ? 'primary' : 'default'}
-            >
+              color={view === 'map' ? 'primary' : 'default'}>
               <MapOutlined />
             </IconButton>
             <IconButton
               aria-label="card view"
               onClick={() => onViewChange('card')}
-              color={view === 'card' ? 'primary' : 'default'}
-            >
+              color={view === 'card' ? 'primary' : 'default'}>
               <GridView />
             </IconButton>
           </Grid>
@@ -168,8 +166,7 @@ export const Controls = ({
                   position: 'absolute',
                   right: 8,
                   top: 8
-                }}
-              >
+                }}>
                 <Close />
               </IconButton>
               <Stack spacing={2}>

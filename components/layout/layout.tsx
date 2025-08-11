@@ -3,11 +3,11 @@ import React, { ReactElement, useState } from 'react';
 import { AccountBox, Analytics, Feed, Foundation } from '@mui/icons-material';
 import Head from 'next/head';
 
+import { PageItem } from '../TreeList/TreeList';
 import { VerticalNavigation } from '../verticalNavigation/VerticalNavigation';
 import Footer from './footer/Footer';
 import AdminHeader from './header/AdminHeader';
 import Header from './header/Header';
-import { PageItem } from '../TreeList/TreeList';
 
 const pages: PageItem[] = [
   {
@@ -23,19 +23,19 @@ const pages: PageItem[] = [
     children: [
       {
         id: 5,
-        text: "Criar Projeto",
-        path: '/admin/projects/create',
+        text: 'Criar Projeto',
+        path: '/admin/projects/create'
       },
       {
         id: 6,
-        text: "Projetos Atuais",
-        path: '/admin/projects/current',
+        text: 'Projetos Atuais',
+        path: '/admin/projects/current'
       },
       {
         id: 7,
-        text: "Projetos Concluídos",
-        path: '/admin/projects/history',
-      },
+        text: 'Projetos Concluídos',
+        path: '/admin/projects/history'
+      }
     ]
   },
   {
