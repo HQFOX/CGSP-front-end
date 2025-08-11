@@ -4,7 +4,7 @@ import { Square } from "@phosphor-icons/react";
 
 import { useInView } from 'react-intersection-observer';
 
-import { Popover, Typography, Zoom } from "@mui/material";
+import {  Typography, Zoom } from "@mui/material";
 
 import theme from "../../theme";
 import { useTranslation } from 'next-i18next';
@@ -21,6 +21,7 @@ export const LotCounter = (props: LotCounterProps) => {
     const { ref, inView, entry } = useInView({
         /* Optional options */
         threshold: 0,
+        triggerOnce: false
       });
     
     if(!lots || assignedLots && assignedLots > lots){
@@ -37,13 +38,15 @@ export const LotCounter = (props: LotCounterProps) => {
 
     const availableText = t("typologyDetails.availableLotsCount", { assignedLots, lots })
 
+    const initialDelay = 500/lots
+
     return (
         <div ref={ref} style={{ display: "flex", alignItems: "center"}}>
             <Typography>{t("typologyDetails.availableLotsTitle")}: </Typography>        
-            <div style={{ display: "flex" }} role="group" aria-label={availableText} >
+            <div style={{ }} role="group" aria-label={availableText} >
             {checks.map((check, index) => {
                 return (
-                    <Zoom key={index} in={inView} style={{ transitionDelay: `calc(100ms * ${index})`}}>
+                    <Zoom key={index} in={inView} style={{ transitionDelay: `calc(${initialDelay}ms * ${index})`}}>
                         {check ? <Square size={iconSize} weight="duotone" color={theme.palette.secondary.dark} /> : <Square size={iconSize} weight="duotone" color={theme.palette.success.dark} />}
                     </Zoom>
                 )
