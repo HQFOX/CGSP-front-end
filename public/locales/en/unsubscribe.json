@@ -1,9 +1,9 @@
 {
-	"title": "Email Notification Preferences",
-	"subtitle": "Here you can change and submit your email notification preferences:",
-	"projectOption": "Stop receiving Notifications about this project.",
-	"allProjectOption": "Stop receiving Notifications about all projects.",
-	"successTitle": "Your preferences were successfully saved.",
-	"successSubtitle": "If this was a mistake or you'd like to change them again you can make a new request in a Project.",
-	"errorMessage": "An error has occurred, please try again later."
+  "title": "Email Notification Preferences",
+  "subtitle": "Here you can change and submit your email notification preferences:",
+  "projectOption": "Stop receiving Notifications about this project.",
+  "allProjectOption": "Stop receiving Notifications about all projects.",
+  "successTitle": "Your preferences were successfully saved.",
+  "successSubtitle": "If this was a mistake or you'd like to change them again you can make a new request in a Project.",
+  "errorMessage": "An error has occurred, please try again later."
 }

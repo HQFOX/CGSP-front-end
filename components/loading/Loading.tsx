@@ -17,29 +17,29 @@ const spinner = keyframes`
 `;
 
 export const StyledSpinnerContainer = styled.div<LoadingProps>`
-	display: flex;
-	flex-grow: 1;
-	justify-content: center;
-	align-items: center;
-	height: ${(props) => props.height};
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  height: ${(props) => props.height};
 `;
 
 const StyledSpinner = styled('div')({
-	width: '50px',
-	height: '50px',
-	border: '5px solid #f3f3f3' /* Light grey */,
-	borderTop: `5px solid ${theme.palette.primary.main}` /* Black */,
-	borderRadius: '50%',
-	animation: `${spinner} 1.5s linear infinite`
+  width: '50px',
+  height: '50px',
+  border: '5px solid #f3f3f3' /* Light grey */,
+  borderTop: `5px solid ${theme.palette.primary.main}` /* Black */,
+  borderRadius: '50%',
+  animation: `${spinner} 1.5s linear infinite`
 });
 
 type LoadingProps = {
-	height?: string;
-	icon?: boolean;
+  height?: string;
+  icon?: boolean;
 };
 
 export const Loading = ({ height, icon = false }: LoadingProps) => (
-	<StyledSpinnerContainer height={height} className="">
-		<StyledSpinner className={cx({ [styles.spinerIcon]: icon })}></StyledSpinner>
-	</StyledSpinnerContainer>
+  <StyledSpinnerContainer height={height} className="">
+    <StyledSpinner className={cx({ [styles.spinerIcon]: icon })}></StyledSpinner>
+  </StyledSpinnerContainer>
 );

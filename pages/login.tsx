@@ -9,21 +9,21 @@ import { LoginForm } from '../components/forms/LoginForm';
 import { PageContainer } from '../components/pageContainer/PageContainer';
 
 const Login: NextPage = () => {
-	useTranslation(['projectpage', 'common']);
+  useTranslation(['projectpage', 'common']);
 
-	return (
-		<PageContainer>
-			<LoginForm />
-		</PageContainer>
-	);
+  return (
+    <PageContainer>
+      <LoginForm />
+    </PageContainer>
+  );
 };
 
 export const getServerSideProps = async (ctx: any) => {
-	return {
-		props: {
-			...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header', 'projectpage']))
-		}
-	};
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header', 'projectpage']))
+    }
+  };
 };
 
 export default Login;
