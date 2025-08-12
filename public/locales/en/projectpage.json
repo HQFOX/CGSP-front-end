@@ -51,7 +51,7 @@
     "BUILDINGPERMIT": "Construction Permit Approved",
     "CONCLUDED": "Concluded",
     "info": {
-      "ALLOTMENTPERMIT": "It is necessary to obtain the Building Permit to begin the construction of the lots of this project.",
+      "ALLOTMENTPERMIT": "It is necesseary to obtain the Building Permit to begin the construction of the lots of this project.",
       "BUILDINGPERMIT": "The Building process of the lots of this project is underway.",
       "CONCLUDED": "The Building process of this project has been concluded."
     }

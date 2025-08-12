@@ -51,7 +51,7 @@
     "BUILDINGPERMIT": "Alvará De Construção Aprovado",
     "CONCLUDED": "Concluída",
     "info": {
-      "ALLOTMENTPERMIT": "É necessária a aprovação do Alvará de Construção para começar a construção dos lotes deste projeto.",
+      "ALLOTMENTPERMIT": "É necessária a aprovação do Alvará de Loteamento para começar a construção dos lotes deste projeto.",
       "BUILDINGPERMIT": "O processo de construção dos lotes deste projeto está a decorrer.",
       "CONCLUDED": "O processo de construção foi terminado."
     }
