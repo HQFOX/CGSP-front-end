@@ -8,7 +8,8 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-push:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
@@ -28,8 +29,10 @@ jobs:
         run: npm run build
 
       - name: Extract version from package.json
-        id: version
-        run: echo "VERSION=$(node -p 'require(\"./package.json\").version')" >> $GITHUB_ENV
+        id: get_version
+        run: |
+          VERSION=$(node -p 'require("./package.json").version')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -41,7 +44,7 @@ jobs:
         run: docker build -t nextapp .
 
       - name: Tag Docker image
-        run: docker tag nextapp hqfox/nextapp:${{ env.VERSION }}
+        run: docker tag nextapp hqfox/nextapp:${{ steps.get_version.outputs.version }}
 
       - name: Push Docker image
-        run: docker push hqfox/nextapp:${{ env.VERSION }}
+        run: docker push hqfox/nextapp:${{ steps.get_version.outputs.version }}
