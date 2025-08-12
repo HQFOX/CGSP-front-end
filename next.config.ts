@@ -3,18 +3,18 @@
 const { i18n } = require('./next-i18next.config.js');
 
 const nextConfig = {
-  reactStrictMode: true,
-  i18n,
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'cgsp-bucket.s3.eu-west-3.amazonaws.com',
-        port: ''
-      }
-    ]
-  },
-  output: 'standalone'
+	reactStrictMode: true,
+	i18n,
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'cgsp-bucket.s3.eu-west-3.amazonaws.com',
+				port: ''
+			}
+		]
+	},
+	output: 'standalone'
 };
 
 module.exports = nextConfig;

@@ -4,52 +4,52 @@ import { CardContent, Grid, Typography } from '@mui/material';
 import Image from 'next/image';
 
 const CarouselCard = ({ index, item }: CarouselCardProps) => {
-  return (
-    // <Box
-    // 	key={`carousel${index}`}
-    // 	sx={{
-    // 		backgroundImage: `url(${item.image.src})`,
-    // 		backgroundRepeat: "no-repeat",
-    // 		backgroundPosition: "center",
-    // 		backgroundSize: { xs: "cover", md: "auto" },
-    // 		width: "100vw",
-    // 		height: "60vh",
-    // 		display: "flex"
-    // 	}}>
-    // 	<CarouselCardText>
-    // 		<Typography variant="h4" component="h1" color="common.white">
-    // 			{item.name}
-    // 		</Typography>
-    // 		<Typography variant="subtitle1" component="h2" color="common.white">
-    // 			{item.description}
-    // 		</Typography>
-    // 		<Button className="CheckButton">Check it out!</Button>
-    // 	</CarouselCardText>
-    // </Box>
-    <Grid container spacing={0} height={600} key={`carousel${index}`}>
-      <Grid item xs={5} alignSelf={'center'}>
-        <CardContent sx={{ p: 8, maxWidth: 500 }}>
-          <Typography variant="h4" component="h1" paddingBottom={2}>
-            {item.name}
-          </Typography>
-          <Typography variant="subtitle1" component="h2" paddingBottom={2}>
-            {item.description}
-          </Typography>
-          {item.action}
-        </CardContent>
-      </Grid>
-      <Grid item xs={7}>
-        <Image
-          width={1500}
-          height={600}
-          src={item.image.src}
-          alt=""
-          style={{ maxWidth: '70dvw', objectFit: 'contain' }}
-          priority
-        />
-      </Grid>
-    </Grid>
-  );
+	return (
+		// <Box
+		// 	key={`carousel${index}`}
+		// 	sx={{
+		// 		backgroundImage: `url(${item.image.src})`,
+		// 		backgroundRepeat: "no-repeat",
+		// 		backgroundPosition: "center",
+		// 		backgroundSize: { xs: "cover", md: "auto" },
+		// 		width: "100vw",
+		// 		height: "60vh",
+		// 		display: "flex"
+		// 	}}>
+		// 	<CarouselCardText>
+		// 		<Typography variant="h4" component="h1" color="common.white">
+		// 			{item.name}
+		// 		</Typography>
+		// 		<Typography variant="subtitle1" component="h2" color="common.white">
+		// 			{item.description}
+		// 		</Typography>
+		// 		<Button className="CheckButton">Check it out!</Button>
+		// 	</CarouselCardText>
+		// </Box>
+		<Grid container spacing={0} height={600} key={`carousel${index}`}>
+			<Grid item xs={5} alignSelf={'center'}>
+				<CardContent sx={{ p: 8, maxWidth: 500 }}>
+					<Typography variant="h4" component="h1" paddingBottom={2}>
+						{item.name}
+					</Typography>
+					<Typography variant="subtitle1" component="h2" paddingBottom={2}>
+						{item.description}
+					</Typography>
+					{item.action}
+				</CardContent>
+			</Grid>
+			<Grid item xs={7}>
+				<Image
+					width={1500}
+					height={600}
+					src={item.image.src}
+					alt=""
+					style={{ maxWidth: '70dvw', objectFit: 'contain' }}
+					priority
+				/>
+			</Grid>
+		</Grid>
+	);
 };
 
 // const CarouselCardText = styled("div")(
@@ -69,8 +69,8 @@ const CarouselCard = ({ index, item }: CarouselCardProps) => {
 // );
 
 type CarouselCardProps = {
-  index: string;
-  item: CarouselItem;
+	index: string;
+	item: CarouselItem;
 };
 
 export default CarouselCard;

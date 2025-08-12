@@ -1,7 +1,7 @@
 {
-  "status": {
-    "Approved": "Aprovado",
-    "Refused": "Recusado",
-    "Waiting": "Em espera"
-  }
+	"status": {
+		"Approved": "Aprovado",
+		"Refused": "Recusado",
+		"Waiting": "Em espera"
+	}
 }

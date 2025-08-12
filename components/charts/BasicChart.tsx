@@ -100,117 +100,117 @@ import { EChartsWrapper, ReactEChartsProps } from './EChartsWrapper';
 // };
 
 const basicChartOptions = (chartData: Project[]): ReactEChartsProps['option'] => ({
-  title: {
-    // text: "Total de Pedidos de Inscrição"
-  },
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'cross',
-      label: {
-        backgroundColor: '#6a7985'
-      }
-    }
-  },
-  legend: {
-    data: chartData.map((project) => project.title)
-  },
-  toolbox: {
-    feature: {
-      saveAsImage: {}
-    }
-  },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '9%',
-    containLabel: true
-  },
-  xAxis: [
-    {
-      type: 'time',
-      boundaryGap: ['0', '0']
-    }
-  ],
-  yAxis: [
-    {
-      minInterval: 1,
-      type: 'value',
-      boundaryGap: ['0', '0.1']
-    }
-  ],
-  dataZoom: [
-    {
-      id: 'dataZoomX',
-      type: 'slider',
-      xAxisIndex: [0],
-      filterMode: 'empty'
-    }
-  ],
-  series: chartData.map((project) => ({
-    name: project.title,
-    type: 'line',
-    // stack: "Total",
-    areaStyle: {},
-    emphasis: {
-      focus: 'series'
-    },
-    data: [
-      [project.createdOn, 0],
-      ...(project.enrollRequests?.map((request, index) => [request.createdOn, index + 1]) ?? []),
-      [new Date().toISOString().slice(0, 10), project.enrollRequests?.length]
-    ]
-  }))
-  // {
-  // 	name: "Union Ads",
-  // 	type: "line",
-  // 	stack: "Total",
-  // 	areaStyle: {},
-  // 	emphasis: {
-  // 		focus: "series"
-  // 	},
-  // 	data: [220, 182, 191, 234, 290, 330, 310]
-  // },
-  // {
-  // 	name: "Video Ads",
-  // 	type: "line",
-  // 	stack: "Total",
-  // 	areaStyle: {},
-  // 	emphasis: {
-  // 		focus: "series"
-  // 	},
-  // 	data: [150, 232, 201, 154, 190, 330, 410]
-  // },
-  // {
-  // 	name: "Direct",
-  // 	type: "line",
-  // 	stack: "Total",
-  // 	areaStyle: {},
-  // 	emphasis: {
-  // 		focus: "series"
-  // 	},
-  // 	data: [320, 332, 301, 334, 390, 330, 320]
-  // },
-  // {
-  // 	name: "Search Engine",
-  // 	type: "line",
-  // 	stack: "Total",
-  // 	label: {
-  // 		show: true,
-  // 		position: "top"
-  // 	},
-  // 	areaStyle: {},
-  // 	emphasis: {
-  // 		focus: "series"
-  // 	},
-  // 	data: [820, 932, 901, 934, 1290, 1330, 1320]
-  // }
+	title: {
+		// text: "Total de Pedidos de Inscrição"
+	},
+	tooltip: {
+		trigger: 'axis',
+		axisPointer: {
+			type: 'cross',
+			label: {
+				backgroundColor: '#6a7985'
+			}
+		}
+	},
+	legend: {
+		data: chartData.map((project) => project.title)
+	},
+	toolbox: {
+		feature: {
+			saveAsImage: {}
+		}
+	},
+	grid: {
+		left: '3%',
+		right: '4%',
+		bottom: '9%',
+		containLabel: true
+	},
+	xAxis: [
+		{
+			type: 'time',
+			boundaryGap: ['0', '0']
+		}
+	],
+	yAxis: [
+		{
+			minInterval: 1,
+			type: 'value',
+			boundaryGap: ['0', '0.1']
+		}
+	],
+	dataZoom: [
+		{
+			id: 'dataZoomX',
+			type: 'slider',
+			xAxisIndex: [0],
+			filterMode: 'empty'
+		}
+	],
+	series: chartData.map((project) => ({
+		name: project.title,
+		type: 'line',
+		// stack: "Total",
+		areaStyle: {},
+		emphasis: {
+			focus: 'series'
+		},
+		data: [
+			[project.createdOn, 0],
+			...(project.enrollRequests?.map((request, index) => [request.createdOn, index + 1]) ?? []),
+			[new Date().toISOString().slice(0, 10), project.enrollRequests?.length]
+		]
+	}))
+	// {
+	// 	name: "Union Ads",
+	// 	type: "line",
+	// 	stack: "Total",
+	// 	areaStyle: {},
+	// 	emphasis: {
+	// 		focus: "series"
+	// 	},
+	// 	data: [220, 182, 191, 234, 290, 330, 310]
+	// },
+	// {
+	// 	name: "Video Ads",
+	// 	type: "line",
+	// 	stack: "Total",
+	// 	areaStyle: {},
+	// 	emphasis: {
+	// 		focus: "series"
+	// 	},
+	// 	data: [150, 232, 201, 154, 190, 330, 410]
+	// },
+	// {
+	// 	name: "Direct",
+	// 	type: "line",
+	// 	stack: "Total",
+	// 	areaStyle: {},
+	// 	emphasis: {
+	// 		focus: "series"
+	// 	},
+	// 	data: [320, 332, 301, 334, 390, 330, 320]
+	// },
+	// {
+	// 	name: "Search Engine",
+	// 	type: "line",
+	// 	stack: "Total",
+	// 	label: {
+	// 		show: true,
+	// 		position: "top"
+	// 	},
+	// 	areaStyle: {},
+	// 	emphasis: {
+	// 		focus: "series"
+	// 	},
+	// 	data: [820, 932, 901, 934, 1290, 1330, 1320]
+	// }
 });
 
 export const BasicChart = ({ chartData = [] }: { chartData: Project[] }) => {
-  return (
-    <div style={{ display: 'flex' }}>
-      <EChartsWrapper option={basicChartOptions(chartData)} style={{ height: '400px' }} />
-    </div>
-  );
+	return (
+		<div style={{ display: 'flex' }}>
+			<EChartsWrapper option={basicChartOptions(chartData)} style={{ height: '400px' }} />
+		</div>
+	);
 };

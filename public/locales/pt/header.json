@@ -1,11 +1,11 @@
 {
-  "home": "Home",
-  "projects": "Projetos",
-  "history": "Histórico",
-  "updates": "Atualizações",
-  "faq": "FAQ",
-  "languages": {
-    "pt": "Português",
-    "en": "Inglês"
-  }
+	"home": "Home",
+	"projects": "Projetos",
+	"history": "Histórico",
+	"updates": "Atualizações",
+	"faq": "FAQ",
+	"languages": {
+		"pt": "Português",
+		"en": "Inglês"
+	}
 }

@@ -1,96 +1,96 @@
 {
-  "projectPageTitle": "Projetos a Decorrer",
-  "allm": "todos",
-  "allf": "todas",
-  "searchPlaceholder": "Pesquise um projeto",
-  "locationFilterLabel": "Distritos",
-  "projectStatusFilterLabel": "Estado do Projeto",
-  "filters": "filtros",
-  "projectDetails": {
-    "title": "título",
-    "typologies": "Tipologias",
-    "details": "detalhes",
-    "lots": "Lotes",
-    "assignedLots": "Lotes Atribuídos",
-    "district": "Distrito",
-    "assignmentStatus": "Estado de Atribuição",
-    "constructionStatus": "Estado de Construção",
-    "price": "Preço"
-  },
-  "typologyDetails": {
-    "typology": "Tipologia",
-    "bedrooms": "Quartos",
-    "bathrooms": "Casas de banho",
-    "area": "Áreas",
-    "interiorArea": "Área Interior",
-    "exteriorArea": "Área Exterior",
-    "garage": "Garagem",
-    "details": "detalhes",
-    "price": "Preço",
-    "plant": "Planta",
-    "availableLotsTitle": "Lotes Disponíveis",
-    "availableLotsCount": "{{assignedLots}} Atribuídos de {{lots}}"
-  },
-  "status": {
-    "completed": "Terminado",
-    "building": "Em construção",
-    "open": "Inscrições Abertas"
-  },
-  "assignmentStatus": {
-    "WAITING": "Em Espera",
-    "ONGOING": "a Decorrer",
-    "CONCLUDED": "Concluída",
-    "info": {
-      "WAITING": "De momento a atribuição de lotes deste projeto aos sócios não está disponível.",
-      "ONGOING": "A atribuição de lotes aos sócios inscritos projeto está a decorrer.",
-      "CONCLUDED": "Todos os lotes deste projeto foram atribuídos."
-    }
-  },
-  "constructionStatus": {
-    "ALLOTMENTPERMIT": "Alvará De Loteamento Aprovado",
-    "BUILDINGPERMIT": "Alvará De Construção Aprovado",
-    "CONCLUDED": "Concluída",
-    "info": {
-      "ALLOTMENTPERMIT": "É necessária a aprovação do Alvará de Construção para começar a construção dos lotes deste projeto.",
-      "BUILDINGPERMIT": "O processo de construção dos lotes deste projeto está a decorrer.",
-      "CONCLUDED": "O processo de construção foi terminado."
-    }
-  },
-  "preEnroll": "Pré-Inscrição",
-  "preEnrollDescription": "Aqui é possível fazer uma pré-inscrição neste projeto. Esta pré-inscrição é apenas uma demonstração de interesse e não constitui uma reserva de uma habitação, servindo como uma uma maneira de subscrever às atualizações do projeto e um pedido de contacto feito à equipa da cooperativa que irá responder assim que possível. \n Por ser natural existirem algumas questões, nós recomendamos também o encontro direto com a nossa equipa na sede.",
-  "form": {
-    "firstName": "Primeiro Nome",
-    "lastName": "Último Nome",
-    "email": "Email",
-    "telephoneNumber": "Número de telefone",
-    "submit": "submeter",
-    "required": "Obrigatório",
-    "updateCheckbox": "Subscrever a atualizações",
-    "notice": "Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e, se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site.\n Não são utilizados para qualquer outro fim comercial."
-  },
-  "successMessage": {
-    "success": "Pedido de Pré-Inscrição submetido com sucesso.",
-    "confirmation": "Um email de confirmação foi enviado para o email {{email}}",
-    "contactSoon": "Entraremos em contacto consigo em breve."
-  },
-  "errorMessage": {
-    "error": "Erro ao submeter Pedido de Pré-Inscrição.",
-    "reason": "Por algum motivo o Pedido de Pré-Inscrição não foi submetido.",
-    "trySoon": "Por favor tente mais tarde."
-  },
-  "tabsTitle": {
-    "details": "Detalhes",
-    "enroll": "Inscrição",
-    "updates": "Atualizações",
-    "location": "Localização"
-  },
-  "photoCategories": {
-    "projection": "projeções",
-    "plant": "planta",
-    "construction": "construção",
-    "fullscreen": "ecrã inteiro"
-  },
-  "map": {
-    "googleMapsLink": "Ver no Google Maps"
-  }
+	"projectPageTitle": "Projetos a Decorrer",
+	"allm": "todos",
+	"allf": "todas",
+	"searchPlaceholder": "Pesquise um projeto",
+	"locationFilterLabel": "Distritos",
+	"projectStatusFilterLabel": "Estado do Projeto",
+	"filters": "filtros",
+	"projectDetails": {
+		"title": "título",
+		"typologies": "Tipologias",
+		"details": "detalhes",
+		"lots": "Lotes",
+		"assignedLots": "Lotes Atribuídos",
+		"district": "Distrito",
+		"assignmentStatus": "Estado de Atribuição",
+		"constructionStatus": "Estado de Construção",
+		"price": "Preço"
+	},
+	"typologyDetails": {
+		"typology": "Tipologia",
+		"bedrooms": "Quartos",
+		"bathrooms": "Casas de banho",
+		"area": "Áreas",
+		"interiorArea": "Área Interior",
+		"exteriorArea": "Área Exterior",
+		"garage": "Garagem",
+		"details": "detalhes",
+		"price": "Preço",
+		"plant": "Planta",
+		"availableLotsTitle": "Lotes Disponíveis",
+		"availableLotsCount": "{{assignedLots}} Atribuídos de {{lots}}"
+	},
+	"status": {
+		"completed": "Terminado",
+		"building": "Em construção",
+		"open": "Inscrições Abertas"
+	},
+	"assignmentStatus": {
+		"WAITING": "Em Espera",
+		"ONGOING": "a Decorrer",
+		"CONCLUDED": "Concluída",
+		"info": {
+			"WAITING": "De momento a atribuição de lotes deste projeto aos sócios não está disponível.",
+			"ONGOING": "A atribuição de lotes aos sócios inscritos projeto está a decorrer.",
+			"CONCLUDED": "Todos os lotes deste projeto foram atribuídos."
+		}
+	},
+	"constructionStatus": {
+		"ALLOTMENTPERMIT": "Alvará De Loteamento Aprovado",
+		"BUILDINGPERMIT": "Alvará De Construção Aprovado",
+		"CONCLUDED": "Concluída",
+		"info": {
+			"ALLOTMENTPERMIT": "É necessária a aprovação do Alvará de Construção para começar a construção dos lotes deste projeto.",
+			"BUILDINGPERMIT": "O processo de construção dos lotes deste projeto está a decorrer.",
+			"CONCLUDED": "O processo de construção foi terminado."
+		}
+	},
+	"preEnroll": "Pré-Inscrição",
+	"preEnrollDescription": "Aqui é possível fazer uma pré-inscrição neste projeto. Esta pré-inscrição é apenas uma demonstração de interesse e não constitui uma reserva de uma habitação, servindo como uma uma maneira de subscrever às atualizações do projeto e um pedido de contacto feito à equipa da cooperativa que irá responder assim que possível. \n Por ser natural existirem algumas questões, nós recomendamos também o encontro direto com a nossa equipa na sede.",
+	"form": {
+		"firstName": "Primeiro Nome",
+		"lastName": "Último Nome",
+		"email": "Email",
+		"telephoneNumber": "Número de telefone",
+		"submit": "submeter",
+		"required": "Obrigatório",
+		"updateCheckbox": "Subscrever a atualizações",
+		"notice": "Os dados preenchidos serão apenas utilizados como forma de comunicar sobre este projeto e, se optar por isso,  de notificar de qualquer atualização sobre este colocada no nosso site.\n Não são utilizados para qualquer outro fim comercial."
+	},
+	"successMessage": {
+		"success": "Pedido de Pré-Inscrição submetido com sucesso.",
+		"confirmation": "Um email de confirmação foi enviado para o email {{email}}",
+		"contactSoon": "Entraremos em contacto consigo em breve."
+	},
+	"errorMessage": {
+		"error": "Erro ao submeter Pedido de Pré-Inscrição.",
+		"reason": "Por algum motivo o Pedido de Pré-Inscrição não foi submetido.",
+		"trySoon": "Por favor tente mais tarde."
+	},
+	"tabsTitle": {
+		"details": "Detalhes",
+		"enroll": "Inscrição",
+		"updates": "Atualizações",
+		"location": "Localização"
+	},
+	"photoCategories": {
+		"projection": "projeções",
+		"plant": "planta",
+		"construction": "construção",
+		"fullscreen": "ecrã inteiro"
+	},
+	"map": {
+		"googleMapsLink": "Ver no Google Maps"
+	}
 }

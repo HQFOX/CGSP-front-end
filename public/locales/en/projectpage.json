@@ -1,96 +1,96 @@
 {
-  "projectPageTitle": "Ongoing Projects",
-  "allm": "all",
-  "allf": "all",
-  "searchPlaceholder": "Search for a project",
-  "locationFilterLabel": "Districts",
-  "projectStatusFilterLabel": "Project Status",
-  "filters": "filters",
-  "projectDetails": {
-    "title": "title",
-    "typologies": "Typologies",
-    "details": "details",
-    "lots": "Lots",
-    "assignedLots": "Assigned Lots",
-    "district": "District",
-    "assignmentStatus": "Assignment Status",
-    "constructionStatus": "Construction Status",
-    "price": "Price"
-  },
-  "typologyDetails": {
-    "typology": "Typology",
-    "bedrooms": "Bedrooms",
-    "bathrooms": "Bathrooms",
-    "area": "Areas",
-    "interiorArea": "Interior Area",
-    "exteriorArea": "Exterior Area",
-    "garage": "Garage",
-    "details": "details",
-    "price": "Price",
-    "plant": "Plant",
-    "availableLotsTitle": "Available Lots",
-    "availableLotsCount": "{{assignedLots}} Assigned out of {{lots}}"
-  },
-  "status": {
-    "completed": "Completed",
-    "building": "Building",
-    "open": "Open"
-  },
-  "assignmentStatus": {
-    "WAITING": "Waiting",
-    "ONGOING": "Ongoing",
-    "CONCLUDED": "Concluded",
-    "info": {
-      "WAITING": "At the moment the lot assignment to members is not available.",
-      "ONGOING": "The lot assignment process is underway.",
-      "CONCLUDED": "All of the lots from this project have been assigned."
-    }
-  },
-  "constructionStatus": {
-    "ALLOTMENTPERMIT": "Allotment Permit Approved",
-    "BUILDINGPERMIT": "Construction Permit Approved",
-    "CONCLUDED": "Concluded",
-    "info": {
-      "ALLOTMENTPERMIT": "It is necessary to obtain the Building Permit to begin the construction of the lots of this project.",
-      "BUILDINGPERMIT": "The Building process of the lots of this project is underway.",
-      "CONCLUDED": "The Building process of this project has been concluded."
-    }
-  },
-  "preEnroll": "Pre-Enroll",
-  "preEnrollDescription": "Here you can pre-enroll for this project. This pre-enroll is only an expression of interest and does not constitute a reservation of a home. It serves as a way of subscribing to updates on the project and a request to contact the cooperative's team, who will respond as soon as possible. \n As there are bound to be some questions, we also recommend meeting directly with our team at the head office.",
-  "form": {
-    "firstName": "First Name",
-    "lastName": "Surname",
-    "email": "Email",
-    "telephoneNumber": "Telephone Number",
-    "submit": "Submit",
-    "required": "Required",
-    "updateCheckbox": "Subscribe to Updates",
-    "notice": "The data you fill in will only be used as a means of communicating about this project and, if you choose, to notify you of any updates about it posted on our website.\n They are not used for any other commercial purpose."
-  },
-  "successMessage": {
-    "success": "Pre-Enroll request successfully submitted.",
-    "confirmation": "A confirmation email has been sent to {{email}}",
-    "contactSoon": "We will contact you soon."
-  },
-  "errorMessage": {
-    "error": "There was an error submitting your Pre-Enroll request.",
-    "reason": "For some reason the request was not submitted.",
-    "trySoon": "Please try again soon."
-  },
-  "tabsTitle": {
-    "details": "Details",
-    "enroll": "Enroll",
-    "updates": "Updates",
-    "location": "Location"
-  },
-  "photoCategories": {
-    "projection": "projection",
-    "plant": "plant",
-    "construction": "construction",
-    "fullscreen": "fullscreen"
-  },
-  "map": {
-    "googleMapsLink": "See on Google Maps"
-  }
+	"projectPageTitle": "Ongoing Projects",
+	"allm": "all",
+	"allf": "all",
+	"searchPlaceholder": "Search for a project",
+	"locationFilterLabel": "Districts",
+	"projectStatusFilterLabel": "Project Status",
+	"filters": "filters",
+	"projectDetails": {
+		"title": "title",
+		"typologies": "Typologies",
+		"details": "details",
+		"lots": "Lots",
+		"assignedLots": "Assigned Lots",
+		"district": "District",
+		"assignmentStatus": "Assignment Status",
+		"constructionStatus": "Construction Status",
+		"price": "Price"
+	},
+	"typologyDetails": {
+		"typology": "Typology",
+		"bedrooms": "Bedrooms",
+		"bathrooms": "Bathrooms",
+		"area": "Areas",
+		"interiorArea": "Interior Area",
+		"exteriorArea": "Exterior Area",
+		"garage": "Garage",
+		"details": "details",
+		"price": "Price",
+		"plant": "Plant",
+		"availableLotsTitle": "Available Lots",
+		"availableLotsCount": "{{assignedLots}} Assigned out of {{lots}}"
+	},
+	"status": {
+		"completed": "Completed",
+		"building": "Building",
+		"open": "Open"
+	},
+	"assignmentStatus": {
+		"WAITING": "Waiting",
+		"ONGOING": "Ongoing",
+		"CONCLUDED": "Concluded",
+		"info": {
+			"WAITING": "At the moment the lot assignment to members is not available.",
+			"ONGOING": "The lot assignment process is underway.",
+			"CONCLUDED": "All of the lots from this project have been assigned."
+		}
+	},
+	"constructionStatus": {
+		"ALLOTMENTPERMIT": "Allotment Permit Approved",
+		"BUILDINGPERMIT": "Construction Permit Approved",
+		"CONCLUDED": "Concluded",
+		"info": {
+			"ALLOTMENTPERMIT": "It is necessary to obtain the Building Permit to begin the construction of the lots of this project.",
+			"BUILDINGPERMIT": "The Building process of the lots of this project is underway.",
+			"CONCLUDED": "The Building process of this project has been concluded."
+		}
+	},
+	"preEnroll": "Pre-Enroll",
+	"preEnrollDescription": "Here you can pre-enroll for this project. This pre-enroll is only an expression of interest and does not constitute a reservation of a home. It serves as a way of subscribing to updates on the project and a request to contact the cooperative's team, who will respond as soon as possible. \n As there are bound to be some questions, we also recommend meeting directly with our team at the head office.",
+	"form": {
+		"firstName": "First Name",
+		"lastName": "Surname",
+		"email": "Email",
+		"telephoneNumber": "Telephone Number",
+		"submit": "Submit",
+		"required": "Required",
+		"updateCheckbox": "Subscribe to Updates",
+		"notice": "The data you fill in will only be used as a means of communicating about this project and, if you choose, to notify you of any updates about it posted on our website.\n They are not used for any other commercial purpose."
+	},
+	"successMessage": {
+		"success": "Pre-Enroll request successfully submitted.",
+		"confirmation": "A confirmation email has been sent to {{email}}",
+		"contactSoon": "We will contact you soon."
+	},
+	"errorMessage": {
+		"error": "There was an error submitting your Pre-Enroll request.",
+		"reason": "For some reason the request was not submitted.",
+		"trySoon": "Please try again soon."
+	},
+	"tabsTitle": {
+		"details": "Details",
+		"enroll": "Enroll",
+		"updates": "Updates",
+		"location": "Location"
+	},
+	"photoCategories": {
+		"projection": "projection",
+		"plant": "plant",
+		"construction": "construction",
+		"fullscreen": "fullscreen"
+	},
+	"map": {
+		"googleMapsLink": "See on Google Maps"
+	}
 }
