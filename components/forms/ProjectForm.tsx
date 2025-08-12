@@ -55,10 +55,6 @@ const districtList = ['Évora', 'Beja', 'Portalegre', 'Setúbal', 'Aveiro', 'Bra
 
 const steps = ['Detalhes', 'Localização', 'Tipologias', 'Fotografias'];
 
-const numberText = "Este valor tem que ser um número.";
-const required = "Campo Obrigatório.";
-const assignedLotsText = "O número de lotes reservado não pode ser maior que o número de lotes desta tipologia."
-
 interface TypologyDetailsForm extends Omit<TypologyDetails, 'plant'> {
   index: number;
   plant?: AbstractFile;
@@ -123,27 +119,25 @@ export const ProjectForm = ({
       files: [] as { filename: string }[]
     },
     validationSchema: Yup.object({
-      title: Yup.string().required(required),
-      district: Yup.string().required(required),
-      lots: Yup.number().typeError(numberText).required(required),
+      title: Yup.string().required('Obrigatório'),
+      district: Yup.string().required('Obrigatório'),
+      lots: Yup.number().typeError('Este valor tem que ser um número').required('Obrigatório'),
       assignedLots: Yup.number()
-        .typeError(numberText)
-        .required(required),
+        .typeError('Este valor tem que ser um número')
+        .required('Obrigatório'),
       typologies: Yup.array().of(
         Yup.object().shape({
           typology: Yup.string(),
-          bedroomNumber: Yup.number().typeError(numberText).nullable(),
-          bathroomNumber: Yup.number().typeError(numberText).nullable(),
-          garageNumber: Yup.number().typeError(numberText).nullable(),
-          totalLotArea: Yup.number().typeError(numberText).nullable(),
-          livingArea: Yup.number().typeError(numberText).nullable(),
-          price: Yup.number().typeError(numberText).nullable(),
-          lots: Yup.number().typeError(numberText).nullable(),
-          assignedLots: Yup.number().typeError(numberText).nullable().max(Yup.ref('lots'), assignedLotsText)
+          bedroomNumber: Yup.number().typeError('Este valor tem que ser um número').nullable(),
+          bathroomNumber: Yup.number().typeError('Este valor tem que ser um número').nullable(),
+          garageNumber: Yup.number().typeError('Este valor tem que ser um número').nullable(),
+          totalLotArea: Yup.number().typeError('Este valor tem que ser um número').nullable(),
+          livingArea: Yup.number().typeError('Este valor tem que ser um número').nullable(),
+          price: Yup.number().typeError('Este valor tem que ser um número').nullable()
         })
       ),
-      latitude: Yup.number().required(required),
-      longitude: Yup.number().required(required)
+      latitude: Yup.number().required('Obrigatório'),
+      longitude: Yup.number().required('Obrigatório')
     }),
     onSubmit: async (values) => {
       setSubmitting(true);
@@ -221,9 +215,7 @@ export const ProjectForm = ({
           totalLotArea: undefined,
           livingArea: undefined,
           price: undefined,
-          plant: undefined,
-          lots: undefined,
-          assignedLots: undefined
+          plant: undefined
         } as TypologyDetailsForm
       ]
     });
@@ -723,12 +715,10 @@ export const ProjectForm = ({
                                   value={formik.values.typologies.at(index)?.totalLotArea}
                                   onChange={formik.handleChange}
                                   fullWidth
-                                  slotProps={{
-                                    input: {
+                                  InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="start">{'\u33A1'}</InputAdornment>
                                     )
-                                  }
                                   }}
                                   error={
                                     formik.touched.typologies?.at(index)?.totalLotArea &&
@@ -749,12 +739,10 @@ export const ProjectForm = ({
                                   value={formik.values.typologies.at(index)?.livingArea}
                                   onChange={formik.handleChange}
                                   fullWidth
-                                  slotProps={{
-                                    input: {
+                                  InputProps={{
                                     endAdornment: (
                                       <InputAdornment position="start">{'\u33A1'}</InputAdornment>
                                     )
-                                  }
                                   }}
                                   error={
                                     formik.touched.typologies?.at(index)?.livingArea &&
@@ -775,12 +763,10 @@ export const ProjectForm = ({
                                   value={formik.values.typologies.at(index)?.price}
                                   onChange={formik.handleChange}
                                   fullWidth
-                                  slotProps={{
-                                    input: {
-                                      endAdornment: (
-                                        <InputAdornment position="start">€</InputAdornment>
-                                      )
-                                    }
+                                  InputProps={{
+                                    endAdornment: (
+                                      <InputAdornment position="start">€</InputAdornment>
+                                    )
                                   }}
                                   error={
                                     formik.touched.typologies?.at(index)?.price &&
@@ -790,44 +776,6 @@ export const ProjectForm = ({
                                   helperText={
                                     // @ts-ignore
                                     formik.errors.typologies?.at(index)?.price
-                                  }
-                                />
-                              </Grid>
-                              <Grid item xs={3}>
-                                <TextField
-                                  id="lots"
-                                  name={`typologies[${index}].lots`}
-                                  label={"Número de lotes"}
-                                  value={formik.values.typologies.at(index)?.lots}
-                                  onChange={formik.handleChange}
-                                  fullWidth
-                                  error={
-                                    formik.touched.typologies?.at(index)?.lots &&
-                                    // @ts-ignore
-                                    Boolean(formik.errors.typologies?.at(index)?.lots)
-                                  }
-                                  helperText={
-                                    // @ts-ignore
-                                    formik.errors.typologies?.at(index)?.lots
-                                  }
-                                />
-                              </Grid>
-                              <Grid item xs={3}>
-                                <TextField
-                                  id="lots"
-                                  name={`typologies[${index}].assignedLots`}
-                                  label={"Número de lotes Reservados"}
-                                  value={formik.values.typologies.at(index)?.assignedLots}
-                                  onChange={formik.handleChange}
-                                  fullWidth
-                                  error={
-                                    formik.touched.typologies?.at(index)?.assignedLots &&
-                                    // @ts-ignore
-                                    Boolean(formik.errors.typologies?.at(index)?.assignedLots)
-                                  }
-                                  helperText={
-                                    // @ts-ignore
-                                    formik.errors.typologies?.at(index)?.assignedLots
                                   }
                                 />
                               </Grid>

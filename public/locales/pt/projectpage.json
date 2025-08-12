@@ -26,10 +26,7 @@
     "exteriorArea": "Área Exterior",
     "garage": "Garagem",
     "details": "detalhes",
-    "price": "Preço",
-    "plant": "Planta",
-    "availableLotsTitle": "Lotes Disponíveis",
-    "availableLotsCount": "{{assignedLots}} Atribuídos de {{lots}}"
+    "price": "Preço"
   },
   "status": {
     "completed": "Terminado",
@@ -89,8 +86,5 @@
     "plant": "planta",
     "construction": "construção",
     "fullscreen": "ecrã inteiro"
-  },
-  "map": {
-    "googleMapsLink": "Ver no Google Maps"
   }
 }
