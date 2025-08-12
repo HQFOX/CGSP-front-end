@@ -81,8 +81,6 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 
   const allowEnrollment = project.assignmentStatus === "ONGOING"
 
-  const showUpdatesPage = project.updates && project.updates.length > 0;
-
   return (
     <PageContainer>
       <Box sx={{ pb: 4 }}>
@@ -106,8 +104,14 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
         <Grid container p={5}>
           <TabPanel index={0} value={value}>
             <Details project={project} />
+            {/* <StyledTypography variant="body2" color="text.secondary">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                      nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              			</StyledTypography> */}
             {project.typologies != null &&
               project.typologies.map((typology, index) => {
+                console.log(typology)
                 return (
                   <Accordion
                     key={'typologyDetails' + index}
@@ -231,7 +235,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                 );
               })}
           </TabPanel>
-          {allowEnrollment && <TabPanel index={1} value={value}>
+          <TabPanel index={1} value={value}>
             <Box>
               <Typography sx={{ textIndent: 20 }} color="text.secondary">
                 {t('preEnrollDescription')}
@@ -253,7 +257,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                 </Grid>
               </Grid>
             </Box>
-          </TabPanel>}
+          </TabPanel>
           <TabPanel index={2} value={value}>
             <UpdateStepper updates={data.project.updates} />
           </TabPanel>
