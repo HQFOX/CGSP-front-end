@@ -1,5 +1,5 @@
 export interface AbstractFile {
-  filename: string;
-  link?: string;
-  file?: File;
+	filename: string;
+	link?: string;
+	file?: File;
 }
