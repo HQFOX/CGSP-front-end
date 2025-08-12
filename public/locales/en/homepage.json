@@ -24,11 +24,5 @@
   "bureaucracyTitle": "Simplified bureaucracy",
   "bureaucracyText": "The long and difficult bureaucratic process is handled entirely by the cooperative.",
   "middlemanTitle": "No Middleman",
-  "middlemanText": "Direct contact with the client.",
-  "carousel": {
-    "aboutUs": "About Us",
-    "sinceText": "Designing and building housing to its members for over 40 years.",
-    "updatesText": "See our latest updates about us and our latest projects.",
-    "historyText": "Know more about the finished projects of our cooperative."
-  }
+  "middlemanText": "Direct contact with the client."
 }
