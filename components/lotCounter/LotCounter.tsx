@@ -52,8 +52,7 @@ export const LotCounter = (props: LotCounterProps) => {
             <Zoom
               key={index}
               in={inView}
-              style={{ transitionDelay: `calc(${initialDelay}ms * ${index})` }}
-            >
+              style={{ transitionDelay: `calc(${initialDelay}ms * ${index})` }}>
               {check ? (
                 <Square size={iconSize} weight="duotone" color={theme.palette.secondary.dark} />
               ) : (

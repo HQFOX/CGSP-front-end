@@ -126,8 +126,7 @@ export const LoginForm = () => {
                 variant="contained"
                 color="primary"
                 value="submit"
-                fullWidth
-              >
+                fullWidth>
                 {'Login'}
               </StyledButton>
             </Grid>

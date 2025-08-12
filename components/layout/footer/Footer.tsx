@@ -42,8 +42,7 @@ const Footer = () => {
             href="https://www.facebook.com/profile.php/?id=100008109739037"
             target="_blank"
             rel="noopener noreferrer"
-            title="Facebook Page"
-          >
+            title="Facebook Page">
             <FacebookIcon fontSize="large" aria-label="Facebook Page" />
           </Link>
           <Typography variant="subtitle1" fontWeight={700} component={'h1'}>
@@ -55,8 +54,7 @@ const Footer = () => {
               component={Link}
               href="https://www.ihru.pt/"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
               Instituto da Habitação e da <br />
               Reabilitação Urbana - IHRU
             </Typography>
@@ -68,8 +66,7 @@ const Footer = () => {
               component={Link}
               href="https://www.cm-evora.pt/"
               target="_blank"
-              rel="noopener noreferrer"
-            >
+              rel="noopener noreferrer">
               Câmara Municipal de Évora - CME
             </Typography>
             <Image src={cme} alt="CME logo" width={120} height={50} />

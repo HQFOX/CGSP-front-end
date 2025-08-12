@@ -102,8 +102,7 @@ export const EnrollRequestForm = ({
             <IconButton
               onClick={() => {
                 success ? onCancel() : setCancelModal(true);
-              }}
-            >
+              }}>
               <Close />
             </IconButton>
           </Grid>
@@ -173,8 +172,7 @@ export const EnrollRequestForm = ({
                   value={formik.values.projectId}
                   onChange={formik.handleChange}
                   fullWidth
-                  helperText="Projeto ao qual esta pessoa se deseja inscrever."
-                >
+                  helperText="Projeto ao qual esta pessoa se deseja inscrever.">
                   {projects &&
                     projects.length > 0 &&
                     projects.map((option) => (
@@ -211,8 +209,7 @@ export const EnrollRequestForm = ({
                   variant="contained"
                   color="primary"
                   value="submit"
-                  fullWidth
-                >
+                  fullWidth>
                   {'Submeter'}
                 </StyledButton>
               </Grid>

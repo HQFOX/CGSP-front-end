@@ -87,15 +87,13 @@ const CGSPCarousel: React.FC = () => {
           color: theme.palette.primary.main
         }
       }}
-      height={'70dvh'}
-    >
+      height={'70dvh'}>
       <Grid
         container
         spacing={0}
         key={'carousel1'}
         style={{ backgroundColor: theme.palette.primary.dark }}
-        height={'100%'}
-      >
+        height={'100%'}>
         <Grid {...gridItemTectSectionProps}>
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={44} color={'white'}>
@@ -117,16 +115,14 @@ const CGSPCarousel: React.FC = () => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: { xs: 'cover', md: 'auto' }
-          }}
-        ></Grid>
+          }}></Grid>
       </Grid>
       <Grid
         container
         spacing={0}
         key={'carousel2'}
         style={{ backgroundColor: theme.palette.primary.dark }}
-        height={'100%'}
-      >
+        height={'100%'}>
         <Grid
           {...gridItemImageSectionProps}
           sx={{
@@ -134,8 +130,7 @@ const CGSPCarousel: React.FC = () => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: { xs: 'cover', md: 'cover' }
-          }}
-        ></Grid>
+          }}></Grid>
         <Grid {...gridItemTectSectionProps}>
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={33} color={'white'}>
@@ -153,8 +148,7 @@ const CGSPCarousel: React.FC = () => {
         spacing={0}
         key={'carousel3'}
         style={{ backgroundColor: theme.palette.primary.dark }}
-        height={'100%'}
-      >
+        height={'100%'}>
         <Grid
           {...gridItemImageSectionProps}
           sx={{
@@ -162,8 +156,7 @@ const CGSPCarousel: React.FC = () => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: { xs: 'cover', md: 'cover' }
-          }}
-        ></Grid>
+          }}></Grid>
         <Grid {...gridItemTectSectionProps}>
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={33} color={'white'}>

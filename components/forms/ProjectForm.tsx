@@ -377,8 +377,7 @@ export const ProjectForm = ({
               <IconButton
                 onClick={() => {
                   success ? onCancel() : setCancelModal(true);
-                }}
-              >
+                }}>
                 <Close />
               </IconButton>
             </Grid>
@@ -432,8 +431,7 @@ export const ProjectForm = ({
                           formik.touched.assignmentStatus && Boolean(formik.errors.assignmentStatus)
                         }
                         onChange={formik.handleChange}
-                        sx={{ width: '100%' }}
-                      >
+                        sx={{ width: '100%' }}>
                         <MenuItem value={'WAITING'}>{t('assignmentStatus.WAITING')}</MenuItem>
                         <MenuItem value={'ONGOING'}>{t('assignmentStatus.ONGOING')}</MenuItem>
                         <MenuItem value={'CONCLUDED'}>{t('assignmentStatus.CONCLUDED')}</MenuItem>
@@ -456,8 +454,7 @@ export const ProjectForm = ({
                           Boolean(formik.errors.constructionStatus)
                         }
                         onChange={formik.handleChange}
-                        sx={{ width: '100%' }}
-                      >
+                        sx={{ width: '100%' }}>
                         <MenuItem value={'ALLOTMENTPERMIT'}>
                           {t('constructionStatus.ALLOTMENTPERMIT')}
                         </MenuItem>
@@ -599,8 +596,7 @@ export const ProjectForm = ({
                           <Link
                             target="_blank"
                             href={`https://www.google.com/maps/search/?api=1&query=${formik.values.latitude}%2C${formik.values.longitude}`}
-                            passHref
-                          >
+                            passHref>
                             <StyledButton endIcon={<OpenInNew />}>Ver No Google Maps</StyledButton>
                           </Link>
                         }
@@ -658,8 +654,7 @@ export const ProjectForm = ({
                           <AccordionSummary
                             expandIcon={<ExpandMore />}
                             aria-controls={`${typology}-content-${index}`}
-                            id={`${typology}-header-${index}`}
-                          >
+                            id={`${typology}-header-${index}`}>
                             <Typography>{typology.typology}</Typography>
                           </AccordionSummary>
                           <AccordionDetails>
@@ -879,8 +874,7 @@ export const ProjectForm = ({
                   color="primary"
                   disabled={activeStep == 0}
                   onClick={handleBack}
-                  startIcon={<ArrowBackIos />}
-                >
+                  startIcon={<ArrowBackIos />}>
                   Passo Anterior
                 </StyledButton>
               </Grid>
@@ -890,8 +884,7 @@ export const ProjectForm = ({
                   color="primary"
                   disabled={activeStep == steps.length - 1}
                   onClick={handleNext}
-                  endIcon={<ArrowForwardIos />}
-                >
+                  endIcon={<ArrowForwardIos />}>
                   Próximo Passo
                 </StyledButton>
               </Grid>
@@ -913,8 +906,7 @@ export const ProjectForm = ({
                   color="primary"
                   value="submit"
                   fullWidth
-                  disabled={!formik.isValid}
-                >
+                  disabled={!formik.isValid}>
                   {'Submeter'}
                 </StyledButton>
               </Grid>

@@ -220,8 +220,7 @@ export const EnrollRequestTable = ({
           <IconButton
             onClick={() => {
               handleShowEditForm(element.row.original);
-            }}
-          >
+            }}>
             <Edit />
           </IconButton>
           <IconButton onClick={() => setDeleteModal({ data: element.row.original, open: true })}>
@@ -270,8 +269,7 @@ export const EnrollRequestTable = ({
                         justifyContent: 'space-between',
                         cursor: 'pointer'
                       }}
-                      className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}
-                    >
+                      className={header.column.getCanSort() ? 'cursor-pointer select-none' : ''}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
@@ -292,8 +290,7 @@ export const EnrollRequestTable = ({
                   <TableCell
                     scope="row"
                     key={cell.id}
-                    style={{ textAlign: cell.column.id === 'actions' ? 'end' : 'inherit' }}
-                  >
+                    style={{ textAlign: cell.column.id === 'actions' ? 'end' : 'inherit' }}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "eslint --fix",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc.json",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "prepare": "husky install",
     "docker-build": "npm run build && docker build -t nextapp .",
     "docker-push": "npm run docker-build && docker image push hqfox/nextapp"

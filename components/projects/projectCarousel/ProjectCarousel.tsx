@@ -68,8 +68,7 @@ export const ProjectCarousel = ({ project }: { project: Project }) => {
           }}
           index={index}
           onChange={handleCarouselItemChange}
-          autoPlay={autoPlay}
-        >
+          autoPlay={autoPlay}>
           {files.map(
             (file, index) =>
               file.filename && (
@@ -87,8 +86,7 @@ export const ProjectCarousel = ({ project }: { project: Project }) => {
             style={{ marginLeft: 'auto' }}
             variant={'outlined'}
             startIcon={<Fullscreen />}
-            onClick={() => handleShowModal(index)}
-          >
+            onClick={() => handleShowModal(index)}>
             {t('photoCategories.fullscreen')}
           </StyledButton>
         </CardActions>

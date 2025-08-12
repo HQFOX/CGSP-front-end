@@ -33,8 +33,7 @@ const ProjectModal = ({
           ml: 'auto',
           mt: 1,
           mr: 2
-        }}
-      >
+        }}>
         <Close />
       </IconButton>
       <Carousel
@@ -43,8 +42,7 @@ const ProjectModal = ({
         fullHeightHover
         navButtonsAlwaysVisible
         index={index}
-        onChange={(now?: number, next?) => handleCarouselItemChange(now)}
-      >
+        onChange={(now?: number, next?) => handleCarouselItemChange(now)}>
         {files.map((file) => (
           <div key={index} style={{ height: '100dvh' }}>
             <Image

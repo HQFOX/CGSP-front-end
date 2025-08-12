@@ -105,8 +105,7 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
             horizontal: 'right'
           }}
           onClose={handleAssignmentPopoverClose}
-          disableRestoreFocus
-        >
+          disableRestoreFocus>
           <Typography sx={{ p: 3 }} variant="body2" color="text.secondary">
             {popoverText}
           </Typography>
@@ -181,8 +180,7 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
             horizontal: 'right'
           }}
           onClose={handleConstructionPopoverClose}
-          disableRestoreFocus
-        >
+          disableRestoreFocus>
           <Typography sx={{ p: 3 }} variant="body2" color="text.secondary">
             {popoverText}
           </Typography>

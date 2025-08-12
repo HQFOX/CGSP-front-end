@@ -119,8 +119,7 @@ const Map = ({
           coordinates={marker}
           key={index}
           draggable={draggable}
-          setCoordinates={onCoordinateChange}
-        >
+          setCoordinates={onCoordinateChange}>
           {popupContent}
         </CGSPMarker>
       )),
@@ -142,8 +141,7 @@ const Map = ({
       center={centerCoordinates}
       scrollWheelZoom={scrollWheelZoom}
       className={styles.container}
-      {...others}
-    >
+      {...others}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url={url}
