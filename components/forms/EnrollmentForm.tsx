@@ -200,7 +200,8 @@ export const EnrollmentForm = ({ project }: { project: Project }) => {
                 variant="contained"
                 color="primary"
                 value="submit"
-                fullWidth>
+                fullWidth
+              >
                 {t('form.submit')}
               </StyledButton>
               <Typography variant="body2" sx={{ marginTop: '10px' }}>

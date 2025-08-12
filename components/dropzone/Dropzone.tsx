@@ -138,7 +138,8 @@ export const CGSPDropzone = ({
                 <DeleteButton
                   aria-label="delete"
                   color="secondary"
-                  onClick={(e) => handleDeleteFile(e, file)}>
+                  onClick={(e) => handleDeleteFile(e, file)}
+                >
                   <Cancel />
                 </DeleteButton>
               </ImageFrame>

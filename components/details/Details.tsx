@@ -1,9 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 
 import styled from '@emotion/styled';
 import { HomeOutlined, HomeWorkOutlined, HowToRegOutlined, Info } from '@mui/icons-material';
 import { Chip, Grid, Popover, Typography } from '@mui/material';
-import { useTranslation } from 'next-i18next';
 
 const StyledTypography = styled(Typography)({
   display: 'flex',
@@ -105,7 +105,8 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
             horizontal: 'right'
           }}
           onClose={handleAssignmentPopoverClose}
-          disableRestoreFocus>
+          disableRestoreFocus
+        >
           <Typography sx={{ p: 3 }} variant="body2" color="text.secondary">
             {popoverText}
           </Typography>
@@ -180,7 +181,8 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
             horizontal: 'right'
           }}
           onClose={handleConstructionPopoverClose}
-          disableRestoreFocus>
+          disableRestoreFocus
+        >
           <Typography sx={{ p: 3 }} variant="body2" color="text.secondary">
             {popoverText}
           </Typography>

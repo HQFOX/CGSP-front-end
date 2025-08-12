@@ -1,7 +1,7 @@
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 
 import { Card, CardActions, CardContent, CardHeader, CardMedia } from '@mui/material';
-import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import router from 'next/router';
 

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { CardMedia } from '@mui/material';
 import Image from 'next/image';
-
 const ProjectCarouselCard = ({ index, item, handleShowModal }: CarouselCardProps) => {
   return (
     <CardMedia>

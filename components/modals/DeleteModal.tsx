@@ -26,7 +26,8 @@ export const DeleteModal = ({
       open={open}
       onClose={() => handleClose(false)}
       aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description">
+      aria-describedby="alert-dialog-description"
+    >
       <DialogTitle id="alert-dialog-title">{'Apagar'}</DialogTitle>
       <IconButton
         aria-label="close"
@@ -35,7 +36,8 @@ export const DeleteModal = ({
           position: 'absolute',
           right: 8,
           top: 8
-        }}>
+        }}
+      >
         <Close />
       </IconButton>
       <DialogContent dividers>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -43,11 +43,11 @@ const Header = () => {
 
   const locales = router.locales;
 
-  const [language, setLanguage] = useState(router.locale);
+  const [language,setLanguage] = useState(router.locale);
 
   useEffect(() => {
-    setLanguage(router.locale);
-  }, [router.locale]);
+    setLanguage(router.locale)
+  },[router.locale])
 
   const pages = [
     {
@@ -103,7 +103,8 @@ const Header = () => {
               mr: 2,
               p: 2,
               display: { xs: 'none', md: 'flex' }
-            }}>
+            }}
+          >
             <Image
               src={logo}
               alt="Cooperativa Giraldo Sem Pavor logo"
@@ -119,7 +120,8 @@ const Header = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="primary">
+              color="primary"
+            >
               <MenuIcon />
             </IconButton>
             <Menu
@@ -138,7 +140,8 @@ const Header = () => {
               onClose={() => handleCloseNavMenu()}
               sx={{
                 display: { xs: 'block', md: 'none' }
-              }}>
+              }}
+            >
               {pages.map((page) => (
                 <MenuItem key={page.headerText} onClick={() => handleCloseNavMenu(page.path)}>
                   <Box textAlign="center">{page.headerText}</Box>
@@ -153,7 +156,8 @@ const Header = () => {
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1
-            }}>
+            }}
+          >
             <Image src={logo} alt="logo" width={120} height={40} />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -163,7 +167,8 @@ const Header = () => {
               onClick={handleClick}
               endIcon={<ExpandMoreIcon />}
               variant="outlined"
-              size="small">
+              size="small"
+            >
               {language?.toUpperCase()}
             </Button>
             <Menu
@@ -173,7 +178,8 @@ const Header = () => {
               onClose={() => handleClose()}
               MenuListProps={{
                 'aria-labelledby': 'languageDropdown'
-              }}>
+              }}
+            >
               {locales?.map((locale, index) => (
                 <MenuItem key={index} onClick={() => handleClose(locale)}>
                   {t(`languages.${locale}`)}
@@ -188,7 +194,8 @@ const Header = () => {
               flexDirection: 'row',
               justifyContent: 'space-evenly',
               alignItems: 'center'
-            }}>
+            }}
+          >
             {pages.map((page) => (
               <Link key={page.id} href={page.path} passHref>
                 <StyledHeaderButton tabIndex={-1} disableElevation variant="contained">
@@ -202,7 +209,8 @@ const Header = () => {
               onClick={handleClick}
               endIcon={<ExpandMoreIcon />}
               variant="outlined"
-              sx={{ maxHeight: 40, textTransform: 'none' }}>
+              sx={{ maxHeight: 40, textTransform: 'none' }}
+            >
               {t(`languages.${language}`)}
             </Button>
             <Menu
@@ -212,7 +220,8 @@ const Header = () => {
               onClose={() => handleClose()}
               MenuListProps={{
                 'aria-labelledby': 'languageDropdown'
-              }}>
+              }}
+            >
               {locales?.map((locale) => (
                 <MenuItem key={locale} onClick={() => handleClose(locale)}>
                   {t(`languages.${locale}`)}

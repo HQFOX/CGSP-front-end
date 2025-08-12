@@ -36,13 +36,17 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Details, Loading, LotCounter, StyledButton, Title } from '../../components';
+import { StyledButton } from '../../components/Button';
+import { Title } from '../../components/Title';
+import { Details } from '../../components/details/Details';
+import { Loading } from '../../components/loading/Loading';
 import { EnrollmentModal } from '../../components/modals/enrollmentModal/enrollmentModal';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 import { ProjectCarousel } from '../../components/projects/projectCarousel/ProjectCarousel';
 import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import theme from '../../theme';
+import { LotCounter } from '../../components/lotCounter/LotCounter';
 
 const Map = dynamic(() => import('../../components/map/Map'), {
   ssr: false,
@@ -75,7 +79,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
     setShowEnrollmentModal(false);
   };
 
-  const allowEnrollment = project.assignmentStatus === 'ONGOING';
+  const allowEnrollment = project.assignmentStatus === "ONGOING"
 
   const showUpdatesPage = project.updates && project.updates.length > 0;
 
@@ -108,15 +112,17 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                   <Accordion
                     key={'typologyDetails' + index}
                     defaultExpanded={index == 0}
-                    sx={{ border: '1px solid rgb(237, 237, 237)', boxShadow: 0 }}>
+                    sx={{ border: '1px solid rgb(237, 237, 237)', boxShadow: 0 }}
+                  >
                     <AccordionSummary
                       expandIcon={<ExpandMore />}
                       aria-controls={`typology${index}-content`}
                       id={`typology${index}-header`}
-                      sx={{ backgroundColor: theme.palette.secondary.light }}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                      sx={{ backgroundColor: theme.palette.secondary.light}}
+                    >
+                      <div style={{ display: "flex", alignItems: "center"}}>
                         <Typography marginRight={4}>{typology.typology}</Typography>
-                        <LotCounter lots={typology.lots} assignedLots={typology.assignedLots} />
+                        <LotCounter lots={typology.lots} assignedLots={typology.assignedLots}/>
                       </div>
                     </AccordionSummary>
                     <AccordionDetails>
@@ -134,12 +140,18 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                               {typology.livingArea && (
                                 <StyledTypography
                                   variant="body2"
-                                  color="text.secondary">{`${t('typologyDetails.interiorArea')}: ${typology.livingArea} \u33A1`}</StyledTypography>
+                                  color="text.secondary"
+                                >{`${t('typologyDetails.interiorArea')}: ${
+                                  typology.livingArea
+                                } \u33A1`}</StyledTypography>
                               )}
                               {typology.totalLotArea && (
                                 <StyledTypography
                                   variant="body2"
-                                  color="text.secondary">{`${t('typologyDetails.exteriorArea')}: ${typology.totalLotArea} \u33A1`}</StyledTypography>
+                                  color="text.secondary"
+                                >{`${t('typologyDetails.exteriorArea')}: ${
+                                  typology.totalLotArea
+                                } \u33A1`}</StyledTypography>
                               )}
                             </Stack>
                           </Grid>
@@ -150,7 +162,10 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                               <Hotel color="primary" />
                               <StyledTypography
                                 variant="body2"
-                                color="text.secondary">{`${t('typologyDetails.bedrooms')}: ${typology.bedroomNumber}`}</StyledTypography>
+                                color="text.secondary"
+                              >{`${t('typologyDetails.bedrooms')}: ${
+                                typology.bedroomNumber
+                              }`}</StyledTypography>
                             </Stack>
                           </Grid>
                         )}
@@ -160,7 +175,10 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                               <Bathtub color="primary" />
                               <StyledTypography
                                 variant="body2"
-                                color="text.secondary">{`${t('typologyDetails.bathrooms')}: ${typology.bathroomNumber}`}</StyledTypography>
+                                color="text.secondary"
+                              >{`${t('typologyDetails.bathrooms')}: ${
+                                typology.bathroomNumber
+                              }`}</StyledTypography>
                             </Stack>
                           </Grid>
                         )}
@@ -170,7 +188,10 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                               <Garage color="primary" />
                               <StyledTypography
                                 variant="body2"
-                                color="text.secondary">{`${t('typologyDetails.garage')}: ${typology.garageNumber}`}</StyledTypography>
+                                color="text.secondary"
+                              >{`${t('typologyDetails.garage')}: ${
+                                typology.garageNumber
+                              }`}</StyledTypography>
                             </Stack>
                           </Grid>
                         )}
@@ -180,13 +201,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                               <Euro color="primary" />
                               <StyledTypography
                                 variant="body2"
-                                color="text.secondary">{`${t('typologyDetails.price')}: ${new Intl.NumberFormat(
-                                'eu',
-                                {
-                                  style: 'currency',
-                                  currency: 'EUR'
-                                }
-                              ).format(typology.price)}`}</StyledTypography>
+                                color="text.secondary"
+                              >{`${t('typologyDetails.price')}: ${new Intl.NumberFormat('eu', {
+                                style: 'currency',
+                                currency: 'EUR'
+                              }).format(typology.price)}`}</StyledTypography>
                             </Stack>
                           </Grid>
                         )}
@@ -199,7 +218,8 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                                 target="_blank"
                                 rel="noreferrer"
                                 variant="body2"
-                                color="text.secondary">
+                                color="text.secondary"
+                              >
                                 {t('typologyDetails.plant')}
                               </MuiLink>
                             </Stack>
@@ -211,30 +231,29 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
                 );
               })}
           </TabPanel>
-          {allowEnrollment && (
-            <TabPanel index={1} value={value}>
-              <Box>
-                <Typography sx={{ textIndent: 20 }} color="text.secondary">
-                  {t('preEnrollDescription')}
-                </Typography>
-                <Grid container justifyContent={'flex-end'} paddingTop={4}>
-                  <Grid item sm={2}>
-                    <StyledButton
-                      variant="contained"
-                      color="primary"
-                      onClick={() => setShowEnrollmentModal(true)}>
-                      {t('preEnroll')}
-                    </StyledButton>
-                    <EnrollmentModal
-                      open={showEnrollmentModal}
-                      handleEnrollmentModalClose={handleEnrollmentModalClose}
-                      project={project}
-                    />
-                  </Grid>
+          {allowEnrollment && <TabPanel index={1} value={value}>
+            <Box>
+              <Typography sx={{ textIndent: 20 }} color="text.secondary">
+                {t('preEnrollDescription')}
+              </Typography>
+              <Grid container justifyContent={'flex-end'} paddingTop={4}>
+                <Grid item sm={2}>
+                  <StyledButton
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setShowEnrollmentModal(true)}
+                  >
+                    {t('preEnroll')}
+                  </StyledButton>
+                  <EnrollmentModal
+                    open={showEnrollmentModal}
+                    handleEnrollmentModalClose={handleEnrollmentModalClose}
+                    project={project}
+                  />
                 </Grid>
-              </Box>
-            </TabPanel>
-          )}
+              </Grid>
+            </Box>
+          </TabPanel>}
           <TabPanel index={2} value={value}>
             <UpdateStepper updates={data.project.updates} />
           </TabPanel>
@@ -250,7 +269,8 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
               <Link
                 target="_blank"
                 href={`https://www.google.com/maps/search/?api=1&query=${project.coordinates?.[0]}%2C${project.coordinates?.[1]}`}
-                passHref>
+                passHref
+              >
                 <StyledButton endIcon={<OpenInNew />}>{t('map.googleMapsLink')}</StyledButton>
               </Link>
             }

@@ -2,15 +2,16 @@ import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 
 import { CardContent, Grid2 as Grid, Grid2Props, Typography } from '@mui/material';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
-import { StyledButton, Title } from '..';
 import carousel2 from '../../public/carousel2.jpg';
 import carousel3 from '../../public/carousel3.jpg';
 import construcao3 from '../../public/construcao3.jpg';
 import projeccao0R from '../../public/projeccao0R.jpg';
 import theme from '../../theme';
+
+import { StyledButton, Title } from '..';
 
 const CGSPCarousel: React.FC = () => {
   const { t } = useTranslation(['homepage', 'header']);
@@ -18,11 +19,11 @@ const CGSPCarousel: React.FC = () => {
   const items = [
     {
       name: 'Giraldo Sem Pavor Cooperativa de Construção e Habitação',
-      description: t('carousel.sinceText'),
+      description: t("carousel.sinceText"),
       action: (
         <Link href="/#aboutus" passHref>
           <StyledButton variant="outlined" color={'secondary'}>
-            {t('carousel.aboutUs')}
+            {t("carousel.aboutUs")}
           </StyledButton>
         </Link>
       ),
@@ -66,12 +67,9 @@ const CGSPCarousel: React.FC = () => {
     }
   ];
 
-  const gridItemImageSectionProps: Grid2Props = { size: { xs: 12, md: 6, lg: 8 } };
+  const gridItemImageSectionProps: Grid2Props = { size: { xs: 12, md: 6, lg: 8}}
 
-  const gridItemTectSectionProps: Grid2Props = {
-    size: { xs: 12, md: 6, lg: 4 },
-    style: { backgroundColor: theme.palette.primary.dark, alignContent: 'center' }
-  };
+  const gridItemTectSectionProps: Grid2Props = { size: { xs: 12, md: 6, lg: 4}, style:{ backgroundColor: theme.palette.primary.dark, alignContent: 'center' }}
 
   return (
     <Carousel
@@ -87,14 +85,18 @@ const CGSPCarousel: React.FC = () => {
           color: theme.palette.primary.main
         }
       }}
-      height={'70dvh'}>
+      height={'70dvh'}
+    >
       <Grid
         container
         spacing={0}
         key={'carousel1'}
         style={{ backgroundColor: theme.palette.primary.dark }}
-        height={'100%'}>
-        <Grid {...gridItemTectSectionProps}>
+        height={'100%'}
+      >
+        <Grid
+        {...gridItemTectSectionProps}
+        >
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={44} color={'white'}>
               Giraldo Sem Pavor
@@ -115,14 +117,16 @@ const CGSPCarousel: React.FC = () => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: { xs: 'cover', md: 'auto' }
-          }}></Grid>
+          }}
+        ></Grid>
       </Grid>
       <Grid
         container
         spacing={0}
         key={'carousel2'}
         style={{ backgroundColor: theme.palette.primary.dark }}
-        height={'100%'}>
+        height={'100%'}
+      >
         <Grid
           {...gridItemImageSectionProps}
           sx={{
@@ -130,8 +134,11 @@ const CGSPCarousel: React.FC = () => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: { xs: 'cover', md: 'cover' }
-          }}></Grid>
-        <Grid {...gridItemTectSectionProps}>
+          }}
+        ></Grid>
+        <Grid
+          {...gridItemTectSectionProps}
+        >
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={33} color={'white'}>
               {items[1].name}
@@ -148,7 +155,8 @@ const CGSPCarousel: React.FC = () => {
         spacing={0}
         key={'carousel3'}
         style={{ backgroundColor: theme.palette.primary.dark }}
-        height={'100%'}>
+        height={'100%'}
+      >
         <Grid
           {...gridItemImageSectionProps}
           sx={{
@@ -156,8 +164,11 @@ const CGSPCarousel: React.FC = () => {
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
             backgroundSize: { xs: 'cover', md: 'cover' }
-          }}></Grid>
-        <Grid {...gridItemTectSectionProps}>
+          }}
+        ></Grid>
+        <Grid
+          {...gridItemTectSectionProps}
+        >
           <CardContent sx={{ p: { xs: 2, lg: 8 } }}>
             <Title variant="h1" component="h1" fontSize={33} color={'white'}>
               {items[3].name}

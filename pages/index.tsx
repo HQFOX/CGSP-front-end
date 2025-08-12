@@ -36,7 +36,7 @@ import { Title } from '../components/Title';
 import CGSPCarousel from '../components/carousel/Carousel';
 import logo from '../public/logo.svg';
 import styles from '../styles/Home.module.css';
-import { styles as styles2 } from '../styles/homepage';
+import { styles as styles2 } from "../styles/homepage";
 import theme from '../theme';
 
 const Map = dynamic(() => import('../components/map/Map'), {
@@ -153,7 +153,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
             <Divider />
           </Box>
           <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('projectElaborationTitle')}</Title>}
                 icon={<Architecture color="inherit" fontSize="large" />}
@@ -166,7 +166,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
                 </CardContent>
               </HoverCard>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('inscriptionTitle')}</Title>}
                 icon={<PersonAdd color="inherit" fontSize="large" />}
@@ -179,7 +179,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
                 </CardContent>
               </HoverCard>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('reservationTitle')}</Title>}
                 icon={<BookmarkAdd color="inherit" fontSize="large" />}
@@ -192,7 +192,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
                 </CardContent>
               </HoverCard>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('constructionTitle')}</Title>}
                 icon={<Construction color="inherit" fontSize="large" />}
@@ -230,7 +230,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
             <Divider />
           </Box>
           <Grid container columnSpacing={2}>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('controlledCostsTitle')}</Title>}
                 icon={<Savings color="inherit" fontSize="large" />}
@@ -243,7 +243,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
                 </CardContent>
               </HoverCard>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('transparencyTitle')}</Title>}
                 icon={<MeetingRoom color="inherit" fontSize="large" />}
@@ -256,7 +256,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
                 </CardContent>
               </HoverCard>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('bureaucracyTitle')}</Title>}
                 icon={<Description color="inherit" fontSize="large" />}
@@ -269,7 +269,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
                 </CardContent>
               </HoverCard>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs:12, sm: 6, md:3}}>
               <HoverCard
                 title={<Title>{t('middlemanTitle')}</Title>}
                 icon={<Group color="inherit" fontSize="large" />}

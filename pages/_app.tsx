@@ -7,7 +7,6 @@ import { jwtDecode } from 'jwt-decode';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
 
 import { AuthContext } from '../components/AuthContext';
 import { getUser } from '../components/forms/utils';
@@ -15,6 +14,7 @@ import Layout from '../components/layout/layout';
 import { Loading } from '../components/loading/Loading';
 import '../styles/globals.css';
 import theme from '../theme';
+import Script from 'next/script';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -57,7 +57,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   }, [router]);
 
-  const authProviderValue = useMemo(() => ({ user, setUser, isAuth, setIsAuth }), [user, isAuth]);
+  const authProviderValue = useMemo(
+    () => ({ user, setUser, isAuth, setIsAuth }),
+    [user, isAuth]
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -71,7 +74,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Script
           src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
           integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-          crossOrigin=""></Script>
+          crossOrigin=""
+        ></Script>
         {!checkAdminRoute() && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLEID ?? ''} />}
         <Layout isAdmin={checkAdminRoute()}>
           {loading ? <Loading height="70vh" /> : <Component {...pageProps} />}

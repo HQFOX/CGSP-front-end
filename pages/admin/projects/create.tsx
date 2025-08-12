@@ -10,6 +10,7 @@ import { Loading } from '../../../components/loading/Loading';
 import { PageContainer } from '../../../components/pageContainer/PageContainer';
 
 const ProjectCreateAdmin: NextPage<{ projects: Project[] }> = (data) => {
+
   return (
     <PageContainer>
       <Box sx={{ pb: 4 }}>
@@ -18,14 +19,15 @@ const ProjectCreateAdmin: NextPage<{ projects: Project[] }> = (data) => {
         </Typography>
         <Divider />
       </Box>
-      <Suspense fallback={<Loading />}>
-        <ProjectForm />
-      </Suspense>
+        <Suspense fallback={<Loading />}>
+          <ProjectForm />
+        </Suspense>
     </PageContainer>
   );
 };
 
 export const getServerSideProps = async (ctx: any) => {
+
   return {
     props: {
       ...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header', 'projectpage']))

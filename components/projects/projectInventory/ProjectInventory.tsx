@@ -300,7 +300,8 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
               key={project.id}
               in={animationStart}
               style={{ transitionDelay: animationStart ? `${i}00ms` : '0ms' }}
-              unmountOnExit>
+              unmountOnExit
+            >
               <Grid item xs={12} md={6} p={1} onClick={() => handleClick(project.id)}>
                 <ProjectCard key={project.id} project={project} />
               </Grid>

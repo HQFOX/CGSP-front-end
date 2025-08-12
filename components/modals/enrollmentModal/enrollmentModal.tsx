@@ -25,7 +25,8 @@ export const EnrollmentModal = ({
           position: 'absolute',
           right: 8,
           top: 8
-        }}>
+        }}
+      >
         <Close />
       </IconButton>
       <EnrollmentForm project={project} />
