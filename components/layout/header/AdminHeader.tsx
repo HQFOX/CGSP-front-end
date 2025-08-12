@@ -49,14 +49,16 @@ const AdminHeader = ({ setOpen }: HeaderProps) => {
             size="large"
             aria-label="account of current user"
             aria-controls="menu-appbar"
-            aria-haspopup="true">
+            aria-haspopup="true"
+          >
             <AccountCircle />
           </IconButton>
           <IconButton
             size="large"
             aria-label="logout"
             aria-haspopup="true"
-            onClick={() => setLogOutModal(true)}>
+            onClick={() => setLogOutModal(true)}
+          >
             <Logout />
           </IconButton>
         </Toolbar>

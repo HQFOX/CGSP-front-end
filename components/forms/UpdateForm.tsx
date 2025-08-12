@@ -124,7 +124,8 @@ export const UpdateForm = ({
             <IconButton
               onClick={() => {
                 success ? onCancel() : setCancelModal(true);
-              }}>
+              }}
+            >
               <Close />
             </IconButton>
           </Grid>
@@ -181,7 +182,8 @@ export const UpdateForm = ({
                   value={formik.values.project?.projectId}
                   onChange={formik.handleChange}
                   fullWidth
-                  helperText="Projeto sobre ao qual esta atualização se refere.">
+                  helperText="Projeto sobre ao qual esta atualização se refere."
+                >
                   {projects &&
                     projects.length > 0 &&
                     projects.map((option) => (
@@ -218,7 +220,8 @@ export const UpdateForm = ({
                   variant="contained"
                   color="primary"
                   value="submit"
-                  fullWidth>
+                  fullWidth
+                >
                   {'Submeter'}
                 </StyledButton>
               </Grid>
