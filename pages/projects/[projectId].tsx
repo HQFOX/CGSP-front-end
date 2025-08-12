@@ -79,8 +79,6 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
     setShowEnrollmentModal(false);
   };
 
-  const allowEnrollment = project.assignmentStatus === "ONGOING"
-
   return (
     <PageContainer>
       <Box sx={{ pb: 4 }}>
@@ -97,8 +95,9 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange}>
             <StyledTab label={t('tabsTitle.details')} />
-            {allowEnrollment && <StyledTab label={t('tabsTitle.enroll')} />}
+            <StyledTab label={t('tabsTitle.enroll')} />
             <StyledTab label={t('tabsTitle.updates')} />
+            {/* <StyledTab label={t("tabsTitle.location")} /> */}
           </Tabs>
         </Box>
         <Grid container p={5}>
