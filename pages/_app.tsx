@@ -71,7 +71,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Script
           src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
           integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-          crossOrigin=""></Script>
+          crossOrigin=""
+        ></Script>
         {!checkAdminRoute() && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLEID ?? ''} />}
         <Layout isAdmin={checkAdminRoute()}>
           {loading ? <Loading height="70vh" /> : <Component {...pageProps} />}

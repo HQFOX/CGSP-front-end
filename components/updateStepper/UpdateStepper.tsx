@@ -35,7 +35,8 @@ export const UpdateStepper = ({ updates }: { updates?: Update[] }) => {
       <Grid item xs={6} display={'flex'} justifyContent="right" height={40} alignItems="center">
         <Button
           style={{ textTransform: 'none' }}
-          onClick={() => handleShowUpdateDialog(post)}>{`${index}. ${post.title}`}</Button>
+          onClick={() => handleShowUpdateDialog(post)}
+        >{`${index}. ${post.title}`}</Button>
         {icon}
       </Grid>
       <Grid item xs={6} alignItems="center"></Grid>
@@ -57,7 +58,8 @@ export const UpdateStepper = ({ updates }: { updates?: Update[] }) => {
         {icon}
         <Button
           style={{ textTransform: 'none' }}
-          onClick={() => handleShowUpdateDialog(post)}>{`${index}. ${post.title}`}</Button>
+          onClick={() => handleShowUpdateDialog(post)}
+        >{`${index}. ${post.title}`}</Button>
       </Grid>
     </>
   );

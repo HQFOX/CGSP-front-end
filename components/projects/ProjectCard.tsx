@@ -46,7 +46,8 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           color="primary"
           variant="contained"
           sx={{ fontWeight: '600', boxShadow: 0 }}
-          onClick={() => router.push(`projects/${project.id}`)}>
+          onClick={() => router.push(`projects/${project.id}`)}
+        >
           {t('projectDetails.details')}
         </StyledButton>
       </CardActions>

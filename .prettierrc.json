@@ -19,5 +19,5 @@
   "editor.formatOnSave": true,
   "bracketSpacing": true,
   "proseWrap": "always",
-  "endOfLine": "auto"
+  "endOfLine": "lf"
 }

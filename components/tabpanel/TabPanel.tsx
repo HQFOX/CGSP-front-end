@@ -12,7 +12,8 @@ export const TabPanel = ({ children, index, value }: TabPanelProps) => {
       role="tabpanel"
       hidden={value !== index}
       id={`tab-panel-${index}`}
-      style={{ width: '100%' }}>
+      style={{ width: '100%' }}
+    >
       {children}
     </div>
   );
