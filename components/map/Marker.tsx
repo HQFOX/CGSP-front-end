@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { ReactNode, useMemo, useRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MarkerProps as LeafletMarkerProps, Marker, Popup } from 'react-leaflet';
@@ -60,7 +61,7 @@ export const CGSPMarker = ({
         }
       }
     }),
-    [setCoordinates]
+    []
   );
 
   return (

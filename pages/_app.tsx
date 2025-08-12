@@ -43,7 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }
       }
     }
-  }, [user, setUser]);
+  }, [user, setUser, isAuth]);
 
   useEffect(() => {
     router.events.on('routeChangeStart', handleStart);

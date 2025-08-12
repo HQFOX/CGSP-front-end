@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
 
 import { Close } from '@mui/icons-material';
-import { Dialog, IconButton } from '@mui/material';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Box, Dialog, IconButton } from '@mui/material';
 import Image from 'next/image';
+
+import { StyledIconButton } from './projectModal.styles';
 
 type ProjectModalProps = {
   open: boolean;

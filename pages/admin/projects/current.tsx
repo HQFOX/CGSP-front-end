@@ -22,6 +22,8 @@ const ProjectCurrentAdmin: NextPage<{ projects: Project[] }> = (data) => {
     </PageContainer>
   );
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
   const res = await fetch(`${process.env.API_URL}/project/current`);
   const projects = (await res.json()) as Project[];

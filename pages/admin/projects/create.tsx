@@ -9,6 +9,7 @@ import { ProjectForm } from '../../../components/forms/ProjectForm';
 import { Loading } from '../../../components/loading/Loading';
 import { PageContainer } from '../../../components/pageContainer/PageContainer';
 
+
 const ProjectCreateAdmin: NextPage<{ projects: Project[] }> = (data) => {
 
   return (
@@ -26,6 +27,7 @@ const ProjectCreateAdmin: NextPage<{ projects: Project[] }> = (data) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
 
   return {

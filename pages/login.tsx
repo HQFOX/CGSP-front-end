@@ -18,6 +18,7 @@ const Login: NextPage = () => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
   return {
     props: {

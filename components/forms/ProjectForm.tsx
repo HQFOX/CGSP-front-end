@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ReactNode, useRef, useState } from 'react';
 
 import { FormikErrors, useFormik } from 'formik';
@@ -604,6 +606,7 @@ export const ProjectForm = ({
                     <Autocomplete
                       multiple
                       options={['T0', 'T1', 'T2', 'T3', 'T4', 'T5']}
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
                       isOptionEqualToValue={(_option, _value) => false}
                       freeSolo
                       value={

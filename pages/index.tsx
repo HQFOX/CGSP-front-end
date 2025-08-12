@@ -325,6 +325,8 @@ const Home: NextPage<{ updates: Update[] }> = () => {
     </StyledMain>
   );
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getServerSideProps = async (ctx: any) => {
   const res = fetch(`${process.env.API_URL}/update`).then((res) => {
     if (res.ok) {

@@ -123,7 +123,7 @@ const Map = ({
         {popupContent}
       </CGSPMarker>
     ))
-  ,[draggable, onCoordinateChange, popupContent, markers])
+  ,[markers])
 
   const mappedProjects = useMemo(
     () => projects.map((project, index) => (
