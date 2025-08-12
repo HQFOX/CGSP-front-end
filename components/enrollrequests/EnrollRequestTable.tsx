@@ -1,11 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Delete, Edit } from '@mui/icons-material';
 import {
-  Chip,
   IconButton,
-  Menu,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -16,7 +13,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { CaretDown, CaretUp, SortAscending, SortDescending } from '@phosphor-icons/react';
+import { SortAscending, SortDescending } from '@phosphor-icons/react';
 import {
   SortingState,
   createColumnHelper,
@@ -28,105 +25,18 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 
-import { useTranslation } from 'next-i18next';
-
 import { DeleteModal } from '../modals/DeleteModal';
-import { Loading } from '../loading/Loading';
-import { dataFetch } from '../forms/utils';
-
-  const getStatusColor = (status: string) => {
-    switch(status){
-      case "Approved":
-        return "success"
-      case  "Waiting":
-        return "warning"
-      case "Refused":
-        return "error"
-      default:
-        return "info"
-    }
-      
-  }
-
-const StatusDropdown = ({status: statusProp, requestId}: {status: string, requestId: string}) => {
-    const { t } = useTranslation("enroll");
-
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const [openMenu, setOpenMenu] = useState(false)
-
-  const [status, setStatus] = useState(statusProp);
-
-  const [oldStatus, setOldStatus] = useState(statusProp);
-
-  const [loading, setLoading] = useState(false);
-
-  const handleOpen = (event: React.MouseEvent<any>) => {
-    setOpenMenu(true)
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = (value?: string) => {
-    setOpenMenu(false)
-    setAnchorEl(null)
-    if(value) {
-      setLoading(true)
-      setStatus(value)
-
-      const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/enroll/${requestId}/status`;
-
-      const res = dataFetch('PUT', endpoint, { status: value }, true).then((response) => {
-        if(response.ok) {
-            setLoading(false);
-            setOldStatus(value);
-            return response.json();
-        } else {
-          throw new Error('Error updating request status ' + response.status)
-        }
-      })
-      .catch((error) => {
-        setLoading(false);
-        setStatus(oldStatus);
-        console.log(error);
-      })
-    }
-  }
-
-  const statusType = ["Waiting", "Approved", "Refused"];
-
-  const chipIcon = useMemo(() => {
-    if(loading){
-      return <Loading height="16px" icon/>
-    } else{
-      return openMenu ? <CaretUp /> : <CaretDown />
-    }
-  },[loading, openMenu])
-
-  return (
-    <>
-      <Chip icon={chipIcon} label={t(`status.${status}`)} size='small' color={getStatusColor(status)} onClick={(event) =>handleOpen(event)} />
-      <Menu open={openMenu} anchorEl={anchorEl} onClick={() =>handleClose()}>
-        {statusType.map((el, index) => (
-          <MenuItem key={index} onClick={() => handleClose(el)}><Chip label={t(`status.${el}`)} size='small' color={getStatusColor(el)} /></MenuItem>)
-        )}
-      </Menu></>
-  )
-}
 
 export const EnrollRequestTable = ({
   requests,
   projects,
-  searchValue,
   handleShowEditForm,
-  handleDelete,
-  setSearchValue
+  handleDelete
 }: {
   requests: EnrollRequest[];
   projects: Project[];
-  searchValue?: string;
   handleShowEditForm: (request: EnrollRequest) => void;
   handleDelete: (id: string | undefined) => void;
-  setSearchValue: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const [data, setData] = React.useState(requests);
 
@@ -171,10 +81,10 @@ export const EnrollRequestTable = ({
     }),
     columnHelper.accessor('projectId', {
       cell: (info) => <Typography>{findProject(info.getValue())}</Typography>,
-      header: () => <Typography>Projeto</Typography>
+      header: () => <Typography>Project Id</Typography>
     }),
     columnHelper.accessor('status', {
-      cell: (info) => <StatusDropdown status={info.getValue() ?? ""} requestId={info.cell.row.original.id ?? ""} />,
+      cell: (info) => <Typography>{info.getValue()}</Typography>,
       header: () => <Typography>Estado</Typography>
     }),
     columnHelper.accessor('subscribedUpdates', {
@@ -184,13 +94,7 @@ export const EnrollRequestTable = ({
       header: () => <Typography>Subscrito a atualizações</Typography>
     }),
     columnHelper.accessor('createdOn', {
-      cell: (info) => { 
-        const value = info.getValue();
-        if(!value){
-          return;
-        }
-        const date = new Date(value).toLocaleDateString()
-        return (<Typography>{date}</Typography>)},
+      cell: (info) => <Typography>{info.getValue()}</Typography>,
       header: () => <Typography>Data de Criação</Typography>
     }),
     columnHelper.display({
@@ -220,10 +124,8 @@ export const EnrollRequestTable = ({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(), //client-side sorting
     onSortingChange: setSorting,
-    onGlobalFilterChange: setSearchValue,
     state: {
-      sorting,
-      globalFilter: searchValue
+      sorting
     }
   });
 
