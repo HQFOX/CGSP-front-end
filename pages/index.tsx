@@ -30,12 +30,11 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Hero } from '../components';
 import { StyledButton } from '../components/Button';
 import { StyledCard } from '../components/StyledCard';
 import { Title } from '../components/Title';
-import CGSPCarousel from '../components/carousel/Carousel';
 import logo from '../public/logo.svg';
-import styles from '../styles/Home.module.css';
 import { styles as styles2 } from '../styles/homepage';
 import theme from '../theme';
 
@@ -90,8 +89,8 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 	const { t } = useTranslation(['homepage', 'common']);
 
 	return (
-		<StyledMain className={styles2.main}>
-			<CGSPCarousel />
+		<StyledMain>
+			<Hero />
 			<Box sx={{ backgroundColor: 'rgb(249, 249, 249)', mt: 8, pb: 6 }}>
 				<Box
 					sx={(theme) => ({
@@ -108,20 +107,20 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 					})}>
 					<Box sx={{ pb: 4, textIndent: 35 }} id="aboutus">
 						<Title variant="h4" component="h1" fontSize={24}>
-							{t('whoAreWeTitle')}
+							{t('ourMissionTitle')}
 						</Title>
 						<Divider sx={{ mb: 4 }} />
 						<Typography variant="body2" color="text.secondary">
-							{t('whoAreWeTextP1')}
+							{t('ourMissionTextP1')}
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
-							{t('whoAreWeTextP2')}
+							{t('ourMissionTextP2')}
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
-							{t('whoAreWeTextP3')}
+							{t('ourMissionTextP3')}
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
-							{t('whoAreWeTextP4')}
+							{t('ourMissionTextP4')}
 						</Typography>
 						<div className={styles2.logoContainer}>
 							<Image src={logo} alt="Cooperativa Giraldo Sem Pavor logo" width={200} height={60} />
