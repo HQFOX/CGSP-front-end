@@ -18,6 +18,7 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 
 	return (
 		<Paper
+			id={`post-${post.id}`}
 			sx={(theme) => ({
 				[theme.breakpoints.up('md')]: { width: width },
 				[theme.breakpoints.down('md')]: { width: '90vw' },
@@ -28,6 +29,7 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 				<Grid container justifyContent={'space-between'}>
 					<Grid item>
 						<Title variant={'h5'}>{post.title}</Title>
+						{post.id}
 					</Grid>
 					<Grid item alignSelf={'end'}>
 						<Typography

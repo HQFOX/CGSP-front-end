@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { Box, Grid2, Typography } from '@mui/material';
+import { css } from '@emotion/css';
+import { Grid2, Typography } from '@mui/material';
 import NumberFlow from '@number-flow/react';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
@@ -22,6 +23,26 @@ const numberFlowProps = {
 	// Used for fading in/out characters:
 	opacityTiming: { duration: 350, easing: 'ease-out' }
 };
+
+const shapeDivider = css({
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
+	width: '100%',
+	overflow: 'hidden',
+	lineHeight: 0,
+	// transform: 'rotate(180deg)',
+
+	svg: {
+		position: 'relative',
+		display: 'block',
+		width: 'calc(183% + 1.3px)',
+		height: '15vh'
+	},
+	'.shape-fill': {
+		fill: '#ffffff'
+	}
+});
 
 export const Hero = () => {
 	const { t } = useTranslation(['homepage', 'common']);
@@ -49,7 +70,7 @@ export const Hero = () => {
 	return (
 		<Grid2
 			container
-			height={{ xs: '90dvh', md: '80dvh', lg: '70dvh' }}
+			height={{ xs: '100dvh', md: '80dvh', lg: '75dvh' }}
 			style={{ position: 'relative' }}
 			color={textColor}>
 			<ImageBox
@@ -60,13 +81,25 @@ export const Hero = () => {
 				}}
 			/>
 			<GradientBox />
+			<div className={shapeDivider}>
+				<svg
+					data-name="Layer 1"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 1200 120"
+					preserveAspectRatio="none">
+					<path
+						d="M598.97 114.72L0 0 0 120 1200 120 1200 0 598.97 114.72z"
+						className="shape-fill"></path>
+				</svg>
+			</div>
 			<Grid2
-				size={{ xs: 12 }}
+				size={{ xs: 12, sm: 12, md: 6 }}
 				zIndex={10}
 				bgcolor={'transparent'}
 				paddingTop={{ xs: 4, md: 8 }}
 				paddingLeft={{ xs: 4, md: 8 }}
 				ml={{ xs: 'auto', md: 8 }}
+				mb={{ xs: 0, md: 8 }}
 				ref={ref}>
 				<Title variant="h1" component="h1" fontSize={34}>
 					{t('cooperativeName')}
@@ -98,7 +131,13 @@ export const Hero = () => {
 					{t('hero.finishedProjects')}
 				</Title>
 			</Grid2>
-			<Grid2 offset={{ xs: 1, sm: 4 }} size={{ xs: 12, sm: 6 }} paddingLeft={{ xs: 4, md: 8 }}>
+			<Grid2
+				offset={{ xs: 1, sm: 1, md: 0 }}
+				size={{ xs: 12, sm: 6, md: 5 }}
+				padding={{ xs: 6, sm: 12 }}
+				mb={1}
+				display="flex"
+				alignItems={{ xs: 'baseline', sm: 'end' }}>
 				<Link href="/history" passHref>
 					<StyledButton disableElevation variant="outlined" color={'secondary'}>
 						{t('hero.ourHistory')}

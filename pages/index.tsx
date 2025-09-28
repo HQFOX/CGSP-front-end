@@ -21,9 +21,12 @@ import {
 	CardHeader,
 	Divider,
 	Grid2 as Grid,
+	IconButton,
+	Snackbar,
 	Typography,
 	styled
 } from '@mui/material';
+import { TelegramLogo, X } from '@phosphor-icons/react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
@@ -86,10 +89,38 @@ const HoverCard = ({
 };
 
 const Home: NextPage<{ updates: Update[] }> = () => {
+	const [openSnackbar, setOpenSnackbar] = useState(true);
 	const { t } = useTranslation(['homepage', 'common']);
 
+	const handleCloseSnackbar = () => {
+		setOpenSnackbar(false);
+	};
+
+	const action = (
+		<IconButton aria-label="close" onClick={handleCloseSnackbar}>
+			<X size={32} color="white" />
+		</IconButton>
+	);
+
+	const message = (
+		<Link href="/updates#post-502" passHref>
+			<Typography style={{ display: 'flex', alignItems: 'center' }}>
+				<TelegramLogo size={32} style={{ margin: 5 }} />
+				<span>Resposta à Vereadora Florbela Fernandes</span>
+			</Typography>
+		</Link>
+	);
 	return (
 		<StyledMain>
+			<Snackbar
+				open={openSnackbar}
+				autoHideDuration={9000}
+				onClose={handleCloseSnackbar}
+				message={message}
+				action={action}
+				anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+				slotProps={{ content: { style: { background: theme.palette.primary.dark } } }}
+			/>
 			<Hero />
 			<Box sx={{ backgroundColor: 'rgb(249, 249, 249)', mt: 8, pb: 6 }}>
 				<Box
