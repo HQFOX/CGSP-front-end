@@ -103,21 +103,23 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 	);
 
 	const message = (
-		<Link href="/updates#post-502" passHref>
-			<Typography style={{ display: 'flex', alignItems: 'center' }}>
-				<TelegramLogo size={32} style={{ margin: 5 }} />
-				<span>Resposta à Vereadora Florbela Fernandes</span>
-			</Typography>
-		</Link>
+		<div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+			<Link href="/updates#post-502" passHref>
+				<Typography style={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+					<TelegramLogo size={32} style={{ margin: 5 }} />
+					<span>Resposta à Vereadora Florbela Fernandes</span>
+				</Typography>
+			</Link>
+			{action}
+		</div>
 	);
 	return (
 		<StyledMain>
 			<Snackbar
 				open={openSnackbar}
-				autoHideDuration={9000}
 				onClose={handleCloseSnackbar}
+				autoHideDuration={9000}
 				message={message}
-				action={action}
 				anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
 				slotProps={{ content: { style: { background: theme.palette.primary.dark } } }}
 			/>

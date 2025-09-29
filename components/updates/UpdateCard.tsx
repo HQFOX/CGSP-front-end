@@ -29,7 +29,6 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 				<Grid container justifyContent={'space-between'}>
 					<Grid item>
 						<Title variant={'h5'}>{post.title}</Title>
-						{post.id}
 					</Grid>
 					<Grid item alignSelf={'end'}>
 						<Typography
