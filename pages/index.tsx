@@ -118,6 +118,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 			<Snackbar
 				open={openSnackbar}
 				onClose={handleCloseSnackbar}
+				autoHideDuration={9000}
 				message={message}
 				anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
 				slotProps={{ content: { style: { background: theme.palette.primary.dark } } }}
