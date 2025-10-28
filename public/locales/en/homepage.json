@@ -12,7 +12,7 @@
 	"aboutUsText": "       Our construction and housing cooperative has a rich history of 40 years of activity, during which we have built some of the most notable housing projects in the city of Évora.\n Our experience has taught us the importance of providing affordable and sustainable housing solutions that meet the diverse needs of our community.\n As a cooperative, we are dedicated to fostering a sense of community and cooperation among our members, and we provide opportunities for education, training, and personal growth.\n We believe in a democratic and inclusive decision-making process that prioritizes the needs and desires of our community.\n Through our commitment to quality, affordability, and community, we aim to continue building sustainable and innovative housing solutions that will benefit our community for generations to come.",
 	"howToGetThere": "Where to find us",
 	"ourMissionTitle": "Our Mission",
-	"ourMissionTextP1": "Cooperativa Giraldo Sem Pavor is a construction and housing cooperative based in Évora since 26th of February 1986, operating in the Alentejo region.",
+	"ourMissionTextP1": "Cooperativa Giraldo Sem Pavor is a construction and housing cooperative based in Évora since 29th of November 1982, operating in the Alentejo region.",
 	"ourMissionTextP2": "This institution emerges from the union of wills and interests in solving essential issues, such as guaranteeing decent housing for families, individuals or occasional groups. The cooperative seeks to provide sustainable and comprehensive solutions, meeting the fundamental needs of the community.",
 	"ourMissionTextP3": "Therefore, the main focus of this cooperative is to make it possible for its members to access housing at controlled costs, resulting in more affordable prices compared to market values.",
 	"ourMissionTextP4": "Within this context, we are actively committed to establishing strategic partnerships with professionals such as architects, construction companies and local councils. Through this collaboration, we seek not only to design but also to realize innovative and affordable housing projects. The developments are carefully planned, providing not just houses, but homes, which our members have the opportunity to join.",
@@ -39,5 +39,12 @@
 		"sinceText": "Designing and building housing to its members for over 40 years.",
 		"updatesText": "See our latest updates about us and our latest projects.",
 		"historyText": "Know more about the finished projects of our cooperative."
-	}
+	},
+	"howItStartedTitle": "How It All Began",
+	"howItStartedTextP1": "The origins of the Giraldo Sem Pavor Cooperative for Affordable Housing and Construction, CRL date back to February 26, 1976, when the São Sebastião Residents' Association was founded. This association emerged from the merger of two neighboring entities dedicated to improving the living conditions of local residents: the Sanches Miranda Neighborhood Residents' Association and the Bairro do Gancho Residents' Association.",
+	"howItStartedTextP2": "The early years were marked by significant challenges. With limited resources but great ambition, the association had to overcome numerous obstacles to achieve its goals. Thanks to the collective effort and commitment of all involved, the necessary funding was secured to begin construction of the first housing units.",
+	"howItStartedTextP3": "The process, however, was far from easy. Delays in funding caused several interruptions in the works, extending their completion until 1983/1984, when the first houses were finally finished. The project received financial support from the former Housing Development Fund (Fundo de Fomento da Habitação).",
+	"howItStartedTextP4": "Over time, and as a natural evolution of the organization, the São Sebastião Residents' Association was dissolved, giving rise to the current Giraldo Sem Pavor Cooperative, officially established on November 29, 1982.",
+	"howItStartedTextP5": "Following its establishment, the Cooperative also began the restoration of the old Alentejo farmhouse, which became its Social Headquarters—a symbol of the organization's journey, resilience, and collective identity that continue to inspire its mission to this day.",
+	"howItStartedTextP6": "Despite all this, we believe that our work speaks for itself, and therefore we invite you to explore our History section, where you can find our completed projects."
 }

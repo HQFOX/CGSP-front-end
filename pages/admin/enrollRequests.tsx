@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 
 import { EChartsOption } from 'echarts';
+import { NextPage } from 'next';
 
 import { Add } from '@mui/icons-material';
 import {
@@ -9,7 +10,6 @@ import {
 	CardHeader,
 	Divider,
 	Grid2 as Grid,
-	Stack,
 	TextField,
 	Typography
 } from '@mui/material';
@@ -134,7 +134,7 @@ const AnualChart = ({ requests }: { requests: EnrollRequest[] }) => {
 	);
 };
 
-const EnrollRequestsAdmin = () => {
+const EnrollRequestsAdmin: NextPage<{}> = (data) => {
 	const [requests, setRequests] = useState<EnrollRequest[]>([]);
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [editRequest, setEditRequest] = useState<EnrollRequest | undefined>();
@@ -376,7 +376,13 @@ const EnrollRequestsAdmin = () => {
 export const getServerSideProps = async (ctx: any) => {
 	return {
 		props: {
-			...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'projectpage', 'enroll']))
+			...(await serverSideTranslations(ctx.locale, [
+				'common',
+				'footer',
+				'header',
+				'projectpage',
+				'enroll'
+			]))
 		}
 	};
 };
