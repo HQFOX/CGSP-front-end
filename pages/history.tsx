@@ -20,14 +20,8 @@ const History: NextPage<{ projects: Project[] }> = (data) => {
 					{t('historyTitle')}
 				</Title>
 				<Divider />
-				<Typography sx={{ pt: 2 }} variant="body2" color="text.secondary">
+				<Typography sx={{ pt: 2, textIndent: 35 }} variant="body2" color="text.secondary">
 					{t('historyP1')}
-				</Typography>
-				<Typography variant="body2" color="text.secondary">
-					{t('historyP2')}
-				</Typography>
-				<Typography variant="body2" color="text.secondary">
-					{t('historyP3')}
 				</Typography>
 			</Box>
 			<ProjectInventory projects={data.projects} history />
