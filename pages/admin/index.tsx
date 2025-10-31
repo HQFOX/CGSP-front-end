@@ -50,7 +50,13 @@ const DashBoard = () => {
 export const getServerSideProps = async (ctx: any) => {
 	return {
 		props: {
-			...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header']))
+			...(await serverSideTranslations(ctx.locale, [
+				'common',
+				'footer',
+				'header',
+				'enroll',
+				'projectpage'
+			]))
 		}
 	};
 };
