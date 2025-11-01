@@ -146,6 +146,8 @@ export const EnrollRequestTable = ({
 
 	const [sorting, setSorting] = React.useState<SortingState>([{ id: 'createdOn', desc: true }]);
 
+	const { t } = useTranslation('enroll');
+
 	useEffect(() => {
 		setData(requests);
 	}, [requests]);
