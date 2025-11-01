@@ -136,8 +136,7 @@ const AnualChart = ({ requests }: { requests: EnrollRequest[] }) => {
 };
 
 const EnrollRequestsAdmin: NextPage = () => {
-	// Initialize i18n in the page component to ensure it's loaded
-	useTranslation();
+	useTranslation(['enroll', 'common', 'projectpage', 'header']);
 
 	const [requests, setRequests] = useState<EnrollRequest[]>([]);
 	const [projects, setProjects] = useState<Project[]>([]);
