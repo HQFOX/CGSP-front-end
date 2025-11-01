@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import NumberFlow from '@number-flow/react';
 import { TrendUp } from '@phosphor-icons/react';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Loading, StyledButton } from '../../components';
@@ -135,6 +136,9 @@ const AnualChart = ({ requests }: { requests: EnrollRequest[] }) => {
 };
 
 const EnrollRequestsAdmin: NextPage = () => {
+	// Initialize i18n in the page component to ensure it's loaded
+	useTranslation();
+
 	const [requests, setRequests] = useState<EnrollRequest[]>([]);
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [editRequest, setEditRequest] = useState<EnrollRequest | undefined>();
