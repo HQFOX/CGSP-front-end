@@ -134,7 +134,7 @@ const AnualChart = ({ requests }: { requests: EnrollRequest[] }) => {
 	);
 };
 
-const EnrollRequestsAdmin: NextPage<{}> = (data) => {
+const EnrollRequestsAdmin: NextPage = () => {
 	const [requests, setRequests] = useState<EnrollRequest[]>([]);
 	const [projects, setProjects] = useState<Project[]>([]);
 	const [editRequest, setEditRequest] = useState<EnrollRequest | undefined>();
