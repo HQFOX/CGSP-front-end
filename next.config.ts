@@ -9,7 +9,7 @@ const nextConfig = {
 		remotePatterns: [
 			{
 				protocol: 'https',
-				hostname: 'cgsp-bucket.s3.eu-west-3.amazonaws.com',
+				hostname: 'cgsp-prod.s3.eu-west-3.amazonaws.com',
 				port: ''
 			}
 		]
