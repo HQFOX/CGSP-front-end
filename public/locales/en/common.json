@@ -1,5 +1,18 @@
 {
 	"h1": "A simple example",
 	"updates": "updates",
-	"submit": "submit"
+	"submit": "submit",
+	"fileUploader": {
+		"fileReadyToSend": "File ready to be sent",
+		"retryUpload": "Retry upload",
+		"submittedImage": "Submitted image",
+		"fileBeingUploaded": "File being uploaded",
+		"deleteFile": "Delete file",
+		"dragFilesOr": "Drag files or",
+		"clickHere": "Click here",
+		"acceptedFiles": "Accepted files: {{types}}",
+		"maxFilesError": "Maximum number of files is {{max}}",
+		"invalidFileTypes": "Invalid file types: {{files}}",
+		"fileUploader": "File uploader"
+	}
 }

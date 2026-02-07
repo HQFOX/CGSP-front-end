@@ -5,9 +5,8 @@ import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
 import Image from 'next/image';
 import router from 'next/router';
 
+import { StyledButton, Title } from '../../components';
 import { formatDate } from '../../utils/utils';
-import { StyledButton } from '../Button';
-import { Title } from '../Title';
 
 const width = '40vw';
 

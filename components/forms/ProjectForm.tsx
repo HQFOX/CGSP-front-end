@@ -39,12 +39,13 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 import { StyledButton } from '../Button';
+import { AbstractFile } from '../FileUploader';
 import { CGSPDropzone } from '../dropzone/Dropzone';
 import { Loading } from '../loading/Loading';
 import { CancelModal } from '../modals/CancelModal';
 import { districtCenterCoordinates } from '../projects/projectInventory/ProjectInventory';
 import { SuccessMessage } from './SuccessMessage';
-import { AbstractFile } from './types';
+import { TypologyDetailsForm } from './types';
 import { dataFetch, getPresignedUrl, submitFile } from './utils';
 
 const Map = dynamic(() => import('../map/Map'), {
@@ -59,11 +60,6 @@ const numberText = 'Este valor tem que ser um número.';
 const required = 'Campo Obrigatório.';
 const assignedLotsText =
 	'O número de lotes reservado não pode ser maior que o número de lotes desta tipologia.';
-
-interface TypologyDetailsForm extends Omit<TypologyDetails, 'plant'> {
-	index: number;
-	plant?: AbstractFile;
-}
 
 const getErrorMessage = (errors: FormikErrors<any>, t?: any) => {
 	const result = [];

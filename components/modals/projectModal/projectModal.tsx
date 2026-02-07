@@ -15,7 +15,7 @@ type ProjectModalProps = {
 	handleCarouselItemChange: (index?: number) => void;
 };
 
-const ProjectModal = ({
+export const ProjectModal = ({
 	open,
 	modalOpen,
 	modalClose,
@@ -58,5 +58,3 @@ const ProjectModal = ({
 		</Dialog>
 	);
 };
-
-export default ProjectModal;

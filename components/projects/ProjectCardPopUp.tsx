@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import router from 'next/router';
 
-import { StyledButton } from '../Button';
+import { StyledButton } from '../../components';
 import { Details } from '../details/Details';
 
 interface ProjectCardPopUpProps {

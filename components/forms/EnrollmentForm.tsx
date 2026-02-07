@@ -17,9 +17,8 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 
+import { Loading, StyledButton } from '../../components';
 import theme from '../../theme';
-import { StyledButton } from '../Button';
-import { Loading } from '../loading/Loading';
 import { dataFetch } from './utils';
 
 export const SuccessMessage = ({ email }: { email: string }) => {

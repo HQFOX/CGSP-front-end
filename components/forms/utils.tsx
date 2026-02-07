@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-import { AbstractFile } from './types';
+import { AbstractFile } from '../FileUploader';
 
 export const submitFile = async (file: AbstractFile) => {
 	const endpoint = file.link ?? '';
@@ -21,7 +21,7 @@ export const submitFile = async (file: AbstractFile) => {
 	});
 };
 
-const getFileExtension = (filename: string) => {
+export const getFileExtension = (filename: string) => {
 	return filename.substring(filename.lastIndexOf('.'), filename.length) || filename;
 };
 

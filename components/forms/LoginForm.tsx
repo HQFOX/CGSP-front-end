@@ -8,9 +8,8 @@ import { Container, Grid, IconButton, Paper, TextField, Typography } from '@mui/
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
+import { Loading, StyledButton } from '../../components';
 import { AuthContext } from '../AuthContext';
-import { StyledButton } from '../Button';
-import { Loading } from '../loading/Loading';
 import { dataFetch, getUser } from './utils';
 
 const postLogin = async (values: { username: string; password: string }) => {
