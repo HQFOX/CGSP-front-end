@@ -8,5 +8,4 @@ export * from './FileUploader';
 export * from './pageContainer/PageContainer';
 export * from './updates/UpdateTable';
 export * from './StyledCard';
-export * from './map/Map';
 export * from './modals';
