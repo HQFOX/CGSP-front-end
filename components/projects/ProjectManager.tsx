@@ -1,14 +1,13 @@
-import React, { Suspense, useCallback, useMemo, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 
 import { Add } from '@mui/icons-material';
-import { Box, Divider, Grid2 as Grid, Typography } from '@mui/material';
+import { Grid2 as Grid } from '@mui/material';
 import { UploadSimple } from '@phosphor-icons/react/dist/ssr';
 import router from 'next/router';
 
-import { StyledButton } from '../Button';
+import { Loading, StyledButton } from '../../components';
 import { ProjectForm } from '../forms/ProjectForm';
 import { dataFetch } from '../forms/utils';
-import { Loading } from '../loading/Loading';
 import ProjectTable from '../tables/ProjectTable';
 
 export interface ProjectManagerProps {

@@ -10,7 +10,7 @@ import {
 	IconButton
 } from '@mui/material';
 
-import { StyledButton } from '../Button';
+import { StyledButton } from '../../components';
 
 export const DeleteModal = ({
 	open,

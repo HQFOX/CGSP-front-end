@@ -5,9 +5,8 @@ import { Fullscreen } from '@mui/icons-material';
 import { Card, CardActions } from '@mui/material';
 import { useTranslation } from 'next-i18next';
 
+import { ProjectModal, StyledButton } from '../../../components';
 import theme from '../../../theme';
-import { StyledButton } from '../../Button';
-import ProjectModal from '../../modals/projectModal/projectModal';
 import ProjectCarouselCard from './ProjectCarouselCard';
 
 const styles = {

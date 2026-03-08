@@ -7,7 +7,7 @@ import { Grid, IconButton, Typography } from '@mui/material';
 import Image from 'next/image';
 
 import theme from '../../theme';
-import { AbstractFile } from '../forms/types';
+import { AbstractFile } from '../FileUploader';
 
 const getColor = (props: any) => {
 	if (props.isDragAccept) {

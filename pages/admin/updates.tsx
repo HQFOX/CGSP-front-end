@@ -6,12 +6,8 @@ import { Add } from '@mui/icons-material';
 import { Box, Divider, Grid, Typography } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { StyledButton } from '../../components/Button';
-import { UpdateForm } from '../../components/forms/UpdateForm';
-import { dataFetch } from '../../components/forms/utils';
-import { Loading } from '../../components/loading/Loading';
-import { PageContainer } from '../../components/pageContainer/PageContainer';
-import { UpdateTable } from '../../components/updates/UpdateTable';
+import { Loading, PageContainer, StyledButton, UpdateTable } from '../../components';
+import { UpdateForm, dataFetch } from '../../components/forms';
 
 const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data) => {
 	const [updates, setUpdates] = useState<Update[]>(data.updates);

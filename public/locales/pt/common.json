@@ -1,5 +1,18 @@
 {
 	"h1": "Um simples Exemplo",
 	"updates": "atualizações",
-	"submit": "submeter"
+	"submit": "submeter",
+	"fileUploader": {
+		"fileReadyToSend": "Ficheiro pronto a ser enviado",
+		"retryUpload": "Retentar upload",
+		"submittedImage": "Imagem submetida",
+		"fileBeingUploaded": "Ficheiro a ser enviado",
+		"deleteFile": "Apagar ficheiro",
+		"dragFilesOr": "Arraste os ficheiros ou",
+		"clickHere": "Clique aqui",
+		"acceptedFiles": "Ficheiros aceites: {{types}}",
+		"maxFilesError": "Número máximo de ficheiros é {{max}}",
+		"invalidFileTypes": "Tipos de ficheiros inválidos: {{files}}",
+		"fileUploader": "Carregador de ficheiros"
+	}
 }

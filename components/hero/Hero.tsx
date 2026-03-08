@@ -7,10 +7,9 @@ import NumberFlow from '@number-flow/react';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 
+import { StyledButton, Title } from '../../components';
 import construcao3 from '../../public/construcao3.jpg';
 import theme from '../../theme';
-import { StyledButton } from '../Button';
-import { Title } from '../Title';
 import { GradientBox, ImageBox } from './styles';
 
 const textColor = 'white';

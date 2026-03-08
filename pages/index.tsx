@@ -27,17 +27,14 @@ import {
 	Typography,
 	styled
 } from '@mui/material';
-import { TelegramLogo, X } from '@phosphor-icons/react';
+import { TelegramLogoIcon, XIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Hero } from '../components';
-import { StyledButton } from '../components/Button';
-import { StyledCard } from '../components/StyledCard';
-import { Title } from '../components/Title';
+import { Hero, StyledButton, StyledCard, Title } from '../components';
 import logo from '../public/logo.svg';
 import { styles as styles2 } from '../styles/homepage';
 import theme from '../theme';
@@ -129,7 +126,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 
 	const action = (
 		<IconButton aria-label="close" onClick={handleCloseSnackbar}>
-			<X size={32} color="white" />
+			<XIcon size={32} color="white" />
 		</IconButton>
 	);
 
@@ -137,7 +134,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 		<div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
 			<Link href="/updates#post-502" passHref>
 				<Typography style={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-					<TelegramLogo size={32} style={{ margin: 5 }} />
+					<TelegramLogoIcon size={32} style={{ margin: 5 }} />
 					<span>Resposta à Vereadora Florbela Fernandes</span>
 				</Typography>
 			</Link>

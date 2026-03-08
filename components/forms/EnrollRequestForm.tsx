@@ -6,8 +6,7 @@ import * as Yup from 'yup';
 import { CheckCircle, Close } from '@mui/icons-material';
 import { Container, Grid, IconButton, MenuItem, Paper, TextField, Typography } from '@mui/material';
 
-import { StyledButton } from '../Button';
-import { Loading } from '../loading/Loading';
+import { Loading, StyledButton } from '../../components';
 import { CancelModal } from '../modals/CancelModal';
 import { SuccessMessage } from './SuccessMessage';
 import { dataFetch } from './utils';

@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 import router from 'next/router';
 
-import { StyledButton } from '../Button';
+import { StyledButton } from '../../components';
 import { StyledCard } from '../StyledCard';
 import { Title } from '../Title';
 import { Details } from '../details/Details';

@@ -4,15 +4,20 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { CheckCircle, Close } from '@mui/icons-material';
-import { Container, Grid, IconButton, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import {
+	Container,
+	Grid2,
+	IconButton,
+	MenuItem,
+	Paper,
+	TextField,
+	Typography
+} from '@mui/material';
 
-import { StyledButton } from '../Button';
-import { CGSPDropzone } from '../dropzone/Dropzone';
-import { Loading } from '../loading/Loading';
-import { CancelModal } from '../modals/CancelModal';
-import { SuccessMessage } from './SuccessMessage';
-import { AbstractFile } from './types';
-import { dataFetch, getPresignedUrl, submitFile } from './utils';
+import { FileUploader, Loading, StyledButton } from '../../../components';
+import { CancelModal } from '../../modals/CancelModal';
+import { SuccessMessage } from '../SuccessMessage';
+import { dataFetch, submitFile } from '../utils';
 
 export const UpdateForm = ({
 	update,
@@ -25,8 +30,6 @@ export const UpdateForm = ({
 	onCancel: () => void;
 	onSubmit: () => void;
 }) => {
-	const [files, setFiles] = useState<AbstractFile[]>(update?.files ?? []);
-
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitting, setSubmitting] = useState(false);
@@ -35,25 +38,16 @@ export const UpdateForm = ({
 
 	const [error, setError] = useState<string | undefined>(undefined);
 
-	const handleAddFile = async (newfiles: File[]) => {
-		newfiles.map((file) =>
-			getPresignedUrl(file).then((value) => value && setFiles([...files, value]))
-		);
-	};
-
-	const handleDeleteFile = () => {
-		setFiles([]);
-	};
-
 	const formik = useFormik({
 		initialValues: {
 			id: update?.id ?? '0',
 			title: update?.title ?? '',
 			content: update?.content ?? '',
-			project: update?.project ? update.project : null,
+			project: update?.project ?? null,
 			createdOn: update?.createdOn
 				? new Date(update.createdOn).toISOString().slice(0, 10)
-				: new Date().toISOString().slice(0, 10)
+				: new Date().toISOString().slice(0, 10),
+			files: update?.files ?? []
 		},
 		validationSchema: Yup.object({
 			title: Yup.string().required('Obrigatório'),
@@ -64,18 +58,24 @@ export const UpdateForm = ({
 
 			values = { ...values, createdOn: new Date(values.createdOn).toISOString() };
 
-			Promise.all(files.map(async (file) => submitFile(file)))
+			Promise.all(values.files.map(async (file) => submitFile(file)))
 				.then(async () => {
 					const valuesWithImage = {
 						...values,
-						files: files.map((file) => {
+						files: values.files.map((file) => {
 							return { filename: file.filename };
 						})
 					};
 
 					postUpdate(valuesWithImage);
 				})
-				.catch((error) => console.log(error));
+				.catch((error) => {
+					setError('Erro a submeter Imagens');
+					console.log(error);
+				})
+				.finally(() => {
+					setSubmitting(false);
+				});
 		}
 	});
 
@@ -105,8 +105,6 @@ export const UpdateForm = ({
 				console.log(error);
 			});
 
-		setSubmitting(false);
-
 		if (res) return res as Update;
 		return undefined;
 	};
@@ -114,21 +112,21 @@ export const UpdateForm = ({
 	return (
 		<Paper sx={{ mt: 4, minHeight: 600 }}>
 			<Container>
-				<Grid container pt={2}>
-					<Grid item mt={4}>
+				<Grid2 container pt={2}>
+					<Grid2 size="grow" mt={4}>
 						<Typography variant={'h5'}>
 							{update ? 'Editar Atualização' : 'Criar Atualização'}
 						</Typography>
-					</Grid>
-					<Grid item ml="auto">
+					</Grid2>
+					<Grid2 size="auto">
 						<IconButton
 							onClick={() => {
 								success ? onCancel() : setCancelModal(true);
 							}}>
 							<Close />
 						</IconButton>
-					</Grid>
-				</Grid>
+					</Grid2>
+				</Grid2>
 				{success ? (
 					<SuccessMessage
 						title={update ? 'Atualização Editada' : 'Nova Atualização Adicionada'}
@@ -136,8 +134,8 @@ export const UpdateForm = ({
 					/>
 				) : (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
-							<Grid item xs={12}>
+						<Grid2 container spacing={4} pb={2} pt={4}>
+							<Grid2 size={{ xs: 12 }}>
 								<TextField
 									id="title"
 									name="title"
@@ -148,17 +146,18 @@ export const UpdateForm = ({
 									helperText={formik.touched.title && formik.errors.title}
 									fullWidth
 								/>
-							</Grid>
-							<Grid item xs={12}>
-								<Typography variant="h6">Adicionar Foto à Atualização</Typography>
-								<CGSPDropzone
-									maxContent={1}
-									files={files}
-									onAddFile={handleAddFile}
-									onDeleteFile={handleDeleteFile}
+							</Grid2>
+							<Grid2 size={{ xs: 12 }}>
+								<FileUploader
+									name="file"
+									label="Adicionar Foto à Atualização"
+									files={formik.values.files}
+									onChange={(value) => formik.setFieldValue('files', value)}
+									error={(formik.errors.files ?? []) as string[]}
+									maxFiles={1}
 								/>
-							</Grid>
-							<Grid item xs={12}>
+							</Grid2>
+							<Grid2 size={{ xs: 12 }}>
 								<TextField
 									id="content"
 									name="content"
@@ -171,27 +170,29 @@ export const UpdateForm = ({
 									multiline
 									minRows={3}
 								/>
-							</Grid>
-							<Grid item xs={6}>
-								<TextField
-									id="projectId"
-									name="project.projectId"
-									label={'Projeto Relacionado: '}
-									select
-									value={formik.values.project?.projectId}
-									onChange={formik.handleChange}
-									fullWidth
-									helperText="Projeto sobre ao qual esta atualização se refere.">
-									{projects &&
-										projects.length > 0 &&
-										projects.map((option) => (
-											<MenuItem key={option.id} value={option.id}>
-												{option.title}
-											</MenuItem>
-										))}
-								</TextField>
-							</Grid>
-							<Grid item xs={6}>
+							</Grid2>
+							{projects && projects.length > 0 && (
+								<Grid2 size={{ xs: 12, sm: 6 }}>
+									<TextField
+										id="projectId"
+										name="project.projectId"
+										label={'Projeto Relacionado: '}
+										select
+										value={formik.values.project?.projectId}
+										onChange={formik.handleChange}
+										fullWidth
+										helperText="Projeto sobre ao qual esta atualização se refere.">
+										{projects &&
+											projects.length > 0 &&
+											projects.map((option) => (
+												<MenuItem key={option.id} value={option.id}>
+													{option.title}
+												</MenuItem>
+											))}
+									</TextField>
+								</Grid2>
+							)}
+							<Grid2 size={{ xs: 12, sm: 6 }}>
 								<TextField
 									id="createdOn"
 									name="createdOn"
@@ -202,8 +203,8 @@ export const UpdateForm = ({
 									fullWidth
 									helperText="Se este campo não for alterado a data será a de criação."
 								/>
-							</Grid>
-							<Grid item ml="auto">
+							</Grid2>
+							<Grid2 size="grow" ml="auto">
 								{submitting ? (
 									<Loading />
 								) : success ? (
@@ -211,8 +212,8 @@ export const UpdateForm = ({
 								) : (
 									<Typography color={'error'}>{error}</Typography>
 								)}
-							</Grid>
-							<Grid item>
+							</Grid2>
+							<Grid2 size="auto">
 								<StyledButton
 									type="submit"
 									variant="contained"
@@ -221,13 +222,13 @@ export const UpdateForm = ({
 									fullWidth>
 									{'Submeter'}
 								</StyledButton>
-							</Grid>
-							<Grid item>
+							</Grid2>
+							<Grid2 size="auto">
 								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
 									Cancelar
 								</StyledButton>
-							</Grid>
-						</Grid>
+							</Grid2>
+						</Grid2>
 					</form>
 				)}
 			</Container>
