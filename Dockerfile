@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -67,4 +67,5 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+# mkdir ensures the cache dir exists even if an ECS volume mount shadows the image layer
+CMD ["sh", "-c", "mkdir -p /app/.next/cache/images && node server.js"]
