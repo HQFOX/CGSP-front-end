@@ -53,10 +53,8 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# ✅ Create .next/cache/images after all copies so it isn't overwritten
-RUN mkdir -p /app/.next/cache/images && \
-    chown -R nextjs:nodejs /app/.next && \
-    chmod -R 777 /app/.next
+# Ensure .next is owned by nextjs
+RUN chown -R nextjs:nodejs /app/.next
 
 USER nextjs
 
@@ -67,5 +65,5 @@ ENV PORT=3000
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
-# mkdir ensures the cache dir exists even if an ECS volume mount shadows the image layer
-CMD ["sh", "-c", "mkdir -p /app/.next/cache/images && node server.js"]
+# Symlink .next/cache to /tmp so image optimization writes to a writable tmpfs
+CMD ["sh", "-c", "rm -rf /app/.next/cache && mkdir -p /tmp/cache/images && ln -s /tmp/cache /app/.next/cache && node server.js"]
