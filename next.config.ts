@@ -11,6 +11,11 @@ const nextConfig = {
 				protocol: 'https',
 				hostname: process.env.BUCKET,
 				port: ''
+			},
+			{
+				protocol: 'https',
+				hostname: 'images.pexels.com',
+				port: ''
 			}
 		]
 	},

@@ -48,7 +48,6 @@
 		"react-i18next": "^16.5.4",
 		"react-intersection-observer": "^10.0.2",
 		"react-leaflet": "^4.2.1",
-		"react-material-ui-carousel": "^3.4.2",
 		"sharp": "^0.34.5",
 		"yup": "^1.7.1"
 	},

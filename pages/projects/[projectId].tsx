@@ -36,10 +36,9 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Details, Loading, LotCounter, StyledButton, Title } from '../../components';
+import { Carousel, Details, Loading, LotCounter, StyledButton, Title } from '../../components';
 import { EnrollmentModal } from '../../components/modals/enrollmentModal/enrollmentModal';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
-import { ProjectCarousel } from '../../components/projects/projectCarousel/ProjectCarousel';
 import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import theme from '../../theme';
@@ -77,7 +76,9 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 
 	const allowEnrollment = project.assignmentStatus === 'ONGOING';
 
-	const showUpdatesPage = project.updates && project.updates.length > 0;
+	const images = [project.coverPhoto, ...(project?.files ?? [])].filter(
+		(file): file is ProjectFile => file !== undefined
+	);
 
 	return (
 		<PageContainer>
@@ -86,11 +87,20 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					<ArrowBackIosNew />
 				</IconButton>
 				<Title variant="h5" component="h1" fontSize={24} display={'inline-block'}>
-					{project.title}
+					{project.title}( )
 				</Title>
 				<Divider />
 			</Box>
-			{project.coverPhoto && project.files && <ProjectCarousel project={project} />}
+			{images.length > 0 && (
+				<Paper sx={{ height: '80vh', border: '1px solid rgb(237, 237, 237)', boxShadow: 0 }}>
+					<Carousel
+						images={images.map((file) => ({
+							id: file?.filename ?? '',
+							url: `${process.env.NEXT_PUBLIC_S3_URL}${file?.filename ?? ''}`
+						}))}
+					/>
+				</Paper>
+			)}
 			<Paper sx={{ mt: 4, border: '1px solid rgb(237, 237, 237)', boxShadow: 0 }}>
 				<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
 					<Tabs value={value} onChange={handleChange}>
