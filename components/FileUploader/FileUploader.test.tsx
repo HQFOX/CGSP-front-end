@@ -33,10 +33,14 @@ const mockGetPresignedUrl = vi.fn(
 	})
 );
 
-vi.mock('./utils', () => ({
-	convertFileToAbstractFile: (file: File) => mockConvertFileToAbstractFile(file),
-	getPresignedUrl: (file: AbstractFile) => mockGetPresignedUrl(file)
-}));
+vi.mock('./utils', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('./utils')>();
+	return {
+		...actual,
+		convertFileToAbstractFile: (file: File) => mockConvertFileToAbstractFile(file),
+		getPresignedUrl: (file: AbstractFile) => mockGetPresignedUrl(file)
+	};
+});
 
 // Re-export for the barrel import in FileUploader (import from '.')
 vi.mock('.', () => ({
@@ -291,9 +295,9 @@ describe('FileUploader', () => {
 
 	it('should handle presigned URL errors gracefully', async () => {
 		mockGetPresignedUrl.mockRejectedValueOnce(new Error('Network error'));
-		const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		const onChangeSpy = vi.fn();
 
-		render(<FileUploaderWrapper name="test" />);
+		render(<FileUploaderWrapper name="test" onChangespy={onChangeSpy} />);
 
 		const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
 		const mockFile = createMockFile('fail.png');
@@ -301,10 +305,12 @@ describe('FileUploader', () => {
 		fireEvent.change(fileInput, { target: { files: createMockFileList([mockFile]) } });
 
 		await waitFor(() => {
-			expect(consoleSpy).toHaveBeenCalledWith('Error uploading files:', expect.any(Error));
+			expect(onChangeSpy).toHaveBeenCalledWith(
+				expect.arrayContaining([
+					expect.objectContaining({ filename: 'fail.png', error: 'Network error' })
+				])
+			);
 		});
-
-		consoleSpy.mockRestore();
 	});
 
 	it('should handle drag and drop file upload', async () => {

@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React from 'react';
 
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -8,17 +9,41 @@ import userEvent from '@testing-library/user-event';
 import { AbstractFile } from '../utils';
 import { FileList } from './FileList';
 
+vi.mock('../utils', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('../utils')>();
+	return {
+		...actual
+	};
+});
+
+// Stub the components barrel to avoid loading heavy transitive dependencies
+// (UpdateTable, Carousel, charts, etc.) that aren't needed here.
+vi.mock('../../../components', () => ({
+	Loading: () => React.createElement('div', { 'data-testid': 'loading-stub' }),
+	// Mirror Media's real behaviour: render <video aria-label> for video alt keys, <img alt> otherwise.
+	Media: ({ alt, ...rest }: any) =>
+		alt === 'fileUploader.submittedVideo'
+			? React.createElement('video', { 'aria-label': alt, ...rest })
+			: React.createElement('img', { alt, ...rest })
+}));
+
 // Mock @phosphor-icons/react since the ESM package can fail to load in jsdom
 vi.mock('@phosphor-icons/react', () => ({
-	ArrowCounterClockwiseIcon: (props: any) =>
-		React.createElement('svg', { ...props, 'data-testid': props['data-testid'] }),
-	FileArrowUpIcon: (props: any) =>
-		React.createElement('svg', { ...props, 'data-testid': props['data-testid'] })
+	ArrowCounterClockwiseIcon: React.forwardRef((props: any, ref: any) =>
+		React.createElement('svg', { ...props, ref, 'data-testid': props['data-testid'] })
+	),
+	FileArrowUpIcon: React.forwardRef((props: any, ref: any) =>
+		React.createElement('svg', { ...props, ref, 'data-testid': props['data-testid'] })
+	)
 }));
 
 // Helper to create a mock File object with a fake object URL
 const createMockFile = (name: string): File => {
 	return new File(['dummy'], name, { type: 'image/png' });
+};
+
+const createMockVideoFile = (name: string): File => {
+	return new File(['dummy'], name, { type: 'video/mp4' });
 };
 
 // Mock URL.createObjectURL since jsdom doesn't support it
@@ -33,8 +58,11 @@ describe('FileList', () => {
 		onRetryFile: vi.fn(async (file: AbstractFile) => file)
 	};
 
+	let user: ReturnType<typeof userEvent.setup>;
+
 	beforeEach(() => {
 		vi.clearAllMocks();
+		user = userEvent.setup({ delay: null });
 	});
 
 	it('should show an existing file in the list', () => {
@@ -70,11 +98,21 @@ describe('FileList', () => {
 	});
 
 	it('should show retry icon when file has no link (upload failed)', () => {
-		const files: AbstractFile[] = [{ filename: 'failed.png' }];
+		const mockFile = createMockFile('failed.png');
+		const files: AbstractFile[] = [{ filename: 'failed.png', file: mockFile }];
 
 		render(<FileList files={files} {...defaultProps} />);
 
 		expect(screen.getByTestId('ArrowCounterClockwiseIcon')).toBeDefined();
+		expect(screen.queryByTestId('CheckCircleIcon')).toBeNull();
+	});
+
+	it('should show no status icon for a server-loaded file (edit mode)', () => {
+		const files: AbstractFile[] = [{ filename: 'server.png' }];
+
+		render(<FileList files={files} {...defaultProps} />);
+
+		expect(screen.queryByTestId('ArrowCounterClockwiseIcon')).toBeNull();
 		expect(screen.queryByTestId('CheckCircleIcon')).toBeNull();
 	});
 
@@ -101,14 +139,6 @@ describe('FileList', () => {
 		expect(img).toBeDefined();
 	});
 
-	it('should not render an image preview when file has no File object', () => {
-		const files: AbstractFile[] = [{ filename: 'nopreview.png', link: 'https://example.com' }];
-
-		render(<FileList files={files} {...defaultProps} />);
-
-		expect(screen.queryByAltText('fileUploader.submittedImage')).toBeNull();
-	});
-
 	it('should call onDeleteFile when delete button is clicked', async () => {
 		const onDeleteFile = vi.fn();
 		const files: AbstractFile[] = [{ filename: 'delete-me.png', link: 'https://example.com' }];
@@ -118,7 +148,7 @@ describe('FileList', () => {
 		);
 
 		const deleteButton = screen.getByRole('button', { name: 'fileUploader.deleteFile' });
-		await userEvent.click(deleteButton);
+		await user.click(deleteButton);
 
 		expect(onDeleteFile).toHaveBeenCalledTimes(1);
 		expect(onDeleteFile).toHaveBeenCalledWith(files[0]);
@@ -129,14 +159,15 @@ describe('FileList', () => {
 			...file,
 			link: 'https://example.com/retried'
 		}));
-		const files: AbstractFile[] = [{ filename: 'retry-me.png' }];
+		const mockFile = createMockFile('retry-me.png');
+		const files: AbstractFile[] = [{ filename: 'retry-me.png', file: mockFile }];
 
 		render(
 			<FileList files={files} onDeleteFile={defaultProps.onDeleteFile} onRetryFile={onRetryFile} />
 		);
 
 		const retryButton = screen.getByRole('button', { name: 'fileUploader.retryUpload' });
-		await userEvent.click(retryButton);
+		await user.click(retryButton);
 
 		await waitFor(() => {
 			expect(onRetryFile).toHaveBeenCalledTimes(1);
@@ -150,7 +181,8 @@ describe('FileList', () => {
 			resolveRetry = resolve;
 		});
 		const onRetryFile = vi.fn(() => retryPromise);
-		const files: AbstractFile[] = [{ filename: 'loading.png' }];
+		const mockFile = createMockFile('loading.png');
+		const files: AbstractFile[] = [{ filename: 'loading.png', file: mockFile }];
 
 		render(
 			<FileList files={files} onDeleteFile={defaultProps.onDeleteFile} onRetryFile={onRetryFile} />
@@ -158,7 +190,7 @@ describe('FileList', () => {
 
 		// Click retry
 		const retryButton = screen.getByRole('button', { name: 'fileUploader.retryUpload' });
-		await userEvent.click(retryButton);
+		await user.click(retryButton);
 
 		// While loading, the ArrowCounterClockwise icon should be replaced
 		expect(screen.queryByTestId('ArrowCounterClockwiseIcon')).toBeNull();
@@ -169,5 +201,32 @@ describe('FileList', () => {
 		await waitFor(() => {
 			expect(onRetryFile).toHaveBeenCalledTimes(1);
 		});
+	});
+
+	it('should render a video preview when file is a video', () => {
+		const mockFile = createMockVideoFile('clip.mp4');
+		const files: AbstractFile[] = [
+			{ filename: 'clip.mp4', file: mockFile, link: 'https://example.com' }
+		];
+
+		render(<FileList files={files} {...defaultProps} />);
+
+		const video = screen.getByLabelText('fileUploader.submittedVideo');
+		expect(video).toBeDefined();
+		expect(video.tagName).toBe('VIDEO');
+		expect(screen.queryByAltText('fileUploader.submittedImage')).toBeNull();
+	});
+
+	it('should render an image preview (not video) for image files', () => {
+		const mockFile = createMockFile('photo.png');
+		const files: AbstractFile[] = [
+			{ filename: 'photo.png', file: mockFile, link: 'https://example.com' }
+		];
+
+		render(<FileList files={files} {...defaultProps} />);
+
+		const img = screen.getByAltText('fileUploader.submittedImage');
+		expect(img).toBeDefined();
+		expect(screen.queryByLabelText('fileUploader.submittedVideo')).toBeNull();
 	});
 });

@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import type { AbstractFile } from '../FileUploader/utils';
 import { Carousel } from './Carousel';
 
 // Stub @phosphor-icons/react — ESM-only, fails in jsdom
@@ -26,20 +27,28 @@ vi.mock('@mui/material', async (importActual) => {
 	};
 });
 
-const mockImages = [
-	{ id: '1', url: '/image1.jpg' },
-	{ id: '2', url: '/image2.jpg' },
-	{ id: '3', url: '/image3.jpg' }
+const mockImages: AbstractFile[] = [
+	{ filename: '/image1.jpg' },
+	{ filename: '/image2.jpg' },
+	{ filename: '/image3.jpg' }
 ];
 
 describe('Carousel', () => {
+	beforeAll(() => {
+		process.env.NEXT_PUBLIC_S3_URL = '';
+	});
+
+	afterAll(() => {
+		delete process.env.NEXT_PUBLIC_S3_URL;
+	});
+
 	it('renders the first image by default', () => {
 		render(<Carousel images={mockImages} />);
 
 		const imgs = screen.getAllByRole('img');
 		const mainImg = imgs.find((img) => img.getAttribute('alt') === 'Slide 1 of 3');
 		expect(mainImg).toBeDefined();
-		expect(mainImg?.getAttribute('src')).toBe('/image1.jpg');
+		expect(mainImg?.getAttribute('src')).toContain('/image1.jpg');
 	});
 
 	it('advances to the next image when the next button is clicked', async () => {
@@ -51,7 +60,7 @@ describe('Carousel', () => {
 			.getAllByRole('img')
 			.find((img) => img.getAttribute('alt') === 'Slide 2 of 3');
 		expect(mainImg).toBeDefined();
-		expect(mainImg?.getAttribute('src')).toBe('/image2.jpg');
+		expect(mainImg?.getAttribute('src')).toContain('/image2.jpg');
 	});
 
 	it('goes to the previous image when the previous button is clicked from slide 1', async () => {
@@ -66,7 +75,7 @@ describe('Carousel', () => {
 			.getAllByRole('img')
 			.find((img) => img.getAttribute('alt') === 'Slide 1 of 3');
 		expect(mainImg).toBeDefined();
-		expect(mainImg?.getAttribute('src')).toBe('/image1.jpg');
+		expect(mainImg?.getAttribute('src')).toContain('/image1.jpg');
 	});
 
 	it('wraps to the last image when previous is clicked from slide 0', async () => {
@@ -78,7 +87,7 @@ describe('Carousel', () => {
 			.getAllByRole('img')
 			.find((img) => img.getAttribute('alt') === 'Slide 3 of 3');
 		expect(mainImg).toBeDefined();
-		expect(mainImg?.getAttribute('src')).toBe('/image3.jpg');
+		expect(mainImg?.getAttribute('src')).toContain('/image3.jpg');
 	});
 
 	it('opens the fullscreen dialog when the image is clicked', async () => {
@@ -112,13 +121,13 @@ describe('Carousel', () => {
 	});
 
 	it('renders a thumbnail button for each image in the gallery', () => {
-		render(<Carousel images={mockImages} />);
+		render(<Carousel images={mockImages} showGallery />);
 
 		expect(screen.getAllByAltText(/^Thumbnail /)).toHaveLength(mockImages.length);
 	});
 
 	it('jumps to the correct image when a gallery thumbnail is clicked', async () => {
-		render(<Carousel images={mockImages} />);
+		render(<Carousel images={mockImages} showGallery />);
 
 		const thumbnail3 = screen.getByAltText('Thumbnail 3');
 		await userEvent.click(thumbnail3.closest('button')!);
@@ -128,7 +137,7 @@ describe('Carousel', () => {
 			.getAllByRole('img')
 			.find((img) => img.getAttribute('alt') === 'Slide 3 of 3');
 		expect(mainImg).toBeDefined();
-		expect(mainImg?.getAttribute('src')).toBe('/image3.jpg');
+		expect(mainImg?.getAttribute('src')).toContain('/image3.jpg');
 	});
 
 	it('renders the carousel section with correct aria attributes', () => {

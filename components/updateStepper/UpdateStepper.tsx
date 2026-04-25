@@ -1,10 +1,16 @@
-import React from 'react';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Circle, FlagCircle } from '@mui/icons-material';
 import { Button, Dialog, Grid } from '@mui/material';
 
 import UpdateCard from '../updates/UpdateCard';
+
+const Seperator = () => (
+	<>
+		<Grid item xs={6} height={50} borderRight={'1px solid black'} alignItems="center"></Grid>
+		<Grid item xs={6} height={50} alignItems="center"></Grid>
+	</>
+);
 
 export const UpdateStepper = ({ updates }: { updates?: Update[] }) => {
 	const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
@@ -14,13 +20,6 @@ export const UpdateStepper = ({ updates }: { updates?: Update[] }) => {
 		setUpdateDialog(update);
 		setUpdateDialogOpen(true);
 	};
-
-	const Seperator = () => (
-		<>
-			<Grid item xs={6} height={50} borderRight={'1px solid black'} alignItems="center"></Grid>
-			<Grid item xs={6} height={50} alignItems="center"></Grid>
-		</>
-	);
 
 	const LeftRow = ({
 		post,

@@ -21,11 +21,9 @@ import {
 	getPaginationRowModel,
 	useReactTable
 } from '@tanstack/react-table';
-import Image from 'next/image';
 
-import { formatDate } from '../../utils/utils';
-// import Image from "next/image";
-
+import { Media } from '../../components';
+import { formatDate } from '../../utils';
 import { DeleteModal } from '../modals/DeleteModal';
 import { TableActions } from './TableActions';
 
@@ -62,14 +60,7 @@ export const UpdateTable = ({
 				const files = info.getValue();
 				if (Array.isArray(files)) {
 					if (files[0]) {
-						return (
-							<Image
-								src={`${process.env.NEXT_PUBLIC_S3_URL}${files[0].filename}`}
-								alt={''}
-								width={50}
-								height={50}
-							/>
-						);
+						return <Media file={files[0]} alt={''} width={50} height={50} />;
 					}
 				}
 			},

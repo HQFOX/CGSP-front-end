@@ -1,19 +1,28 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import type { AbstractFile } from '../FileUploader/utils';
 import { Gallery } from './Gallery';
 
 // next/image is globally mocked in vitest.setup.ts → renders as <img>
 
-const mockImages = [
-	{ id: '1', url: '/image1.jpg' },
-	{ id: '2', url: '/image2.jpg' },
-	{ id: '3', url: '/image3.jpg' }
+const mockImages: AbstractFile[] = [
+	{ filename: '/image1.jpg' },
+	{ filename: '/image2.jpg' },
+	{ filename: '/image3.jpg' }
 ];
 
 describe('Gallery', () => {
+	beforeAll(() => {
+		process.env.NEXT_PUBLIC_S3_URL = '';
+	});
+
+	afterAll(() => {
+		delete process.env.NEXT_PUBLIC_S3_URL;
+	});
+
 	it('renders one thumbnail button per image', () => {
 		render(<Gallery images={mockImages} currentIndex={0} />);
 
