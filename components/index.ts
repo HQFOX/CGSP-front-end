@@ -9,3 +9,4 @@ export * from './pageContainer/PageContainer';
 export * from './updates/UpdateTable';
 export * from './StyledCard';
 export * from './Carousel';
+export * from './media';

@@ -47,6 +47,15 @@ const Playground: NextPage<{}> = () => {
 	return (
 		<div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 32 }}>
 			<h1>Component Playground</h1>
+			<div>
+				<h2>Video</h2>
+				<video controls width="100%">
+					<source
+						src="https://cgsp-dev-bucket.s3.eu-west-3.amazonaws.com/GOPR2067.MP4"
+						type="video/mp4"
+					/>
+				</video>
+			</div>
 			<CGSPDropzone
 				label="Test Dropzone"
 				maxContent={3}
@@ -55,16 +64,22 @@ const Playground: NextPage<{}> = () => {
 				onDeleteFile={handleDeleteFile}
 			/>
 
-			<FileUploader name="playground" maxFiles={3} files={files} title="playground" />
+			<FileUploader
+				name="playground"
+				maxFiles={2}
+				files={files}
+				title="playground"
+				allowVideoFiles
+			/>
 			<h2> Carousel </h2>
 			<div style={{ width: 200, height: 200 }}>
-				<Carousel images={images} />
+				<Carousel images={images} showGallery />
 			</div>
 			<div style={{ width: '100%', height: 400 }}>
-				<Carousel images={images} autoSlide={true} />
+				<Carousel images={images} autoSlide={true} showGallery />
 			</div>
 			<div style={{ width: '100%', height: 400 }}>
-				<Carousel images={images} vertical autoSlide={true} />
+				<Carousel images={images} vertical autoSlide={true} showGallery />
 			</div>
 		</div>
 	);

@@ -6,8 +6,8 @@ import { ArrowCounterClockwiseIcon, FileArrowUpIcon } from '@phosphor-icons/reac
 import { useTranslation } from 'next-i18next';
 import Image from 'next/image';
 
-import { Loading } from '../../../components';
-import { AbstractFile } from '../utils';
+import { Loading, Media } from '../../../components';
+import { AbstractFile, isVideoFile } from '../utils';
 import { styles } from './styles';
 
 export interface FileListInterface {
@@ -33,23 +33,29 @@ export const FileList = (props: FileListInterface) => {
 	return props.files.map((file, index) => {
 		const isLoading = loading[file.filename] ?? false;
 
+		console.log(file);
+
 		return (
 			<div key={file.filename + index} className={styles.listItem}>
-				{file.file && (
-					<Image
-						src={URL.createObjectURL(file.file)}
-						alt={t('fileUploader.submittedImage')}
+				{
+					<Media
+						file={file}
+						alt={
+							isVideoFile(file)
+								? t('fileUploader.submittedVideo')
+								: t('fileUploader.submittedImage')
+						}
 						width={100}
 						height={100}
 					/>
-				)}
+				}
 				<span>{file.filename}</span>
 				<div className={styles.itemActions}>
 					{file.link ? (
 						<Tooltip title={t('fileUploader.fileReadyToSend')}>
 							<CheckCircle color="success" data-testid="CheckCircleIcon" />
 						</Tooltip>
-					) : (
+					) : file.file ? (
 						<Tooltip title={t('fileUploader.retryUpload')}>
 							<IconButton onClick={() => handleRetryWithLoading(file, props.onRetryFile)}>
 								{isLoading ? (
@@ -61,7 +67,7 @@ export const FileList = (props: FileListInterface) => {
 								)}
 							</IconButton>
 						</Tooltip>
-					)}
+					) : null}
 					{file.file && (
 						<Tooltip title={t('fileUploader.fileBeingUploaded')}>
 							<FileArrowUpIcon data-testid="FileArrowUpIcon" />

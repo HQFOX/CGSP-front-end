@@ -3,6 +3,11 @@ import { css } from '@emotion/css';
 import theme from '../../theme';
 
 export const styles = {
+	wrapper: css({
+		display: 'flex',
+		flexDirection: 'column',
+		gap: theme.spacing(1)
+	}),
 	container: css({
 		flex: 1,
 		display: 'flex',

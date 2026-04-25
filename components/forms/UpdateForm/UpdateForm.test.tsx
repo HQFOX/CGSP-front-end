@@ -357,7 +357,7 @@ describe('UpdateForm', () => {
 			await waitFor(() => {
 				expect(mockDataFetch).toHaveBeenCalledTimes(1);
 				const [method, endpoint] = mockDataFetch.mock.calls[0] as [string, string];
-				expect(method).toBe('POST');
+				expect(method).toBe('PATCH');
 				expect(endpoint).toMatch(/\/update\/1$/);
 			});
 		});

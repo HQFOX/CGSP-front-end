@@ -2,10 +2,9 @@ import React from 'react';
 
 import { Launch } from '@mui/icons-material';
 import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
-import Image from 'next/image';
 import router from 'next/router';
 
-import { StyledButton, Title } from '../../components';
+import { Carousel, StyledButton, Title } from '../../components';
 import { formatDate } from '../../utils/utils';
 
 const width = '40vw';
@@ -58,14 +57,9 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 					)}
 				</Grid>
 			</Box>
-			{post.files[0] && (
+			{post.files && post.files.length > 0 && (
 				<div style={{ width: '100%', height: '60vh', position: 'relative' }}>
-					<Image
-						src={`${process.env.NEXT_PUBLIC_S3_URL}${post.files[0].filename}`}
-						alt={''}
-						fill
-						style={{ objectFit: 'cover' }}
-					/>
+					<Carousel images={post.files} showGallery={false} autoSlide={false} />
 				</div>
 			)}
 			<Box sx={{ p: 4 }}>

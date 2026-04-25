@@ -7,10 +7,14 @@ import { useTranslation } from 'next-i18next';
 
 import { AbstractFile, convertFileToAbstractFile, getPresignedUrl } from '.';
 import { Loading, StyledButton } from '..';
+import theme from '../../theme';
 import { FileList } from './FileList';
 import { styles } from './styles';
 
 const EMPTY_FILES: AbstractFile[] = [];
+
+export const IMAGE_FILE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
+export const VIDEO_FILE_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
 
 export interface FileUploaderProps {
 	title?: string;
@@ -22,6 +26,7 @@ export interface FileUploaderProps {
 	error?: string[] | string;
 	touched?: boolean;
 	acceptedFileTypes?: HTMLInputElement['accept'][];
+	allowVideoFiles?: boolean;
 }
 
 export const FileUploader = (props: FileUploaderProps) => {
@@ -31,7 +36,8 @@ export const FileUploader = (props: FileUploaderProps) => {
 		maxFiles = 1,
 		files: filesProp = EMPTY_FILES,
 		label,
-		acceptedFileTypes = ['image/png', 'image/jpeg', 'image/jpg'],
+		acceptedFileTypes: acceptedFileTypesProp = IMAGE_FILE_TYPES,
+		allowVideoFiles = false,
 		onChange,
 		touched
 	} = props;
@@ -44,6 +50,10 @@ export const FileUploader = (props: FileUploaderProps) => {
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const inputId = useId();
+
+	const acceptedFileTypes = allowVideoFiles
+		? [...acceptedFileTypesProp, ...VIDEO_FILE_TYPES]
+		: acceptedFileTypesProp;
 
 	// Sync internal state with Formik value
 	useEffect(() => {
@@ -125,18 +135,13 @@ export const FileUploader = (props: FileUploaderProps) => {
 			convertFileToAbstractFile(file)
 		);
 
-		const presignedFiles = convertedFiles.map((file) => {
-			return getPresignedUrl(file);
-		});
-		try {
-			const results = await Promise.all(presignedFiles);
-			const newFiles = [...files, ...results];
-			notifyChange(newFiles);
-		} catch (error) {
-			console.error('Error uploading files:', error);
-		} finally {
-			setLoading(false);
-		}
+		const presignedFiles = convertedFiles.map((file) =>
+			getPresignedUrl(file).catch(() => ({ ...file, error: 'Network error' }) as AbstractFile)
+		);
+		const results = await Promise.all(presignedFiles);
+		const newFiles = [...files, ...results];
+		notifyChange(newFiles);
+		setLoading(false);
 	};
 
 	const handleRetryFile = useCallback(
@@ -183,7 +188,7 @@ export const FileUploader = (props: FileUploaderProps) => {
 	);
 
 	return (
-		<>
+		<div className={styles.wrapper}>
 			{props.title && <Typography variant="h6">{props.title}</Typography>}
 			<section
 				className={cx(styles.container, { [styles.highlight]: highlightToggle })}
@@ -219,6 +224,6 @@ export const FileUploader = (props: FileUploaderProps) => {
 				)}
 			</section>
 			<FileList files={files} onDeleteFile={handleDeleteFile} onRetryFile={handleRetryFile} />
-		</>
+		</div>
 	);
 };

@@ -103,5 +103,27 @@ export const styles = {
 	galleryImage: css({
 		objectFit: 'cover',
 		borderRadius: 6
+	}),
+	carouselWrapper: css({
+		width: '100%',
+		height: '100%',
+		position: 'relative',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		flexDirection: 'column'
+	}),
+	carouselWrapperVertical: css({
+		flexDirection: 'row'
+	}),
+	carouselContent: css({
+		flex: 1,
+		minHeight: 0,
+		width: '100%',
+		height: 'inherit'
+	}),
+	carouselContentVertical: css({
+		width: 'inherit',
+		height: '100%'
 	})
 };

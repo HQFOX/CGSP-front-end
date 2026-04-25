@@ -1,7 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
-import Image from 'next/image';
-
+import { Media } from '../media';
 import { CarouselProps } from './Carousel';
 import { styles } from './styles';
 
@@ -22,14 +21,6 @@ export const Gallery = ({
 }) => {
 	const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-	useEffect(() => {
-		itemRefs.current[currentIndex]?.scrollIntoView({
-			behavior: 'smooth',
-			block: 'nearest',
-			inline: 'nearest'
-		});
-	}, [currentIndex]);
-
 	const indicatorTransform = vertical
 		? `translateY(${currentIndex * THUMBNAIL_STEP}px)`
 		: `translateX(${currentIndex * THUMBNAIL_STEP}px)`;
@@ -39,17 +30,18 @@ export const Gallery = ({
 			<div className={styles.galleryIndicator} style={{ transform: indicatorTransform }} />
 			{images.map((image, index) => (
 				<button
-					key={image.id}
+					key={image.filename}
 					ref={(el) => {
 						itemRefs.current[index] = el;
 					}}
 					className={styles.galleryItem}
 					onClick={() => onSelectImage?.(index)}>
-					<Image
-						className={styles.galleryImage}
-						src={image.url}
+					<Media
+						file={image}
 						alt={`Thumbnail ${index + 1}`}
 						fill
+						className={styles.galleryImage}
+						muted
 					/>
 				</button>
 			))}

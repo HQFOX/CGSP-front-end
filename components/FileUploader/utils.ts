@@ -1,11 +1,37 @@
 import { getFileExtension } from '../forms/utils';
 
 export interface AbstractFile {
+	/** The name of the file, used as link to source */
 	filename: string;
+	/** The presigned link used to submit the file */
 	link?: string;
+	/** The original file object, exists if the file was uploaded locally */
 	file?: File;
 	error?: string;
 }
+
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.mov', '.avi', '.mkv']);
+
+const hasVideoExtension = (filename: string): boolean => {
+	const ext = /\.[^.]+$/.exec(filename.toLowerCase());
+	return ext !== null && VIDEO_EXTENSIONS.has(ext[0]);
+};
+
+export const isVideoFile = (file: AbstractFile): boolean => {
+	if (file.file?.type.startsWith('video/')) {
+		return true;
+	}
+	return hasVideoExtension(file.filename);
+};
+
+export const isVideoUrl = (src: string): boolean => {
+	try {
+		const { pathname } = new URL(src, 'http://x');
+		return hasVideoExtension(pathname);
+	} catch {
+		return false;
+	}
+};
 
 export const convertFileToAbstractFile = (file: File): AbstractFile => {
 	return {

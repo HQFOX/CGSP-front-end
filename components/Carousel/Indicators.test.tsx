@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { render, screen } from '@testing-library/react';
 
+import type { AbstractFile } from '../FileUploader/utils';
 import { Indicators } from './Indicators';
 
 vi.mock('@phosphor-icons/react', () => ({
@@ -11,10 +12,10 @@ vi.mock('@phosphor-icons/react', () => ({
 		React.createElement('svg', { 'data-testid': 'CircleIcon', color: props.color })
 }));
 
-const mockImages = [
-	{ id: '1', url: '/image1.jpg' },
-	{ id: '2', url: '/image2.jpg' },
-	{ id: '3', url: '/image3.jpg' }
+const mockImages: AbstractFile[] = [
+	{ filename: '/image1.jpg' },
+	{ filename: '/image2.jpg' },
+	{ filename: '/image3.jpg' }
 ];
 
 describe('Indicators', () => {
@@ -53,7 +54,7 @@ describe('Indicators', () => {
 	});
 
 	it('renders without error with a single image', () => {
-		const singleImage = [{ id: '1', url: '/image1.jpg' }];
+		const singleImage: AbstractFile[] = [{ filename: '/image1.jpg' }];
 
 		render(<Indicators currentIndex={0} images={singleImage} />);
 

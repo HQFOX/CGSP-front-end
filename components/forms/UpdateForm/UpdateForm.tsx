@@ -14,7 +14,7 @@ import {
 	Typography
 } from '@mui/material';
 
-import { FileUploader, Loading, StyledButton } from '../../../components';
+import { AbstractFile, FileUploader, Loading, StyledButton } from '../../../components';
 import { CancelModal } from '../../modals/CancelModal';
 import { SuccessMessage } from '../SuccessMessage';
 import { dataFetch, submitFile } from '../utils';
@@ -56,26 +56,66 @@ export const UpdateForm = ({
 		onSubmit: async (values) => {
 			setSubmitting(true);
 
-			values = { ...values, createdOn: new Date(values.createdOn).toISOString() };
+			if (update) {
+				// PATCH: only send dirty fields
+				const initial = formik.initialValues;
+				const patch: Record<string, unknown> = {};
 
-			Promise.all(values.files.map(async (file) => submitFile(file)))
-				.then(async () => {
-					const valuesWithImage = {
-						...values,
-						files: values.files.map((file) => {
-							return { filename: file.filename };
-						})
-					};
+				if (values.title !== initial.title) patch.title = values.title;
+				if (values.content !== initial.content) patch.content = values.content;
+				if (values.createdOn !== initial.createdOn)
+					patch.createdOn = new Date(values.createdOn).toISOString();
 
-					postUpdate(valuesWithImage);
-				})
-				.catch((error) => {
-					setError('Erro a submeter Imagens');
-					console.log(error);
-				})
-				.finally(() => {
-					setSubmitting(false);
-				});
+				const initialProjectId = initial.project?.projectId ?? null;
+				const currentProjectId = values.project?.projectId ?? null;
+				if (currentProjectId !== initialProjectId) patch.project = values.project ?? null;
+
+				const initialFilenames = initial.files
+					.map((f) => f.filename)
+					.sort((a, b) => a.localeCompare(b));
+				const currentFilenames = values.files
+					.map((f) => f.filename)
+					.sort((a, b) => a.localeCompare(b));
+				const filesChanged = JSON.stringify(initialFilenames) !== JSON.stringify(currentFilenames);
+
+				const newFiles = (values.files as AbstractFile[]).filter((f) => f.link);
+
+				Promise.all(newFiles.map((file) => submitFile(file)))
+					.then(() => {
+						if (filesChanged) patch.files = values.files.map((f) => ({ filename: f.filename }));
+						postUpdate(patch);
+					})
+					.catch((error) => {
+						setError('Erro a submeter Imagens');
+						console.log(error);
+					})
+					.finally(() => {
+						setSubmitting(false);
+					});
+			} else {
+				// POST: send full payload
+				const fullValues = {
+					...values,
+					createdOn: new Date(values.createdOn).toISOString()
+				};
+
+				Promise.all(
+					(fullValues.files as AbstractFile[]).filter((f) => f.link).map((file) => submitFile(file))
+				)
+					.then(() => {
+						postUpdate({
+							...fullValues,
+							files: fullValues.files.map((f) => ({ filename: f.filename }))
+						});
+					})
+					.catch((error) => {
+						setError('Erro a submeter Imagens');
+						console.log(error);
+					})
+					.finally(() => {
+						setSubmitting(false);
+					});
+			}
 		}
 	});
 
@@ -88,8 +128,9 @@ export const UpdateForm = ({
 		const endpoint = update
 			? `${process.env.NEXT_PUBLIC_API_URL}/update/${update.id}`
 			: `${process.env.NEXT_PUBLIC_API_URL}/update`;
+		const method = update?.id ? 'PATCH' : 'POST';
 
-		const res = await dataFetch('POST', endpoint, values, true)
+		const res = await dataFetch(method, endpoint, values, true)
 			.then((response) => {
 				if (response.ok) {
 					setSuccess(true);
@@ -150,11 +191,12 @@ export const UpdateForm = ({
 							<Grid2 size={{ xs: 12 }}>
 								<FileUploader
 									name="file"
-									label="Adicionar Foto à Atualização"
+									label="Adicionar Fotos ou Videos à Atualização"
 									files={formik.values.files}
 									onChange={(value) => formik.setFieldValue('files', value)}
 									error={(formik.errors.files ?? []) as string[]}
-									maxFiles={1}
+									maxFiles={3}
+									allowVideoFiles
 								/>
 							</Grid2>
 							<Grid2 size={{ xs: 12 }}>
@@ -219,7 +261,8 @@ export const UpdateForm = ({
 									variant="contained"
 									color="primary"
 									value="submit"
-									fullWidth>
+									fullWidth
+									loading={submitting}>
 									{'Submeter'}
 								</StyledButton>
 							</Grid2>
@@ -235,8 +278,10 @@ export const UpdateForm = ({
 			<CancelModal
 				open={cancelModal}
 				handleClose={(confirm) => handleClose(confirm)}
-				title="Cancelar Criação de Update"
+				title={update ? 'Cancelar Edição de Atualização' : 'Cancelar Criação de Atualização'}
 			/>
 		</Paper>
 	);
 };
+
+//repo path: edit an update with an image. change the text content and submit, error uploading with: File already exists in aws.
