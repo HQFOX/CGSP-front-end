@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 
 import { Typography, Zoom } from '@mui/material';
 import { Square } from '@phosphor-icons/react';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 
 import theme from '../../theme';
 

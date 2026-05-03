@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { css } from '@emotion/css';
 import { Grid2, Typography } from '@mui/material';
 import NumberFlow from '@number-flow/react';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 import Link from 'next/link';
 
 import { StyledButton, Title } from '../../components';

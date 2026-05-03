@@ -41,7 +41,7 @@ import {
 	getPaginationRowModel,
 	useReactTable
 } from '@tanstack/react-table';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 import Image from 'next/image';
 
 import { formatDate } from '../../utils/utils';

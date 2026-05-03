@@ -3,7 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { HomeOutlined, HomeWorkOutlined, HowToRegOutlined, Info } from '@mui/icons-material';
 import { Chip, Grid, Popover, Typography } from '@mui/material';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 
 const StyledTypography = styled(Typography)({
 	display: 'flex',

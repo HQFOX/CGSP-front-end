@@ -3,7 +3,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { cx } from '@emotion/css';
 import { Typography } from '@mui/material';
 import { UploadSimpleIcon, WarningCircleIcon } from '@phosphor-icons/react';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 
 import { AbstractFile, convertFileToAbstractFile, getPresignedUrl } from '.';
 import { Loading, StyledButton } from '..';

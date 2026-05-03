@@ -3,8 +3,8 @@ import React from 'react';
 import type { NextPage } from 'next';
 
 import { Box, Divider } from '@mui/material';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
 import { Title } from '../components/Title';
 import { PageContainer } from '../components/pageContainer/PageContainer';

@@ -2,8 +2,8 @@ import React from 'react';
 
 import type { NextPage } from 'next';
 
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
 import { LoginForm } from '../components/forms/LoginForm';
 import { PageContainer } from '../components/pageContainer/PageContainer';

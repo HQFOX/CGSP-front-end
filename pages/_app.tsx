@@ -4,7 +4,7 @@ import { ThemeProvider } from '@emotion/react';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import { appWithTranslation } from 'next-i18next';
+import { appWithTranslation } from 'next-i18next/pages';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Script from 'next/script';

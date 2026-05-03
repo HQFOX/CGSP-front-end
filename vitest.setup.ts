@@ -3,7 +3,7 @@ import React from 'react';
 import { vi } from 'vitest';
 
 // Mock next-i18next
-vi.mock('next-i18next', () => ({
+vi.mock('next-i18next/pages', () => ({
 	useTranslation: () => ({
 		t: (key: string) => key,
 		i18n: {
@@ -13,8 +13,8 @@ vi.mock('next-i18next', () => ({
 	})
 }));
 
-// Mock next-i18next/serverSideTranslations
-vi.mock('next-i18next/serverSideTranslations', () => ({
+// Mock next-i18next/pages/serverSideTranslations
+vi.mock('next-i18next/pages/serverSideTranslations', () => ({
 	serverSideTranslations: vi.fn()
 }));
 

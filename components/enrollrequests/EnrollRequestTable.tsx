@@ -27,7 +27,7 @@ import {
 	getSortedRowModel,
 	useReactTable
 } from '@tanstack/react-table';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 
 import { dataFetch } from '../forms/utils';
 import { Loading } from '../loading/Loading';

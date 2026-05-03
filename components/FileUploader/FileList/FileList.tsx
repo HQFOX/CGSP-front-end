@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { CheckCircle, Delete } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 import { ArrowCounterClockwiseIcon, FileArrowUpIcon } from '@phosphor-icons/react';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 import Image from 'next/image';
 
 import { Loading, Media } from '../../../components';
