@@ -15,8 +15,31 @@
 		"format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc.json --end-of-line lf",
 		"prepare": "husky",
 		"docker-build": "npm run build && docker build -t nextapp .",
-		"docker-push": "npm run docker-build && docker image push hqfox/nextapp"
+		"docker-push": "npm run docker-build && docker image push hqfox/nextapp",
+		"size": "size-limit"
 	},
+	"size-limit": [
+		{
+			"name": "Shared app bundle",
+			"path": ".next/static/chunks/pages/_app.js"
+		},
+		{
+			"name": "Home page",
+			"path": ".next/static/chunks/pages/index.js"
+		},
+		{
+			"name": "Projects page",
+			"path": ".next/static/chunks/pages/projects.js"
+		},
+		{
+			"name": "Updates page",
+			"path": ".next/static/chunks/pages/updates.js"
+		},
+		{
+			"name": "Map (dynamic chunk)",
+			"path": ".next/static/chunks/_pages-dir-browser_components_map_Map_tsx.js"
+		}
+	],
 	"dependencies": {
 		"@dnd-kit/core": "^6.3.1",
 		"@dnd-kit/modifiers": "^9.0.0",
@@ -53,8 +76,9 @@
 	"devDependencies": {
 		"@commitlint/cli": "^19.6.0",
 		"@commitlint/config-conventional": "^19.6.0",
-		"@next/eslint-plugin-next": "^15.2.4",
 		"@next/bundle-analyzer": "^16.2.4",
+		"@next/eslint-plugin-next": "^15.2.4",
+		"@size-limit/file": "^12.1.0",
 		"@testing-library/dom": "^10.4.1",
 		"@testing-library/react": "^16.3.2",
 		"@testing-library/user-event": "^14.6.1",
@@ -76,6 +100,7 @@
 		"husky": "^9.1.7",
 		"jsdom": "^28.1.0",
 		"prettier": "^3.8.1",
+		"size-limit": "^12.1.0",
 		"typescript": "5.9.3",
 		"vite-tsconfig-paths": "^6.1.1",
 		"vitest": "^4.0.18"
