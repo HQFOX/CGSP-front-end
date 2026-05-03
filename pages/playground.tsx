@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
-import { AbstractFile, Carousel, FileUploader } from '../components';
+import { AbstractFile, FileUploader } from '../components';
 import { CGSPDropzone } from '../components/dropzone/Dropzone';
 
 const Playground: NextPage<{}> = () => {
@@ -23,26 +23,6 @@ const Playground: NextPage<{}> = () => {
 	if (process.env.NODE_ENV === 'production') {
 		return null;
 	}
-
-	const images = [
-		{
-			id: 1,
-			url: 'https://images.pexels.com/photos/29089597/pexels-photo-29089597/free-photo-of-stunning-autumn-beach-sunset-with-waves.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-		},
-		{ id: 2, url: 'https://images.pexels.com/photos/691668/pexels-photo-691668.jpeg' },
-		{
-			id: 3,
-			url: 'https://images.pexels.com/photos/2049422/pexels-photo-2049422.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-		},
-		{
-			id: 4,
-			url: 'https://images.pexels.com/photos/325044/pexels-photo-325044.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-		},
-		{
-			id: 5,
-			url: 'https://images.pexels.com/photos/1485894/pexels-photo-1485894.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
-		}
-	];
 
 	return (
 		<div style={{ padding: 32, display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -71,16 +51,6 @@ const Playground: NextPage<{}> = () => {
 				title="playground"
 				allowVideoFiles
 			/>
-			<h2> Carousel </h2>
-			<div style={{ width: 200, height: 200 }}>
-				{/* <Carousel images={images} showGallery /> */}
-			</div>
-			<div style={{ width: '100%', height: 400 }}>
-				{/* <Carousel images={images} autoSlide={true} showGallery /> */}
-			</div>
-			<div style={{ width: '100%', height: 400 }}>
-				{/* <Carousel images={images} vertical autoSlide={true} showGallery /> */}
-			</div>
 		</div>
 	);
 };
