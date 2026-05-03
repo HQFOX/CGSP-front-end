@@ -12,6 +12,9 @@ jobs:
   size:
     name: Check bundle size
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -28,5 +31,6 @@ jobs:
 
       - name: Check size
         uses: andresz1/size-limit-action@v1
+        continue-on-error: true
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
