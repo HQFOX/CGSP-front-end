@@ -34,10 +34,6 @@
 		{
 			"name": "Updates page",
 			"path": ".next/static/chunks/pages/updates.js"
-		},
-		{
-			"name": "Map (dynamic chunk)",
-			"path": ".next/static/chunks/_pages-dir-browser_components_map_Map_tsx.js"
 		}
 	],
 	"dependencies": {
