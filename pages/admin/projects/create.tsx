@@ -3,7 +3,7 @@ import React, { Suspense, useState } from 'react';
 import type { NextPage } from 'next';
 
 import { Box, Divider, Grid2 as Grid, Typography } from '@mui/material';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
 import { ProjectForm } from '../../../components/forms/ProjectForm';
 import { Loading } from '../../../components/loading/Loading';

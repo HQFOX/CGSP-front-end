@@ -1,0 +1,22 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      mui:
+        patterns:
+          - "@mui/*"
+      emotion:
+        patterns:
+          - "@emotion/*"
+      dnd-kit:
+        patterns:
+          - "@dnd-kit/*"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "monthly"

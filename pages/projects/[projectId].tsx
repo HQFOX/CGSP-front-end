@@ -30,8 +30,8 @@ import {
 	Typography,
 	styled
 } from '@mui/material';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -87,7 +87,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					<ArrowBackIosNew />
 				</IconButton>
 				<Title variant="h5" component="h1" fontSize={24} display={'inline-block'}>
-					{project.title}( )
+					{project.title}
 				</Title>
 				<Divider />
 			</Box>
@@ -96,7 +96,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					<Carousel
 						images={images.map((file) => ({
 							id: file?.filename ?? '',
-							url: `${process.env.NEXT_PUBLIC_S3_URL}${file?.filename ?? ''}`
+							filename: `${process.env.NEXT_PUBLIC_S3_URL}${file?.filename ?? ''}`
 						}))}
 					/>
 				</Paper>

@@ -3,7 +3,7 @@ import React, { Suspense, useCallback, useState } from 'react';
 import type { NextPage } from 'next';
 
 import { Box, Divider, Typography } from '@mui/material';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
 import { PageContainer } from '../../../components/pageContainer/PageContainer';
 import { ProjectManager } from '../../../components/projects/ProjectManager';

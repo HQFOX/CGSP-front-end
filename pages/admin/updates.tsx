@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 
 import { Add } from '@mui/icons-material';
 import { Box, Divider, Grid, Typography } from '@mui/material';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
 import { Loading, PageContainer, StyledButton, UpdateTable } from '../../components';
 import { UpdateForm, dataFetch } from '../../components/forms';

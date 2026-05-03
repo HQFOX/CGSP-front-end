@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import type { NextPage } from 'next';
 
 import { Box, Divider } from '@mui/material';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next/pages';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 import { Title } from '../components/Title';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EChartsOption } from 'echarts';
+import type { EChartsOption } from 'echarts';
 
 import { CardContent, CardHeader } from '@mui/material';
 

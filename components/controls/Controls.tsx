@@ -16,7 +16,7 @@ import {
 	Stack,
 	Typography
 } from '@mui/material';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 
 import { ViewType } from '../../pages/projects';
 import Dropdown from '../dropdown/Dropdown';

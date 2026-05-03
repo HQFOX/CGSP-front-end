@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { LatLngTuple } from 'leaflet';
 
 import { Fade, Grid } from '@mui/material';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next/pages';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
