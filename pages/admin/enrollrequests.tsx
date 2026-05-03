@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 
-import { EChartsOption } from 'echarts';
+import type { EChartsOption } from 'echarts';
 import { NextPage } from 'next';
 
 import { Add } from '@mui/icons-material';

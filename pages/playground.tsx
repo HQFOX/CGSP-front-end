@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { NextPage } from 'next';
 
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
 import { AbstractFile, Carousel, FileUploader } from '../components';
 import { CGSPDropzone } from '../components/dropzone/Dropzone';
@@ -73,13 +73,13 @@ const Playground: NextPage<{}> = () => {
 			/>
 			<h2> Carousel </h2>
 			<div style={{ width: 200, height: 200 }}>
-				<Carousel images={images} showGallery />
+				{/* <Carousel images={images} showGallery /> */}
 			</div>
 			<div style={{ width: '100%', height: 400 }}>
-				<Carousel images={images} autoSlide={true} showGallery />
+				{/* <Carousel images={images} autoSlide={true} showGallery /> */}
 			</div>
 			<div style={{ width: '100%', height: 400 }}>
-				<Carousel images={images} vertical autoSlide={true} showGallery />
+				{/* <Carousel images={images} vertical autoSlide={true} showGallery /> */}
 			</div>
 		</div>
 	);

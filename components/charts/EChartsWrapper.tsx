@@ -1,6 +1,14 @@
 import React, { CSSProperties, useEffect, useRef } from 'react';
 
-import { ECharts, EChartsOption, SetOptionOpts, getInstanceByDom, init } from 'echarts';
+import type { EChartsOption, SetOptionOpts } from 'echarts';
+
+import { PieChart } from 'echarts/charts';
+import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import * as echarts from 'echarts/core';
+import type { ECharts } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+
+echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, CanvasRenderer]);
 
 export interface ReactEChartsProps {
 	option: EChartsOption;
@@ -17,7 +25,7 @@ export const EChartsWrapper = ({ option, style, settings, loading, theme }: Reac
 		// Initialize chart
 		let chart: ECharts | undefined;
 		if (chartRef.current !== null) {
-			chart = init(chartRef.current, theme);
+			chart = echarts.init(chartRef.current, theme);
 		}
 
 		// Add chart resize listener
@@ -37,7 +45,7 @@ export const EChartsWrapper = ({ option, style, settings, loading, theme }: Reac
 	useEffect(() => {
 		// Update chart
 		if (chartRef.current !== null) {
-			const chart = getInstanceByDom(chartRef.current);
+			const chart = echarts.getInstanceByDom(chartRef.current);
 			chart?.setOption(option, settings);
 		}
 	}, [option, settings, theme]); // Whenever theme changes we need to add option and setting due to it being deleted in cleanup function
@@ -45,7 +53,7 @@ export const EChartsWrapper = ({ option, style, settings, loading, theme }: Reac
 	useEffect(() => {
 		// Update chart
 		if (chartRef.current !== null) {
-			const chart = getInstanceByDom(chartRef.current);
+			const chart = echarts.getInstanceByDom(chartRef.current);
 			loading === true ? chart?.showLoading() : chart?.hideLoading();
 		}
 	}, [loading, theme]);
