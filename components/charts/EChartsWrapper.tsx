@@ -2,13 +2,28 @@ import React, { CSSProperties, useEffect, useRef } from 'react';
 
 import type { EChartsOption, SetOptionOpts } from 'echarts';
 
-import { PieChart } from 'echarts/charts';
-import { LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
+import { LineChart, PieChart } from 'echarts/charts';
+import {
+	DataZoomComponent,
+	GridComponent,
+	LegendComponent,
+	TitleComponent,
+	TooltipComponent
+} from 'echarts/components';
 import * as echarts from 'echarts/core';
 import type { ECharts } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 
-echarts.use([PieChart, LegendComponent, TitleComponent, TooltipComponent, CanvasRenderer]);
+echarts.use([
+	PieChart,
+	LineChart,
+	LegendComponent,
+	TitleComponent,
+	TooltipComponent,
+	GridComponent,
+	CanvasRenderer,
+	DataZoomComponent
+]);
 
 export interface ReactEChartsProps {
 	option: EChartsOption;
