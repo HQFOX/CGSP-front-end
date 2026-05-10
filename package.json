@@ -53,7 +53,7 @@
 		"cgsp-front-end": "file:",
 		"echarts": "^6.0.0",
 		"formik": "^2.4.9",
-		"i18next": "^26.0.8",
+		"i18next": "^26.0.10",
 		"js-cookie": "^3.0.5",
 		"jwt-decode": "^4.0.0",
 		"leaflet": "^1.9.4",
