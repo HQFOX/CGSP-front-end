@@ -1,7 +1,7 @@
 import React, { ReactNode, useRef, useState } from 'react';
 
 import { FormikErrors, useFormik } from 'formik';
-import { LatLngTuple } from 'leaflet';
+import type { LatLngTuple } from 'leaflet';
 import * as Yup from 'yup';
 
 import {
@@ -35,22 +35,15 @@ import {
 	Typography
 } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
-import { StyledButton } from '../Button';
-import { AbstractFile } from '../FileUploader';
+import { AbstractFile, DynamicMap, Loading, StyledButton } from '../';
 import { CGSPDropzone } from '../dropzone/Dropzone';
-import { Loading } from '../loading/Loading';
 import { CancelModal } from '../modals/CancelModal';
 import { districtCenterCoordinates } from '../projects/projectInventory/ProjectInventory';
 import { SuccessMessage } from './SuccessMessage';
 import { TypologyDetailsForm } from './types';
 import { dataFetch, getPresignedUrl, submitFile } from './utils';
-
-const Map = dynamic(() => import('../map/Map'), {
-	ssr: false
-});
 
 const districtList = ['Évora', 'Beja', 'Portalegre', 'Setúbal', 'Aveiro', 'Braga'];
 
@@ -575,7 +568,7 @@ export const ProjectForm = ({
 											automaticamente.
 										</Typography>
 										<Box id="map" style={{ height: 480 }} sx={{ pt: 2 }}>
-											<Map
+											<DynamicMap
 												doubleClickZoom={false}
 												scrollWheelZoom={true}
 												centerCoordinates={centerCoordinates}

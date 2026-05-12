@@ -6,7 +6,7 @@ import { CardContent, CardHeader } from '@mui/material';
 
 import { StyledCard } from '../StyledCard';
 import { Title } from '../Title';
-import { EChartsWrapper } from './EChartsWrapper';
+import { DynamicEChartsWrapper } from './DynamicEChartsWrapper';
 
 interface KpiPieProps {
 	title: string;
@@ -66,7 +66,7 @@ export const KpiPie = ({ title, data }: KpiPieProps) => {
 		<StyledCard variant="outlined" style={{ overflow: 'visible' }}>
 			<CardHeader title={<Title>{title}:</Title>} />
 			<CardContent style={{ height: '170px' }} sx={{ pt: 0 }}>
-				<EChartsWrapper option={option} style={{ width: '100%' }} />
+				<DynamicEChartsWrapper option={option} style={{ width: '100%' }} />
 			</CardContent>
 		</StyledCard>
 	);

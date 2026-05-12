@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { LatLngTuple } from 'leaflet';
+import type { LatLngTuple } from 'leaflet';
 import { NextPage } from 'next';
 
 import {
@@ -32,21 +32,15 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Carousel, Details, Loading, LotCounter, StyledButton, Title } from '../../components';
+import { Carousel, Details, DynamicMap, LotCounter, StyledButton, Title } from '../../components';
 import { EnrollmentModal } from '../../components/modals/enrollmentModal/enrollmentModal';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
 import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import theme from '../../theme';
-
-const Map = dynamic(() => import('../../components/map/Map'), {
-	ssr: false,
-	loading: () => <Loading />
-});
 
 const StyledTab = styled(Tab)({
 	textTransform: 'capitalize'
@@ -252,7 +246,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 			</Paper>
 			<Paper sx={{ mt: 4, border: '1px solid rgb(237, 237, 237)', boxShadow: 0 }}>
 				<div id="map" style={{ height: 480 }}>
-					<Map
+					<DynamicMap
 						zoom={13}
 						centerCoordinates={project.coordinates as LatLngTuple}
 						markers={[project.coordinates] as LatLngTuple[]}

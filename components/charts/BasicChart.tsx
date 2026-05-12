@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { EChartsWrapper, ReactEChartsProps } from './EChartsWrapper';
+import { DynamicEChartsWrapper } from './DynamicEChartsWrapper';
+import type { ReactEChartsProps } from './EChartsWrapper';
 
 // const option: ReactEChartsProps["option"] = {
 // 	title: {
@@ -210,7 +211,7 @@ const basicChartOptions = (chartData: Project[]): ReactEChartsProps['option'] =>
 export const BasicChart = ({ chartData = [] }: { chartData: Project[] }) => {
 	return (
 		<div style={{ display: 'flex' }}>
-			<EChartsWrapper option={basicChartOptions(chartData)} style={{ height: '400px' }} />
+			<DynamicEChartsWrapper option={basicChartOptions(chartData)} style={{ height: '400px' }} />
 		</div>
 	);
 };
