@@ -21,7 +21,7 @@ import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslation
 import { Loading, StyledButton } from '../../components';
 import { StyledCard } from '../../components/StyledCard';
 import { Title } from '../../components/Title';
-import { EChartsWrapper } from '../../components/charts/EChartsWrapper';
+import { DynamicEChartsWrapper } from '../../components/charts/DynamicEChartsWrapper';
 import { KpiPie } from '../../components/charts/PieChart';
 import { EnrollRequestTable } from '../../components/enrollrequests/EnrollRequestTable';
 import { EnrollRequestForm } from '../../components/forms/EnrollRequestForm';
@@ -129,7 +129,7 @@ const AnualChart = ({ requests }: { requests: EnrollRequest[] }) => {
 		<StyledCard variant="outlined">
 			<CardHeader title={<Title>Pedidos ao Long do Tempo:</Title>} />
 			<CardContent>
-				<EChartsWrapper option={option} style={{ height: '200px' }} />
+				<DynamicEChartsWrapper option={option} style={{ height: '200px' }} />
 			</CardContent>
 		</StyledCard>
 	);

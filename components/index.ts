@@ -10,3 +10,5 @@ export * from './updates/UpdateTable';
 export * from './StyledCard';
 export * from './Carousel';
 export * from './media';
+export * from './home';
+export * from './map';

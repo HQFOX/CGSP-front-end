@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { LatLngTuple } from 'leaflet';
+import type { LatLngTuple } from 'leaflet';
 
 import { Fade, Grid } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
 import { Controls } from '../../controls/Controls';
+import { DynamicMap } from '../../map/DynamicMap';
 import { Beja, Evora, Portalegre } from '../../map/districtdata';
 import { Setubal } from '../../map/districtdata/Setubal';
 import ProjectCard from '../ProjectCard';
@@ -19,10 +19,6 @@ import {
 	getTypologies,
 	normalizeString
 } from './utils';
-
-const Map = dynamic(() => import('../../map/Map'), {
-	ssr: false
-});
 
 export interface ProjectInventoryProps {
 	projects: Project[];
@@ -309,7 +305,7 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 			</Grid>
 			{view === 'map' && (
 				<div id="map" style={{ height: 480, padding: '8px' }}>
-					<Map
+					<DynamicMap
 						centerCoordinates={centerCoordinates}
 						projects={projectSearchResults}
 						zoom={zoom}

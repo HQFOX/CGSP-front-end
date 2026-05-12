@@ -2,7 +2,8 @@ import React, { ReactNode, useMemo, useRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MarkerProps as LeafletMarkerProps, Marker, Popup } from 'react-leaflet';
 
-import { LatLngTuple, divIcon } from 'leaflet';
+import type { LatLngTuple } from 'leaflet';
+import { divIcon } from 'leaflet';
 
 import { ClassNames } from '@emotion/react';
 import RoomIcon from '@mui/icons-material/Room';

@@ -21,19 +21,19 @@
 	"size-limit": [
 		{
 			"name": "Shared app bundle",
-			"path": ".next/static/chunks/pages/_app.js"
+			"path": ".next/static/chunks/pages/_app-*.js"
 		},
 		{
 			"name": "Home page",
-			"path": ".next/static/chunks/pages/index.js"
+			"path": ".next/static/chunks/pages/index-*.js"
 		},
 		{
 			"name": "Projects page",
-			"path": ".next/static/chunks/pages/projects.js"
+			"path": ".next/static/chunks/pages/projects-*.js"
 		},
 		{
 			"name": "Updates page",
-			"path": ".next/static/chunks/pages/updates.js"
+			"path": ".next/static/chunks/pages/updates-*.js"
 		}
 	],
 	"dependencies": {
