@@ -37,13 +37,13 @@ import {
 import { useTranslation } from 'next-i18next/pages';
 import Link from 'next/link';
 
-import { AbstractFile, DynamicMap, Loading, StyledButton } from '../';
-import { CGSPDropzone } from '../dropzone/Dropzone';
-import { CancelModal } from '../modals/CancelModal';
-import { districtCenterCoordinates } from '../projects/projectInventory/ProjectInventory';
-import { SuccessMessage } from './SuccessMessage';
-import { TypologyDetailsForm } from './types';
-import { dataFetch, getPresignedUrl, submitFile } from './utils';
+import { AbstractFile, DynamicMap, Loading, StyledButton } from '../..';
+import { CGSPDropzone } from '../../dropzone/Dropzone';
+import { CancelModal } from '../../modals/CancelModal';
+import { districtCenterCoordinates } from '../../projects/projectInventory/ProjectInventory';
+import { SuccessMessage } from '../SuccessMessage';
+import { TypologyDetailsForm } from '../types';
+import { dataFetch, getPresignedUrl, submitFile } from '../utils';
 
 const districtList = ['Évora', 'Beja', 'Portalegre', 'Setúbal', 'Aveiro', 'Braga'];
 
