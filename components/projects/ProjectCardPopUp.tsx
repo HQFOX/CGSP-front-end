@@ -7,6 +7,7 @@ import router from 'next/router';
 
 import { StyledButton } from '../../components';
 import { Details } from '../details/Details';
+import { getS3Url } from '../../utils/utils';
 
 interface ProjectCardPopUpProps {
 	project: Project;
@@ -25,7 +26,7 @@ export const ProjectCardPopUp = ({ project }: ProjectCardPopUpProps) => {
 				<div style={{ position: 'relative', overflow: 'hidden', height: '170px' }}>
 					{project.coverPhoto && (
 						<Image
-							src={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto.filename}`}
+							src={getS3Url(project.coverPhoto.filename)}
 							alt={`cover image for ${project.title} project`}
 							fill
 							style={{ objectFit: 'cover' }}

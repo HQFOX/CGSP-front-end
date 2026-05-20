@@ -8,6 +8,7 @@ import router from 'next/router';
 
 import { StyledButton } from '../../components';
 import { StyledCard } from '../StyledCard';
+import { getS3Url } from '../../utils/utils';
 import { Title } from '../Title';
 import { Details } from '../details/Details';
 
@@ -30,7 +31,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 				<StyledDiv>
 					{project.coverPhoto && (
 						<Image
-							src={`${process.env.NEXT_PUBLIC_S3_URL}${project.coverPhoto.filename}`}
+						src={getS3Url(project.coverPhoto.filename)}
 							alt={`cover image for ${project.title} project`}
 							fill
 							style={{ objectFit: 'cover' }}

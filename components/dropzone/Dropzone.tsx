@@ -8,6 +8,7 @@ import Image from 'next/image';
 
 import theme from '../../theme';
 import { AbstractFile } from '../FileUploader';
+import { getS3Url } from '../../utils/utils';
 
 const getColor = (props: any) => {
 	if (props.isDragAccept) {
@@ -129,7 +130,7 @@ export const CGSPDropzone = ({
 									src={
 										file.file
 											? URL.createObjectURL(file.file)
-											: `${process.env.NEXT_PUBLIC_S3_URL}${file.filename}`
+											: getS3Url(file.filename)
 									}
 									fill
 									style={{ objectFit: 'contain' }}
