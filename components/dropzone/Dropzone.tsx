@@ -7,8 +7,8 @@ import { Grid, IconButton, Typography } from '@mui/material';
 import Image from 'next/image';
 
 import theme from '../../theme';
-import { AbstractFile } from '../FileUploader';
 import { getS3Url } from '../../utils/utils';
+import { AbstractFile } from '../FileUploader';
 
 const getColor = (props: any) => {
 	if (props.isDragAccept) {
@@ -127,11 +127,7 @@ export const CGSPDropzone = ({
 						<div style={{ position: 'relative' }}>
 							<ImageFrame>
 								<Image
-									src={
-										file.file
-											? URL.createObjectURL(file.file)
-											: getS3Url(file.filename)
-									}
+									src={file.file ? URL.createObjectURL(file.file) : getS3Url(file.filename)}
 									fill
 									style={{ objectFit: 'contain' }}
 									alt="submitted image"

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import { AbstractFile, isVideoFile, isVideoUrl } from '../FileUploader/utils';
 import { getS3Url } from '../../utils/utils';
+import { AbstractFile, isVideoFile, isVideoUrl } from '../FileUploader/utils';
 
 interface MediaBaseProps {
 	file: AbstractFile;
@@ -45,9 +45,7 @@ export const Media = ({
 	...rest
 }: MediaProps) => {
 	/** Check to see if tit is a local file */
-	const source = file.file
-		? URL.createObjectURL(file.file)
-		: getS3Url(file.filename);
+	const source = file.file ? URL.createObjectURL(file.file) : getS3Url(file.filename);
 
 	const isVideo = file.file ? isVideoFile(file) : isVideoUrl(source);
 
