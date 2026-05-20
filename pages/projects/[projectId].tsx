@@ -41,6 +41,7 @@ import { PageContainer } from '../../components/pageContainer/PageContainer';
 import TabPanel from '../../components/tabpanel/TabPanel';
 import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
 import theme from '../../theme';
+import { getS3Url } from '../../utils/utils';
 
 const StyledTab = styled(Tab)({
 	textTransform: 'capitalize'
@@ -90,7 +91,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					<Carousel
 						images={images.map((file) => ({
 							id: file?.filename ?? '',
-							filename: `${process.env.NEXT_PUBLIC_S3_URL}${file?.filename ?? ''}`
+							filename: getS3Url(file?.filename ?? '')
 						}))}
 					/>
 				</Paper>
@@ -199,7 +200,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 														<Stack direction="row" gap={1}>
 															<Dashboard color="primary" />
 															<MuiLink
-																href={`${process.env.NEXT_PUBLIC_S3_URL}${typology.plant?.filename}`}
+																href={getS3Url(typology.plant?.filename ?? '')}
 																target="_blank"
 																rel="noreferrer"
 																variant="body2"

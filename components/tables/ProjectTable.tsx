@@ -44,7 +44,7 @@ import {
 import { useTranslation } from 'next-i18next/pages';
 import Image from 'next/image';
 
-import { formatDate } from '../../utils/utils';
+import { formatDate, getS3Url } from '../../utils/utils';
 import { Loading } from '../loading/Loading';
 import { DeleteModal } from '../modals/DeleteModal';
 import { TableActions } from '../updates/TableActions';
@@ -138,7 +138,7 @@ const ProjectTable = ({
 				cell: (info) =>
 					info.getValue()?.filename && (
 						<Image
-							src={`${process.env.NEXT_PUBLIC_S3_URL}${info.getValue()?.filename}`}
+							src={getS3Url(info.getValue()?.filename ?? '')}
 							alt={''}
 							width={50}
 							height={50}
