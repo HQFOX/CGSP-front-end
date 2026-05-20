@@ -6,8 +6,8 @@ import Image from 'next/image';
 import router from 'next/router';
 
 import { StyledButton } from '../../components';
-import { Details } from '../details/Details';
 import { getS3Url } from '../../utils/utils';
+import { Details } from '../details/Details';
 
 interface ProjectCardPopUpProps {
 	project: Project;
