@@ -54,7 +54,7 @@
 		"echarts": "^6.0.0",
 		"formik": "^2.4.9",
 		"i18next": "^26.0.10",
-		"js-cookie": "^3.0.5",
+		"js-cookie": "^3.0.7",
 		"jwt-decode": "^4.0.0",
 		"leaflet": "^1.9.4",
 		"next": "^15.5.18",
