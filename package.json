@@ -52,7 +52,7 @@
 		"@phosphor-icons/react": "^2.1.10",
 		"@tanstack/react-table": "^8.21.3",
 		"cgsp-front-end": "file:",
-		"echarts": "^6.0.0",
+		"echarts": "^6.1.0",
 		"formik": "^2.4.9",
 		"i18next": "^26.0.10",
 		"js-cookie": "^3.0.7",
