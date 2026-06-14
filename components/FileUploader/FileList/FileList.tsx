@@ -33,8 +33,6 @@ export const FileList = (props: FileListInterface) => {
 	return props.files.map((file, index) => {
 		const isLoading = loading[file.filename] ?? false;
 
-		console.log(file);
-
 		return (
 			<div key={file.filename + index} className={styles.listItem}>
 				{
