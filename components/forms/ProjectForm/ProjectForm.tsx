@@ -1,29 +1,14 @@
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { FormikErrors, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import type { LatLngTuple } from 'leaflet';
-import * as Yup from 'yup';
 
+import { ArrowBackIos, ArrowForwardIos, CheckCircle, Close } from '@mui/icons-material';
 import {
-	ArrowBackIos,
-	ArrowForwardIos,
-	CheckCircle,
-	Close,
-	ExpandMore,
-	OpenInNew
-} from '@mui/icons-material';
-import {
-	Accordion,
-	AccordionDetails,
-	AccordionSummary,
-	Autocomplete,
-	Box,
-	Chip,
 	Container,
 	FormControl,
-	Grid,
+	Grid2,
 	IconButton,
-	InputAdornment,
 	InputLabel,
 	MenuItem,
 	Paper,
@@ -35,47 +20,26 @@ import {
 	Typography
 } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
-import Link from 'next/link';
 
-import { AbstractFile, DynamicMap, Loading, StyledButton } from '../..';
-import { CGSPDropzone } from '../../dropzone/Dropzone';
-import { CancelModal } from '../../modals/CancelModal';
+import { AbstractFile, CancelModal, FileUploader, Loading, StyledButton } from '../..';
 import { districtCenterCoordinates } from '../../projects/projectInventory/ProjectInventory';
 import { SuccessMessage } from '../SuccessMessage';
-import { TypologyDetailsForm } from '../types';
-import { dataFetch, getPresignedUrl, submitFile } from '../utils';
+import { dataFetch, submitFile } from '../utils';
+import { LocationSection, districtList } from './LocationSection';
+import { TypologiesSection } from './TypologiesSection';
+import { getErrorMessage, getProjectInitialValues, projectValidationSchema, steps } from './utils';
 
-const districtList = ['Évora', 'Beja', 'Portalegre', 'Setúbal', 'Aveiro', 'Braga'];
-
-const steps = ['Detalhes', 'Localização', 'Tipologias', 'Fotografias'];
-
-const numberText = 'Este valor tem que ser um número.';
-const required = 'Campo Obrigatório.';
-const assignedLotsText =
-	'O número de lotes reservado não pode ser maior que o número de lotes desta tipologia.';
-
-const getErrorMessage = (errors: FormikErrors<any>, t?: any) => {
-	const result = [];
-	for (const key of Object.keys(errors)) {
-		result.push(`Erro no campo ${t(`projectDetails.${key}`)}. `);
-	}
-	return result;
-};
-
-export const ProjectForm = ({
-	project,
-	onCancel,
-	onSubmit
-}: {
+export interface ProjectFormProps {
 	project?: Project;
 	onCancel?: () => void;
 	onSubmit?: () => void;
-}) => {
+}
+
+export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) => {
 	const { t } = useTranslation(['projectpage', 'common']);
 
 	const [files, setFiles] = useState<AbstractFile[]>(project?.files ?? []);
 
-	const [typologyIndex, setTypologyIndex] = useState(0);
 	const [cancelModal, setCancelModal] = useState(false);
 
 	const [submitting, setSubmitting] = useState(false);
@@ -90,242 +54,105 @@ export const ProjectForm = ({
 		38.56633674453089, -7.925327404275489
 	]);
 
-	const ref = useRef(null);
-
 	const formik = useFormik({
-		initialValues: {
-			id: project?.id ?? '0',
-			title: project?.title ?? '',
-			assignmentStatus: project?.assignmentStatus ?? 'WAITING',
-			constructionStatus: project?.constructionStatus ?? 'ALLOTMENTPERMIT',
-			coverPhoto: (project?.coverPhoto as AbstractFile | undefined) ?? undefined,
-			district: project?.district ?? '',
-			county: project?.county ?? '',
-			lots: project ? project.lots : 0,
-			assignedLots: project ? project.assignedLots : 0,
-			createdOn: project?.createdOn
-				? new Date(project.createdOn).toISOString().slice(0, 10)
-				: new Date().toISOString().slice(0, 10),
-			typologies: (project?.typologies?.map((value, index) => ({ ...value, index: index })) ??
-				[]) as TypologyDetailsForm[],
-			latitude: project?.coordinates ? project.coordinates[0] : 38.56633674453089,
-			longitude: project?.coordinates ? project.coordinates[1] : -7.925327404275489,
-			files: [] as { filename: string }[]
-		},
-		validationSchema: Yup.object({
-			title: Yup.string().required(required),
-			district: Yup.string().required(required),
-			lots: Yup.number().typeError(numberText).required(required),
-			assignedLots: Yup.number().typeError(numberText).required(required),
-			typologies: Yup.array().of(
-				Yup.object().shape({
-					typology: Yup.string(),
-					bedroomNumber: Yup.number().typeError(numberText).nullable(),
-					bathroomNumber: Yup.number().typeError(numberText).nullable(),
-					garageNumber: Yup.number().typeError(numberText).nullable(),
-					totalLotArea: Yup.number().typeError(numberText).nullable(),
-					livingArea: Yup.number().typeError(numberText).nullable(),
-					price: Yup.number().typeError(numberText).nullable(),
-					lots: Yup.number().typeError(numberText).nullable(),
-					assignedLots: Yup.number()
-						.typeError(numberText)
-						.nullable()
-						.max(Yup.ref('lots'), assignedLotsText)
-				})
-			),
-			latitude: Yup.number().required(required),
-			longitude: Yup.number().required(required)
-		}),
+		initialValues: getProjectInitialValues(project),
+		validationSchema: projectValidationSchema,
 		onSubmit: async (values) => {
 			setSubmitting(true);
 
+			// TODO: if this value is not user editable then it's declarion should be moved to the backend
 			values = { ...values, createdOn: new Date(values.createdOn).toISOString() };
 
+			const uploadPromises: Promise<unknown>[] = [
+				...files.map((file) => submitFile(file)),
+				...values.typologies.flatMap((typ) => (typ.plant ? [submitFile(typ.plant)] : []))
+			];
+
 			if (values.coverPhoto) {
-				submitFile(values.coverPhoto);
+				uploadPromises.push(submitFile(values.coverPhoto));
 			}
 
-			Promise.all(files.map(async (file) => submitFile(file))).then(async () => {
-				Promise.all(values.typologies.map((typ) => typ.plant && submitFile(typ.plant))).then(
-					async () => {
-						const formatValue = {
-							title: values.title,
-							assignmentStatus: values.assignmentStatus,
-							constructionStatus: values.constructionStatus,
-							district: values.district,
-							county: values.county,
-							lots: values.lots,
-							assignedLots: values.assignedLots,
-							typologies: values.typologies,
-							coordinates: [values.latitude, values.longitude],
-							coverPhoto: values.coverPhoto,
-							files: files.map((file) => {
-								return { filename: file.filename };
-							}),
-							createdOn: values.createdOn
-						};
+			await Promise.all(uploadPromises);
 
-						postProject(formatValue);
-					}
-				);
-			});
+			const formatValue = {
+				title: values.title,
+				assignmentStatus: values.assignmentStatus,
+				constructionStatus: values.constructionStatus,
+				district: values.district,
+				county: values.county,
+				lots: values.lots,
+				assignedLots: values.assignedLots,
+				typologies: values.typologies,
+				coordinates: [values.latitude, values.longitude],
+				coverPhoto: values.coverPhoto,
+				files: files.map((file) => {
+					return { filename: file.filename };
+				}),
+				createdOn: values.createdOn
+			};
+
+			postProject(formatValue);
 		}
 	});
 
-	const onCoordinateChange = async (values: LatLngTuple) => {
-		const geoApiInfo = await fetch(`https://json.geoapi.pt/gps/${values[0]},${values[1]}`).then(
-			(res) => (res.ok ? res.json() : undefined)
-		);
-
-		if (geoApiInfo) {
-			formik.setValues({
+	const onCoordinateChange = async ({
+		values,
+		district,
+		county
+	}: {
+		values: LatLngTuple;
+		district?: string;
+		county?: string;
+	}) => {
+		formik.setValues(
+			{
 				...formik.values,
 				latitude: values[0],
 				longitude: values[1],
-				district: geoApiInfo.distrito,
-				county: geoApiInfo.concelho
-			});
-			setCenterCoordinates(values);
-		}
-	};
-
-	const handleTypologyDelete = (index: number | undefined) => {
-		formik.setValues({
-			...formik.values,
-			typologies: formik.values.typologies.filter((value) => value.index != index)
-		});
-	};
-
-	const handleTypologyAdd = (option: string) => {
-		const newIndex = typologyIndex + 1;
-		const newTypology = { index: newIndex, typology: option };
-		setTypologyIndex(newIndex);
-		formik.setValues({
-			...formik.values,
-			typologies: [
-				...formik.values.typologies,
-				{
-					...newTypology,
-					bedroomNumber: undefined,
-					bathroomNumber: undefined,
-					garageNumber: undefined,
-					totalLotArea: undefined,
-					livingArea: undefined,
-					price: undefined,
-					plant: undefined,
-					lots: undefined,
-					assignedLots: undefined
-				} as TypologyDetailsForm
-			]
-		});
-	};
-
-	const onTypologyChange = (
-		_e: React.SyntheticEvent,
-		value: (string | undefined)[],
-		reason: string
-	) => {
-		if (
-			reason === 'selectOption' ||
-			(reason === 'createOption' && typeof value[value.length - 1] === 'string')
-		) {
-			handleTypologyAdd(value[value.length - 1] as string);
-		}
-	};
-
-	const handleAddFile = async (newFiles: File[]) => {
-		newFiles.map((file) =>
-			getPresignedUrl(file).then((value) => value && setFiles([...files, value]))
+				...(district && { district: district }),
+				...(county && { county: county })
+			},
+			true
 		);
+		setCenterCoordinates(values);
 	};
 
-	const handleDeleteFile = (file: AbstractFile) => {
-		setFiles(files.filter((item) => item != file));
-	};
+	const handleClose = useCallback(
+		(confirm: boolean) => {
+			setCancelModal(false);
+			confirm && onCancel?.();
+		},
+		[onCancel]
+	);
 
-	const handleAddCover = async (newFiles: File[]) => {
-		newFiles.map((file) =>
-			getPresignedUrl(file).then((value) => {
-				if (value) {
-					formik.setValues({
-						...formik.values,
-						coverPhoto: value
-					});
-				}
-			})
-		);
-	};
-
-	const handleDeleteCover = () => {
-		formik.setValues({
-			...formik.values,
-			coverPhoto: undefined
-		});
-	};
-
-	const handleAddPlant = async (newFiles: File[], index: number) => {
-		newFiles.map((file) =>
-			getPresignedUrl(file).then((value) => {
-				if (value) {
-					const updatedTypologies = formik.values.typologies;
-
-					updatedTypologies[index] = { ...updatedTypologies[index], plant: value };
-
-					formik.setValues({
-						...formik.values,
-						typologies: updatedTypologies
-					});
-				}
-			})
-		);
-	};
-
-	const handleDeletePlant = (index: number) => {
-		const updatedTypologies = formik.values.typologies;
-
-		const updatedTypology = updatedTypologies[index];
-
-		delete updatedTypology.plant;
-
-		updatedTypologies[index] = updatedTypology;
-
-		formik.setValues({
-			...formik.values,
-			typologies: updatedTypologies
-		});
-	};
-
-	const handleClose = (confirm: boolean) => {
-		setCancelModal(false);
-		confirm && onCancel?.();
-	};
-
-	const handleDistrictChange = (district: string | null) => {
-		if (district && district != formik.values.district) {
-			formik.setValues({
-				...formik.values,
-				district: district
-			});
-			if (districtList.includes(district)) {
-				const newCoordinates = districtCenterCoordinates[district];
-				if (newCoordinates) {
-					setCenterCoordinates(newCoordinates);
+	const handleDistrictChange = useCallback(
+		(district: string | null) => {
+			const newDistrict = district ?? '';
+			if (newDistrict != formik.values.district) {
+				formik.setFieldValue('district', newDistrict, true);
+				formik.setFieldTouched('district', true, false);
+				if (districtList.includes(newDistrict)) {
+					const newCoordinates = districtCenterCoordinates[newDistrict];
+					if (newCoordinates) {
+						setCenterCoordinates(newCoordinates);
+					}
 				}
 			}
-		}
-	};
+		},
+		[formik.values.district, formik.setFieldValue, formik.setFieldTouched]
+	);
 
-	const handleBack = () => {
+	const handleBack = useCallback(() => {
 		setActiveStep((prevActiveStep) => (prevActiveStep - 1) % steps.length);
-	};
+	}, []);
 
-	const handleNext = () => {
+	const handleNext = useCallback(() => {
 		setActiveStep((prevActiveStep) => (prevActiveStep + 1) % steps.length);
-	};
+	}, []);
 
-	const handleStep = (step: number) => () => {
+	const handleStep = useCallback((step: number) => {
 		setActiveStep(step);
-	};
+	}, []);
 
 	const postProject = async (values: unknown) => {
 		const endpoint = project
@@ -355,45 +182,45 @@ export const ProjectForm = ({
 	return (
 		<Paper sx={{ mt: 4 }}>
 			<Container style={{ minHeight: 800 }}>
-				<Grid container pt={2}>
-					<Grid item mt={4}>
+				<Grid2 container pt={2}>
+					<Grid2 mt={4}>
 						<Typography variant={'h4'}>
 							{project ? 'Editar Projeto' : 'Adicionar Projeto'}
 						</Typography>
-					</Grid>
+					</Grid2>
 					{onCancel ? (
-						<Grid item ml="auto">
+						<Grid2 ml="auto">
 							<IconButton
 								onClick={() => {
 									success ? onCancel() : setCancelModal(true);
 								}}>
 								<Close />
 							</IconButton>
-						</Grid>
+						</Grid2>
 					) : (
 						<></>
 					)}
-				</Grid>
+				</Grid2>
 				{success ? (
 					<SuccessMessage title={project ? 'Projeto Editado' : 'Novo Projeto Adicionado'} />
 				) : (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
-							<Grid item xs={12}>
+						<Grid2 container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
+							<Grid2 size={{ xs: 12 }}>
 								<Stepper nonLinear activeStep={activeStep}>
 									{steps.map((label, index) => (
 										<Step key={label}>
-											<StepButton onClick={handleStep(index)}>{label}</StepButton>
+											<StepButton onClick={() => handleStep(index)}>{label}</StepButton>
 										</Step>
 									))}
 								</Stepper>
-							</Grid>
+							</Grid2>
 							{activeStep === 0 && (
 								<React.Fragment>
-									<Grid item xs={12}>
+									<Grid2 size={{ xs: 12 }}>
 										<Typography variant={'h6'}>Detalhes do Projeto</Typography>
-									</Grid>
-									<Grid item xs={12}>
+									</Grid2>
+									<Grid2 size={{ xs: 12 }}>
 										<TextField
 											id="title"
 											name="title"
@@ -404,8 +231,8 @@ export const ProjectForm = ({
 											helperText={formik.errors.title}
 											fullWidth
 										/>
-									</Grid>
-									<Grid item xs={4}>
+									</Grid2>
+									<Grid2 size={{ xs: 4 }}>
 										<FormControl sx={{ width: '100%' }}>
 											<InputLabel id="assignment-status-select-dropdown-label">
 												Estado de Atribuição
@@ -426,8 +253,8 @@ export const ProjectForm = ({
 												<MenuItem value={'CONCLUDED'}>{t('assignmentStatus.CONCLUDED')}</MenuItem>
 											</Select>
 										</FormControl>
-									</Grid>
-									<Grid item xs={4}>
+									</Grid2>
+									<Grid2 size={{ xs: 4 }}>
 										<FormControl sx={{ width: '100%' }}>
 											<InputLabel id="construction-status-select-dropdown-label">
 												Estado de Construção
@@ -453,8 +280,8 @@ export const ProjectForm = ({
 												<MenuItem value={'CONCLUDED'}>{t('constructionStatus.CONCLUDED')}</MenuItem>
 											</Select>
 										</FormControl>
-									</Grid>
-									<Grid item xs={4}>
+									</Grid2>
+									<Grid2 size={{ xs: 4 }}>
 										<TextField
 											id="lots"
 											name="lots"
@@ -465,8 +292,8 @@ export const ProjectForm = ({
 											helperText={formik.errors.lots}
 											fullWidth
 										/>
-									</Grid>
-									<Grid item xs={4}>
+									</Grid2>
+									<Grid2 size={{ xs: 4 }}>
 										<TextField
 											id="assignedLots"
 											name="assignedLots"
@@ -477,8 +304,8 @@ export const ProjectForm = ({
 											helperText={formik.errors.assignedLots}
 											fullWidth
 										/>
-									</Grid>
-									<Grid item xs={6}>
+									</Grid2>
+									<Grid2 size={{ xs: 6 }}>
 										<TextField
 											id="createdOn"
 											name="createdOn"
@@ -489,375 +316,43 @@ export const ProjectForm = ({
 											fullWidth
 											helperText="Se este campo não for alterado a data será a de criação."
 										/>
-									</Grid>
-									<Grid item xs={12}>
-										<Typography variant="h6">Adicionar Foto de Capa</Typography>
-										<CGSPDropzone
-											maxContent={1}
-											files={formik.values.coverPhoto ? [formik.values.coverPhoto] : undefined}
-											onAddFile={handleAddCover}
-											onDeleteFile={handleDeleteCover}
+									</Grid2>
+									<Grid2 size={{ xs: 12 }}>
+										<FileUploader
+											name="coverPhoto"
+											title="Adicionar Foto de Capa"
+											maxFiles={1}
+											files={formik.values.coverPhoto ? [formik.values.coverPhoto] : []}
+											onChange={(value) =>
+												formik.setFieldValue('coverPhoto', value[0] || undefined)
+											}
 										/>
-									</Grid>
+									</Grid2>
 								</React.Fragment>
 							)}
 							{activeStep == 1 && (
-								<React.Fragment>
-									<Grid item xs={12}>
-										<Typography variant={'h6'}>Localização</Typography>
-									</Grid>
-									<Grid item xs={3}>
-										<Autocomplete
-											id="district"
-											freeSolo
-											options={districtList}
-											value={formik.values.district}
-											onChange={(_e, value) => handleDistrictChange(value)}
-											fullWidth
-											renderInput={(params) => (
-												<TextField
-													{...params}
-													label={'Distrito'}
-													error={formik.touched.district && Boolean(formik.errors.district)}
-													helperText={formik.touched.district && formik.errors.district}
-												/>
-											)}
-										/>
-									</Grid>
-									<Grid item xs={3}>
-										<TextField
-											id="county"
-											name="county"
-											label={'Concelho'}
-											value={formik.values.county}
-											onChange={formik.handleChange}
-											error={formik.touched.county && Boolean(formik.errors.county)}
-											helperText={formik.touched.county && formik.errors.county}
-											fullWidth
-										/>
-									</Grid>
-									<Grid item xs={3}>
-										<TextField
-											id="latitude"
-											name="latitude"
-											label={'latitude'}
-											value={formik.values.latitude}
-											onChange={formik.handleChange}
-											error={formik.touched.latitude && Boolean(formik.errors.latitude)}
-											helperText={formik.touched.latitude && (formik.errors.latitude as ReactNode)}
-											fullWidth
-										/>
-									</Grid>
-									<Grid item xs={3}>
-										<TextField
-											id="longitude"
-											name="longitude"
-											label={'longitude'}
-											value={formik.values.longitude}
-											onChange={formik.handleChange}
-											error={formik.touched.longitude && Boolean(formik.errors.longitude)}
-											helperText={
-												formik.touched.longitude && (formik.errors.longitude as ReactNode)
-											}
-											fullWidth
-										/>
-									</Grid>
-									<Grid item xs={12}>
-										<Typography variant="body2">
-											Arraste o Marcador ou clique duas vezes no mapa para preencher
-											automaticamente.
-										</Typography>
-										<Box id="map" style={{ height: 480 }} sx={{ pt: 2 }}>
-											<DynamicMap
-												doubleClickZoom={false}
-												scrollWheelZoom={true}
-												centerCoordinates={centerCoordinates}
-												markers={
-													formik.values.latitude && formik.values.longitude
-														? [[formik.values.latitude, formik.values.longitude]]
-														: []
-												}
-												onCoordinateChange={onCoordinateChange}
-												changeView
-												draggable
-												zoom={13}
-												popupContent={
-													<Link
-														target="_blank"
-														href={`https://www.google.com/maps/search/?api=1&query=${formik.values.latitude}%2C${formik.values.longitude}`}
-														passHref>
-														<StyledButton endIcon={<OpenInNew />}>Ver No Google Maps</StyledButton>
-													</Link>
-												}
-											/>
-										</Box>
-									</Grid>
-								</React.Fragment>
+								<LocationSection
+									formik={formik}
+									centerCoordinates={centerCoordinates}
+									onCoordinateChange={onCoordinateChange}
+									handleDistrictChange={handleDistrictChange}
+								/>
 							)}
-							{activeStep == 2 && (
-								<React.Fragment>
-									<Grid item xs={12}>
-										<Typography variant={'h6'}>Tipologias</Typography>
-									</Grid>
-									<Grid item xs={12}>
-										<Autocomplete
-											multiple
-											options={['T0', 'T1', 'T2', 'T3', 'T4', 'T5']}
-											isOptionEqualToValue={(_option, _value) => false}
-											freeSolo
-											value={
-												formik.values.typologies
-													.map((element) => element.typology)
-													.filter((element) => typeof element === 'string') as string[]
-											}
-											// defaultValue={formik.values.typology.map((element) => element.typology)}
-											onChange={onTypologyChange}
-											getOptionLabel={(option) => option}
-											renderTags={(value, getTagProps) =>
-												value.map((option, index) => (
-													// eslint-disable-next-line react/jsx-key
-													<Chip
-														variant="outlined"
-														label={option}
-														{...getTagProps({ index })}
-														onDelete={() =>
-															handleTypologyDelete(formik.values.typologies.at(index)?.index)
-														}
-													/>
-												))
-											}
-											renderInput={(params) => (
-												<TextField
-													ref={ref}
-													{...params}
-													label={'tipologia'}
-													helperText="Adicione uma tipologia para fornecer mais detalhes. Pode selecionar uma da lista ou introduzir uma nova."
-												/>
-											)}
-										/>
-									</Grid>
-									<Grid item xs={12}>
-										{formik.values.typologies.map((typology, index) => {
-											return (
-												<Accordion key={'typologyDetails' + index} defaultExpanded={index == 0}>
-													<AccordionSummary
-														expandIcon={<ExpandMore />}
-														aria-controls={`${typology}-content-${index}`}
-														id={`${typology}-header-${index}`}>
-														<Typography>{typology.typology}</Typography>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Grid container rowSpacing={4} columnSpacing={4}>
-															<Grid item xs={6}>
-																<TextField
-																	id="bedroomNumber"
-																	name={`typologies[${index}].bedroomNumber`}
-																	label={'Número de quartos'}
-																	value={formik.values.typologies.at(index)?.bedroomNumber}
-																	onChange={formik.handleChange}
-																	error={
-																		formik.touched.typologies?.at(index)?.bedroomNumber &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.bedroomNumber)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.bedroomNumber
-																	}
-																	fullWidth
-																/>
-															</Grid>
-															<Grid item xs={6}>
-																<TextField
-																	id="bathroomNumber"
-																	name={`typologies[${index}].bathroomNumber`}
-																	label={'Número de casas de banho'}
-																	value={formik.values.typologies.at(index)?.bathroomNumber}
-																	onChange={formik.handleChange}
-																	error={
-																		formik.touched.typologies?.at(index)?.bathroomNumber &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.bathroomNumber)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.bathroomNumber
-																	}
-																	fullWidth
-																/>
-															</Grid>
-															<Grid item xs={6}>
-																<TextField
-																	id="garageNumber"
-																	name={`typologies[${index}].garageNumber`}
-																	label={'Garagens'}
-																	value={formik.values.typologies.at(index)?.garageNumber}
-																	onChange={formik.handleChange}
-																	error={
-																		formik.touched.typologies?.at(index)?.garageNumber &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.garageNumber)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.garageNumber
-																	}
-																	fullWidth
-																/>
-															</Grid>
-															<Grid item xs={3}>
-																<TextField
-																	id="totalLotArea"
-																	name={`typologies[${index}].totalLotArea`}
-																	label={'Área Total do Lote'}
-																	value={formik.values.typologies.at(index)?.totalLotArea}
-																	onChange={formik.handleChange}
-																	fullWidth
-																	slotProps={{
-																		input: {
-																			endAdornment: (
-																				<InputAdornment position="start">{'\u33A1'}</InputAdornment>
-																			)
-																		}
-																	}}
-																	error={
-																		formik.touched.typologies?.at(index)?.totalLotArea &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.totalLotArea)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.totalLotArea
-																	}
-																/>
-															</Grid>
-															<Grid item xs={3}>
-																<TextField
-																	id="livingArea"
-																	name={`typologies[${index}].livingArea`}
-																	label={'Área Útil'}
-																	value={formik.values.typologies.at(index)?.livingArea}
-																	onChange={formik.handleChange}
-																	fullWidth
-																	slotProps={{
-																		input: {
-																			endAdornment: (
-																				<InputAdornment position="start">{'\u33A1'}</InputAdornment>
-																			)
-																		}
-																	}}
-																	error={
-																		formik.touched.typologies?.at(index)?.livingArea &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.livingArea)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.livingArea
-																	}
-																/>
-															</Grid>
-															<Grid item xs={6}>
-																<TextField
-																	id="price"
-																	name={`typologies[${index}].price`}
-																	label={'Preço'}
-																	value={formik.values.typologies.at(index)?.price}
-																	onChange={formik.handleChange}
-																	fullWidth
-																	slotProps={{
-																		input: {
-																			endAdornment: (
-																				<InputAdornment position="start">€</InputAdornment>
-																			)
-																		}
-																	}}
-																	error={
-																		formik.touched.typologies?.at(index)?.price &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.price)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.price
-																	}
-																/>
-															</Grid>
-															<Grid item xs={3}>
-																<TextField
-																	id="lots"
-																	name={`typologies[${index}].lots`}
-																	label={'Número de lotes'}
-																	value={formik.values.typologies.at(index)?.lots}
-																	onChange={formik.handleChange}
-																	fullWidth
-																	error={
-																		formik.touched.typologies?.at(index)?.lots &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.lots)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.lots
-																	}
-																/>
-															</Grid>
-															<Grid item xs={3}>
-																<TextField
-																	id="lots"
-																	name={`typologies[${index}].assignedLots`}
-																	label={'Número de lotes Reservados'}
-																	value={formik.values.typologies.at(index)?.assignedLots}
-																	onChange={formik.handleChange}
-																	fullWidth
-																	error={
-																		formik.touched.typologies?.at(index)?.assignedLots &&
-																		// @ts-ignore
-																		Boolean(formik.errors.typologies?.at(index)?.assignedLots)
-																	}
-																	helperText={
-																		// @ts-ignore
-																		formik.errors.typologies?.at(index)?.assignedLots
-																	}
-																/>
-															</Grid>
-															<Grid item xs={12}>
-																<Typography variant="h6">Adicionar Planta</Typography>
-																<CGSPDropzone
-																	maxContent={1}
-																	files={
-																		formik.values.typologies.at(index)?.plant
-																			? ([
-																					formik.values.typologies.at(index)?.plant
-																				] as AbstractFile[])
-																			: undefined
-																	}
-																	onAddFile={(files) => handleAddPlant(files, index)}
-																	onDeleteFile={() => handleDeletePlant(index)}
-																/>
-															</Grid>
-														</Grid>
-													</AccordionDetails>
-												</Accordion>
-											);
-										})}
-									</Grid>
-								</React.Fragment>
-							)}
+							{activeStep == 2 && <TypologiesSection formik={formik} />}
 							{activeStep == 3 && (
-								<Grid item xs={12}>
-									<Typography variant="h6">Adicionar Fotos</Typography>
-									<CGSPDropzone
-										maxContent={30}
+								<Grid2 size={{ xs: 12 }}>
+									<FileUploader
+										name="photos"
+										title="Adicionar Fotos"
+										maxFiles={30}
 										files={files}
-										onAddFile={handleAddFile}
-										onDeleteFile={handleDeleteFile}
+										onChange={(value) => setFiles(value)}
 									/>
-								</Grid>
+								</Grid2>
 							)}
-						</Grid>
-						<Grid container rowSpacing={4} pb={2} columnSpacing={4}>
-							<Grid item xs={6}>
+						</Grid2>
+						<Grid2 container rowSpacing={4} pb={2} columnSpacing={4}>
+							<Grid2 size={{ xs: 6 }}>
 								<StyledButton
 									variant="contained"
 									color="primary"
@@ -866,8 +361,8 @@ export const ProjectForm = ({
 									startIcon={<ArrowBackIos />}>
 									Passo Anterior
 								</StyledButton>
-							</Grid>
-							<Grid item textAlign="end" xs={6}>
+							</Grid2>
+							<Grid2 size={{ xs: 6 }} textAlign="end">
 								<StyledButton
 									variant="contained"
 									color="primary"
@@ -876,37 +371,39 @@ export const ProjectForm = ({
 									endIcon={<ArrowForwardIos />}>
 									Próximo Passo
 								</StyledButton>
-							</Grid>
-							<Grid item ml="auto">
+							</Grid2>
+							<Grid2 size={{ xs: 'auto' }} ml="auto">
 								{submitting ? (
 									<Loading />
 								) : success ? (
 									<CheckCircle color={'success'} style={{ fontSize: '50px' }} />
 								) : (
 									<Typography color={'error'}>
-										{!formik.isValid ? getErrorMessage(formik.errors, t) : error}
+										{formik.submitCount > 0 && !formik.isValid
+											? getErrorMessage(formik.errors, t)
+											: error}
 									</Typography>
 								)}
-							</Grid>
-							<Grid item>
+							</Grid2>
+							<Grid2 size={{ xs: 'auto' }}>
 								<StyledButton
 									type="submit"
 									variant="contained"
 									color="primary"
 									value="submit"
 									fullWidth
-									disabled={!formik.isValid}>
+									disabled={submitting}>
 									{'Submeter'}
 								</StyledButton>
-							</Grid>
+							</Grid2>
 							{onCancel && (
-								<Grid item>
+								<Grid2 size={{ xs: 'auto' }}>
 									<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
 										Cancelar
 									</StyledButton>
-								</Grid>
+								</Grid2>
 							)}
-						</Grid>
+						</Grid2>
 					</form>
 				)}
 			</Container>

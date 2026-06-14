@@ -12,3 +12,4 @@ export * from './Carousel';
 export * from './media';
 export * from './home';
 export * from './map';
+export * from './modals';
