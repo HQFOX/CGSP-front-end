@@ -70,7 +70,7 @@
 		"yup": "^1.7.1"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^21.0.1",
+		"@commitlint/cli": "^21.0.2",
 		"@commitlint/config-conventional": "^20.5.3",
 		"@next/bundle-analyzer": "^16.2.6",
 		"@next/eslint-plugin-next": "^15.5.19",
