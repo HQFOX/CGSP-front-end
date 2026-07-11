@@ -24,6 +24,7 @@ import { SearchParams } from '../projects/projectInventory/utils';
 import { MapTrifoldIcon, SquaresFourIcon } from '@phosphor-icons/react';
 import { styles } from './styles';
 import { css } from '@emotion/css';
+import { StyledButton } from '../Button';
 
 export interface ControlProps {
 	search: SearchParams;
@@ -38,11 +39,8 @@ export interface ControlProps {
 	onViewChange?: (view: ViewType) => void;
 	onStatusChange?: (status: string) => void;
 	onDistrictChange?: (district: string) => void;
-	onPriceRangeChange?: (checked: boolean, range?: number[]) => void;
-	onTypologyChange?: (typology: string, checked: boolean, type: 'typologies' | 'types') => void;
-	// onTypeChange?: (type: string, checked: boolean) => void,
-	onAssignmentStatusChange?: (status: AssignmentStatusType, checked: boolean) => void;
-	onConstructionStatusChange?: (status: ConstructionStatusType, checked: boolean) => void;
+	onApply?: (search: SearchParams) => void;
+	onClear?: () => void;
 }
 
 export const Controls = ({
@@ -56,12 +54,9 @@ export const Controls = ({
 	types = [],
 	onWildCardChange,
 	onViewChange,
-	onDistrictChange: onDistrictChange,
-	onPriceRangeChange = () => {},
-	onTypologyChange = () => {},
-	// onTypeChange = () => {},
-	onAssignmentStatusChange = () => {},
-	onConstructionStatusChange = () => {}
+	onDistrictChange,
+	onApply,
+	onClear
 }: ControlProps) => {
 	const { t } = useTranslation('projectpage');
 
@@ -74,33 +69,120 @@ export const Controls = ({
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popper' : undefined;
 
-	const [priceRangeState, setPriceRangeState] = React.useState<number[]>(priceRange);
+	// Draft state holds the filter selection while the user edits it. Changes are
+	// only propagated to the parent when "Apply Changes" is clicked.
+	const [draft, setDraft] = React.useState<SearchParams>(search);
+	const [priceRangeState, setPriceRangeState] = React.useState<number[]>(
+		search.priceRange.length === 2 ? search.priceRange : priceRange
+	);
 
-	const handleChange = (event: unknown, checked: boolean, newValue?: number | number[]) => {
-		if (newValue instanceof Array) setPriceRangeState(newValue);
-		onPriceRangeChange(checked, priceRangeState);
-	};
+	// Sync the draft whenever the applied filters change externally (e.g. URL
+	// initialization or after an apply/clear), without overriding in-progress edits.
+	const appliedKeyRef = React.useRef<string>('');
+	const appliedKey = JSON.stringify([
+		search.assignmentStatus,
+		search.constructionStatus,
+		search.priceRange,
+		search.typologies,
+		search.types
+	]);
 
-	const handleTypologyChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-		onTypologyChange(event.target.name, checked, 'typologies');
-	};
+	React.useEffect(() => {
+		if (appliedKeyRef.current !== appliedKey) {
+			appliedKeyRef.current = appliedKey;
+			setDraft(search);
+			if (search.priceRange.length === 2) setPriceRangeState(search.priceRange);
+		}
+	}, [appliedKey, search]);
 
-	const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-		onTypologyChange(event.target.name, checked, 'types');
+	const handleConstructionStatusChange = (
+		event: React.ChangeEvent<HTMLInputElement>,
+		checked: boolean
+	) => {
+		const name = event.target.name;
+		setDraft((prev) => {
+			if (name === 'all')
+				return { ...prev, constructionStatus: checked ? [...constructionsStatus] : [] };
+			return {
+				...prev,
+				constructionStatus: checked
+					? [...prev.constructionStatus, name as ConstructionStatusType]
+					: prev.constructionStatus.filter((value) => value !== name)
+			};
+		});
 	};
 
 	const handleAssignmentStatusChange = (
 		event: React.ChangeEvent<HTMLInputElement>,
 		checked: boolean
 	) => {
-		onAssignmentStatusChange(event.target.name as AssignmentStatusType, checked);
+		const name = event.target.name;
+		setDraft((prev) => {
+			if (name === 'all')
+				return { ...prev, assignmentStatus: checked ? [...assignmentStatus] : [] };
+			return {
+				...prev,
+				assignmentStatus: checked
+					? [...prev.assignmentStatus, name as AssignmentStatusType]
+					: prev.assignmentStatus.filter((value) => value !== name)
+			};
+		});
 	};
 
-	const handleConstructionStatusChange = (
-		event: React.ChangeEvent<HTMLInputElement>,
+	const updateTypologyGroup = (
+		type: 'typologies' | 'types',
+		name: string,
 		checked: boolean
 	) => {
-		onConstructionStatusChange(event.target.name as ConstructionStatusType, checked);
+		setDraft((prev) => {
+			if (name === 'all')
+				return {
+					...prev,
+					typologies: checked ? [...typologies] : [],
+					types: checked ? [...types] : []
+				};
+			return {
+				...prev,
+				[type]: checked ? [...prev[type], name] : prev[type].filter((value) => value !== name)
+			};
+		});
+	};
+
+	const handleTypologyChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+		updateTypologyGroup('typologies', event.target.name, checked);
+	};
+
+	const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+		updateTypologyGroup('types', event.target.name, checked);
+	};
+
+	const handlePriceCheck = (checked: boolean) => {
+		setDraft((prev) => ({ ...prev, priceRange: checked ? priceRangeState : [] }));
+	};
+
+	const handlePriceSlider = (value: number | number[]) => {
+		if (value instanceof Array) {
+			setPriceRangeState(value);
+			setDraft((prev) => ({ ...prev, priceRange: value }));
+		}
+	};
+
+	const handleApplyChanges = () => {
+		onApply?.(draft);
+		setAnchorEl(null);
+	};
+
+	const handleClearFilters = () => {
+		setDraft((prev) => ({
+			...prev,
+			assignmentStatus: [],
+			constructionStatus: [],
+			priceRange: [],
+			typologies: [],
+			types: []
+		}));
+		setPriceRangeState(priceRange);
+		onClear?.();
 	};
 
 	return (
@@ -170,10 +252,10 @@ export const Controls = ({
 										control={
 											<Checkbox
 												name={'all'}
-												checked={search.constructionStatus.length === constructionsStatus.length}
+												checked={draft.constructionStatus.length === constructionsStatus.length}
 												indeterminate={
-													search.constructionStatus.length > 0 &&
-													search.constructionStatus.length < constructionsStatus.length
+													draft.constructionStatus.length > 0 &&
+													draft.constructionStatus.length < constructionsStatus.length
 												}
 												onChange={handleConstructionStatusChange}
 											/>
@@ -187,7 +269,7 @@ export const Controls = ({
 													<Checkbox
 														name={status}
 														onChange={handleConstructionStatusChange}
-														checked={search.constructionStatus.includes(status)}
+														checked={draft.constructionStatus.includes(status)}
 													/>
 												}
 												label={t(`constructionStatus.${status}`)}
@@ -201,10 +283,10 @@ export const Controls = ({
 										control={
 											<Checkbox
 												name={'all'}
-												checked={search.assignmentStatus.length === assignmentStatus.length}
+												checked={draft.assignmentStatus.length === assignmentStatus.length}
 												indeterminate={
-													search.assignmentStatus.length > 0 &&
-													search.assignmentStatus.length < assignmentStatus.length
+													draft.assignmentStatus.length > 0 &&
+													draft.assignmentStatus.length < assignmentStatus.length
 												}
 												onChange={handleAssignmentStatusChange}
 											/>
@@ -218,7 +300,7 @@ export const Controls = ({
 													<Checkbox
 														name={status}
 														onChange={handleAssignmentStatusChange}
-														checked={search.assignmentStatus.includes(status)}
+														checked={draft.assignmentStatus.includes(status)}
 													/>
 												}
 												label={t(`assignmentStatus.${status}`)}
@@ -234,13 +316,13 @@ export const Controls = ({
 												name={'all'}
 												onChange={handleTypologyChange}
 												checked={
-													search.typologies.length === typologies.length &&
-													search.types.length === types.length
+													draft.typologies.length === typologies.length &&
+													draft.types.length === types.length
 												}
 												indeterminate={
-													(search.typologies.length > 0 &&
-														search.typologies.length <= typologies.length) ||
-													(search.types.length > 0 && search.types.length <= types.length)
+													(draft.typologies.length > 0 &&
+														draft.typologies.length <= typologies.length) ||
+													(draft.types.length > 0 && draft.types.length <= types.length)
 												}
 											/>
 										}
@@ -252,7 +334,7 @@ export const Controls = ({
 												control={<Checkbox onChange={handleTypologyChange} name={typology} />}
 												label={typology}
 												key={index}
-												checked={search.typologies.includes(typology)}
+												checked={draft.typologies.includes(typology)}
 											/>
 										))}
 									</Box>
@@ -262,7 +344,7 @@ export const Controls = ({
 												control={<Checkbox onChange={handleTypeChange} name={type} />}
 												label={type}
 												key={index}
-												checked={search.types.includes(type)}
+												checked={draft.types.includes(type)}
 											/>
 										))}
 									</Box>
@@ -272,8 +354,8 @@ export const Controls = ({
 										control={
 											<Checkbox
 												name=""
-												onChange={(e, checked) => handleChange(e, checked)}
-												checked={search.priceRange.length > 0}
+												onChange={(e, checked) => handlePriceCheck(checked)}
+												checked={draft.priceRange.length > 0}
 											/>
 										}
 										label={t('projectDetails.price')}
@@ -281,7 +363,7 @@ export const Controls = ({
 									<Slider
 										getAriaLabel={() => 'price range'}
 										value={priceRangeState}
-										onChange={(event, value) => handleChange(event, true, value)}
+										onChange={(event, value) => handlePriceSlider(value)}
 										valueLabelDisplay="auto"
 										marks={[
 											{ value: priceRange[0], label: priceRange[0] },
@@ -291,6 +373,14 @@ export const Controls = ({
 										max={priceRange[1]}
 									/>
 								</div>
+								<Stack direction="row" spacing={2} justifyContent="flex-end">
+									<StyledButton variant="outlined" onClick={handleClearFilters} startIcon={<Close />}>
+										{t('clearFilters')}
+									</StyledButton>
+									<StyledButton variant="contained" onClick={handleApplyChanges}>
+										{t('applyChanges')}
+									</StyledButton>
+								</Stack>
 							</Stack>
 						</Paper>
 					</Popper>

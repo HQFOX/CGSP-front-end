@@ -12,8 +12,6 @@ import ProjectCard from '../ProjectCard';
 import {
 	SearchParams,
 	ViewType,
-	assignmentStatusValues,
-	constructionStatusValues,
 	districtCenterCoordinates,
 	filterResultsByAssignmentStatus,
 	filterResultsByConstructionStatus,
@@ -143,80 +141,30 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 		}
 	};
 
-	const onPriceRangeChange = (checked: boolean, range?: number[]) => {
-		if (checked && range) setSearch((search) => ({ ...search, priceRange: range }));
-		else {
-			setSearch((search) => ({ ...search, priceRange: [] }));
-		}
-	};
-
 	const onWildCardChange = (wildcard: string) => {
 		setSearch((search) => ({ ...search, wildcard: wildcard }));
 	};
 
-	const onTypologyChange = (param: string, checked: boolean, type: 'typologies' | 'types') => {
-		if (param == 'all') {
-			if (!checked) {
-				setSearch((search) => ({ ...search, typologies: [] }));
-				setSearch((search) => ({ ...search, types: [] }));
-			} else {
-				setSearch((search) => ({ ...search, typologies: getTypologies(projects) }));
-				setSearch((search) => ({ ...search, types: getTypes(projects) }));
-			}
-		} else {
-			if (!checked) {
-				setSearch((search) => ({
-					...search,
-					[type]: search[type].filter((value) => value !== param)
-				}));
-			} else {
-				setSearch((search) => ({ ...search, [type]: [...search[type], param] }));
-			}
-		}
+	const onApply = (draft: SearchParams) => {
+		setSearch((search) => ({
+			...search,
+			assignmentStatus: draft.assignmentStatus,
+			constructionStatus: draft.constructionStatus,
+			priceRange: draft.priceRange,
+			typologies: draft.typologies,
+			types: draft.types
+		}));
 	};
 
-	const onAssignmentStatusChange = (param: AssignmentStatusType | 'all', checked: boolean) => {
-		if (param == 'all') {
-			if (!checked) {
-				setSearch((search) => ({ ...search, assignmentStatus: [] }));
-			} else {
-				setSearch((search) => ({ ...search, assignmentStatus: assignmentStatusValues }));
-			}
-		} else {
-			if (!checked) {
-				setSearch((search) => ({
-					...search,
-					assignmentStatus: search.assignmentStatus.filter((value) => value !== param)
-				}));
-			} else {
-				setSearch((search) => ({
-					...search,
-					assignmentStatus: [...search.assignmentStatus, param]
-				}));
-			}
-		}
-	};
-
-	const onConstructionStatusChange = (param: ConstructionStatusType | 'all', checked: boolean) => {
-		if (param == 'all') {
-			if (!checked) {
-				setSearch((search) => ({ ...search, constructionStatus: [] }));
-			} else {
-				setSearch((search) => ({ ...search, constructionStatus: constructionStatusValues }));
-			}
-		} else {
-			if (!checked) {
-				setSearch((search) => ({
-					...search,
-					constructionStatus: search.constructionStatus.filter((value) => value !== param)
-				}));
-			} else {
-				setSearch((search) => ({
-					...search,
-					constructionStatus: [...search.constructionStatus, param]
-				}));
-			}
-		}
+	const onClear = () => {
+		setSearch((search) => ({
+			...search,
+			assignmentStatus: [],
+			constructionStatus: [],
+			priceRange: [],
+			typologies: [],
+			types: []
+		}));
 	};
 
 	return (
@@ -232,10 +180,8 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 				onViewChange={onViewChange}
 				onStatusChange={history ? undefined : onStatusChange}
 				onDistrictChange={onDistrictChange}
-				onPriceRangeChange={onPriceRangeChange}
-				onTypologyChange={onTypologyChange}
-				onAssignmentStatusChange={onAssignmentStatusChange}
-				onConstructionStatusChange={onConstructionStatusChange}
+				onApply={onApply}
+				onClear={onClear}
 			/>
 			<Grid2 container>
 				{view === 'card' &&
