@@ -211,3 +211,5 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 		</>
 	);
 };
+
+export { districtCenterCoordinates };

@@ -1,8 +1,8 @@
-import type { ParsedUrlQuery } from 'querystring';
 import type { LatLngTuple } from 'leaflet';
-import { Beja, Evora , Portalegre} from '../../map/districtdata';
-import { Setubal } from '../../map/districtdata/Setubal';
+import type { ParsedUrlQuery } from 'querystring';
 
+import { Beja, Evora, Portalegre } from '../../map/districtdata';
+import { Setubal } from '../../map/districtdata/Setubal';
 
 export const normalizeString = (value: string): string => {
 	return value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -90,10 +90,7 @@ export const getDistricts = (projects: Project[], allDistrictsLabel: string): st
 	return districtSet;
 };
 
-export const filterResultsByLocation = (
-	district: string,
-	projects: Project[]
-): Project[] => {
+export const filterResultsByLocation = (district: string, projects: Project[]): Project[] => {
 	if (district !== '') {
 		return projects.filter((project) =>
 			project.district?.toLowerCase().includes(district.toLowerCase())
@@ -145,10 +142,7 @@ export const filterResultsByTypology = (param: string[], projects: Project[]): P
 			project.typologies.some((typology) => typology.typology && param.includes(typology.typology))
 	);
 
-export const filterResultsByAssignmentStatus = (
-	param: string[],
-	projects: Project[]
-): Project[] =>
+export const filterResultsByAssignmentStatus = (param: string[], projects: Project[]): Project[] =>
 	projects.filter(
 		(project) => project.assignmentStatus && param.includes(project.assignmentStatus)
 	);
@@ -161,9 +155,7 @@ export const filterResultsByConstructionStatus = (
 		(project) => project.constructionStatus && param.includes(project.constructionStatus)
 	);
 
-export const searchParamsToQuery = (
-	search: SearchParams
-): Record<string, string> => {
+export const searchParamsToQuery = (search: SearchParams): Record<string, string> => {
 	const query: Record<string, string> = {};
 	if (search.wildcard) query.q = search.wildcard;
 	if (search.district) query.district = search.district;
@@ -180,9 +172,7 @@ export const searchParamsToQuery = (
 	return query;
 };
 
-export const queryToSearchParams = (
-	query: ParsedUrlQuery
-): Partial<SearchParams> => {
+export const queryToSearchParams = (query: ParsedUrlQuery): Partial<SearchParams> => {
 	const partial: Partial<SearchParams> = {};
 	if (typeof query.q === 'string') partial.wildcard = query.q;
 	if (typeof query.district === 'string') partial.district = query.district;
