@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { css } from '@emotion/css';
 import { Close, Search, Tune } from '@mui/icons-material';
 import {
 	Box,
@@ -16,15 +17,14 @@ import {
 	Stack,
 	Typography
 } from '@mui/material';
+import { MapTrifoldIcon, SquaresFourIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'next-i18next/pages';
 
 import { ViewType } from '../../pages/projects';
+import { StyledButton } from '../Button';
 import Dropdown from '../dropdown/Dropdown';
 import { SearchParams } from '../projects/projectInventory/utils';
-import { MapTrifoldIcon, SquaresFourIcon } from '@phosphor-icons/react';
 import { styles } from './styles';
-import { css } from '@emotion/css';
-import { StyledButton } from '../Button';
 
 export interface ControlProps {
 	search: SearchParams;
@@ -129,11 +129,7 @@ export const Controls = ({
 		});
 	};
 
-	const updateTypologyGroup = (
-		type: 'typologies' | 'types',
-		name: string,
-		checked: boolean
-	) => {
+	const updateTypologyGroup = (type: 'typologies' | 'types', name: string, checked: boolean) => {
 		setDraft((prev) => {
 			if (name === 'all')
 				return {
@@ -196,7 +192,12 @@ export const Controls = ({
 								placeholder={t('searchPlaceholder')}
 								onChange={(e) => onWildCardChange(e.target.value)}
 								value={search.wildcard}
-								classes={{ root: css({ ":before": { borderBottom: '0px' }, ":hover": { borderBottom: '0px' } }) }}
+								classes={{
+									root: css({
+										':before': { borderBottom: '0px' },
+										':hover': { borderBottom: '0px' }
+									})
+								}}
 							/>
 						</Button>
 					</Grid2>
@@ -213,7 +214,7 @@ export const Controls = ({
 							aria-label="card view"
 							onClick={() => onViewChange('card')}
 							color={view === 'card' ? 'primary' : 'default'}>
-							<SquaresFourIcon/>
+							<SquaresFourIcon />
 						</IconButton>
 					</Grid2>
 				)}
@@ -374,7 +375,10 @@ export const Controls = ({
 									/>
 								</div>
 								<Stack direction="row" spacing={2} justifyContent="flex-end">
-									<StyledButton variant="outlined" onClick={handleClearFilters} startIcon={<Close />}>
+									<StyledButton
+										variant="outlined"
+										onClick={handleClearFilters}
+										startIcon={<Close />}>
 										{t('clearFilters')}
 									</StyledButton>
 									<StyledButton variant="contained" onClick={handleApplyChanges}>

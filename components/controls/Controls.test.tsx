@@ -5,8 +5,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { Controls } from './Controls';
 import { SearchParams } from '../projects/projectInventory/utils';
+import { Controls } from './Controls';
 
 // Stub @phosphor-icons/react — ESM-only, fails in jsdom
 vi.mock('@phosphor-icons/react', () => ({
@@ -153,9 +153,7 @@ describe('Controls', () => {
 		);
 		await userEvent.click(screen.getByRole('button', { name: 'applyChanges' }));
 
-		expect(onApply).toHaveBeenCalledWith(
-			expect.objectContaining({ constructionStatus: [] })
-		);
+		expect(onApply).toHaveBeenCalledWith(expect.objectContaining({ constructionStatus: [] }));
 	});
 
 	it('syncs the draft when the applied search changes externally', async () => {
