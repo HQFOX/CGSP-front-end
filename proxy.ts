@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
 	const user = request.cookies.get('cgsptoken')?.value;
 	if (!user) return NextResponse.redirect(new URL('/login', request.url));
 }
