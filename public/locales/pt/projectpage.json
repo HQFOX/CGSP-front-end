@@ -6,6 +6,8 @@
 	"locationFilterLabel": "Distritos",
 	"projectStatusFilterLabel": "Estado do Projeto",
 	"filters": "filtros",
+	"applyChanges": "Aplicar Filtros",
+	"clearFilters": "Limpar",
 	"projectDetails": {
 		"title": "título",
 		"typologies": "Tipologias",
