@@ -1,44 +1,39 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { LatLngTuple } from 'leaflet';
 
-import { Fade, Grid } from '@mui/material';
+import { Fade, Grid2 } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { useRouter } from 'next/router';
 
 import { Controls } from '../../controls/Controls';
 import { DynamicMap } from '../../map/DynamicMap';
-import { Beja, Evora, Portalegre } from '../../map/districtdata';
-import { Setubal } from '../../map/districtdata/Setubal';
 import ProjectCard from '../ProjectCard';
 import {
 	SearchParams,
 	ViewType,
+	assignmentStatusValues,
+	constructionStatusValues,
+	districtCenterCoordinates,
+	filterResultsByAssignmentStatus,
+	filterResultsByConstructionStatus,
+	filterResultsByLocation,
+	filterResultsByPrice,
+	filterResultsByTitle,
+	filterResultsByTypology,
+	filterResultsByWildCard,
+	getDistricts,
 	getPriceRange,
 	getTypes,
 	getTypologies,
-	normalizeString
+	queryToSearchParams,
+	searchParamsToQuery
 } from './utils';
 
 export interface ProjectInventoryProps {
 	projects: Project[];
 	history?: boolean;
 }
-
-export const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
-	Évora: Evora.geojson.properties.centros.centro.reverse() as LatLngTuple,
-	Beja: Beja.geojson.properties.centros.centro.reverse() as LatLngTuple,
-	Portalegre: Portalegre.geojson.properties.centros.centro.reverse() as LatLngTuple,
-	Setúbal: Setubal.geojson.properties.centros.centro.reverse() as LatLngTuple
-};
-
-const constructionStatusValues: ConstructionStatusType[] = [
-	'ALLOTMENTPERMIT',
-	'BUILDINGPERMIT',
-	'CONCLUDED'
-];
-
-const assignmentStatusValues: AssignmentStatusType[] = ['WAITING', 'ONGOING', 'CONCLUDED'];
 
 export const ProjectInventory = ({ projects = [], history = false }: ProjectInventoryProps) => {
 	const router = useRouter();
@@ -47,7 +42,7 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 
 	const [search, setSearch] = useState<SearchParams>({
 		title: '',
-		district: t('allm'),
+		district: '',
 		assignmentStatus: [],
 		constructionStatus: [],
 		priceRange: [],
@@ -68,6 +63,35 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 
 	const [zoom, setZoom] = useState<number>(6);
 
+	const isInitialized = useRef(false);
+
+	// Initialize state from URL on first ready
+	useEffect(() => {
+		if (!router.isReady) return;
+		const fromQuery = queryToSearchParams(router.query);
+		if (Object.keys(fromQuery).length > 0) {
+			setSearch((prev) => ({ ...prev, ...fromQuery }));
+			if (fromQuery.district && fromQuery.district !== '') {
+				setCenterCoordinates(
+					districtCenterCoordinates[fromQuery.district] ?? [38.56633674453089, -7.925327404275489]
+				);
+				setZoom(districtCenterCoordinates[fromQuery.district] ? 9 : 6);
+			}
+		}
+		if (typeof router.query.view === 'string') {
+			setView(router.query.view as ViewType);
+		}
+		isInitialized.current = true;
+	}, [router.isReady]);
+
+	// Sync state changes to URL without a full navigation
+	useEffect(() => {
+		if (!isInitialized.current) return;
+		const query: Record<string, string> = searchParamsToQuery(search);
+		if (view !== 'card') query.view = view;
+		router.replace({ query }, undefined, { shallow: true });
+	}, [search, view]);
+
 	const handleClick = (projectId: string) => {
 		router.push(`projects/${projectId}`);
 	};
@@ -75,73 +99,6 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 	useEffect(() => {
 		setAnimationStart(true);
 	}, [projectSearchResults]);
-
-	const filterResultsByLocation = (district: string, projects: Project[]): Project[] => {
-		let result: Project[] = projects;
-		if (district !== t('allm')) {
-			result = projects.filter((project) =>
-				project.district?.toLowerCase().includes(district.toLowerCase())
-			);
-			return result;
-		}
-		return result;
-	};
-
-	const filterResultsByTitle = (param: string, projects: Project[]) => {
-		let result: Project[] = projects;
-		if (param !== '') {
-			result = projects.filter((project) =>
-				normalizeString(project.title.toLowerCase()).includes(normalizeString(param.toLowerCase()))
-			);
-		}
-		return result;
-	};
-
-	const filterResultsByWildCard = (param: string, projects: Project[]) => {
-		let result: Project[] = projects;
-		if (param !== '') {
-			const resultTitle = projects.filter((project) =>
-				normalizeString(project.title.toLowerCase()).includes(normalizeString(param.toLowerCase()))
-			);
-			const resultLocation = projects.filter(
-				(project) =>
-					project.district &&
-					normalizeString(project.district.toLowerCase()).includes(
-						normalizeString(param.toLowerCase())
-					)
-			);
-			result = resultTitle.concat(resultLocation);
-		}
-		return result;
-	};
-
-	const filterResultsByPrice = (param: number[], projects: Project[]) =>
-		projects.filter((project) =>
-			project.typologies
-				? project.typologies?.filter(
-						(typology) =>
-							!typology.price || (typology.price >= param[0] && typology.price <= param[1])
-					).length > 0
-				: false
-		);
-
-	const filterResultsByTypology = (param: string[], projects: Project[]) =>
-		projects.filter(
-			(project) =>
-				project.typologies &&
-				project.typologies.some(
-					(typology) => typology.typology && param.includes(typology.typology)
-				)
-		);
-
-	const filterResultsByAssignmentStatus = (param: string[], projects: Project[]) =>
-		projects.filter(
-			(project) => project.assignmentStatus && param.includes(project.assignmentStatus)
-		);
-	const filterResultsByConstructionStatus = (param: string[], projects: Project[]) =>
-		projects.filter(
-			(project) => project.constructionStatus && param.includes(project.constructionStatus)
-		);
 
 	useMemo(() => {
 		let results = projects;
@@ -157,22 +114,13 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 		setProjectSearchResults(results);
 	}, [search, projects]);
 
-	const districts = (projectData: Project[]): string[] => {
-		const districtSet: string[] = [t('allm')];
-		projectData.map((project) => {
-			if (project.district && !districtSet.includes(project.district)) {
-				districtSet.push(project.district);
-			}
-		});
-		return districtSet;
-	};
-
 	const onDistrictChange = (district: string) => {
-		setSearch((search) => ({ ...search, district: district }));
+		const value = district === t('allm') ? '' : district;
+		setSearch((search) => ({ ...search, district: value }));
 		setCenterCoordinates(
-			districtCenterCoordinates[district] ?? [38.56633674453089, -7.925327404275489]
+			districtCenterCoordinates[value] ?? [38.56633674453089, -7.925327404275489]
 		);
-		setZoom(districtCenterCoordinates[district] == undefined ? 6 : 9);
+		setZoom(districtCenterCoordinates[value] == undefined ? 6 : 9);
 	};
 
 	const onViewChange = (view: ViewType) => {
@@ -274,9 +222,9 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 	return (
 		<>
 			<Controls
-				search={search}
+				search={{ ...search, district: search.district || t('allm') }}
 				view={view}
-				districts={districts(projects)}
+				districts={getDistricts(projects, t('allm'))}
 				priceRange={getPriceRange(projects)}
 				typologies={getTypologies(projects)}
 				types={getTypes(projects)}
@@ -289,7 +237,7 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 				onAssignmentStatusChange={onAssignmentStatusChange}
 				onConstructionStatusChange={onConstructionStatusChange}
 			/>
-			<Grid container>
+			<Grid2 container>
 				{view === 'card' &&
 					projectSearchResults.map((project, i) => (
 						<Fade
@@ -297,12 +245,12 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 							in={animationStart}
 							style={{ transitionDelay: animationStart ? `${i}00ms` : '0ms' }}
 							unmountOnExit>
-							<Grid item xs={12} md={6} p={1} onClick={() => handleClick(project.id)}>
+							<Grid2 size={{ xs: 12, md: 6 }} p={1} onClick={() => handleClick(project.id)}>
 								<ProjectCard key={project.id} project={project} />
-							</Grid>
+							</Grid2>
 						</Fade>
 					))}
-			</Grid>
+			</Grid2>
 			{view === 'map' && (
 				<div id="map" style={{ height: 480, padding: '8px' }}>
 					<DynamicMap

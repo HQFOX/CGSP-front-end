@@ -1,15 +1,15 @@
 import React from 'react';
 
-import styled from '@emotion/styled';
-import { Close, GridView, MapOutlined, Search, Tune } from '@mui/icons-material';
+import { Close, Search, Tune } from '@mui/icons-material';
 import {
 	Box,
 	Button,
 	Checkbox,
 	FormControlLabel,
 	FormGroup,
-	Grid,
+	Grid2,
 	IconButton,
+	Input,
 	Paper,
 	Popper,
 	Slider,
@@ -21,16 +21,9 @@ import { useTranslation } from 'next-i18next/pages';
 import { ViewType } from '../../pages/projects';
 import Dropdown from '../dropdown/Dropdown';
 import { SearchParams } from '../projects/projectInventory/utils';
-
-const StyledInput = styled.input({
-	fontSize: '1rem',
-	border: 0,
-	borderBottom: 1,
-	boxShadow: 'none',
-	':focus': {
-		outline: 'none'
-	}
-});
+import { MapTrifoldIcon, SquaresFourIcon } from '@phosphor-icons/react';
+import { styles } from './styles';
+import { css } from '@emotion/css';
 
 export interface ControlProps {
 	search: SearchParams;
@@ -111,37 +104,39 @@ export const Controls = ({
 	};
 
 	return (
-		<Paper sx={{ ml: 1, mr: 1, p: 2, mb: 2, border: '1px solid rgb(237, 237, 237)', boxShadow: 0 }}>
-			<Grid container spacing={2}>
+		<Paper className={styles.container}>
+			<Grid2 container spacing={2}>
 				{onWildCardChange && (
-					<Grid item>
+					<Grid2>
 						<Button size={'large'} variant={'outlined'} startIcon={<Search />} disableRipple>
-							<StyledInput
+							<Input
+								className={styles.input}
 								placeholder={t('searchPlaceholder')}
 								onChange={(e) => onWildCardChange(e.target.value)}
 								value={search.wildcard}
+								classes={{ root: css({ ":before": { borderBottom: '0px' }, ":hover": { borderBottom: '0px' } }) }}
 							/>
 						</Button>
-					</Grid>
+					</Grid2>
 				)}
 				{onViewChange && (
-					<Grid item sx={{ ml: 'auto' }}>
+					<Grid2 sx={{ ml: 'auto' }}>
 						<IconButton
 							aria-label="map view"
 							onClick={() => onViewChange('map')}
 							color={view === 'map' ? 'primary' : 'default'}>
-							<MapOutlined />
+							<MapTrifoldIcon />
 						</IconButton>
 						<IconButton
 							aria-label="card view"
 							onClick={() => onViewChange('card')}
 							color={view === 'card' ? 'primary' : 'default'}>
-							<GridView />
+							<SquaresFourIcon/>
 						</IconButton>
-					</Grid>
+					</Grid2>
 				)}
 				{onDistrictChange && (
-					<Grid item>
+					<Grid2>
 						<Typography sx={{ mr: 1, verticalAlign: 'middle' }} component={'span'} variant="body1">
 							{t('locationFilterLabel')}:{' '}
 						</Typography>
@@ -151,9 +146,9 @@ export const Controls = ({
 							options={districts}
 							valueChange={onDistrictChange}
 						/>
-					</Grid>
+					</Grid2>
 				)}
-				<Grid item>
+				<Grid2>
 					<Button startIcon={<Tune />} sx={{ textTransform: 'capitalize' }} onClick={handleClick}>
 						{t('filters')}
 					</Button>
@@ -299,8 +294,8 @@ export const Controls = ({
 							</Stack>
 						</Paper>
 					</Popper>
-				</Grid>
-			</Grid>
+				</Grid2>
+			</Grid2>
 		</Paper>
 	);
 };
