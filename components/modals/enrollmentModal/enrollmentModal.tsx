@@ -8,7 +8,7 @@ import { EnrollmentForm } from '../../forms/EnrollmentForm';
 export type EnrollmentModalProps = {
 	open: boolean;
 	handleEnrollmentModalClose: () => void;
-	project: Project;
+	project?: Project;
 };
 
 export const EnrollmentModal = ({
