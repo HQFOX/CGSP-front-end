@@ -19,7 +19,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import logo from '../../../public/logo.svg';
-import theme from '../../../theme';
 
 const StyledAppBar = styled(AppBar)(
 	({ theme }) => `
@@ -69,6 +68,11 @@ const Header = () => {
 			id: 4,
 			headerText: t('updates'),
 			path: '/updates'
+		},
+		{
+			id: 5,
+			headerText: t('membership'),
+			path: '/membership'
 		}
 	];
 

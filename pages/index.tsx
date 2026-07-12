@@ -25,6 +25,7 @@ import { DynamicMap } from '../components/map/DynamicMap';
 import logo from '../public/logo.svg';
 import { styles as styles2 } from '../styles/homepage';
 import theme from '../theme';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/icons/ArrowRight';
 
 const StyledMain = styled('main')({
 	backgroundColor: 'white'
@@ -90,6 +91,15 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 								<Typography variant="body2" color="text.secondary">
 									{t('inscriptionText')}
 								</Typography>
+								<StyledButton
+									component={Link}
+									href="/membership"
+									variant={'outlined'}
+									sx={{ mt: 1 }}
+									endIcon={<ArrowRightIcon />}
+								>
+									Saiba mais
+								</StyledButton>
 							</CardContent>
 						</HoverCard>
 					</Grid>
