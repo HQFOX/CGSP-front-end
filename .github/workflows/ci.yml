@@ -50,7 +50,7 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
-        run: npm run test
+        run: npx vitest
 
   build:
     name: Build
@@ -92,6 +92,20 @@ jobs:
 
       - name: Serve built application for E2E tests
         run: npm run start
+
+      - name: Start Next.js server and wait for readiness
+        id: start-server
+        run: |
+          # Start the production server in the background using 'npm run start'
+          npm run start &
+          SERVER_PID=$!
+          echo "Server started with PID $SERVER_PID"
+          # Wait until the server is available on localhost:3000
+          until curl -s http://localhost:3000/ || [ $? -ne 0 ]; do
+            echo "Waiting for server to start..."
+            sleep 2
+          done
+          echo "Server is up and running."
 
       - name: Run E2E tests
         run: npx playwright test
