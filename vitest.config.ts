@@ -12,6 +12,6 @@ export default defineConfig({
 		hookTimeout: 10000,
 		isolate: true,
 		include: ['**/*.test.{ts,tsx}'],
-		exclude: ['**/tests/**']
+		exclude: ['**/tests/**', '**/node_modules/**']
 	}
 });
