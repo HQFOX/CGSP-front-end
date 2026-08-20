@@ -104,3 +104,10 @@ dist
 .tern-port
 .env.production
 .env.development
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
