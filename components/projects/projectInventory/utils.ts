@@ -1,10 +1,12 @@
 import type { LatLngTuple } from 'leaflet';
 import type { ParsedUrlQuery } from 'querystring';
 
+import { ProjectDTO } from '../../../api/model';
 import { Beja, Evora, Portalegre } from '../../map/districtdata';
 import { Setubal } from '../../map/districtdata/Setubal';
 
-export const normalizeString = (value: string): string => {
+export const normalizeString = (value?: string): string => {
+	if (!value) return '';
 	return value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
 };
 
@@ -21,7 +23,7 @@ export type SearchParams = {
 
 export type ViewType = 'card' | 'list' | 'map';
 
-export const getPriceRange = (projects: Project[]) => {
+export const getPriceRange = (projects: ProjectDTO[]) => {
 	const priceRange: (number | undefined)[] = [undefined, undefined];
 
 	projects.map((project) => {
@@ -37,7 +39,7 @@ export const getPriceRange = (projects: Project[]) => {
 	return priceRange as number[];
 };
 
-export const getTypologies = (projects: Project[]) => {
+export const getTypologies = (projects: ProjectDTO[]) => {
 	const typologies = new Set<string>();
 
 	projects.map((project) => {
@@ -51,7 +53,7 @@ export const getTypologies = (projects: Project[]) => {
 	return [...typologies];
 };
 
-export const getTypes = (projects: Project[]) => {
+export const getTypes = (projects: ProjectDTO[]) => {
 	const types = new Set<string>();
 
 	projects.map((project) => {
@@ -80,7 +82,7 @@ export const constructionStatusValues: ConstructionStatusType[] = [
 
 export const assignmentStatusValues: AssignmentStatusType[] = ['WAITING', 'ONGOING', 'CONCLUDED'];
 
-export const getDistricts = (projects: Project[], allDistrictsLabel: string): string[] => {
+export const getDistricts = (projects: ProjectDTO[], allDistrictsLabel: string): string[] => {
 	const districtSet: string[] = [allDistrictsLabel];
 	projects.map((project) => {
 		if (project.district && !districtSet.includes(project.district)) {
@@ -90,7 +92,7 @@ export const getDistricts = (projects: Project[], allDistrictsLabel: string): st
 	return districtSet;
 };
 
-export const filterResultsByLocation = (district: string, projects: Project[]): Project[] => {
+export const filterResultsByLocation = (district: string, projects: ProjectDTO[]): ProjectDTO[] => {
 	if (district !== '') {
 		return projects.filter((project) =>
 			project.district?.toLowerCase().includes(district.toLowerCase())
@@ -99,19 +101,19 @@ export const filterResultsByLocation = (district: string, projects: Project[]): 
 	return projects;
 };
 
-export const filterResultsByTitle = (param: string, projects: Project[]): Project[] => {
+export const filterResultsByTitle = (param: string, projects: ProjectDTO[]): ProjectDTO[] => {
 	if (param !== '') {
 		return projects.filter((project) =>
-			normalizeString(project.title.toLowerCase()).includes(normalizeString(param.toLowerCase()))
+			normalizeString(project.title?.toLowerCase()).includes(normalizeString(param.toLowerCase()))
 		);
 	}
 	return projects;
 };
 
-export const filterResultsByWildCard = (param: string, projects: Project[]): Project[] => {
+export const filterResultsByWildCard = (param: string, projects: ProjectDTO[]): ProjectDTO[] => {
 	if (param !== '') {
 		const resultTitle = projects.filter((project) =>
-			normalizeString(project.title.toLowerCase()).includes(normalizeString(param.toLowerCase()))
+			normalizeString(project.title?.toLowerCase()).includes(normalizeString(param.toLowerCase()))
 		);
 		const resultLocation = projects.filter(
 			(project) =>
@@ -125,7 +127,7 @@ export const filterResultsByWildCard = (param: string, projects: Project[]): Pro
 	return projects;
 };
 
-export const filterResultsByPrice = (param: number[], projects: Project[]): Project[] =>
+export const filterResultsByPrice = (param: number[], projects: ProjectDTO[]): ProjectDTO[] =>
 	projects.filter((project) =>
 		project.typologies
 			? project.typologies.filter(
@@ -135,22 +137,25 @@ export const filterResultsByPrice = (param: number[], projects: Project[]): Proj
 			: false
 	);
 
-export const filterResultsByTypology = (param: string[], projects: Project[]): Project[] =>
+export const filterResultsByTypology = (param: string[], projects: ProjectDTO[]): ProjectDTO[] =>
 	projects.filter(
 		(project) =>
 			project.typologies &&
 			project.typologies.some((typology) => typology.typology && param.includes(typology.typology))
 	);
 
-export const filterResultsByAssignmentStatus = (param: string[], projects: Project[]): Project[] =>
+export const filterResultsByAssignmentStatus = (
+	param: string[],
+	projects: ProjectDTO[]
+): ProjectDTO[] =>
 	projects.filter(
 		(project) => project.assignmentStatus && param.includes(project.assignmentStatus)
 	);
 
 export const filterResultsByConstructionStatus = (
 	param: string[],
-	projects: Project[]
-): Project[] =>
+	projects: ProjectDTO[]
+): ProjectDTO[] =>
 	projects.filter(
 		(project) => project.constructionStatus && param.includes(project.constructionStatus)
 	);

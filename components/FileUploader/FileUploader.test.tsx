@@ -19,19 +19,15 @@ vi.mock('@phosphor-icons/react', () => ({
 }));
 
 // Mock utils
-const mockConvertFileToAbstractFile = vi.fn(
-	(file: File): AbstractFile => ({
-		filename: file.name,
-		file: file
-	})
-);
+const mockConvertFileToAbstractFile = vi.fn((file: File): AbstractFile => ({
+	filename: file.name,
+	file: file
+}));
 
-const mockGetPresignedUrl = vi.fn(
-	async (file: AbstractFile): Promise<AbstractFile> => ({
-		...file,
-		link: 'https://example.com/presigned-url'
-	})
-);
+const mockGetPresignedUrl = vi.fn(async (file: AbstractFile): Promise<AbstractFile> => ({
+	...file,
+	link: 'https://example.com/presigned-url'
+}));
 
 vi.mock('./utils', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('./utils')>();

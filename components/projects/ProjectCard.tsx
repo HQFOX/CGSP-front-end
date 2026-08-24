@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next/pages';
 import Image from 'next/image';
 import router from 'next/router';
 
+import { ProjectDTO } from '../../api/model';
 import { StyledButton } from '../../components';
 import { getS3Url } from '../../utils/utils';
 import { StyledCard } from '../StyledCard';
@@ -57,6 +58,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
 export default ProjectCard;
 
-type ProjectCardProps = {
-	project: Project;
-};
+interface ProjectCardProps {
+	project: ProjectDTO;
+}

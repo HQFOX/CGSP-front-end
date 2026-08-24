@@ -35,6 +35,7 @@ import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslation
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { getOneProject } from '../../api/project-controller/project-controller';
 import { Carousel, Details, DynamicMap, LotCounter, StyledButton, Title } from '../../components';
 import { EnrollmentModal } from '../../components/modals/enrollmentModal/enrollmentModal';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
@@ -268,8 +269,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 
 export const getServerSideProps = async (context: any) => {
 	const id = context.params.projectId;
-	const projectRes = await fetch(`${process.env.API_URL}/project/${id}`);
-	const project = (await projectRes.json()) as Project;
+	const project = await getOneProject(id);
 
 	return {
 		props: {

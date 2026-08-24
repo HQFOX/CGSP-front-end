@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { ThemeProvider } from '@mui/material/styles';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { appWithTranslation } from 'next-i18next/pages';
@@ -18,6 +19,9 @@ import theme from '../theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
+
+	const [queryClient] = useState(() => new QueryClient());
+
 	const [loading, setLoading] = useState(false);
 
 	const [user, setUser] = useState<User | undefined>();
@@ -60,24 +64,26 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const authProviderValue = useMemo(() => ({ user, setUser, isAuth, setIsAuth }), [user, isAuth]);
 
 	return (
-		<ThemeProvider theme={theme}>
-			<AuthContext.Provider value={authProviderValue}>
-				<link
-					rel="stylesheet"
-					href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-					integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-					crossOrigin=""
-				/>
-				<Script
-					src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-					integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-					crossOrigin=""></Script>
-				{!checkAdminRoute() && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLEID ?? ''} />}
-				<Layout isAdmin={checkAdminRoute()}>
-					{loading ? <Loading height="70vh" /> : <Component {...pageProps} />}
-				</Layout>
-			</AuthContext.Provider>
-		</ThemeProvider>
+		<QueryClientProvider client={queryClient}>
+			<ThemeProvider theme={theme}>
+				<AuthContext.Provider value={authProviderValue}>
+					<link
+						rel="stylesheet"
+						href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+						integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+						crossOrigin=""
+					/>
+					<Script
+						src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+						integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+						crossOrigin=""></Script>
+					{!checkAdminRoute() && <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLEID ?? ''} />}
+					<Layout isAdmin={checkAdminRoute()}>
+						{loading ? <Loading height="70vh" /> : <Component {...pageProps} />}
+					</Layout>
+				</AuthContext.Provider>
+			</ThemeProvider>
+		</QueryClientProvider>
 	);
 }
 

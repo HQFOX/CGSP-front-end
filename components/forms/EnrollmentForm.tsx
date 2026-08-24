@@ -121,19 +121,21 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 		<form onSubmit={formik.handleSubmit}>
 			<StyledBox>
 				<Grid2 container columnSpacing={2}>
-					<Grid2 size={{ xs:12 }} maxHeight={150}>
+					<Grid2 size={{ xs: 12 }} maxHeight={150}>
 						<Typography variant="h4" component={'h1'}>
 							{t('preEnroll')}
 						</Typography>
 						<hr />
-						{project && <Typography variant="h5" component={'h2'}>
-							{project.title}
-						</Typography>}
+						{project && (
+							<Typography variant="h5" component={'h2'}>
+								{project.title}
+							</Typography>
+						)}
 					</Grid2>
 				</Grid2>
 				{!success && (
 					<Grid2 container rowSpacing={2} columnSpacing={2} mt={2}>
-						<Grid2 size={{ xs:12, md:6 }}>
+						<Grid2 size={{ xs: 12, md: 6 }}>
 							<TextField
 								id="first-name"
 								name="firstName"
@@ -145,7 +147,7 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								fullWidth
 							/>
 						</Grid2>
-						<Grid2 size={{ xs:12, md:6 }}>
+						<Grid2 size={{ xs: 12, md: 6 }}>
 							<TextField
 								id="last-name"
 								name="lastName"
@@ -157,7 +159,7 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								fullWidth
 							/>
 						</Grid2>
-						<Grid2 size={{ xs:12 }}>
+						<Grid2 size={{ xs: 12 }}>
 							<TextField
 								id="email"
 								name="email"
@@ -169,7 +171,7 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								fullWidth
 							/>
 						</Grid2>
-						<Grid2 size={{ xs:12 }}>
+						<Grid2 size={{ xs: 12 }}>
 							<TextField
 								id="telehponeNumber"
 								name="telephoneNumber"
@@ -181,7 +183,7 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								fullWidth
 							/>
 						</Grid2>
-						<Grid2 size={{ xs:12 }}>
+						<Grid2 size={{ xs: 12 }}>
 							<FormControlLabel
 								control={
 									<Checkbox
@@ -193,7 +195,7 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								label={t('form.updateCheckbox')}
 							/>
 						</Grid2>
-						<Grid2 size={{ xs:12 }}>
+						<Grid2 size={{ xs: 12 }}>
 							<StyledButton
 								type="submit"
 								variant="contained"

@@ -7,11 +7,13 @@ import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import { usePathname, useSearchParams } from 'next/navigation';
 
+import { UpdateDTO } from '../api/model';
+import { getAllUpdates } from '../api/update-controller/update-controller';
 import { Title } from '../components/Title';
 import { PageContainer } from '../components/pageContainer/PageContainer';
 import Updates from '../components/updates/Update';
 
-const UpdatePage: NextPage<{ updates: Update[] }> = (data) => {
+const UpdatePage: NextPage<{ updates: UpdateDTO[] }> = (data) => {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
@@ -44,14 +46,7 @@ const UpdatePage: NextPage<{ updates: Update[] }> = (data) => {
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
-	const res = fetch(`${process.env.API_URL}/update`).then((res) => {
-		if (res.ok) {
-			return res.json().then((data) => data);
-		}
-		console.error('Error fetching updates');
-	});
-
-	const updates = res ? ((await res) as Update[]) : [];
+	const updates = await getAllUpdates();
 	return {
 		props: {
 			updates,

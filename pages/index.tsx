@@ -15,6 +15,7 @@ import {
 	Savings
 } from '@mui/icons-material';
 import { Box, CardContent, Divider, Grid2 as Grid, Typography, styled } from '@mui/material';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/icons/ArrowRight';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import Image from 'next/image';
@@ -25,7 +26,6 @@ import { DynamicMap } from '../components/map/DynamicMap';
 import logo from '../public/logo.svg';
 import { styles as styles2 } from '../styles/homepage';
 import theme from '../theme';
-import { ArrowRightIcon } from '@phosphor-icons/react/dist/icons/ArrowRight';
 
 const StyledMain = styled('main')({
 	backgroundColor: 'white'
@@ -96,8 +96,7 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 									href="/membership"
 									variant={'outlined'}
 									sx={{ mt: 1 }}
-									endIcon={<ArrowRightIcon />}
-								>
+									endIcon={<ArrowRightIcon />}>
 									Saiba mais
 								</StyledButton>
 							</CardContent>
