@@ -6,11 +6,13 @@ import { Box, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
+import { ProjectDTO } from '../api/model';
+import { getAllProjectsHistory } from '../api/project-controller/project-controller';
 import { Title } from '../components/Title';
 import { PageContainer } from '../components/pageContainer/PageContainer';
 import { ProjectInventory } from '../components/projects/projectInventory/ProjectInventory';
 
-const History: NextPage<{ projects: Project[] }> = (data) => {
+const History: NextPage<{ projects: ProjectDTO[] }> = (data) => {
 	const { t } = useTranslation(['history', 'projectpage', 'common']);
 
 	return (
@@ -24,18 +26,12 @@ const History: NextPage<{ projects: Project[] }> = (data) => {
 					{t('historyP1')}
 				</Typography>
 			</Box>
-			<ProjectInventory projects={data.projects} history />
+			<ProjectInventory projects={data.projects as Project[]} history />
 		</PageContainer>
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
-	const res = await fetch(`${process.env.API_URL}/project/history`).then((res) => {
-		if (res.ok) {
-			return res.json().then((data) => data);
-		}
-		console.error('Error fetching projects');
-	});
-	const projects = res ? ((await res) as Project[]) : [];
+	const projects = await getAllProjectsHistory();
 	return {
 		props: {
 			projects,

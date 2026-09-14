@@ -16,7 +16,12 @@ import {
 	TableRow,
 	Typography
 } from '@mui/material';
-import { CaretDown, CaretUp, SortAscending, SortDescending } from '@phosphor-icons/react';
+import {
+	CaretDownIcon,
+	CaretUpIcon,
+	SortAscendingIcon,
+	SortDescendingIcon
+} from '@phosphor-icons/react';
 import {
 	SortingState,
 	createColumnHelper,
@@ -103,7 +108,7 @@ const StatusDropdown = ({
 		if (loading) {
 			return <Loading height="16px" icon />;
 		} else {
-			return openMenu ? <CaretUp /> : <CaretDown />;
+			return openMenu ? <CaretUpIcon /> : <CaretDownIcon />;
 		}
 	}, [loading, openMenu]);
 
@@ -276,8 +281,8 @@ export const EnrollRequestTable = ({
 												? null
 												: flexRender(header.column.columnDef.header, header.getContext())}
 											{{
-												asc: <SortAscending />,
-												desc: <SortDescending />
+												asc: <SortAscendingIcon />,
+												desc: <SortDescendingIcon />
 											}[header.column.getIsSorted() as string] ?? null}
 										</div>
 									</TableCell>

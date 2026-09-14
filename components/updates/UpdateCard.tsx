@@ -4,7 +4,8 @@ import { Launch } from '@mui/icons-material';
 import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
 import router from 'next/router';
 
-import { Carousel, StyledButton, Title } from '../../components';
+import { UpdateDTO } from '../../api/model';
+import { AbstractFile, Carousel, StyledButton, Title } from '../../components';
 import { formatDate } from '../../utils/utils';
 
 const width = '40vw';
@@ -59,7 +60,7 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 			</Box>
 			{post.files && post.files.length > 0 && (
 				<div style={{ width: '100%', height: '60vh', position: 'relative' }}>
-					<Carousel images={post.files} showGallery={false} autoSlide={false} />
+					<Carousel images={post.files as AbstractFile[]} showGallery={false} autoSlide={false} />
 				</div>
 			)}
 			<Box sx={{ p: 4 }}>
@@ -73,6 +74,6 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 
 export default UpdateCard;
 
-type UpdateCardProps = {
-	post: Update;
-};
+interface UpdateCardProps {
+	post: UpdateDTO;
+}

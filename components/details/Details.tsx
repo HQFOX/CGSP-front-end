@@ -5,6 +5,8 @@ import { HomeOutlined, HomeWorkOutlined, HowToRegOutlined, Info } from '@mui/ico
 import { Chip, Grid, Popover, Typography } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 
+import { ProjectDTO } from '../../api/model';
+
 const StyledTypography = styled(Typography)({
 	display: 'flex',
 	alignItems: 'end'
@@ -15,7 +17,7 @@ const removeDuplicates = (data?: (string | undefined)[]) => {
 };
 
 export interface DetailsProps {
-	project: Project;
+	project: ProjectDTO;
 	minimal?: boolean;
 }
 

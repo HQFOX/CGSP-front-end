@@ -6,6 +6,8 @@ import { Box, Divider } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
+import { ProjectDTO } from '../api/model';
+import { getAllProjectsCurrent } from '../api/project-controller/project-controller';
 import { Title } from '../components/Title';
 import { PageContainer } from '../components/pageContainer/PageContainer';
 import { ProjectInventory } from '../components/projects/projectInventory/ProjectInventory';
@@ -16,7 +18,7 @@ export const normalizeString = (value: string): string => {
 
 export type ViewType = 'card' | 'list' | 'map';
 
-const Projects: NextPage<{ projects: Project[] }> = (data) => {
+const Projects: NextPage<{ projects: ProjectDTO[] }> = (data) => {
 	const { t } = useTranslation(['projectpage', 'common']);
 
 	return (
@@ -27,18 +29,12 @@ const Projects: NextPage<{ projects: Project[] }> = (data) => {
 				</Title>
 				<Divider />
 			</Box>
-			<ProjectInventory projects={data.projects} />
+			<ProjectInventory projects={data.projects as Project[]} />
 		</PageContainer>
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
-	const res = await fetch(`${process.env.API_URL}/project/current`).then((res) => {
-		if (res.ok) {
-			return res.json().then((data) => data);
-		}
-		console.error('Error fetching projects');
-	});
-	const projects = (await res) ?? [];
+	const projects = await getAllProjectsCurrent();
 	return {
 		props: {
 			projects,

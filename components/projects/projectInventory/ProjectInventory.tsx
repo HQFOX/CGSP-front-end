@@ -100,15 +100,17 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 
 	useMemo(() => {
 		let results = projects;
-		results = filterResultsByLocation(search.district, results);
-		results = filterResultsByTitle(search.title, results);
-		results = filterResultsByWildCard(search.wildcard, results);
-		if (search.priceRange.length > 0) results = filterResultsByPrice(search.priceRange, results);
-		if (search.typologies.length > 0) results = filterResultsByTypology(search.typologies, results);
+		results = filterResultsByLocation(search.district, results) as Project[];
+		results = filterResultsByTitle(search.title, results) as Project[];
+		results = filterResultsByWildCard(search.wildcard, results) as Project[];
+		if (search.priceRange.length > 0)
+			results = filterResultsByPrice(search.priceRange, results) as Project[];
+		if (search.typologies.length > 0)
+			results = filterResultsByTypology(search.typologies, results) as Project[];
 		if (search.assignmentStatus.length > 0)
-			results = filterResultsByAssignmentStatus(search.assignmentStatus, results);
+			results = filterResultsByAssignmentStatus(search.assignmentStatus, results) as Project[];
 		if (search.constructionStatus.length > 0)
-			results = filterResultsByConstructionStatus(search.constructionStatus, results);
+			results = filterResultsByConstructionStatus(search.constructionStatus, results) as Project[];
 		setProjectSearchResults(results);
 	}, [search, projects]);
 
