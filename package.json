@@ -101,7 +101,7 @@
 		"husky": "^9.1.7",
 		"jsdom": "^30.0.1",
 		"orval": "^8.26.0",
-		"prettier": "^3.9.5",
+		"prettier": "^3.9.9",
 		"size-limit": "^12.1.0",
 		"typescript": "6.0.2",
 		"vite-tsconfig-paths": "^6.1.1",
