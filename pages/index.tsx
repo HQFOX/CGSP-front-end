@@ -14,7 +14,7 @@ import {
 	PersonAdd,
 	Savings
 } from '@mui/icons-material';
-import { Box, CardContent, Divider, Grid2 as Grid, Typography, styled } from '@mui/material';
+import { Box, CardContent, Divider, Grid, Typography, styled } from '@mui/material';
 import { ArrowRightIcon } from '@phosphor-icons/react/dist/icons/ArrowRight';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';

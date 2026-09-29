@@ -7,7 +7,7 @@ import { ArrowBackIos, ArrowForwardIos, CheckCircle, Close } from '@mui/icons-ma
 import {
 	Container,
 	FormControl,
-	Grid2,
+	Grid,
 	IconButton,
 	InputLabel,
 	MenuItem,
@@ -182,31 +182,31 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 	return (
 		<Paper sx={{ mt: 4 }}>
 			<Container style={{ minHeight: 800 }}>
-				<Grid2 container pt={2}>
-					<Grid2 mt={4}>
+				<Grid container pt={2}>
+					<Grid mt={4}>
 						<Typography variant={'h4'}>
 							{project ? 'Editar Projeto' : 'Adicionar Projeto'}
 						</Typography>
-					</Grid2>
+					</Grid>
 					{onCancel ? (
-						<Grid2 ml="auto">
+						<Grid ml="auto">
 							<IconButton
 								onClick={() => {
 									success ? onCancel() : setCancelModal(true);
 								}}>
 								<Close />
 							</IconButton>
-						</Grid2>
+						</Grid>
 					) : (
 						<></>
 					)}
-				</Grid2>
+				</Grid>
 				{success ? (
 					<SuccessMessage title={project ? 'Projeto Editado' : 'Novo Projeto Adicionado'} />
 				) : (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid2 container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
-							<Grid2 size={{ xs: 12 }}>
+						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
+							<Grid size={{ xs: 12 }}>
 								<Stepper nonLinear activeStep={activeStep}>
 									{steps.map((label, index) => (
 										<Step key={label}>
@@ -214,13 +214,13 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 										</Step>
 									))}
 								</Stepper>
-							</Grid2>
+							</Grid>
 							{activeStep === 0 && (
 								<React.Fragment>
-									<Grid2 size={{ xs: 12 }}>
+									<Grid size={{ xs: 12 }}>
 										<Typography variant={'h6'}>Detalhes do Projeto</Typography>
-									</Grid2>
-									<Grid2 size={{ xs: 12 }}>
+									</Grid>
+									<Grid size={{ xs: 12 }}>
 										<TextField
 											id="title"
 											name="title"
@@ -231,8 +231,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 											helperText={formik.errors.title}
 											fullWidth
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 4 }}>
+									</Grid>
+									<Grid size={{ xs: 4 }}>
 										<FormControl sx={{ width: '100%' }}>
 											<InputLabel id="assignment-status-select-dropdown-label">
 												Estado de Atribuição
@@ -253,8 +253,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 												<MenuItem value={'CONCLUDED'}>{t('assignmentStatus.CONCLUDED')}</MenuItem>
 											</Select>
 										</FormControl>
-									</Grid2>
-									<Grid2 size={{ xs: 4 }}>
+									</Grid>
+									<Grid size={{ xs: 4 }}>
 										<FormControl sx={{ width: '100%' }}>
 											<InputLabel id="construction-status-select-dropdown-label">
 												Estado de Construção
@@ -280,8 +280,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 												<MenuItem value={'CONCLUDED'}>{t('constructionStatus.CONCLUDED')}</MenuItem>
 											</Select>
 										</FormControl>
-									</Grid2>
-									<Grid2 size={{ xs: 4 }}>
+									</Grid>
+									<Grid size={{ xs: 4 }}>
 										<TextField
 											id="lots"
 											name="lots"
@@ -292,8 +292,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 											helperText={formik.errors.lots}
 											fullWidth
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 4 }}>
+									</Grid>
+									<Grid size={{ xs: 4 }}>
 										<TextField
 											id="assignedLots"
 											name="assignedLots"
@@ -304,8 +304,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 											helperText={formik.errors.assignedLots}
 											fullWidth
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 6 }}>
+									</Grid>
+									<Grid size={{ xs: 6 }}>
 										<TextField
 											id="createdOn"
 											name="createdOn"
@@ -316,8 +316,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 											fullWidth
 											helperText="Se este campo não for alterado a data será a de criação."
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 12 }}>
+									</Grid>
+									<Grid size={{ xs: 12 }}>
 										<FileUploader
 											name="coverPhoto"
 											title="Adicionar Foto de Capa"
@@ -327,7 +327,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 												formik.setFieldValue('coverPhoto', value[0] || undefined)
 											}
 										/>
-									</Grid2>
+									</Grid>
 								</React.Fragment>
 							)}
 							{activeStep == 1 && (
@@ -340,7 +340,7 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 							)}
 							{activeStep == 2 && <TypologiesSection formik={formik} />}
 							{activeStep == 3 && (
-								<Grid2 size={{ xs: 12 }}>
+								<Grid size={{ xs: 12 }}>
 									<FileUploader
 										name="photos"
 										title="Adicionar Fotos"
@@ -348,11 +348,11 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 										files={files}
 										onChange={(value) => setFiles(value)}
 									/>
-								</Grid2>
+								</Grid>
 							)}
-						</Grid2>
-						<Grid2 container rowSpacing={4} pb={2} columnSpacing={4}>
-							<Grid2 size={{ xs: 6 }}>
+						</Grid>
+						<Grid container rowSpacing={4} pb={2} columnSpacing={4}>
+							<Grid size={{ xs: 6 }}>
 								<StyledButton
 									variant="contained"
 									color="primary"
@@ -361,8 +361,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 									startIcon={<ArrowBackIos />}>
 									Passo Anterior
 								</StyledButton>
-							</Grid2>
-							<Grid2 size={{ xs: 6 }} textAlign="end">
+							</Grid>
+							<Grid size={{ xs: 6 }} textAlign="end">
 								<StyledButton
 									variant="contained"
 									color="primary"
@@ -371,8 +371,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 									endIcon={<ArrowForwardIos />}>
 									Próximo Passo
 								</StyledButton>
-							</Grid2>
-							<Grid2 size={{ xs: 'auto' }} ml="auto">
+							</Grid>
+							<Grid size={{ xs: 'auto' }} ml="auto">
 								{submitting ? (
 									<Loading />
 								) : success ? (
@@ -384,8 +384,8 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 											: error}
 									</Typography>
 								)}
-							</Grid2>
-							<Grid2 size={{ xs: 'auto' }}>
+							</Grid>
+							<Grid size={{ xs: 'auto' }}>
 								<StyledButton
 									type="submit"
 									variant="contained"
@@ -395,15 +395,15 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 									disabled={submitting}>
 									{'Submeter'}
 								</StyledButton>
-							</Grid2>
+							</Grid>
 							{onCancel && (
-								<Grid2 size={{ xs: 'auto' }}>
+								<Grid size={{ xs: 'auto' }}>
 									<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
 										Cancelar
 									</StyledButton>
-								</Grid2>
+								</Grid>
 							)}
-						</Grid2>
+						</Grid>
 					</form>
 				)}
 			</Container>

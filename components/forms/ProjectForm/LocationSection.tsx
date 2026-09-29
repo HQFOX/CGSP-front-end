@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import type { LatLngTuple } from 'leaflet';
 
 import { OpenInNew } from '@mui/icons-material';
-import { Autocomplete, Grid2, TextField, Typography } from '@mui/material';
+import { Autocomplete, Grid, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 
 import { DynamicMap, Loading, StyledButton } from '../..';
@@ -50,10 +50,10 @@ export const LocationSection = ({
 
 	return (
 		<React.Fragment>
-			<Grid2 size={{ xs: 12 }}>
+			<Grid size={{ xs: 12 }}>
 				<Typography variant={'h6'}>Localização</Typography>
-			</Grid2>
-			<Grid2 size={{ xs: 3 }}>
+			</Grid>
+			<Grid size={{ xs: 3 }}>
 				<Autocomplete
 					id="district"
 					freeSolo
@@ -75,8 +75,8 @@ export const LocationSection = ({
 						/>
 					)}
 				/>
-			</Grid2>
-			<Grid2 size={{ xs: 3 }}>
+			</Grid>
+			<Grid size={{ xs: 3 }}>
 				<TextField
 					id="county"
 					name="county"
@@ -87,8 +87,8 @@ export const LocationSection = ({
 					helperText={formik.touched.county && (formik.errors.county as ReactNode)}
 					fullWidth
 				/>
-			</Grid2>
-			<Grid2 size={{ xs: 3 }}>
+			</Grid>
+			<Grid size={{ xs: 3 }}>
 				<TextField
 					id="latitude"
 					name="latitude"
@@ -99,8 +99,8 @@ export const LocationSection = ({
 					helperText={formik.touched.latitude && (formik.errors.latitude as ReactNode)}
 					fullWidth
 				/>
-			</Grid2>
-			<Grid2 size={{ xs: 3 }}>
+			</Grid>
+			<Grid size={{ xs: 3 }}>
 				<TextField
 					id="longitude"
 					name="longitude"
@@ -111,8 +111,8 @@ export const LocationSection = ({
 					helperText={formik.touched.longitude && (formik.errors.longitude as ReactNode)}
 					fullWidth
 				/>
-			</Grid2>
-			<Grid2 size={{ xs: 12 }}>
+			</Grid>
+			<Grid size={{ xs: 12 }}>
 				<Typography variant="body2">
 					Arraste o Marcador ou clique duas vezes no mapa para preencher automaticamente.
 				</Typography>
@@ -145,7 +145,7 @@ export const LocationSection = ({
 						}
 					/>
 				</div>
-			</Grid2>
+			</Grid>
 		</React.Fragment>
 	);
 };

@@ -128,7 +128,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 										<AccordionDetails>
 											<Grid container columnSpacing={4} columns={1}>
 												{typology.livingArea && typology.totalLotArea && (
-													<Grid item>
+													<Grid>
 														<Stack spacing={2}>
 															<Stack direction="row" gap={1}>
 																<SquareFoot color="primary" />
@@ -151,7 +151,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 													</Grid>
 												)}
 												{typology.bedroomNumber && (
-													<Grid item>
+													<Grid>
 														<Stack direction="row" gap={1}>
 															<Hotel color="primary" />
 															<StyledTypography
@@ -161,7 +161,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 													</Grid>
 												)}
 												{typology.bathroomNumber && (
-													<Grid item>
+													<Grid>
 														<Stack direction="row" gap={1}>
 															<Bathtub color="primary" />
 															<StyledTypography
@@ -171,7 +171,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 													</Grid>
 												)}
 												{typology.garageNumber && (
-													<Grid item>
+													<Grid>
 														<Stack direction="row" gap={1}>
 															<Garage color="primary" />
 															<StyledTypography
@@ -181,7 +181,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 													</Grid>
 												)}
 												{typology.price && (
-													<Grid item>
+													<Grid>
 														<Stack direction="row" gap={1}>
 															<Euro color="primary" />
 															<StyledTypography
@@ -197,7 +197,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 													</Grid>
 												)}
 												{typology.plant && (
-													<Grid item>
+													<Grid>
 														<Stack direction="row" gap={1}>
 															<Dashboard color="primary" />
 															<MuiLink
@@ -224,7 +224,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 									{t('preEnrollDescription')}
 								</Typography>
 								<Grid container justifyContent={'flex-end'} paddingTop={4}>
-									<Grid item sm={2}>
+									<Grid size={{ sm: 2 }}>
 										<StyledButton
 											variant="contained"
 											color="primary"

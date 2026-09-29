@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { LatLngTuple } from 'leaflet';
 
-import { Fade, Grid2 } from '@mui/material';
+import { Fade, Grid } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { useRouter } from 'next/router';
 
@@ -185,7 +185,7 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 				onApply={onApply}
 				onClear={onClear}
 			/>
-			<Grid2 container>
+			<Grid container>
 				{view === 'card' &&
 					projectSearchResults.map((project, i) => (
 						<Fade
@@ -193,12 +193,12 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 							in={animationStart}
 							style={{ transitionDelay: animationStart ? `${i}00ms` : '0ms' }}
 							unmountOnExit>
-							<Grid2 size={{ xs: 12, md: 6 }} p={1} onClick={() => handleClick(project.id)}>
+							<Grid size={{ xs: 12, md: 6 }} p={1} onClick={() => handleClick(project.id)}>
 								<ProjectCard key={project.id} project={project} />
-							</Grid2>
+							</Grid>
 						</Fade>
 					))}
-			</Grid2>
+			</Grid>
 			{view === 'map' && (
 				<div id="map" style={{ height: 480, padding: '8px' }}>
 					<DynamicMap

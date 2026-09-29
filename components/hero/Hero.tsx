@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { css } from '@emotion/css';
-import { Grid2, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import NumberFlow from '@number-flow/react';
 import { useTranslation } from 'next-i18next/pages';
 import Link from 'next/link';
@@ -67,7 +67,7 @@ export const Hero = () => {
 	}, [inView]);
 
 	return (
-		<Grid2
+		<Grid
 			container
 			height={{ xs: '100dvh', md: '80dvh', lg: '75dvh' }}
 			style={{ position: 'relative' }}
@@ -91,7 +91,7 @@ export const Hero = () => {
 						className="shape-fill"></path>
 				</svg>
 			</div>
-			<Grid2
+			<Grid
 				size={{ xs: 12, sm: 12, md: 6 }}
 				zIndex={10}
 				bgcolor={'transparent'}
@@ -129,8 +129,8 @@ export const Hero = () => {
 					</Title>{' '}
 					{t('hero.finishedProjects')}
 				</Title>
-			</Grid2>
-			<Grid2
+			</Grid>
+			<Grid
 				offset={{ xs: 1, sm: 1, md: 0 }}
 				size={{ xs: 12, sm: 6, md: 5 }}
 				padding={{ xs: 6, sm: 12 }}
@@ -142,7 +142,7 @@ export const Hero = () => {
 						{t('hero.ourHistory')}
 					</StyledButton>
 				</Link>
-			</Grid2>
-		</Grid2>
+			</Grid>
+		</Grid>
 	);
 };

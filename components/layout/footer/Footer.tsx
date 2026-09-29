@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Email, HomeRounded, LocalPhone } from '@mui/icons-material';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import { Grid2 as Grid, Stack, Typography, styled } from '@mui/material';
+import { Grid, Stack, Typography, styled } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import Image from 'next/image';
 import Link from 'next/link';

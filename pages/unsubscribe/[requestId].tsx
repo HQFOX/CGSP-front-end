@@ -10,7 +10,7 @@ import {
 	Container,
 	Divider,
 	FormControlLabel,
-	Grid2,
+	Grid,
 	Paper,
 	Typography
 } from '@mui/material';
@@ -76,13 +76,13 @@ const Unsubscribe: NextPage = ({ requestId, token }: { requestId?: string; token
 			<Paper sx={{ p: 4 }} variant="outlined">
 				{!showSuccessMessage && (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid2 container p={4} rowSpacing={1} columnSpacing={1}>
-							<Grid2 size={12}>
+						<Grid container p={4} rowSpacing={1} columnSpacing={1}>
+							<Grid size={12}>
 								<Typography variant="body2" color="text.secondary">
 									{t('subtitle')}
 								</Typography>
-							</Grid2>
-							<Grid2 size={12} ml={1}>
+							</Grid>
+							<Grid size={12} ml={1}>
 								<FormControlLabel
 									name="project"
 									value={formik.values.project}
@@ -95,8 +95,8 @@ const Unsubscribe: NextPage = ({ requestId, token }: { requestId?: string; token
 										</Typography>
 									}
 								/>
-							</Grid2>
-							<Grid2 size={12} ml={1}>
+							</Grid>
+							<Grid size={12} ml={1}>
 								<FormControlLabel
 									name="allProjects"
 									value={formik.values.allProjects}
@@ -108,15 +108,15 @@ const Unsubscribe: NextPage = ({ requestId, token }: { requestId?: string; token
 										</Typography>
 									}
 								/>
-							</Grid2>
+							</Grid>
 							{showErrorMessage && (
-								<Grid2 ml="auto" alignContent="center">
+								<Grid ml="auto" alignContent="center">
 									<Typography variant="body2" color="text.secondary">
 										{t('errorMessage')}
 									</Typography>
-								</Grid2>
+								</Grid>
 							)}
-							<Grid2 ml={showErrorMessage ? undefined : 'auto'}>
+							<Grid ml={showErrorMessage ? undefined : 'auto'}>
 								<StyledButton
 									type="submit"
 									variant="contained"
@@ -125,8 +125,8 @@ const Unsubscribe: NextPage = ({ requestId, token }: { requestId?: string; token
 									loadingIndicator={<Loading height="16px" icon />}>
 									{t('common:submit')}
 								</StyledButton>
-							</Grid2>
-						</Grid2>
+							</Grid>
+						</Grid>
 					</form>
 				)}
 				{showSuccessMessage && (
