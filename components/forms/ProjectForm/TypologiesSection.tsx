@@ -9,7 +9,7 @@ import {
 	AccordionSummary,
 	Autocomplete,
 	Chip,
-	Grid2,
+	Grid,
 	InputAdornment,
 	TextField,
 	Typography
@@ -73,10 +73,10 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 
 	return (
 		<React.Fragment>
-			<Grid2 size={{ xs: 12 }}>
+			<Grid size={{ xs: 12 }}>
 				<Typography variant={'h6'}>Tipologias</Typography>
-			</Grid2>
-			<Grid2 size={{ xs: 12 }}>
+			</Grid>
+			<Grid size={{ xs: 12 }}>
 				<Autocomplete
 					multiple
 					options={['T0', 'T1', 'T2', 'T3', 'T4', 'T5']}
@@ -108,8 +108,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 						/>
 					)}
 				/>
-			</Grid2>
-			<Grid2 size={{ xs: 12 }}>
+			</Grid>
+			<Grid size={{ xs: 12 }}>
 				{formik.values.typologies.map((typology: TypologyDetailsForm, index: number) => {
 					return (
 						<Accordion key={'typologyDetails' + index} defaultExpanded={index == 0}>
@@ -120,8 +120,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 								<Typography>{typology.typology}</Typography>
 							</AccordionSummary>
 							<AccordionDetails>
-								<Grid2 container rowSpacing={4} columnSpacing={4}>
-									<Grid2 size={{ xs: 6 }}>
+								<Grid container rowSpacing={4} columnSpacing={4}>
+									<Grid size={{ xs: 6 }}>
 										<TextField
 											id="bedroomNumber"
 											name={`typologies[${index}].bedroomNumber`}
@@ -140,8 +140,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 											}
 											fullWidth
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 6 }}>
+									</Grid>
+									<Grid size={{ xs: 6 }}>
 										<TextField
 											id="bathroomNumber"
 											name={`typologies[${index}].bathroomNumber`}
@@ -160,8 +160,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 											}
 											fullWidth
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 6 }}>
+									</Grid>
+									<Grid size={{ xs: 6 }}>
 										<TextField
 											id="garageNumber"
 											name={`typologies[${index}].garageNumber`}
@@ -180,8 +180,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 											}
 											fullWidth
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 3 }}>
+									</Grid>
+									<Grid size={{ xs: 3 }}>
 										<TextField
 											id="totalLotArea"
 											name={`typologies[${index}].totalLotArea`}
@@ -205,8 +205,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 												formik.errors.typologies?.at(index)?.totalLotArea
 											}
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 3 }}>
+									</Grid>
+									<Grid size={{ xs: 3 }}>
 										<TextField
 											id="livingArea"
 											name={`typologies[${index}].livingArea`}
@@ -230,8 +230,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 												formik.errors.typologies?.at(index)?.livingArea
 											}
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 6 }}>
+									</Grid>
+									<Grid size={{ xs: 6 }}>
 										<TextField
 											id="price"
 											name={`typologies[${index}].price`}
@@ -255,8 +255,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 												formik.errors.typologies?.at(index)?.price
 											}
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 3 }}>
+									</Grid>
+									<Grid size={{ xs: 3 }}>
 										<TextField
 											id="lots"
 											name={`typologies[${index}].lots`}
@@ -275,8 +275,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 												formik.errors.typologies?.at(index)?.lots
 											}
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 3 }}>
+									</Grid>
+									<Grid size={{ xs: 3 }}>
 										<TextField
 											id="lots"
 											name={`typologies[${index}].assignedLots`}
@@ -295,8 +295,8 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 												formik.errors.typologies?.at(index)?.assignedLots
 											}
 										/>
-									</Grid2>
-									<Grid2 size={{ xs: 12 }}>
+									</Grid>
+									<Grid size={{ xs: 12 }}>
 										<FileUploader
 											name={`typologies[${index}].plant`}
 											title="Adicionar Planta"
@@ -315,13 +315,13 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 												formik.setFieldValue('typologies', updatedTypologies);
 											}}
 										/>
-									</Grid2>
-								</Grid2>
+									</Grid>
+								</Grid>
 							</AccordionDetails>
 						</Accordion>
 					);
 				})}
-			</Grid2>
+			</Grid>
 		</React.Fragment>
 	);
 };

@@ -3,7 +3,7 @@
 	"version": "1.0.1",
 	"private": true,
 	"engines": {
-		"node": "22.x"
+		"node": "26.x"
 	},
 	"scripts": {
 		"dev": "next dev",
@@ -48,8 +48,8 @@
 		"@emotion/react": "^11.13.5",
 		"@emotion/styled": "^11.13.5",
 		"@fontsource/roboto": "^5.3.0",
-		"@mui/icons-material": "^6.1.9",
-		"@mui/material": "^6.1.9",
+		"@mui/icons-material": "^7.3.11",
+		"@mui/material": "^7.3.11",
 		"@next/third-parties": "^16.2.10",
 		"@number-flow/react": "^0.6.0",
 		"@phosphor-icons/react": "^2.1.10",
@@ -69,6 +69,7 @@
 		"react-dom": "^18.3.1",
 		"react-i18next": "^17.0.9",
 		"react-intersection-observer": "^11.0.1",
+		"react-is": "^18.3.1",
 		"react-leaflet": "^4.2.1",
 		"sharp": "^0.35.3",
 		"yup": "^1.7.1"
@@ -108,6 +109,7 @@
 		"vitest": "^4.1.10"
 	},
 	"overrides": {
-		"conventional-changelog-conventionalcommits": "^9.0.0"
+		"conventional-changelog-conventionalcommits": "^9.0.0",
+		"react-is": "^18.3.1"
 	}
 }

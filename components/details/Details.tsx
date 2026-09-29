@@ -193,7 +193,7 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 
 	return (
 		<Grid container justifyContent={'space-between'} spacing={1} paddingBottom={1}>
-			<Grid item>
+			<Grid>
 				<StyledTypography variant="body2" color="text.secondary">
 					<HomeWorkOutlined sx={{ marginRight: '5px' }} />
 					{t('projectDetails.typologies')}:{' '}
@@ -209,20 +209,20 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 					)}
 				</StyledTypography>
 			</Grid>
-			<Grid item textAlign={'center'}>
+			<Grid textAlign={'center'}>
 				<StyledTypography variant="body2" color="text.secondary">
 					<HomeOutlined sx={{ marginRight: '5px' }} />
 					{t('projectDetails.lots')}: {project.lots}
 				</StyledTypography>
 			</Grid>
-			<Grid item>
+			<Grid>
 				<StyledTypography variant="body2" color="text.secondary">
 					<HowToRegOutlined sx={{ marginRight: '5px' }} />
 					{t('projectDetails.assignedLots')}: {project.assignedLots}
 				</StyledTypography>
 			</Grid>
 			{!minimal && project.assignmentStatus && (
-				<Grid item>
+				<Grid>
 					<Typography variant="body2" color="text.secondary" component={'span'}>
 						{t('projectDetails.assignmentStatus')}:{' '}
 					</Typography>
@@ -230,7 +230,7 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 				</Grid>
 			)}
 			{!minimal && project.constructionStatus && (
-				<Grid item>
+				<Grid>
 					<Typography variant="body2" color="text.secondary" component={'span'}>
 						{t('projectDetails.constructionStatus')}:{' '}
 					</Typography>

@@ -1,8 +1,8 @@
 import React, { Suspense, useCallback, useState } from 'react';
 
 import { Add } from '@mui/icons-material';
-import { Grid2 as Grid } from '@mui/material';
-import { UploadSimple } from '@phosphor-icons/react/dist/ssr';
+import { Grid } from '@mui/material';
+import { UploadSimpleIcon } from '@phosphor-icons/react/dist/ssr';
 import router from 'next/router';
 
 import { Loading, StyledButton } from '../../components';
@@ -107,7 +107,7 @@ export const ProjectManager = ({ type, projects: projectsProp }: ProjectManagerP
 				</Grid>
 				<Grid>
 					<StyledButton
-						startIcon={loading ? <Loading height="16px" icon /> : <UploadSimple />}
+						startIcon={loading ? <Loading height="16px" icon /> : <UploadSimpleIcon />}
 						variant="outlined"
 						onClick={setUpdateProjectsPriority}
 						disabled={

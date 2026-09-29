@@ -4,15 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { CheckCircle, Close } from '@mui/icons-material';
-import {
-	Container,
-	Grid2,
-	IconButton,
-	MenuItem,
-	Paper,
-	TextField,
-	Typography
-} from '@mui/material';
+import { Container, Grid, IconButton, MenuItem, Paper, TextField, Typography } from '@mui/material';
 
 import { AbstractFile, FileUploader, Loading, StyledButton } from '../../../components';
 import { CancelModal } from '../../modals/CancelModal';
@@ -153,21 +145,21 @@ export const UpdateForm = ({
 	return (
 		<Paper sx={{ mt: 4, minHeight: 600 }}>
 			<Container>
-				<Grid2 container pt={2}>
-					<Grid2 size="grow" mt={4}>
+				<Grid container pt={2}>
+					<Grid size="grow" mt={4}>
 						<Typography variant={'h5'}>
 							{update ? 'Editar Atualização' : 'Criar Atualização'}
 						</Typography>
-					</Grid2>
-					<Grid2 size="auto">
+					</Grid>
+					<Grid size="auto">
 						<IconButton
 							onClick={() => {
 								success ? onCancel() : setCancelModal(true);
 							}}>
 							<Close />
 						</IconButton>
-					</Grid2>
-				</Grid2>
+					</Grid>
+				</Grid>
 				{success ? (
 					<SuccessMessage
 						title={update ? 'Atualização Editada' : 'Nova Atualização Adicionada'}
@@ -175,8 +167,8 @@ export const UpdateForm = ({
 					/>
 				) : (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid2 container spacing={4} pb={2} pt={4}>
-							<Grid2 size={{ xs: 12 }}>
+						<Grid container spacing={4} pb={2} pt={4}>
+							<Grid size={{ xs: 12 }}>
 								<TextField
 									id="title"
 									name="title"
@@ -187,8 +179,8 @@ export const UpdateForm = ({
 									helperText={formik.touched.title && formik.errors.title}
 									fullWidth
 								/>
-							</Grid2>
-							<Grid2 size={{ xs: 12 }}>
+							</Grid>
+							<Grid size={{ xs: 12 }}>
 								<FileUploader
 									name="file"
 									label="Adicionar Fotos ou Videos à Atualização"
@@ -198,8 +190,8 @@ export const UpdateForm = ({
 									maxFiles={3}
 									allowVideoFiles
 								/>
-							</Grid2>
-							<Grid2 size={{ xs: 12 }}>
+							</Grid>
+							<Grid size={{ xs: 12 }}>
 								<TextField
 									id="content"
 									name="content"
@@ -212,9 +204,9 @@ export const UpdateForm = ({
 									multiline
 									minRows={3}
 								/>
-							</Grid2>
+							</Grid>
 							{projects && projects.length > 0 && (
-								<Grid2 size={{ xs: 12, sm: 6 }}>
+								<Grid size={{ xs: 12, sm: 6 }}>
 									<TextField
 										id="projectId"
 										name="project.projectId"
@@ -232,9 +224,9 @@ export const UpdateForm = ({
 												</MenuItem>
 											))}
 									</TextField>
-								</Grid2>
+								</Grid>
 							)}
-							<Grid2 size={{ xs: 12, sm: 6 }}>
+							<Grid size={{ xs: 12, sm: 6 }}>
 								<TextField
 									id="createdOn"
 									name="createdOn"
@@ -245,8 +237,8 @@ export const UpdateForm = ({
 									fullWidth
 									helperText="Se este campo não for alterado a data será a de criação."
 								/>
-							</Grid2>
-							<Grid2 size="grow" ml="auto">
+							</Grid>
+							<Grid size="grow" ml="auto">
 								{submitting ? (
 									<Loading />
 								) : success ? (
@@ -254,8 +246,8 @@ export const UpdateForm = ({
 								) : (
 									<Typography color={'error'}>{error}</Typography>
 								)}
-							</Grid2>
-							<Grid2 size="auto">
+							</Grid>
+							<Grid size="auto">
 								<StyledButton
 									type="submit"
 									variant="contained"
@@ -265,13 +257,13 @@ export const UpdateForm = ({
 									loading={submitting}>
 									{'Submeter'}
 								</StyledButton>
-							</Grid2>
-							<Grid2 size="auto">
+							</Grid>
+							<Grid size="auto">
 								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
 									Cancelar
 								</StyledButton>
-							</Grid2>
-						</Grid2>
+							</Grid>
+						</Grid>
 					</form>
 				)}
 			</Container>

@@ -8,7 +8,7 @@ import {
 	Box,
 	Checkbox,
 	FormControlLabel,
-	Grid2,
+	Grid,
 	Grow,
 	Stack,
 	TextField,
@@ -120,8 +120,8 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 	return (
 		<form onSubmit={formik.handleSubmit}>
 			<StyledBox>
-				<Grid2 container columnSpacing={2}>
-					<Grid2 size={{ xs: 12 }} maxHeight={150}>
+				<Grid container columnSpacing={2}>
+					<Grid size={{ xs: 12 }} maxHeight={150}>
 						<Typography variant="h4" component={'h1'}>
 							{t('preEnroll')}
 						</Typography>
@@ -131,11 +131,11 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								{project.title}
 							</Typography>
 						)}
-					</Grid2>
-				</Grid2>
+					</Grid>
+				</Grid>
 				{!success && (
-					<Grid2 container rowSpacing={2} columnSpacing={2} mt={2}>
-						<Grid2 size={{ xs: 12, md: 6 }}>
+					<Grid container rowSpacing={2} columnSpacing={2} mt={2}>
+						<Grid size={{ xs: 12, md: 6 }}>
 							<TextField
 								id="first-name"
 								name="firstName"
@@ -146,8 +146,8 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								helperText={formik.touched.firstName && formik.errors.firstName}
 								fullWidth
 							/>
-						</Grid2>
-						<Grid2 size={{ xs: 12, md: 6 }}>
+						</Grid>
+						<Grid size={{ xs: 12, md: 6 }}>
 							<TextField
 								id="last-name"
 								name="lastName"
@@ -158,8 +158,8 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								helperText={formik.touched.lastName && formik.errors.lastName}
 								fullWidth
 							/>
-						</Grid2>
-						<Grid2 size={{ xs: 12 }}>
+						</Grid>
+						<Grid size={{ xs: 12 }}>
 							<TextField
 								id="email"
 								name="email"
@@ -170,8 +170,8 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								helperText={formik.touched.email && formik.errors.email}
 								fullWidth
 							/>
-						</Grid2>
-						<Grid2 size={{ xs: 12 }}>
+						</Grid>
+						<Grid size={{ xs: 12 }}>
 							<TextField
 								id="telehponeNumber"
 								name="telephoneNumber"
@@ -182,8 +182,8 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								helperText={formik.touched.telephoneNumber && formik.errors.telephoneNumber}
 								fullWidth
 							/>
-						</Grid2>
-						<Grid2 size={{ xs: 12 }}>
+						</Grid>
+						<Grid size={{ xs: 12 }}>
 							<FormControlLabel
 								control={
 									<Checkbox
@@ -194,8 +194,8 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 								}
 								label={t('form.updateCheckbox')}
 							/>
-						</Grid2>
-						<Grid2 size={{ xs: 12 }}>
+						</Grid>
+						<Grid size={{ xs: 12 }}>
 							<StyledButton
 								type="submit"
 								variant="contained"
@@ -207,8 +207,8 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 							<Typography variant="body2" sx={{ marginTop: '10px' }}>
 								{t('form.notice')}
 							</Typography>
-						</Grid2>
-					</Grid2>
+						</Grid>
+					</Grid>
 				)}
 				<>
 					{submitting && <Loading />}

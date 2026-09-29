@@ -26,10 +26,10 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 			})}>
 			<Box sx={{ p: 4 }}>
 				<Grid container justifyContent={'space-between'}>
-					<Grid item>
+					<Grid>
 						<Title variant={'h5'}>{post.title}</Title>
 					</Grid>
-					<Grid item alignSelf={'end'}>
+					<Grid alignSelf={'end'}>
 						<Typography
 							variant="body2"
 							color="text.secondary"
@@ -37,11 +37,11 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 							{formatDate(post.createdOn)}
 						</Typography>
 					</Grid>
-					<Grid item xs={12}>
+					<Grid size={{ xs: 12 }}>
 						<Divider sx={{ mb: 1 }} />
 					</Grid>
 					{post.project && (
-						<Grid item>
+						<Grid>
 							<Typography
 								variant={'subtitle2'}
 								component={'span'}

@@ -92,12 +92,12 @@ export const EnrollRequestForm = ({
 		<Paper sx={{ mt: 4, minHeight: 600 }}>
 			<Container>
 				<Grid container pt={2}>
-					<Grid item mt={4}>
+					<Grid mt={4}>
 						<Typography variant={'h5'}>
 							{request ? 'Editar Pedido de Inscrição' : 'Criar Pedido de Inscrição'}
 						</Typography>
 					</Grid>
-					<Grid item ml="auto">
+					<Grid ml="auto">
 						<IconButton
 							onClick={() => {
 								success ? onCancel() : setCancelModal(true);
@@ -114,7 +114,7 @@ export const EnrollRequestForm = ({
 				) : (
 					<form onSubmit={formik.handleSubmit}>
 						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
-							<Grid item xs={6}>
+							<Grid size={{ xs: 6 }}>
 								<TextField
 									id="first-name"
 									name="firstName"
@@ -126,7 +126,7 @@ export const EnrollRequestForm = ({
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid size={{ xs: 6 }}>
 								<TextField
 									id="last-name"
 									name="lastName"
@@ -138,7 +138,7 @@ export const EnrollRequestForm = ({
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid size={{ xs: 6 }}>
 								<TextField
 									id="email"
 									name="email"
@@ -150,7 +150,7 @@ export const EnrollRequestForm = ({
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid size={{ xs: 6 }}>
 								<TextField
 									id="telehponeNumber"
 									name="telephoneNumber"
@@ -162,7 +162,7 @@ export const EnrollRequestForm = ({
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid size={{ xs: 6 }}>
 								<TextField
 									id="projectId"
 									name="projectId"
@@ -181,7 +181,7 @@ export const EnrollRequestForm = ({
 										))}
 								</TextField>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid size={{ xs: 6 }}>
 								<TextField
 									id="createdOn"
 									name="createdOn"
@@ -193,7 +193,7 @@ export const EnrollRequestForm = ({
 									helperText="Se este campo não for alterado a data será a de criação."
 								/>
 							</Grid>
-							<Grid item ml="auto">
+							<Grid ml="auto">
 								{submitting ? (
 									<Loading />
 								) : success ? (
@@ -202,7 +202,7 @@ export const EnrollRequestForm = ({
 									<Typography color={'error'}>{error}</Typography>
 								)}
 							</Grid>
-							<Grid item>
+							<Grid>
 								<StyledButton
 									type="submit"
 									variant="contained"
@@ -212,7 +212,7 @@ export const EnrollRequestForm = ({
 									{'Submeter'}
 								</StyledButton>
 							</Grid>
-							<Grid item>
+							<Grid>
 								<StyledButton variant="outlined" onClick={() => setCancelModal(true)} fullWidth>
 									Cancelar
 								</StyledButton>

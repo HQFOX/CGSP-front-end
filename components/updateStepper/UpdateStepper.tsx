@@ -7,8 +7,8 @@ import UpdateCard from '../updates/UpdateCard';
 
 const Seperator = () => (
 	<>
-		<Grid item xs={6} height={50} borderRight={'1px solid black'} alignItems="center"></Grid>
-		<Grid item xs={6} height={50} alignItems="center"></Grid>
+		<Grid size={{ xs: 6 }} height={50} borderRight={'1px solid black'} alignItems="center"></Grid>
+		<Grid size={{ xs: 12 }} height={50} alignItems="center"></Grid>
 	</>
 );
 
@@ -31,13 +31,18 @@ export const UpdateStepper = ({ updates }: { updates?: Update[] }) => {
 		index: number;
 	}) => (
 		<>
-			<Grid item xs={6} display={'flex'} justifyContent="right" height={40} alignItems="center">
+			<Grid
+				size={{ xs: 12 }}
+				display={'flex'}
+				justifyContent="right"
+				height={40}
+				alignItems="center">
 				<Button
 					style={{ textTransform: 'none' }}
 					onClick={() => handleShowUpdateDialog(post)}>{`${index}. ${post.title}`}</Button>
 				{icon}
 			</Grid>
-			<Grid item xs={6} alignItems="center"></Grid>
+			<Grid size={{ xs: 6 }} alignItems="center"></Grid>
 		</>
 	);
 
@@ -51,8 +56,8 @@ export const UpdateStepper = ({ updates }: { updates?: Update[] }) => {
 		index: number;
 	}) => (
 		<>
-			<Grid item xs={6} display={'flex'} height={40} alignItems="center"></Grid>
-			<Grid item xs={6} display={'flex'} height={40} alignItems="center">
+			<Grid size={{ xs: 6 }} display={'flex'} height={40} alignItems="center"></Grid>
+			<Grid size={{ xs: 6 }} display={'flex'} height={40} alignItems="center">
 				{icon}
 				<Button
 					style={{ textTransform: 'none' }}

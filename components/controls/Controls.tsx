@@ -8,7 +8,7 @@ import {
 	Checkbox,
 	FormControlLabel,
 	FormGroup,
-	Grid2,
+	Grid,
 	IconButton,
 	Input,
 	Paper,
@@ -183,9 +183,9 @@ export const Controls = ({
 
 	return (
 		<Paper className={styles.container}>
-			<Grid2 container spacing={2}>
+			<Grid container spacing={2}>
 				{onWildCardChange && (
-					<Grid2>
+					<Grid>
 						<Button size={'large'} variant={'outlined'} startIcon={<Search />} disableRipple>
 							<Input
 								className={styles.input}
@@ -200,10 +200,10 @@ export const Controls = ({
 								}}
 							/>
 						</Button>
-					</Grid2>
+					</Grid>
 				)}
 				{onViewChange && (
-					<Grid2 sx={{ ml: 'auto' }}>
+					<Grid sx={{ ml: 'auto' }}>
 						<IconButton
 							aria-label="map view"
 							onClick={() => onViewChange('map')}
@@ -216,10 +216,10 @@ export const Controls = ({
 							color={view === 'card' ? 'primary' : 'default'}>
 							<SquaresFourIcon />
 						</IconButton>
-					</Grid2>
+					</Grid>
 				)}
 				{onDistrictChange && (
-					<Grid2>
+					<Grid>
 						<Typography sx={{ mr: 1, verticalAlign: 'middle' }} component={'span'} variant="body1">
 							{t('locationFilterLabel')}:{' '}
 						</Typography>
@@ -229,9 +229,9 @@ export const Controls = ({
 							options={districts}
 							valueChange={onDistrictChange}
 						/>
-					</Grid2>
+					</Grid>
 				)}
-				<Grid2>
+				<Grid>
 					<Button startIcon={<Tune />} sx={{ textTransform: 'capitalize' }} onClick={handleClick}>
 						{t('filters')}
 					</Button>
@@ -388,8 +388,8 @@ export const Controls = ({
 							</Stack>
 						</Paper>
 					</Popper>
-				</Grid2>
-			</Grid2>
+				</Grid>
+			</Grid>
 		</Paper>
 	);
 };

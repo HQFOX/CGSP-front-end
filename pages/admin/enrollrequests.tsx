@@ -4,17 +4,9 @@ import type { EChartsOption } from 'echarts';
 import { NextPage } from 'next';
 
 import { Add } from '@mui/icons-material';
-import {
-	Box,
-	CardContent,
-	CardHeader,
-	Divider,
-	Grid2 as Grid,
-	TextField,
-	Typography
-} from '@mui/material';
+import { Box, CardContent, CardHeader, Divider, Grid, TextField, Typography } from '@mui/material';
 import NumberFlow from '@number-flow/react';
-import { TrendUp } from '@phosphor-icons/react';
+import { TrendUpIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
@@ -74,7 +66,7 @@ const Kpi = ({ total: totalProp, week }: { total: number; week: number }) => {
 							<Typography variant={'body2'}>
 								+<NumberFlow value={week} /> Esta semana
 							</Typography>
-							<TrendUp color={theme.palette.success.main} />
+							<TrendUpIcon color={theme.palette.success.main} />
 						</div>
 					)}
 				</div>
