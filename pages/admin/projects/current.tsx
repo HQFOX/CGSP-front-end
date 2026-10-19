@@ -5,10 +5,15 @@ import type { NextPage } from 'next';
 import { Box, Divider, Typography } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
+import { PageProjectListItemDTO } from '../../../api/model';
+import { getGetAllProjectsCurrentUrl } from '../../../api/project-controller/project-controller';
 import { PageContainer } from '../../../components/pageContainer/PageContainer';
-import { ProjectManager } from '../../../components/projects/ProjectManager';
+import {
+	ADMIN_PROJECTS_PAGE_SIZE,
+	ProjectManager
+} from '../../../components/projects/ProjectManager';
 
-const ProjectCurrentAdmin: NextPage<{ projects: Project[] }> = (data) => {
+const ProjectCurrentAdmin: NextPage<{ initialPage: PageProjectListItemDTO }> = (data) => {
 	return (
 		<PageContainer>
 			<Box sx={{ pb: 4 }}>
@@ -17,17 +22,19 @@ const ProjectCurrentAdmin: NextPage<{ projects: Project[] }> = (data) => {
 				</Typography>
 				<Divider />
 			</Box>
-			<ProjectManager projects={data.projects} type="current" />
+			<ProjectManager initialPage={data.initialPage} type="current" />
 		</PageContainer>
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
-	const res = await fetch(`${process.env.API_URL}/project/current`);
-	const projects = (await res.json()) as Project[];
+	const res = await fetch(
+		`${process.env.API_URL}${getGetAllProjectsCurrentUrl({ page: 0, size: ADMIN_PROJECTS_PAGE_SIZE })}`
+	);
+	const initialPage = (await res.json()) as PageProjectListItemDTO;
 
 	return {
 		props: {
-			projects,
+			initialPage,
 			...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header', 'projectpage']))
 		}
 	};

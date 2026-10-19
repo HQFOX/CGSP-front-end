@@ -22,7 +22,14 @@ import type {
 } from '@tanstack/react-query';
 
 import { customFetch } from '.././custom-fetch';
-import type { ProjectDTO, ProjectListItemDTO, ProjectPriorityDTO } from '../model';
+import type {
+	GetAllProjectsCurrentParams,
+	GetAllProjectsHistoryParams,
+	PageProjectListItemDTO,
+	ProjectDTO,
+	ProjectListItemDTO,
+	ProjectPriorityDTO
+} from '../model';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -78,8 +85,19 @@ export const updateProject = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<updateProjectResponse>(getUpdateProjectUrl(projectId), {
 		...options,
@@ -88,6 +106,8 @@ export const updateProject = async (
 		body: JSON.stringify(projectDTO)
 	});
 };
+
+export const getUpdateProjectMutationKey = () => ['updateProject'] as const;
 
 export const getUpdateProjectMutationOptions = <TError = ProjectDTO, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -103,7 +123,7 @@ export const getUpdateProjectMutationOptions = <TError = ProjectDTO, TContext = 
 	UpdateProjectMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['updateProject'];
+	const mutationKey = getUpdateProjectMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -186,6 +206,8 @@ export const deleteProject = async (
 	});
 };
 
+export const getDeleteProjectMutationKey = () => ['deleteProject'] as const;
+
 export const getDeleteProjectMutationOptions = <TError = void, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
 		Awaited<ReturnType<typeof deleteProject>>,
@@ -200,7 +222,7 @@ export const getDeleteProjectMutationOptions = <TError = void, TContext = unknow
 	DeleteProjectMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['deleteProject'];
+	const mutationKey = getDeleteProjectMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -406,8 +428,19 @@ export const createProject = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<createProjectResponse>(getCreateProjectUrl(), {
 		...options,
@@ -416,6 +449,8 @@ export const createProject = async (
 		body: JSON.stringify(projectDTO)
 	});
 };
+
+export const getCreateProjectMutationKey = () => ['createProject'] as const;
 
 export const getCreateProjectMutationOptions = <TError = unknown, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -431,7 +466,7 @@ export const getCreateProjectMutationOptions = <TError = unknown, TContext = unk
 	CreateProjectMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['createProject'];
+	const mutationKey = getCreateProjectMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -645,8 +680,19 @@ export const editOneProject = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<editOneProjectResponse>(getEditOneProjectUrl(id), {
 		...options,
@@ -655,6 +701,8 @@ export const editOneProject = async (
 		body: JSON.stringify(projectDTO)
 	});
 };
+
+export const getEditOneProjectMutationKey = () => ['editOneProject'] as const;
 
 export const getEditOneProjectMutationOptions = <TError = unknown, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -670,7 +718,7 @@ export const getEditOneProjectMutationOptions = <TError = unknown, TContext = un
 	EditOneProjectMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['editOneProject'];
+	const mutationKey = getEditOneProjectMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -736,8 +784,19 @@ export const updatePriority = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<updatePriorityResponse>(getUpdatePriorityUrl(), {
 		...options,
@@ -746,6 +805,8 @@ export const updatePriority = async (
 		body: JSON.stringify(projectPriorityDTO)
 	});
 };
+
+export const getUpdatePriorityMutationKey = () => ['updatePriority'] as const;
 
 export const getUpdatePriorityMutationOptions = <TError = unknown, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -761,7 +822,7 @@ export const getUpdatePriorityMutationOptions = <TError = unknown, TContext = un
 	UpdatePriorityMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['updatePriority'];
+	const mutationKey = getUpdatePriorityMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -805,51 +866,86 @@ export const useUpdatePriority = <TError = unknown, TContext = unknown>(
 	return useMutation(getUpdatePriorityMutationOptions(options), queryClient);
 };
 export type getAllProjectsHistoryResponse200 = {
-	data: ProjectListItemDTO[];
+	data: PageProjectListItemDTO;
 	status: 200;
+};
+
+export type getAllProjectsHistoryResponse400 = {
+	data: void;
+	status: 400;
 };
 
 export type getAllProjectsHistoryResponseSuccess = getAllProjectsHistoryResponse200 & {
 	headers: Headers;
 };
-export type getAllProjectsHistoryResponse = getAllProjectsHistoryResponseSuccess;
+export type getAllProjectsHistoryResponseError = getAllProjectsHistoryResponse400 & {
+	headers: Headers;
+};
 
-export const getGetAllProjectsHistoryUrl = () => {
-	return `/project/history`;
+export type getAllProjectsHistoryResponse =
+	getAllProjectsHistoryResponseSuccess | getAllProjectsHistoryResponseError;
+
+export const getGetAllProjectsHistoryUrl = (params?: GetAllProjectsHistoryParams) => {
+	const normalizedParams = new URLSearchParams();
+
+	Object.entries(params || {}).forEach(([key, value]) => {
+		const explodeParameters = ['typologies', 'assignmentStatuses', 'constructionStatuses', 'sort'];
+
+		if (Array.isArray(value) && explodeParameters.includes(key)) {
+			value.forEach((v) => {
+				normalizedParams.append(key, v === null ? 'null' : String(v));
+			});
+			return;
+		}
+
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? 'null' : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/project/history?${stringifiedParams}`
+		: `/project/history`;
 };
 
 /**
- * Retrieves historical projects. Authenticated users receive detailed projects; anonymous users receive public project data.
+ * Retrieves a page of historical projects, optionally filtered. Authenticated users receive detailed projects; anonymous users receive public project data. Without a sort parameter, projects are ordered by priority (projects without priority last).
  * @summary Get project history
  */
 export const getAllProjectsHistory = async (
+	params?: GetAllProjectsHistoryParams,
 	options?: Parameters<typeof customFetch>[1]
 ): Promise<getAllProjectsHistoryResponse> => {
-	return customFetch<getAllProjectsHistoryResponse>(getGetAllProjectsHistoryUrl(), {
+	return customFetch<getAllProjectsHistoryResponse>(getGetAllProjectsHistoryUrl(params), {
 		...options,
 		method: 'GET'
 	});
 };
 
-export const getGetAllProjectsHistoryQueryKey = () => {
-	return [`/project/history`] as const;
+export const getGetAllProjectsHistoryQueryKey = (params?: GetAllProjectsHistoryParams) => {
+	return [`/project/history`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetAllProjectsHistoryQueryOptions = <
 	TData = Awaited<ReturnType<typeof getAllProjectsHistory>>,
-	TError = unknown
->(options?: {
-	query?: Partial<
-		UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsHistory>>, TError, TData>
-	>;
-	request?: SecondParameter<typeof customFetch>;
-}) => {
+	TError = void
+>(
+	params?: GetAllProjectsHistoryParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsHistory>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	}
+) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetAllProjectsHistoryQueryKey();
+	const queryKey = queryOptions?.queryKey ?? getGetAllProjectsHistoryQueryKey(params);
 
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllProjectsHistory>>> = ({ signal }) =>
-		getAllProjectsHistory({ signal, ...requestOptions });
+		getAllProjectsHistory(params, { signal, ...requestOptions });
 
 	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
 		Awaited<ReturnType<typeof getAllProjectsHistory>>,
@@ -861,12 +957,13 @@ export const getGetAllProjectsHistoryQueryOptions = <
 export type GetAllProjectsHistoryQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getAllProjectsHistory>>
 >;
-export type GetAllProjectsHistoryQueryError = unknown;
+export type GetAllProjectsHistoryQueryError = void;
 
 export function useGetAllProjectsHistory<
 	TData = Awaited<ReturnType<typeof getAllProjectsHistory>>,
-	TError = unknown
+	TError = void
 >(
+	params: undefined | GetAllProjectsHistoryParams,
 	options: {
 		query: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsHistory>>, TError, TData>
@@ -885,8 +982,9 @@ export function useGetAllProjectsHistory<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 export function useGetAllProjectsHistory<
 	TData = Awaited<ReturnType<typeof getAllProjectsHistory>>,
-	TError = unknown
+	TError = void
 >(
+	params?: GetAllProjectsHistoryParams,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsHistory>>, TError, TData>
@@ -905,8 +1003,9 @@ export function useGetAllProjectsHistory<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 export function useGetAllProjectsHistory<
 	TData = Awaited<ReturnType<typeof getAllProjectsHistory>>,
-	TError = unknown
+	TError = void
 >(
+	params?: GetAllProjectsHistoryParams,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsHistory>>, TError, TData>
@@ -921,8 +1020,9 @@ export function useGetAllProjectsHistory<
 
 export function useGetAllProjectsHistory<
 	TData = Awaited<ReturnType<typeof getAllProjectsHistory>>,
-	TError = unknown
+	TError = void
 >(
+	params?: GetAllProjectsHistoryParams,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsHistory>>, TError, TData>
@@ -931,7 +1031,7 @@ export function useGetAllProjectsHistory<
 	},
 	queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-	const queryOptions = getGetAllProjectsHistoryQueryOptions(options);
+	const queryOptions = getGetAllProjectsHistoryQueryOptions(params, options);
 
 	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;
@@ -941,51 +1041,86 @@ export function useGetAllProjectsHistory<
 }
 
 export type getAllProjectsCurrentResponse200 = {
-	data: ProjectListItemDTO[];
+	data: PageProjectListItemDTO;
 	status: 200;
+};
+
+export type getAllProjectsCurrentResponse400 = {
+	data: void;
+	status: 400;
 };
 
 export type getAllProjectsCurrentResponseSuccess = getAllProjectsCurrentResponse200 & {
 	headers: Headers;
 };
-export type getAllProjectsCurrentResponse = getAllProjectsCurrentResponseSuccess;
+export type getAllProjectsCurrentResponseError = getAllProjectsCurrentResponse400 & {
+	headers: Headers;
+};
 
-export const getGetAllProjectsCurrentUrl = () => {
-	return `/project/current`;
+export type getAllProjectsCurrentResponse =
+	getAllProjectsCurrentResponseSuccess | getAllProjectsCurrentResponseError;
+
+export const getGetAllProjectsCurrentUrl = (params?: GetAllProjectsCurrentParams) => {
+	const normalizedParams = new URLSearchParams();
+
+	Object.entries(params || {}).forEach(([key, value]) => {
+		const explodeParameters = ['typologies', 'assignmentStatuses', 'constructionStatuses', 'sort'];
+
+		if (Array.isArray(value) && explodeParameters.includes(key)) {
+			value.forEach((v) => {
+				normalizedParams.append(key, v === null ? 'null' : String(v));
+			});
+			return;
+		}
+
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? 'null' : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/project/current?${stringifiedParams}`
+		: `/project/current`;
 };
 
 /**
- * Retrieves all current projects. Authenticated users receive detailed projects; anonymous users receive public project data.
+ * Retrieves a page of current projects, optionally filtered. Authenticated users receive detailed projects; anonymous users receive public project data. Without a sort parameter, projects are ordered by priority (projects without priority last).
  * @summary Get current projects
  */
 export const getAllProjectsCurrent = async (
+	params?: GetAllProjectsCurrentParams,
 	options?: Parameters<typeof customFetch>[1]
 ): Promise<getAllProjectsCurrentResponse> => {
-	return customFetch<getAllProjectsCurrentResponse>(getGetAllProjectsCurrentUrl(), {
+	return customFetch<getAllProjectsCurrentResponse>(getGetAllProjectsCurrentUrl(params), {
 		...options,
 		method: 'GET'
 	});
 };
 
-export const getGetAllProjectsCurrentQueryKey = () => {
-	return [`/project/current`] as const;
+export const getGetAllProjectsCurrentQueryKey = (params?: GetAllProjectsCurrentParams) => {
+	return [`/project/current`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetAllProjectsCurrentQueryOptions = <
 	TData = Awaited<ReturnType<typeof getAllProjectsCurrent>>,
-	TError = unknown
->(options?: {
-	query?: Partial<
-		UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsCurrent>>, TError, TData>
-	>;
-	request?: SecondParameter<typeof customFetch>;
-}) => {
+	TError = void
+>(
+	params?: GetAllProjectsCurrentParams,
+	options?: {
+		query?: Partial<
+			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsCurrent>>, TError, TData>
+		>;
+		request?: SecondParameter<typeof customFetch>;
+	}
+) => {
 	const { query: queryOptions, request: requestOptions } = options ?? {};
 
-	const queryKey = queryOptions?.queryKey ?? getGetAllProjectsCurrentQueryKey();
+	const queryKey = queryOptions?.queryKey ?? getGetAllProjectsCurrentQueryKey(params);
 
 	const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllProjectsCurrent>>> = ({ signal }) =>
-		getAllProjectsCurrent({ signal, ...requestOptions });
+		getAllProjectsCurrent(params, { signal, ...requestOptions });
 
 	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
 		Awaited<ReturnType<typeof getAllProjectsCurrent>>,
@@ -997,12 +1132,13 @@ export const getGetAllProjectsCurrentQueryOptions = <
 export type GetAllProjectsCurrentQueryResult = NonNullable<
 	Awaited<ReturnType<typeof getAllProjectsCurrent>>
 >;
-export type GetAllProjectsCurrentQueryError = unknown;
+export type GetAllProjectsCurrentQueryError = void;
 
 export function useGetAllProjectsCurrent<
 	TData = Awaited<ReturnType<typeof getAllProjectsCurrent>>,
-	TError = unknown
+	TError = void
 >(
+	params: undefined | GetAllProjectsCurrentParams,
 	options: {
 		query: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsCurrent>>, TError, TData>
@@ -1021,8 +1157,9 @@ export function useGetAllProjectsCurrent<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 export function useGetAllProjectsCurrent<
 	TData = Awaited<ReturnType<typeof getAllProjectsCurrent>>,
-	TError = unknown
+	TError = void
 >(
+	params?: GetAllProjectsCurrentParams,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsCurrent>>, TError, TData>
@@ -1041,8 +1178,9 @@ export function useGetAllProjectsCurrent<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 export function useGetAllProjectsCurrent<
 	TData = Awaited<ReturnType<typeof getAllProjectsCurrent>>,
-	TError = unknown
+	TError = void
 >(
+	params?: GetAllProjectsCurrentParams,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsCurrent>>, TError, TData>
@@ -1057,8 +1195,9 @@ export function useGetAllProjectsCurrent<
 
 export function useGetAllProjectsCurrent<
 	TData = Awaited<ReturnType<typeof getAllProjectsCurrent>>,
-	TError = unknown
+	TError = void
 >(
+	params?: GetAllProjectsCurrentParams,
 	options?: {
 		query?: Partial<
 			UseQueryOptions<Awaited<ReturnType<typeof getAllProjectsCurrent>>, TError, TData>
@@ -1067,7 +1206,7 @@ export function useGetAllProjectsCurrent<
 	},
 	queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-	const queryOptions = getGetAllProjectsCurrentQueryOptions(options);
+	const queryOptions = getGetAllProjectsCurrentQueryOptions(params, options);
 
 	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;

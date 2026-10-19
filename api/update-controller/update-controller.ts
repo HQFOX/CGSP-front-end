@@ -210,8 +210,19 @@ export const createUpdate = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<createUpdateResponse>(getCreateUpdateUrl(), {
 		...options,
@@ -220,6 +231,8 @@ export const createUpdate = async (
 		body: JSON.stringify(updateDTO)
 	});
 };
+
+export const getCreateUpdateMutationKey = () => ['createUpdate'] as const;
 
 export const getCreateUpdateMutationOptions = <TError = UpdateDTO, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -235,7 +248,7 @@ export const getCreateUpdateMutationOptions = <TError = UpdateDTO, TContext = un
 	CreateUpdateMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['createUpdate'];
+	const mutationKey = getCreateUpdateMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -453,6 +466,8 @@ export const deleteOneUpdate = async (
 	});
 };
 
+export const getDeleteOneUpdateMutationKey = () => ['deleteOneUpdate'] as const;
+
 export const getDeleteOneUpdateMutationOptions = <TError = unknown, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
 		Awaited<ReturnType<typeof deleteOneUpdate>>,
@@ -467,7 +482,7 @@ export const getDeleteOneUpdateMutationOptions = <TError = unknown, TContext = u
 	DeleteOneUpdateMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['deleteOneUpdate'];
+	const mutationKey = getDeleteOneUpdateMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -552,8 +567,19 @@ export const editOneUpdate = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<editOneUpdateResponse>(getEditOneUpdateUrl(id), {
 		...options,
@@ -562,6 +588,8 @@ export const editOneUpdate = async (
 		body: JSON.stringify(jsonNode)
 	});
 };
+
+export const getEditOneUpdateMutationKey = () => ['editOneUpdate'] as const;
 
 export const getEditOneUpdateMutationOptions = <TError = UpdateDTO, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -577,7 +605,7 @@ export const getEditOneUpdateMutationOptions = <TError = UpdateDTO, TContext = u
 	EditOneUpdateMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['editOneUpdate'];
+	const mutationKey = getEditOneUpdateMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options

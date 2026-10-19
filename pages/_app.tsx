@@ -32,7 +32,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	const handleStop = () => setLoading(false);
 
-	const handleStart = () => setLoading(true);
+	// Shallow route changes (e.g. syncing filters to the URL) keep the current page
+	// mounted, so they must not swap it for the loading screen
+	const handleStart = (_url: string, { shallow }: { shallow: boolean }) => {
+		if (!shallow) setLoading(true);
+	};
 
 	useMemo(() => {
 		if (!user) {

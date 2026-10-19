@@ -1,14 +1,15 @@
 import type { LatLngTuple } from 'leaflet';
 import type { ParsedUrlQuery } from 'querystring';
 
-import { ProjectDTO } from '../../../api/model';
+import { GetAllProjectsCurrentParams, PageProjectListItemDTO } from '../../../api/model';
+import {
+	getAllProjectsCurrent,
+	getAllProjectsHistory,
+	getGetAllProjectsCurrentQueryKey,
+	getGetAllProjectsHistoryQueryKey
+} from '../../../api/project-controller/project-controller';
 import { Beja, Evora, Portalegre } from '../../map/districtdata';
 import { Setubal } from '../../map/districtdata/Setubal';
-
-export const normalizeString = (value?: string): string => {
-	if (!value) return '';
-	return value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
-};
 
 export type SearchParams = {
 	title: string;
@@ -23,49 +24,15 @@ export type SearchParams = {
 
 export type ViewType = 'card' | 'list' | 'map';
 
-export const getPriceRange = (projects: ProjectDTO[]) => {
-	const priceRange: (number | undefined)[] = [undefined, undefined];
+// The current and history endpoints accept the same filter params
+export type ProjectsQueryParams = GetAllProjectsCurrentParams;
 
-	projects.map((project) => {
-		project.typologies?.map((typology) => {
-			if (typology.price) {
-				if (priceRange[0] == undefined || priceRange[0] > typology.price)
-					priceRange[0] = typology.price;
-				if (priceRange[1] == undefined || priceRange[1] < typology.price)
-					priceRange[1] = typology.price;
-			}
-		});
-	});
-	return priceRange as number[];
-};
+export const PROJECTS_PAGE_SIZE = 4;
 
-export const getTypologies = (projects: ProjectDTO[]) => {
-	const typologies = new Set<string>();
+export const TYPOLOGY_OPTIONS = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5'];
 
-	projects.map((project) => {
-		project.typologies?.map((typology) => {
-			if (typology.typology) {
-				typologies.add(typology.typology);
-			}
-		});
-	});
-
-	return [...typologies];
-};
-
-export const getTypes = (projects: ProjectDTO[]) => {
-	const types = new Set<string>();
-
-	projects.map((project) => {
-		project.typologies?.map((typology) => {
-			if (typology.type) {
-				types.add(typology.type);
-			}
-		});
-	});
-
-	return [...types];
-};
+// Bounds for the price slider; the API doesn't expose the price range of the dataset
+export const PRICE_RANGE_BOUNDS = [0, 500000];
 
 export const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
 	Évora: Evora.geojson.properties.centros.centro.reverse() as LatLngTuple,
@@ -73,6 +40,8 @@ export const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
 	Portalegre: Portalegre.geojson.properties.centros.centro.reverse() as LatLngTuple,
 	Setúbal: Setubal.geojson.properties.centros.centro.reverse() as LatLngTuple
 };
+
+export const DISTRICT_OPTIONS = Object.keys(districtCenterCoordinates);
 
 export const constructionStatusValues: ConstructionStatusType[] = [
 	'ALLOTMENTPERMIT',
@@ -82,83 +51,39 @@ export const constructionStatusValues: ConstructionStatusType[] = [
 
 export const assignmentStatusValues: AssignmentStatusType[] = ['WAITING', 'ONGOING', 'CONCLUDED'];
 
-export const getDistricts = (projects: ProjectDTO[], allDistrictsLabel: string): string[] => {
-	const districtSet: string[] = [allDistrictsLabel];
-	projects.map((project) => {
-		if (project.district && !districtSet.includes(project.district)) {
-			districtSet.push(project.district);
-		}
-	});
-	return districtSet;
-};
-
-export const filterResultsByLocation = (district: string, projects: ProjectDTO[]): ProjectDTO[] => {
-	if (district !== '') {
-		return projects.filter((project) =>
-			project.district?.toLowerCase().includes(district.toLowerCase())
-		);
+// Only defined values are set, so the result is JSON-serializable for getServerSideProps
+export const searchParamsToApiParams = (
+	search: Partial<SearchParams>,
+	page: number
+): ProjectsQueryParams => {
+	const params: ProjectsQueryParams = {};
+	if (search.district) params.district = search.district;
+	if (search.wildcard?.trim()) params.title = search.wildcard.trim();
+	if (search.typologies?.length) params.typologies = search.typologies;
+	if (search.assignmentStatus?.length) params.assignmentStatuses = search.assignmentStatus;
+	if (search.constructionStatus?.length) params.constructionStatuses = search.constructionStatus;
+	if (search.priceRange?.length === 2) {
+		params.priceMin = search.priceRange[0];
+		params.priceMax = search.priceRange[1];
 	}
-	return projects;
+	params.page = page;
+	params.size = PROJECTS_PAGE_SIZE;
+	return params;
 };
 
-export const filterResultsByTitle = (param: string, projects: ProjectDTO[]): ProjectDTO[] => {
-	if (param !== '') {
-		return projects.filter((project) =>
-			normalizeString(project.title?.toLowerCase()).includes(normalizeString(param.toLowerCase()))
-		);
-	}
-	return projects;
+export const fetchProjectsPage = async (
+	history: boolean,
+	params: ProjectsQueryParams,
+	options?: RequestInit
+): Promise<PageProjectListItemDTO> => {
+	const fetcher = history ? getAllProjectsHistory : getAllProjectsCurrent;
+	// customFetch resolves with the response body, not the { data, status } envelope orval types describe
+	return (await fetcher(params, options)) as unknown as PageProjectListItemDTO;
 };
 
-export const filterResultsByWildCard = (param: string, projects: ProjectDTO[]): ProjectDTO[] => {
-	if (param !== '') {
-		const resultTitle = projects.filter((project) =>
-			normalizeString(project.title?.toLowerCase()).includes(normalizeString(param.toLowerCase()))
-		);
-		const resultLocation = projects.filter(
-			(project) =>
-				project.district &&
-				normalizeString(project.district.toLowerCase()).includes(
-					normalizeString(param.toLowerCase())
-				)
-		);
-		return resultTitle.concat(resultLocation);
-	}
-	return projects;
-};
-
-export const filterResultsByPrice = (param: number[], projects: ProjectDTO[]): ProjectDTO[] =>
-	projects.filter((project) =>
-		project.typologies
-			? project.typologies.filter(
-					(typology) =>
-						!typology.price || (typology.price >= param[0] && typology.price <= param[1])
-				).length > 0
-			: false
-	);
-
-export const filterResultsByTypology = (param: string[], projects: ProjectDTO[]): ProjectDTO[] =>
-	projects.filter(
-		(project) =>
-			project.typologies &&
-			project.typologies.some((typology) => typology.typology && param.includes(typology.typology))
-	);
-
-export const filterResultsByAssignmentStatus = (
-	param: string[],
-	projects: ProjectDTO[]
-): ProjectDTO[] =>
-	projects.filter(
-		(project) => project.assignmentStatus && param.includes(project.assignmentStatus)
-	);
-
-export const filterResultsByConstructionStatus = (
-	param: string[],
-	projects: ProjectDTO[]
-): ProjectDTO[] =>
-	projects.filter(
-		(project) => project.constructionStatus && param.includes(project.constructionStatus)
-	);
+// Without params, the key matches every cached page of that list (useful for invalidation)
+export const getProjectsQueryKey = (history: boolean, params?: ProjectsQueryParams) =>
+	history ? getGetAllProjectsHistoryQueryKey(params) : getGetAllProjectsCurrentQueryKey(params);
 
 export const searchParamsToQuery = (search: SearchParams): Record<string, string> => {
 	const query: Record<string, string> = {};
@@ -173,7 +98,6 @@ export const searchParamsToQuery = (search: SearchParams): Record<string, string
 		query.priceMax = String(search.priceRange[1]);
 	}
 	if (search.typologies.length > 0) query.typologies = search.typologies.join(',');
-	if (search.types.length > 0) query.types = search.types.join(',');
 	return query;
 };
 
@@ -192,6 +116,24 @@ export const queryToSearchParams = (query: ParsedUrlQuery): Partial<SearchParams
 		if (!isNaN(min) && !isNaN(max)) partial.priceRange = [min, max];
 	}
 	if (typeof query.typologies === 'string') partial.typologies = query.typologies.split(',');
-	if (typeof query.types === 'string') partial.types = query.types.split(',');
 	return partial;
 };
+
+export const isSameQuery = (query: Record<string, string>, current: ParsedUrlQuery): boolean => {
+	const keys = Object.keys(query);
+	return (
+		keys.length === Object.keys(current).length && keys.every((key) => current[key] === query[key])
+	);
+};
+
+// The URL holds a 1-based page number, the API expects a 0-based index
+export const pageToQuery = (page: number): Record<string, string> =>
+	page > 0 ? { page: String(page + 1) } : {};
+
+export const queryToPage = (query: ParsedUrlQuery): number => {
+	const page = Number(query.page);
+	return Number.isInteger(page) && page > 1 ? page - 1 : 0;
+};
+
+export const queryToApiParams = (query: ParsedUrlQuery): ProjectsQueryParams =>
+	searchParamsToApiParams(queryToSearchParams(query), queryToPage(query));

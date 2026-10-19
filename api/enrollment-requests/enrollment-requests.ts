@@ -96,8 +96,19 @@ export const unsubscribe = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<unsubscribeResponse>(getUnsubscribeUrl(id, params), {
 		...options,
@@ -106,6 +117,8 @@ export const unsubscribe = async (
 		body: JSON.stringify(unsubscribeOptionsDTO)
 	});
 };
+
+export const getUnsubscribeMutationKey = () => ['unsubscribe'] as const;
 
 export const getUnsubscribeMutationOptions = <
 	TError = EnrollRequestDTO[],
@@ -124,7 +137,7 @@ export const getUnsubscribeMutationOptions = <
 	UnsubscribeMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['unsubscribe'];
+	const mutationKey = getUnsubscribeMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -212,8 +225,19 @@ export const editRequestStatus = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<editRequestStatusResponse>(getEditRequestStatusUrl(id), {
 		...options,
@@ -222,6 +246,8 @@ export const editRequestStatus = async (
 		body: JSON.stringify(enrollRequestStatusDTO)
 	});
 };
+
+export const getEditRequestStatusMutationKey = () => ['editRequestStatus'] as const;
 
 export const getEditRequestStatusMutationOptions = <
 	TError = EnrollRequestDTO,
@@ -240,7 +266,7 @@ export const getEditRequestStatusMutationOptions = <
 	EditRequestStatusMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['editRequestStatus'];
+	const mutationKey = getEditRequestStatusMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -457,8 +483,19 @@ export const createRequest = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<createRequestResponse>(getCreateRequestUrl(), {
 		...options,
@@ -467,6 +504,8 @@ export const createRequest = async (
 		body: JSON.stringify(enrollRequestDTO)
 	});
 };
+
+export const getCreateRequestMutationKey = () => ['createRequest'] as const;
 
 export const getCreateRequestMutationOptions = <
 	TError = EnrollRequestDTO,
@@ -485,7 +524,7 @@ export const getCreateRequestMutationOptions = <
 	CreateRequestMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['createRequest'];
+	const mutationKey = getCreateRequestMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -704,8 +743,19 @@ export const editOneRequest = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<editOneRequestResponse>(getEditOneRequestUrl(id), {
 		...options,
@@ -714,6 +764,8 @@ export const editOneRequest = async (
 		body: JSON.stringify(enrollRequestDTO)
 	});
 };
+
+export const getEditOneRequestMutationKey = () => ['editOneRequest'] as const;
 
 export const getEditOneRequestMutationOptions = <TError = unknown, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -729,7 +781,7 @@ export const getEditOneRequestMutationOptions = <TError = unknown, TContext = un
 	EditOneRequestMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['editOneRequest'];
+	const mutationKey = getEditOneRequestMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
@@ -804,6 +856,8 @@ export const deleteOneEnrollRequest = async (
 	});
 };
 
+export const getDeleteOneEnrollRequestMutationKey = () => ['deleteOneEnrollRequest'] as const;
+
 export const getDeleteOneEnrollRequestMutationOptions = <
 	TError = unknown,
 	TContext = unknown
@@ -821,7 +875,7 @@ export const getDeleteOneEnrollRequestMutationOptions = <
 	DeleteOneEnrollRequestMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['deleteOneEnrollRequest'];
+	const mutationKey = getDeleteOneEnrollRequestMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options

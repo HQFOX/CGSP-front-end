@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useId, useMemo, useState } from 'react';
+import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 
 import {
 	DndContext,
@@ -37,8 +37,6 @@ import {
 	createColumnHelper,
 	flexRender,
 	getCoreRowModel,
-	getFilteredRowModel,
-	getPaginationRowModel,
 	useReactTable
 } from '@tanstack/react-table';
 import { useTranslation } from 'next-i18next/pages';
@@ -98,6 +96,11 @@ export interface ProjectTableProps {
 	handleShowProjectForm: (update: Project) => void;
 	handleDelete: (id: string | undefined) => void;
 	handleUpdateProjectPriority: (projects: Project[]) => void;
+	// Pagination is server-side: rowCount is the total across all pages
+	rowCount: number;
+	pageIndex: number;
+	pageSize: number;
+	onPaginationChange: (pageIndex: number, pageSize: number) => void;
 }
 
 const ProjectTable = ({
@@ -105,9 +108,17 @@ const ProjectTable = ({
 	loading = false,
 	handleShowProjectForm,
 	handleDelete,
-	handleUpdateProjectPriority
+	handleUpdateProjectPriority,
+	rowCount,
+	pageIndex,
+	pageSize,
+	onPaginationChange
 }: ProjectTableProps) => {
 	const [data, setData] = useState<Project[]>(projects);
+
+	useEffect(() => {
+		setData(projects);
+	}, [projects]);
 
 	const dataIds = useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id), [data]);
 
@@ -199,12 +210,10 @@ const ProjectTable = ({
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 		getRowId: (row) => row.id,
-		getFilteredRowModel: getFilteredRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
-		autoResetPageIndex: false
+		manualPagination: true,
+		rowCount,
+		state: { pagination: { pageIndex, pageSize } }
 	});
-
-	const { pageSize, pageIndex } = table.getState().pagination;
 
 	const handleDeleteClose = (confirm: boolean) => {
 		confirm && deleteModal.data && handleDelete(deleteModal.data.id);
@@ -277,16 +286,21 @@ const ProjectTable = ({
 				</TableContainer>
 				<TablePagination
 					component="div"
-					count={table.getFilteredRowModel().rows.length}
+					count={rowCount}
 					page={pageIndex}
 					onPageChange={(_, page) => {
-						table.setPageIndex(page);
+						onPaginationChange(page, pageSize);
 					}}
 					rowsPerPage={pageSize}
-					rowsPerPageOptions={[5, 10, 25, { label: 'Todos', value: data.length }]}
+					rowsPerPageOptions={[
+						5,
+						10,
+						25,
+						...(rowCount > 25 ? [{ label: 'Todos', value: rowCount }] : [])
+					]}
 					onRowsPerPageChange={(e) => {
 						const size = e.target.value ? Number(e.target.value) : 10;
-						table.setPageSize(size);
+						onPaginationChange(0, size);
 					}}
 					ActionsComponent={TableActions}
 					labelRowsPerPage={'Projetos por página'}

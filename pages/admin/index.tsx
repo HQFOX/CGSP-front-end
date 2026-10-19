@@ -3,30 +3,42 @@ import React, { useEffect, useState } from 'react';
 import { Box, Divider, Typography } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
+import { PageProjectListItemDTO } from '../../api/model';
+import { getGetAllProjectsCurrentUrl } from '../../api/project-controller/project-controller';
 import { BasicChart } from '../../components/charts/BasicChart';
 import { dataFetch } from '../../components/forms/utils';
 import { Loading } from '../../components/loading/Loading';
 import { PageContainer } from '../../components/pageContainer/PageContainer';
+
+const CHART_FETCH_PAGE_SIZE = 100;
+
+// The chart plots every current project, so walk through all pages of the list
+const fetchAllCurrentProjects = async (): Promise<Project[]> => {
+	const projects: Project[] = [];
+	let page = 0;
+	let last = false;
+	while (!last) {
+		const res = await dataFetch(
+			'GET',
+			`${process.env.NEXT_PUBLIC_API_URL}${getGetAllProjectsCurrentUrl({ page, size: CHART_FETCH_PAGE_SIZE })}`,
+			null,
+			true
+		);
+		if (!res.ok) throw new Error('Error fetching projects ' + res.status);
+		const body = (await res.json()) as PageProjectListItemDTO;
+		projects.push(...((body.content ?? []) as Project[]));
+		last = body.last ?? true;
+		page++;
+	}
+	return projects;
+};
 
 const DashBoard = () => {
 	const [projects, setProjects] = useState<Project[] | undefined>(undefined);
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const data = dataFetch(
-				'GET',
-				`${process.env.NEXT_PUBLIC_API_URL}/project/current`,
-				null,
-				true
-			).then((res) => {
-				if (res.ok) {
-					return res.json() as unknown as Project[];
-				} else {
-					throw new Error('Error fetching projects ' + res.status);
-				}
-			});
-
-			setProjects(await data);
+			setProjects(await fetchAllCurrentProjects());
 		};
 		fetchData().catch((e) => {
 			// handle the error as needed

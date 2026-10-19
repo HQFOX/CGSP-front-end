@@ -6,11 +6,13 @@ import { Box, Divider } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
-import { ProjectDTO } from '../api/model';
-import { getAllProjectsCurrent } from '../api/project-controller/project-controller';
 import { Title } from '../components/Title';
 import { PageContainer } from '../components/pageContainer/PageContainer';
-import { ProjectInventory } from '../components/projects/projectInventory/ProjectInventory';
+import {
+	ProjectInventory,
+	ProjectInventoryProps
+} from '../components/projects/projectInventory/ProjectInventory';
+import { fetchProjectsPage, queryToApiParams } from '../components/projects/projectInventory/utils';
 
 export const normalizeString = (value: string): string => {
 	return value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -18,7 +20,7 @@ export const normalizeString = (value: string): string => {
 
 export type ViewType = 'card' | 'list' | 'map';
 
-const Projects: NextPage<{ projects: ProjectDTO[] }> = (data) => {
+const Projects: NextPage<ProjectInventoryProps> = (data) => {
 	const { t } = useTranslation(['projectpage', 'common']);
 
 	return (
@@ -29,15 +31,17 @@ const Projects: NextPage<{ projects: ProjectDTO[] }> = (data) => {
 				</Title>
 				<Divider />
 			</Box>
-			<ProjectInventory projects={data.projects as Project[]} />
+			<ProjectInventory initialPage={data.initialPage} initialParams={data.initialParams} />
 		</PageContainer>
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
-	const projects = await getAllProjectsCurrent();
+	const initialParams = queryToApiParams(ctx.query);
+	const initialPage = await fetchProjectsPage(false, initialParams);
 	return {
 		props: {
-			projects,
+			initialPage,
+			initialParams,
 			...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header', 'projectpage']))
 		}
 	};
