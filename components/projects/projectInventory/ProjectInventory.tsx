@@ -1,44 +1,56 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import type { LatLngTuple } from 'leaflet';
 
-import { Fade, Grid } from '@mui/material';
+import { Box, Fade, Grid, Pagination } from '@mui/material';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next/pages';
 import { useRouter } from 'next/router';
 
+import { PageProjectListItemDTO } from '../../../api/model';
 import { Controls } from '../../controls/Controls';
 import { DynamicMap } from '../../map/DynamicMap';
 import ProjectCard from '../ProjectCard';
 import {
+	DISTRICT_OPTIONS,
+	PRICE_RANGE_BOUNDS,
+	ProjectsQueryParams,
 	SearchParams,
+	TYPOLOGY_OPTIONS,
 	ViewType,
 	districtCenterCoordinates,
-	filterResultsByAssignmentStatus,
-	filterResultsByConstructionStatus,
-	filterResultsByLocation,
-	filterResultsByPrice,
-	filterResultsByTitle,
-	filterResultsByTypology,
-	filterResultsByWildCard,
-	getDistricts,
-	getPriceRange,
-	getTypes,
-	getTypologies,
+	fetchProjectsPage,
+	getProjectsQueryKey,
+	isSameQuery,
+	pageToQuery,
+	queryToPage,
 	queryToSearchParams,
+	searchParamsToApiParams,
 	searchParamsToQuery
 } from './utils';
 
+const DEFAULT_CENTER_COORDINATES: LatLngTuple = [38.56633674453089, -7.925327404275489];
+
+const SEARCH_DEBOUNCE_MS = 300;
+
 export interface ProjectInventoryProps {
-	projects: Project[];
+	initialPage?: PageProjectListItemDTO;
+	initialParams?: ProjectsQueryParams;
 	history?: boolean;
 }
 
-export const ProjectInventory = ({ projects = [], history = false }: ProjectInventoryProps) => {
+export const ProjectInventory = ({
+	initialPage,
+	initialParams,
+	history = false
+}: ProjectInventoryProps) => {
 	const router = useRouter();
 
 	const { t } = useTranslation(['projectpage', 'common']);
 
-	const [search, setSearch] = useState<SearchParams>({
+	// Pages using this component are server-side rendered, so router.query is
+	// already populated on the first render and matches the initial params.
+	const [search, setSearch] = useState<SearchParams>(() => ({
 		title: '',
 		district: '',
 		assignmentStatus: [],
@@ -46,49 +58,65 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 		priceRange: [],
 		typologies: [],
 		types: [],
-		wildcard: ''
-	});
+		wildcard: '',
+		...queryToSearchParams(router.query)
+	}));
 
-	const [projectSearchResults, setProjectSearchResults] = useState<Project[]>(projects);
+	const [page, setPage] = useState<number>(() => queryToPage(router.query));
+
+	// The search box updates search.wildcard on every keystroke; the API is only
+	// queried once typing settles.
+	const [titleFilter, setTitleFilter] = useState<string>(search.wildcard);
 
 	const [animationStart, setAnimationStart] = useState(false);
 
-	const [view, setView] = useState<ViewType>('card');
+	const [view, setView] = useState<ViewType>(() =>
+		typeof router.query.view === 'string' ? (router.query.view as ViewType) : 'card'
+	);
 
-	const [centerCoordinates, setCenterCoordinates] = useState<LatLngTuple>([
-		38.56633674453089, -7.925327404275489
-	]);
+	const [centerCoordinates, setCenterCoordinates] = useState<LatLngTuple>(
+		() => districtCenterCoordinates[search.district] ?? DEFAULT_CENTER_COORDINATES
+	);
 
-	const [zoom, setZoom] = useState<number>(6);
+	const [zoom, setZoom] = useState<number>(() =>
+		districtCenterCoordinates[search.district] ? 9 : 6
+	);
 
-	const isInitialized = useRef(false);
-
-	// Initialize state from URL on first ready
 	useEffect(() => {
-		if (!router.isReady) return;
-		const fromQuery = queryToSearchParams(router.query);
-		if (Object.keys(fromQuery).length > 0) {
-			setSearch((prev) => ({ ...prev, ...fromQuery }));
-			if (fromQuery.district && fromQuery.district !== '') {
-				setCenterCoordinates(
-					districtCenterCoordinates[fromQuery.district] ?? [38.56633674453089, -7.925327404275489]
-				);
-				setZoom(districtCenterCoordinates[fromQuery.district] ? 9 : 6);
-			}
-		}
-		if (typeof router.query.view === 'string') {
-			setView(router.query.view as ViewType);
-		}
-		isInitialized.current = true;
-	}, [router.isReady]);
+		if (search.wildcard === titleFilter) return;
+		const timeout = setTimeout(() => {
+			setTitleFilter(search.wildcard);
+			setPage(0);
+		}, SEARCH_DEBOUNCE_MS);
+		return () => clearTimeout(timeout);
+	}, [search.wildcard, titleFilter]);
 
-	// Sync state changes to URL without a full navigation
+	// Sync state changes to URL without a full navigation. Only replace when the
+	// URL actually differs, so mounting (or remounting) never triggers a navigation.
 	useEffect(() => {
-		if (!isInitialized.current) return;
-		const query: Record<string, string> = searchParamsToQuery(search);
+		const query: Record<string, string> = { ...searchParamsToQuery(search), ...pageToQuery(page) };
 		if (view !== 'card') query.view = view;
+		if (isSameQuery(query, router.query)) return;
 		router.replace({ query }, undefined, { shallow: true });
-	}, [search, view]);
+	}, [search, view, page]);
+
+	const params = useMemo(
+		() => searchParamsToApiParams({ ...search, wildcard: titleFilter }, page),
+		[search, titleFilter, page]
+	);
+
+	const isInitialParams = JSON.stringify(params) === JSON.stringify(initialParams);
+
+	const { data, isPlaceholderData } = useQuery({
+		queryKey: getProjectsQueryKey(history, params),
+		queryFn: ({ signal }) => fetchProjectsPage(history, params, { signal }),
+		initialData: isInitialParams ? initialPage : undefined,
+		placeholderData: keepPreviousData,
+		staleTime: 60 * 1000
+	});
+
+	const projects = (data?.content ?? []) as Project[];
+	const totalPages = data?.totalPages ?? 0;
 
 	const handleClick = (projectId: string) => {
 		router.push(`projects/${projectId}`);
@@ -96,30 +124,13 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 
 	useEffect(() => {
 		setAnimationStart(true);
-	}, [projectSearchResults]);
-
-	useMemo(() => {
-		let results = projects;
-		results = filterResultsByLocation(search.district, results) as Project[];
-		results = filterResultsByTitle(search.title, results) as Project[];
-		results = filterResultsByWildCard(search.wildcard, results) as Project[];
-		if (search.priceRange.length > 0)
-			results = filterResultsByPrice(search.priceRange, results) as Project[];
-		if (search.typologies.length > 0)
-			results = filterResultsByTypology(search.typologies, results) as Project[];
-		if (search.assignmentStatus.length > 0)
-			results = filterResultsByAssignmentStatus(search.assignmentStatus, results) as Project[];
-		if (search.constructionStatus.length > 0)
-			results = filterResultsByConstructionStatus(search.constructionStatus, results) as Project[];
-		setProjectSearchResults(results);
-	}, [search, projects]);
+	}, [data]);
 
 	const onDistrictChange = (district: string) => {
 		const value = district === t('allm') ? '' : district;
 		setSearch((search) => ({ ...search, district: value }));
-		setCenterCoordinates(
-			districtCenterCoordinates[value] ?? [38.56633674453089, -7.925327404275489]
-		);
+		setPage(0);
+		setCenterCoordinates(districtCenterCoordinates[value] ?? DEFAULT_CENTER_COORDINATES);
 		setZoom(districtCenterCoordinates[value] == undefined ? 6 : 9);
 	};
 
@@ -153,9 +164,9 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 			assignmentStatus: draft.assignmentStatus,
 			constructionStatus: draft.constructionStatus,
 			priceRange: draft.priceRange,
-			typologies: draft.typologies,
-			types: draft.types
+			typologies: draft.typologies
 		}));
+		setPage(0);
 	};
 
 	const onClear = () => {
@@ -164,9 +175,14 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 			assignmentStatus: [],
 			constructionStatus: [],
 			priceRange: [],
-			typologies: [],
-			types: []
+			typologies: []
 		}));
+		setPage(0);
+	};
+
+	const onPageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+		setPage(value - 1);
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
 	return (
@@ -174,10 +190,9 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 			<Controls
 				search={{ ...search, district: search.district || t('allm') }}
 				view={view}
-				districts={getDistricts(projects, t('allm'))}
-				priceRange={getPriceRange(projects)}
-				typologies={getTypologies(projects)}
-				types={getTypes(projects)}
+				districts={[t('allm'), ...DISTRICT_OPTIONS]}
+				priceRange={PRICE_RANGE_BOUNDS}
+				typologies={TYPOLOGY_OPTIONS}
 				onWildCardChange={onWildCardChange}
 				onViewChange={onViewChange}
 				onStatusChange={history ? undefined : onStatusChange}
@@ -185,31 +200,42 @@ export const ProjectInventory = ({ projects = [], history = false }: ProjectInve
 				onApply={onApply}
 				onClear={onClear}
 			/>
-			<Grid container>
-				{view === 'card' &&
-					projectSearchResults.map((project, i) => (
-						<Fade
-							key={project.id}
-							in={animationStart}
-							style={{ transitionDelay: animationStart ? `${i}00ms` : '0ms' }}
-							unmountOnExit>
-							<Grid size={{ xs: 12, md: 6 }} p={1} onClick={() => handleClick(project.id)}>
-								<ProjectCard key={project.id} project={project} />
-							</Grid>
-						</Fade>
-					))}
-			</Grid>
-			{view === 'map' && (
-				<div id="map" style={{ height: 480, padding: '8px' }}>
-					<DynamicMap
-						centerCoordinates={centerCoordinates}
-						projects={projectSearchResults}
-						zoom={zoom}
-						currentDistrict={search.district}
-						changeView
+			<Box sx={{ opacity: isPlaceholderData ? 0.5 : 1, transition: 'opacity 200ms' }}>
+				<Grid container>
+					{view === 'card' &&
+						projects.map((project, i) => (
+							<Fade
+								key={project.id}
+								in={animationStart}
+								style={{ transitionDelay: animationStart ? `${i}00ms` : '0ms' }}
+								unmountOnExit>
+								<Grid size={{ xs: 12, md: 6 }} p={1} onClick={() => handleClick(project.id)}>
+									<ProjectCard key={project.id} project={project} />
+								</Grid>
+							</Fade>
+						))}
+				</Grid>
+				{view === 'map' && (
+					<div id="map" style={{ height: 480, padding: '8px' }}>
+						<DynamicMap
+							centerCoordinates={centerCoordinates}
+							projects={projects}
+							zoom={zoom}
+							currentDistrict={search.district}
+							changeView
+						/>
+					</div>
+				)}
+			</Box>
+				<Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+					<Pagination
+						count={totalPages}
+						page={page + 1}
+						onChange={onPageChange}
+						color="primary"
+						disabled={isPlaceholderData}
 					/>
-				</div>
-			)}
+				</Box>
 		</>
 	);
 };

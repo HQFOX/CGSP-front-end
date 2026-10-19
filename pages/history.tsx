@@ -6,13 +6,15 @@ import { Box, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
-import { ProjectDTO } from '../api/model';
-import { getAllProjectsHistory } from '../api/project-controller/project-controller';
 import { Title } from '../components/Title';
 import { PageContainer } from '../components/pageContainer/PageContainer';
-import { ProjectInventory } from '../components/projects/projectInventory/ProjectInventory';
+import {
+	ProjectInventory,
+	ProjectInventoryProps
+} from '../components/projects/projectInventory/ProjectInventory';
+import { fetchProjectsPage, queryToApiParams } from '../components/projects/projectInventory/utils';
 
-const History: NextPage<{ projects: ProjectDTO[] }> = (data) => {
+const History: NextPage<ProjectInventoryProps> = (data) => {
 	const { t } = useTranslation(['history', 'projectpage', 'common']);
 
 	return (
@@ -26,15 +28,17 @@ const History: NextPage<{ projects: ProjectDTO[] }> = (data) => {
 					{t('historyP1')}
 				</Typography>
 			</Box>
-			<ProjectInventory projects={data.projects as Project[]} history />
+			<ProjectInventory initialPage={data.initialPage} initialParams={data.initialParams} history />
 		</PageContainer>
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
-	const projects = await getAllProjectsHistory();
+	const initialParams = queryToApiParams(ctx.query);
+	const initialPage = await fetchProjectsPage(true, initialParams);
 	return {
 		props: {
-			projects,
+			initialPage,
+			initialParams,
 			...(await serverSideTranslations(ctx.locale, [
 				'common',
 				'footer',

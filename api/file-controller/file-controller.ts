@@ -68,8 +68,19 @@ export const getPressingUrl = async (
 	): Record<string, string | readonly string[]> => {
 		if (!h) return {};
 		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Array.isArray(h)) return Object.fromEntries(h);
-		return h;
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string]
+				)
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
 	};
 	return customFetch<getPressingUrlResponse>(getGetPressingUrlUrl(), {
 		...options,
@@ -78,6 +89,8 @@ export const getPressingUrl = async (
 		body: JSON.stringify(fileDTO)
 	});
 };
+
+export const getGetPressingUrlMutationKey = () => ['getPressingUrl'] as const;
 
 export const getGetPressingUrlMutationOptions = <TError = unknown, TContext = unknown>(options?: {
 	mutation?: UseMutationOptions<
@@ -93,7 +106,7 @@ export const getGetPressingUrlMutationOptions = <TError = unknown, TContext = un
 	GetPressingUrlMutationVariables,
 	TContext
 > => {
-	const mutationKey = ['getPressingUrl'];
+	const mutationKey = getGetPressingUrlMutationKey();
 	const { mutation: mutationOptions, request: requestOptions } = options
 		? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
 			? options
