@@ -23,6 +23,7 @@ import type {
 
 import { customFetch } from '.././custom-fetch';
 import type {
+	FilterValuesDTO,
 	GetAllProjectsCurrentParams,
 	GetAllProjectsHistoryParams,
 	PageProjectListItemDTO,
@@ -1032,6 +1033,130 @@ export function useGetAllProjectsHistory<
 	queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 	const queryOptions = getGetAllProjectsHistoryQueryOptions(params, options);
+
+	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+		queryKey: DataTag<QueryKey, TData, TError>;
+	};
+
+	return withQueryKey(query, queryOptions.queryKey);
+}
+
+export type getFilterValuesResponse200 = {
+	data: FilterValuesDTO;
+	status: 200;
+};
+
+export type getFilterValuesResponseSuccess = getFilterValuesResponse200 & {
+	headers: Headers;
+};
+export type getFilterValuesResponse = getFilterValuesResponseSuccess;
+
+export const getGetFilterValuesUrl = () => {
+	return `/project/filter-values`;
+};
+
+/**
+ * Retrieves the values available for filtering projects: the highest typology price across all projects (null if no typology has a price) and the distinct set of typologies.
+ * @summary Get project filter values
+ */
+export const getFilterValues = async (
+	options?: Parameters<typeof customFetch>[1]
+): Promise<getFilterValuesResponse> => {
+	return customFetch<getFilterValuesResponse>(getGetFilterValuesUrl(), {
+		...options,
+		method: 'GET'
+	});
+};
+
+export const getGetFilterValuesQueryKey = () => {
+	return [`/project/filter-values`] as const;
+};
+
+export const getGetFilterValuesQueryOptions = <
+	TData = Awaited<ReturnType<typeof getFilterValues>>,
+	TError = unknown
+>(options?: {
+	query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilterValues>>, TError, TData>>;
+	request?: SecondParameter<typeof customFetch>;
+}) => {
+	const { query: queryOptions, request: requestOptions } = options ?? {};
+
+	const queryKey = queryOptions?.queryKey ?? getGetFilterValuesQueryKey();
+
+	const queryFn: QueryFunction<Awaited<ReturnType<typeof getFilterValues>>> = ({ signal }) =>
+		getFilterValues({ signal, ...requestOptions });
+
+	return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+		Awaited<ReturnType<typeof getFilterValues>>,
+		TError,
+		TData
+	> & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetFilterValuesQueryResult = NonNullable<Awaited<ReturnType<typeof getFilterValues>>>;
+export type GetFilterValuesQueryError = unknown;
+
+export function useGetFilterValues<
+	TData = Awaited<ReturnType<typeof getFilterValues>>,
+	TError = unknown
+>(
+	options: {
+		query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilterValues>>, TError, TData>> &
+			Pick<
+				DefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getFilterValues>>,
+					TError,
+					Awaited<ReturnType<typeof getFilterValues>>
+				>,
+				'initialData'
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetFilterValues<
+	TData = Awaited<ReturnType<typeof getFilterValues>>,
+	TError = unknown
+>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilterValues>>, TError, TData>> &
+			Pick<
+				UndefinedInitialDataOptions<
+					Awaited<ReturnType<typeof getFilterValues>>,
+					TError,
+					Awaited<ReturnType<typeof getFilterValues>>
+				>,
+				'initialData'
+			>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+export function useGetFilterValues<
+	TData = Awaited<ReturnType<typeof getFilterValues>>,
+	TError = unknown
+>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilterValues>>, TError, TData>>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+/**
+ * @summary Get project filter values
+ */
+
+export function useGetFilterValues<
+	TData = Awaited<ReturnType<typeof getFilterValues>>,
+	TError = unknown
+>(
+	options?: {
+		query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getFilterValues>>, TError, TData>>;
+		request?: SecondParameter<typeof customFetch>;
+	},
+	queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+	const queryOptions = getGetFilterValuesQueryOptions(options);
 
 	const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
 		queryKey: DataTag<QueryKey, TData, TError>;

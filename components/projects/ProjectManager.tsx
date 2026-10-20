@@ -7,6 +7,7 @@ import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-quer
 import router from 'next/router';
 
 import { PageProjectListItemDTO } from '../../api/model';
+import { getGetFilterValuesQueryKey } from '../../api/project-controller/project-controller';
 import { Loading, StyledButton } from '../../components';
 import { ProjectForm } from '../forms/ProjectForm';
 import { dataFetch } from '../forms/utils';
@@ -74,11 +75,13 @@ export const ProjectManager = ({ type, initialPage }: ProjectManagerProps) => {
 		setPriorityList(initialPriorityList);
 	}, [initialPriorityList]);
 
-	// Edits can move a project between the current and history lists, so refresh both
+	// Edits can move a project between the current and history lists, so refresh both.
+	// They can also change the available typologies and the highest price.
 	const refreshData = async () => {
 		await Promise.all([
 			queryClient.invalidateQueries({ queryKey: getProjectsQueryKey(false) }),
-			queryClient.invalidateQueries({ queryKey: getProjectsQueryKey(true) })
+			queryClient.invalidateQueries({ queryKey: getProjectsQueryKey(true) }),
+			queryClient.invalidateQueries({ queryKey: getGetFilterValuesQueryKey() })
 		]);
 	};
 

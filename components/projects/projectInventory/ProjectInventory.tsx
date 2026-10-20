@@ -7,19 +7,21 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next/pages';
 import { useRouter } from 'next/router';
 
-import { PageProjectListItemDTO } from '../../../api/model';
+import { FilterValuesDTO, PageProjectListItemDTO } from '../../../api/model';
+import { getGetFilterValuesQueryKey } from '../../../api/project-controller/project-controller';
 import { Controls } from '../../controls/Controls';
 import { DynamicMap } from '../../map/DynamicMap';
 import ProjectCard from '../ProjectCard';
 import {
 	DISTRICT_OPTIONS,
-	PRICE_RANGE_BOUNDS,
 	ProjectsQueryParams,
 	SearchParams,
-	TYPOLOGY_OPTIONS,
 	ViewType,
 	districtCenterCoordinates,
+	fetchFilterValues,
 	fetchProjectsPage,
+	filterValuesToPriceRange,
+	filterValuesToTypologies,
 	getProjectsQueryKey,
 	isSameQuery,
 	pageToQuery,
@@ -36,12 +38,14 @@ const SEARCH_DEBOUNCE_MS = 300;
 export interface ProjectInventoryProps {
 	initialPage?: PageProjectListItemDTO;
 	initialParams?: ProjectsQueryParams;
+	initialFilterValues?: FilterValuesDTO | null;
 	history?: boolean;
 }
 
 export const ProjectInventory = ({
 	initialPage,
 	initialParams,
+	initialFilterValues,
 	history = false
 }: ProjectInventoryProps) => {
 	const router = useRouter();
@@ -118,6 +122,16 @@ export const ProjectInventory = ({
 	const projects = (data?.content ?? []) as Project[];
 	const totalPages = data?.totalPages ?? 0;
 
+	const { data: filterValues } = useQuery({
+		queryKey: getGetFilterValuesQueryKey(),
+		queryFn: ({ signal }) => fetchFilterValues({ signal }),
+		initialData: initialFilterValues ?? undefined,
+		staleTime: 60 * 1000
+	});
+
+	const priceRange = useMemo(() => filterValuesToPriceRange(filterValues), [filterValues]);
+	const typologies = useMemo(() => filterValuesToTypologies(filterValues), [filterValues]);
+
 	const handleClick = (projectId: string) => {
 		router.push(`projects/${projectId}`);
 	};
@@ -191,8 +205,8 @@ export const ProjectInventory = ({
 				search={{ ...search, district: search.district || t('allm') }}
 				view={view}
 				districts={[t('allm'), ...DISTRICT_OPTIONS]}
-				priceRange={PRICE_RANGE_BOUNDS}
-				typologies={TYPOLOGY_OPTIONS}
+				priceRange={priceRange}
+				typologies={typologies}
 				onWildCardChange={onWildCardChange}
 				onViewChange={onViewChange}
 				onStatusChange={history ? undefined : onStatusChange}
@@ -227,6 +241,7 @@ export const ProjectInventory = ({
 					</div>
 				)}
 			</Box>
+			{totalPages > 0 && (
 				<Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
 					<Pagination
 						count={totalPages}
@@ -236,6 +251,7 @@ export const ProjectInventory = ({
 						disabled={isPlaceholderData}
 					/>
 				</Box>
+			)}
 		</>
 	);
 };

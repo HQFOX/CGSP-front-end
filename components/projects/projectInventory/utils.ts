@@ -1,10 +1,15 @@
 import type { LatLngTuple } from 'leaflet';
 import type { ParsedUrlQuery } from 'querystring';
 
-import { GetAllProjectsCurrentParams, PageProjectListItemDTO } from '../../../api/model';
+import {
+	FilterValuesDTO,
+	GetAllProjectsCurrentParams,
+	PageProjectListItemDTO
+} from '../../../api/model';
 import {
 	getAllProjectsCurrent,
 	getAllProjectsHistory,
+	getFilterValues,
 	getGetAllProjectsCurrentQueryKey,
 	getGetAllProjectsHistoryQueryKey
 } from '../../../api/project-controller/project-controller';
@@ -28,11 +33,6 @@ export type ViewType = 'card' | 'list' | 'map';
 export type ProjectsQueryParams = GetAllProjectsCurrentParams;
 
 export const PROJECTS_PAGE_SIZE = 4;
-
-export const TYPOLOGY_OPTIONS = ['T0', 'T1', 'T2', 'T3', 'T4', 'T5'];
-
-// Bounds for the price slider; the API doesn't expose the price range of the dataset
-export const PRICE_RANGE_BOUNDS = [0, 500000];
 
 export const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
 	Évora: Evora.geojson.properties.centros.centro.reverse() as LatLngTuple,
@@ -85,7 +85,22 @@ export const fetchProjectsPage = async (
 export const getProjectsQueryKey = (history: boolean, params?: ProjectsQueryParams) =>
 	history ? getGetAllProjectsHistoryQueryKey(params) : getGetAllProjectsCurrentQueryKey(params);
 
-export const searchParamsToQuery = (search: SearchParams): Record<string, string> => {
+export const fetchFilterValues = async (options?: RequestInit): Promise<FilterValuesDTO> =>
+	// customFetch resolves with the response body, not the { data, status } envelope orval types describe
+	(await getFilterValues(options)) as unknown as FilterValuesDTO;
+
+// The price slider always starts at 0; without any priced typology there's no upper bound to offer
+export const filterValuesToPriceRange = (filterValues?: FilterValuesDTO | null): number[] => [
+	0,
+	filterValues?.price ?? 0
+];
+
+export const filterValuesToTypologies = (filterValues?: FilterValuesDTO | null): string[] =>
+	[...(filterValues?.typologies ?? [])].sort((a, b) =>
+		a.localeCompare(b, undefined, { numeric: true })
+	);
+
+export const searchParamsToQuery =(search: SearchParams): Record<string, string> => {
 	const query: Record<string, string> = {};
 	if (search.wildcard) query.q = search.wildcard;
 	if (search.district) query.district = search.district;

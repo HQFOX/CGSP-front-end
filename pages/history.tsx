@@ -12,7 +12,11 @@ import {
 	ProjectInventory,
 	ProjectInventoryProps
 } from '../components/projects/projectInventory/ProjectInventory';
-import { fetchProjectsPage, queryToApiParams } from '../components/projects/projectInventory/utils';
+import {
+	fetchFilterValues,
+	fetchProjectsPage,
+	queryToApiParams
+} from '../components/projects/projectInventory/utils';
 
 const History: NextPage<ProjectInventoryProps> = (data) => {
 	const { t } = useTranslation(['history', 'projectpage', 'common']);
@@ -28,17 +32,27 @@ const History: NextPage<ProjectInventoryProps> = (data) => {
 					{t('historyP1')}
 				</Typography>
 			</Box>
-			<ProjectInventory initialPage={data.initialPage} initialParams={data.initialParams} history />
+			<ProjectInventory
+				initialPage={data.initialPage}
+				initialParams={data.initialParams}
+				initialFilterValues={data.initialFilterValues}
+				history
+			/>
 		</PageContainer>
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
 	const initialParams = queryToApiParams(ctx.query);
-	const initialPage = await fetchProjectsPage(true, initialParams);
+	const [initialPage, initialFilterValues] = await Promise.all([
+		fetchProjectsPage(true, initialParams),
+		// The filters are secondary to the listing, so the client retries if this fails
+		fetchFilterValues().catch(() => null)
+	]);
 	return {
 		props: {
 			initialPage,
 			initialParams,
+			initialFilterValues,
 			...(await serverSideTranslations(ctx.locale, [
 				'common',
 				'footer',

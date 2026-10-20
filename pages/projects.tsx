@@ -12,7 +12,11 @@ import {
 	ProjectInventory,
 	ProjectInventoryProps
 } from '../components/projects/projectInventory/ProjectInventory';
-import { fetchProjectsPage, queryToApiParams } from '../components/projects/projectInventory/utils';
+import {
+	fetchFilterValues,
+	fetchProjectsPage,
+	queryToApiParams
+} from '../components/projects/projectInventory/utils';
 
 export const normalizeString = (value: string): string => {
 	return value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -31,17 +35,26 @@ const Projects: NextPage<ProjectInventoryProps> = (data) => {
 				</Title>
 				<Divider />
 			</Box>
-			<ProjectInventory initialPage={data.initialPage} initialParams={data.initialParams} />
+			<ProjectInventory
+				initialPage={data.initialPage}
+				initialParams={data.initialParams}
+				initialFilterValues={data.initialFilterValues}
+			/>
 		</PageContainer>
 	);
 };
 export const getServerSideProps = async (ctx: any) => {
 	const initialParams = queryToApiParams(ctx.query);
-	const initialPage = await fetchProjectsPage(false, initialParams);
+	const [initialPage, initialFilterValues] = await Promise.all([
+		fetchProjectsPage(false, initialParams),
+		// The filters are secondary to the listing, so the client retries if this fails
+		fetchFilterValues().catch(() => null)
+	]);
 	return {
 		props: {
 			initialPage,
 			initialParams,
+			initialFilterValues,
 			...(await serverSideTranslations(ctx.locale, ['common', 'footer', 'header', 'projectpage']))
 		}
 	};
