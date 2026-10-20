@@ -12,6 +12,7 @@ export * from './enrollRequestLogsDTO';
 export * from './enrollRequestStatusDTO';
 export * from './enrollRequestStatusDTOStatus';
 export * from './fileDTO';
+export * from './filterValuesDTO';
 export * from './getAllProjectsCurrentAssignmentStatusesItem';
 export * from './getAllProjectsCurrentConstructionStatusesItem';
 export * from './getAllProjectsCurrentParams';

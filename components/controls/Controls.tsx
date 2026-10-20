@@ -95,6 +95,13 @@ export const Controls = ({
 		}
 	}, [appliedKey, search]);
 
+	// The bounds come from the API and may arrive or change after mount; keep the
+	// slider at the full range unless a price filter is being edited or applied.
+	const [minPrice, maxPrice] = priceRange;
+	React.useEffect(() => {
+		if (draft.priceRange.length === 0) setPriceRangeState([minPrice, maxPrice]);
+	}, [minPrice, maxPrice]);
+
 	const handleConstructionStatusChange = (
 		event: React.ChangeEvent<HTMLInputElement>,
 		checked: boolean
