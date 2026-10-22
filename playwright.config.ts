@@ -7,7 +7,11 @@ import path from 'path';
 
 import { defineConfig, devices } from '@playwright/test';
 
-dotenv.config({ path: path.resolve(__dirname, '.env.production') });
+dotenv.config({ path: path.resolve(__dirname, '.env.development') });
+
+// The e2e suite runs against a local backend container using the dev profile
+const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_IMAGE = process.env.BACKEND_IMAGE ?? 'hqfox/cgsp-backend:latest';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -71,11 +75,24 @@ export default defineConfig({
 		// },
 	],
 
-	/* Run your local dev server before starting the tests */
-	webServer: {
-		command: 'npm run build && npm run start',
-		url: 'http://localhost:3000',
-		reuseExistingServer: !process.env.CI,
-		timeout: 120 * 1000 // build takes longer, bump the timeout
-	}
+	/* Start the backend container and the local dev server before starting the tests */
+	webServer: [
+		{
+			// The image's entrypoint forces the prod profile, a program argument overrides it
+			command: `docker run --rm --pull always -p 8080:8080 ${BACKEND_IMAGE} --spring.profiles.active=dev`,
+			url: `${BACKEND_URL}/project/filter-values`,
+			reuseExistingServer: !process.env.CI,
+			timeout: 180 * 1000, // image pull + spring boot startup
+			// SIGTERM lets docker stop and remove the container, the default SIGKILL would leave it running
+			gracefulShutdown: { signal: 'SIGTERM', timeout: 15 * 1000 }
+		},
+		{
+			command: 'npm run build && npm run start',
+			url: 'http://localhost:3000',
+			reuseExistingServer: !process.env.CI,
+			timeout: 120 * 1000, // build takes longer, bump the timeout
+			// Takes precedence over .env.production during next build
+			env: { API_URL: BACKEND_URL, NEXT_PUBLIC_API_URL: BACKEND_URL }
+		}
+	]
 });
