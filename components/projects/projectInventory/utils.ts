@@ -100,7 +100,7 @@ export const filterValuesToTypologies = (filterValues?: FilterValuesDTO | null):
 		a.localeCompare(b, undefined, { numeric: true })
 	);
 
-export const searchParamsToQuery =(search: SearchParams): Record<string, string> => {
+export const searchParamsToQuery = (search: SearchParams): Record<string, string> => {
 	const query: Record<string, string> = {};
 	if (search.wildcard) query.q = search.wildcard;
 	if (search.district) query.district = search.district;
