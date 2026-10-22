@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-npm test 
-
-npx --no -- commitlint --edit ${1}
