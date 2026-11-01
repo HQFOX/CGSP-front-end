@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 
-import { AccountBox, Analytics, Feed, Foundation } from '@mui/icons-material';
+import { AccountBox, Analytics, Feed, Foundation, ManageSearch } from '@mui/icons-material';
 import Head from 'next/head';
 
 import { PageItem } from '../TreeList/TreeList';
@@ -49,6 +49,12 @@ const pages: PageItem[] = [
 		text: 'Inscrições',
 		path: '/admin/enrollrequests',
 		icon: <AccountBox />
+	},
+	{
+		id: 8,
+		text: 'Auditoria',
+		path: '/admin/auditlogs',
+		icon: <ManageSearch />
 	}
 ];
 

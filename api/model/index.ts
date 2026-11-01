@@ -6,6 +6,8 @@
  * OpenAPI spec version: 1.0
  */
 
+export * from './auditLogDTO';
+export * from './auditLogDTOOutcome';
 export * from './authRequestDTO';
 export * from './enrollRequestDTO';
 export * from './enrollRequestLogsDTO';
@@ -19,8 +21,11 @@ export * from './getAllProjectsCurrentParams';
 export * from './getAllProjectsHistoryAssignmentStatusesItem';
 export * from './getAllProjectsHistoryConstructionStatusesItem';
 export * from './getAllProjectsHistoryParams';
+export * from './getAuditLogsOutcome';
+export * from './getAuditLogsParams';
 export * from './jsonNode';
 export * from './pageableObject';
+export * from './pageAuditLogDTO';
 export * from './pageProjectListItemDTO';
 export * from './presignedLinkDTO';
 export * from './projectDTO';

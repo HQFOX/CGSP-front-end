@@ -514,12 +514,12 @@ export const useCreateProject = <TError = unknown, TContext = unknown>(
 	return useMutation(getCreateProjectMutationOptions(options), queryClient);
 };
 export type getOneProjectResponse200 = {
-	data: ProjectDTO;
+	data: ProjectListItemDTO;
 	status: 200;
 };
 
 export type getOneProjectResponse404 = {
-	data: ProjectDTO;
+	data: ProjectListItemDTO;
 	status: 404;
 };
 
@@ -537,7 +537,7 @@ export const getGetOneProjectUrl = (id: number) => {
 };
 
 /**
- * Retrieves a single project by its unique identifier.
+ * Retrieves a single project by its unique identifier. Authenticated users receive the detailed project; anonymous users receive public project data.
  * @summary Get project by ID
  */
 export const getOneProject = async (
@@ -556,7 +556,7 @@ export const getGetOneProjectQueryKey = (id: number) => {
 
 export const getGetOneProjectQueryOptions = <
 	TData = Awaited<ReturnType<typeof getOneProject>>,
-	TError = ProjectDTO
+	TError = ProjectListItemDTO
 >(
 	id: number,
 	options?: {
@@ -582,11 +582,11 @@ export const getGetOneProjectQueryOptions = <
 };
 
 export type GetOneProjectQueryResult = NonNullable<Awaited<ReturnType<typeof getOneProject>>>;
-export type GetOneProjectQueryError = ProjectDTO;
+export type GetOneProjectQueryError = ProjectListItemDTO;
 
 export function useGetOneProject<
 	TData = Awaited<ReturnType<typeof getOneProject>>,
-	TError = ProjectDTO
+	TError = ProjectListItemDTO
 >(
 	id: number,
 	options: {
@@ -605,7 +605,7 @@ export function useGetOneProject<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 export function useGetOneProject<
 	TData = Awaited<ReturnType<typeof getOneProject>>,
-	TError = ProjectDTO
+	TError = ProjectListItemDTO
 >(
 	id: number,
 	options?: {
@@ -624,7 +624,7 @@ export function useGetOneProject<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 export function useGetOneProject<
 	TData = Awaited<ReturnType<typeof getOneProject>>,
-	TError = ProjectDTO
+	TError = ProjectListItemDTO
 >(
 	id: number,
 	options?: {
@@ -639,7 +639,7 @@ export function useGetOneProject<
 
 export function useGetOneProject<
 	TData = Awaited<ReturnType<typeof getOneProject>>,
-	TError = ProjectDTO
+	TError = ProjectListItemDTO
 >(
 	id: number,
 	options?: {
