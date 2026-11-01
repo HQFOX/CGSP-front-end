@@ -12,13 +12,13 @@ import type { SortObject } from './sortObject';
 export interface PageProjectListItemDTO {
 	totalPages?: number;
 	totalElements?: number;
-	pageable?: PageableObject;
-	first?: boolean;
-	last?: boolean;
 	size?: number;
 	content?: ProjectListItemDTO[];
 	number?: number;
+	pageable?: PageableObject;
 	sort?: SortObject;
 	numberOfElements?: number;
+	first?: boolean;
+	last?: boolean;
 	empty?: boolean;
 }
