@@ -141,7 +141,13 @@ export const ProjectManager = ({ type, initialPage }: ProjectManagerProps) => {
 
 	return (
 		<>
-			<Grid container mt={2} mb={2} spacing={2}>
+			<Grid
+				container
+				spacing={2}
+				sx={{
+					mt: 2,
+					mb: 2
+				}}>
 				<Grid>
 					<StyledButton
 						startIcon={<Add />}

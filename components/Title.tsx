@@ -7,16 +7,18 @@ const StyledTypography = styled(Typography)({
 	textTransform: 'capitalize'
 });
 
-export interface TitleProps extends TypographyProps {}
+export interface TitleProps extends TypographyProps {
+	fontSize?: React.CSSProperties['fontSize'];
+	letterSpacing?: React.CSSProperties['letterSpacing'];
+	lineHeight?: React.CSSProperties['lineHeight'];
+}
 
 export const Title = (props: TitleProps) => {
-	const { children, fontSize = 18, letterSpacing = -0.54, lineHeight = 1.8, ...others } = props;
+	const { children, fontSize = 18, letterSpacing = -0.54, lineHeight = 1.8, sx, ...others } = props;
 
 	return (
 		<StyledTypography
-			fontSize={fontSize}
-			letterSpacing={letterSpacing}
-			lineHeight={lineHeight}
+			sx={[{ fontSize, letterSpacing, lineHeight }, ...(Array.isArray(sx) ? sx : [sx])]}
 			{...others}>
 			{children}
 		</StyledTypography>

@@ -34,10 +34,15 @@ const Footer = () => {
 						title="Facebook Page">
 						<FacebookIcon fontSize="large" aria-label="Facebook Page Icon" />
 					</Link>
-					<Typography variant="subtitle1" fontWeight={700} component={'h1'}>
+					<Typography
+						variant="subtitle1"
+						component={'h1'}
+						sx={{
+							fontWeight: 700
+						}}>
 						{t('supportEntities')}:
 					</Typography>
-					<StyledStack direction="row" gap={1}>
+					<StyledStack direction="row" sx={{ gap: 1 }}>
 						<Typography
 							variant="subtitle1"
 							component={Link}
@@ -49,7 +54,7 @@ const Footer = () => {
 						</Typography>
 						<Image src={ihru} alt="IHRU logo" width={150} height={30} />
 					</StyledStack>
-					<StyledStack direction="row" gap={1}>
+					<StyledStack direction="row" sx={{ gap: 1 }}>
 						<Typography
 							variant="subtitle1"
 							component={Link}
@@ -64,33 +69,42 @@ const Footer = () => {
 				<Grid
 					className={styles.item}
 					size={{ xs: 12, md: 4 }}
-					display="flex"
-					justifyContent="center"
-					alignItems="center">
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center'
+					}}>
 					<Image src={logo} alt="Cooperativa Giraldo Sem Pavor logo" width={150} height={50} />
 				</Grid>
 				<Grid
 					className={styles.item}
 					size={{ xs: 12, md: 4 }}
-					textAlign="right"
 					component="address"
-					fontStyle="normal">
-					<Typography variant="h5" fontWeight={600} component={'h2'}>
+					sx={{
+						textAlign: 'right',
+						fontStyle: 'normal'
+					}}>
+					<Typography
+						variant="h5"
+						component={'h2'}
+						sx={{
+							fontWeight: 600
+						}}>
 						{t('contactsTitle')}:
 					</Typography>
-					<StyledStack direction="row" gap={1} side="right">
+					<StyledStack direction="row" sx={{ gap: 1 }} side="right">
 						<HomeRounded />
 						<Typography variant="subtitle1" component={'span'}>
 							{t('address')}: Évora B. Malagueira R. do Sarrabulho 4{' '}
 						</Typography>
 					</StyledStack>
-					<StyledStack direction="row" gap={1} side="right">
+					<StyledStack direction="row" sx={{ gap: 1 }} side="right">
 						<LocalPhone />
 						<Typography variant="subtitle1" component={'span'}>
 							{t('telephone')}: 266737970, 963022787
 						</Typography>
 					</StyledStack>
-					<StyledStack direction="row" gap={1} side="right">
+					<StyledStack direction="row" sx={{ gap: 1 }} side="right">
 						<Email />
 						<Typography variant="subtitle1" component={'span'}>
 							{t('email')}: geral@cchegiraldosp.pt

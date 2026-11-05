@@ -91,13 +91,23 @@ export const EnrollRequestForm = ({
 	return (
 		<Paper sx={{ mt: 4, minHeight: 600 }}>
 			<Container>
-				<Grid container pt={2}>
-					<Grid mt={4}>
+				<Grid
+					container
+					sx={{
+						pt: 2
+					}}>
+					<Grid
+						sx={{
+							mt: 4
+						}}>
 						<Typography variant={'h5'}>
 							{request ? 'Editar Pedido de Inscrição' : 'Criar Pedido de Inscrição'}
 						</Typography>
 					</Grid>
-					<Grid ml="auto">
+					<Grid
+						sx={{
+							ml: 'auto'
+						}}>
 						<IconButton
 							onClick={() => {
 								success ? onCancel() : setCancelModal(true);
@@ -113,7 +123,14 @@ export const EnrollRequestForm = ({
 					/>
 				) : (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
+						<Grid
+							container
+							rowSpacing={4}
+							columnSpacing={4}
+							sx={{
+								pb: 2,
+								pt: 4
+							}}>
 							<Grid size={{ xs: 6 }}>
 								<TextField
 									id="first-name"
@@ -193,7 +210,10 @@ export const EnrollRequestForm = ({
 									helperText="Se este campo não for alterado a data será a de criação."
 								/>
 							</Grid>
-							<Grid ml="auto">
+							<Grid
+								sx={{
+									ml: 'auto'
+								}}>
 								{submitting ? (
 									<Loading />
 								) : success ? (

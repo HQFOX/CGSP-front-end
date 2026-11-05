@@ -223,7 +223,12 @@ export const ProjectInventory = ({
 								in={animationStart}
 								style={{ transitionDelay: animationStart ? `${i}00ms` : '0ms' }}
 								unmountOnExit>
-								<Grid size={{ xs: 12, md: 6 }} p={1} onClick={() => handleClick(project.id)}>
+								<Grid
+									size={{ xs: 12, md: 6 }}
+									onClick={() => handleClick(project.id)}
+									sx={{
+										p: 1
+									}}>
 									<ProjectCard key={project.id} project={project} />
 								</Grid>
 							</Fade>

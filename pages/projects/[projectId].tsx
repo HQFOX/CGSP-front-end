@@ -82,7 +82,7 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 				<IconButton disableRipple onClick={() => router.back()} sx={{ paddingBottom: '13px' }}>
 					<ArrowBackIosNew />
 				</IconButton>
-				<Title variant="h5" component="h1" fontSize={24} display={'inline-block'}>
+				<Title variant="h5" component="h1" fontSize={24} sx={{ display: 'inline-block' }}>
 					{project.title}
 				</Title>
 				<Divider />
@@ -105,7 +105,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 						<StyledTab label={t('tabsTitle.updates')} />
 					</Tabs>
 				</Box>
-				<Grid container p={5}>
+				<Grid
+					container
+					sx={{
+						p: 5
+					}}>
 					<TabPanel index={0} value={value}>
 						<Details project={project} />
 						{project.typologies != null &&
@@ -121,7 +125,12 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 											id={`typology${index}-header`}
 											sx={{ backgroundColor: theme.palette.secondary.light }}>
 											<div style={{ display: 'flex', alignItems: 'center' }}>
-												<Typography marginRight={4}>{typology.typology}</Typography>
+												<Typography
+													sx={{
+														marginRight: 4
+													}}>
+													{typology.typology}
+												</Typography>
 												<LotCounter lots={typology.lots} assignedLots={typology.assignedLots} />
 											</div>
 										</AccordionSummary>
@@ -130,7 +139,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 												{typology.livingArea && typology.totalLotArea && (
 													<Grid>
 														<Stack spacing={2}>
-															<Stack direction="row" gap={1}>
+															<Stack
+																direction="row"
+																sx={{
+																	gap: 1
+																}}>
 																<SquareFoot color="primary" />
 																<StyledTypography variant="body2" color="text.secondary">
 																	{' '}
@@ -152,7 +165,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 												)}
 												{typology.bedroomNumber && (
 													<Grid>
-														<Stack direction="row" gap={1}>
+														<Stack
+															direction="row"
+															sx={{
+																gap: 1
+															}}>
 															<Hotel color="primary" />
 															<StyledTypography
 																variant="body2"
@@ -162,7 +179,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 												)}
 												{typology.bathroomNumber && (
 													<Grid>
-														<Stack direction="row" gap={1}>
+														<Stack
+															direction="row"
+															sx={{
+																gap: 1
+															}}>
 															<Bathtub color="primary" />
 															<StyledTypography
 																variant="body2"
@@ -172,7 +193,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 												)}
 												{typology.garageNumber && (
 													<Grid>
-														<Stack direction="row" gap={1}>
+														<Stack
+															direction="row"
+															sx={{
+																gap: 1
+															}}>
 															<Garage color="primary" />
 															<StyledTypography
 																variant="body2"
@@ -182,7 +207,11 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 												)}
 												{typology.price && (
 													<Grid>
-														<Stack direction="row" gap={1}>
+														<Stack
+															direction="row"
+															sx={{
+																gap: 1
+															}}>
 															<Euro color="primary" />
 															<StyledTypography
 																variant="body2"
@@ -198,14 +227,20 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 												)}
 												{typology.plant && (
 													<Grid>
-														<Stack direction="row" gap={1}>
+														<Stack
+															direction="row"
+															sx={{
+																gap: 1
+															}}>
 															<Dashboard color="primary" />
 															<MuiLink
 																href={getS3Url(typology.plant?.filename ?? '')}
 																target="_blank"
 																rel="noreferrer"
 																variant="body2"
-																color="text.secondary">
+																sx={{
+																	color: 'text.secondary'
+																}}>
 																{t('typologyDetails.plant')}
 															</MuiLink>
 														</Stack>
@@ -220,10 +255,19 @@ const ProjectDetails: NextPage<{ project: Project; updates: Update[] }> = (data)
 					{allowEnrollment && (
 						<TabPanel index={1} value={value}>
 							<Box>
-								<Typography sx={{ textIndent: 20 }} color="text.secondary">
+								<Typography
+									sx={{
+										color: 'text.secondary',
+										textIndent: 20
+									}}>
 									{t('preEnrollDescription')}
 								</Typography>
-								<Grid container justifyContent={'flex-end'} paddingTop={4}>
+								<Grid
+									container
+									sx={{
+										justifyContent: 'flex-end',
+										paddingTop: 4
+									}}>
 									<Grid size={{ sm: 2 }}>
 										<StyledButton
 											variant="contained"

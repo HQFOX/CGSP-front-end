@@ -108,7 +108,12 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 					}}
 					onClose={handleAssignmentPopoverClose}
 					disableRestoreFocus>
-					<Typography sx={{ p: 3 }} variant="body2" color="text.secondary">
+					<Typography
+						variant="body2"
+						sx={{
+							color: 'text.secondary',
+							p: 3
+						}}>
 						{popoverText}
 					</Typography>
 				</Popover>
@@ -183,7 +188,12 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 					}}
 					onClose={handleConstructionPopoverClose}
 					disableRestoreFocus>
-					<Typography sx={{ p: 3 }} variant="body2" color="text.secondary">
+					<Typography
+						variant="body2"
+						sx={{
+							color: 'text.secondary',
+							p: 3
+						}}>
 						{popoverText}
 					</Typography>
 				</Popover>
@@ -192,7 +202,13 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 	};
 
 	return (
-		<Grid container justifyContent={'space-between'} spacing={1} paddingBottom={1}>
+		<Grid
+			container
+			spacing={1}
+			sx={{
+				justifyContent: 'space-between',
+				paddingBottom: 1
+			}}>
 			<Grid>
 				<StyledTypography variant="body2" color="text.secondary">
 					<HomeWorkOutlined sx={{ marginRight: '5px' }} />
@@ -209,7 +225,10 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 					)}
 				</StyledTypography>
 			</Grid>
-			<Grid textAlign={'center'}>
+			<Grid
+				sx={{
+					textAlign: 'center'
+				}}>
 				<StyledTypography variant="body2" color="text.secondary">
 					<HomeOutlined sx={{ marginRight: '5px' }} />
 					{t('projectDetails.lots')}: {project.lots}
@@ -223,7 +242,12 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 			</Grid>
 			{!minimal && project.assignmentStatus && (
 				<Grid>
-					<Typography variant="body2" color="text.secondary" component={'span'}>
+					<Typography
+						variant="body2"
+						component={'span'}
+						sx={{
+							color: 'text.secondary'
+						}}>
 						{t('projectDetails.assignmentStatus')}:{' '}
 					</Typography>
 					{assignmentChips(project.assignmentStatus)}
@@ -231,7 +255,12 @@ export const Details = ({ project, minimal = false }: DetailsProps) => {
 			)}
 			{!minimal && project.constructionStatus && (
 				<Grid>
-					<Typography variant="body2" color="text.secondary" component={'span'}>
+					<Typography
+						variant="body2"
+						component={'span'}
+						sx={{
+							color: 'text.secondary'
+						}}>
 						{t('projectDetails.constructionStatus')}:{' '}
 					</Typography>
 					{constructionChips(project.constructionStatus)}
