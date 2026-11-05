@@ -45,16 +45,32 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 						{t('ourMissionTitle')}
 					</Title>
 					<Divider sx={{ mb: 4 }} />
-					<Typography variant="body2" color="text.secondary">
+					<Typography
+						variant="body2"
+						sx={{
+							color: 'text.secondary'
+						}}>
 						{t('ourMissionTextP1')}
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography
+						variant="body2"
+						sx={{
+							color: 'text.secondary'
+						}}>
 						{t('ourMissionTextP2')}
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography
+						variant="body2"
+						sx={{
+							color: 'text.secondary'
+						}}>
 						{t('ourMissionTextP3')}
 					</Typography>
-					<Typography variant="body2" color="text.secondary">
+					<Typography
+						variant="body2"
+						sx={{
+							color: 'text.secondary'
+						}}>
 						{t('ourMissionTextP4')}
 					</Typography>
 					<div className={styles2.logoContainer}>
@@ -76,7 +92,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<Architecture color="inherit" fontSize="large" />}
 							color={theme.palette.success.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('projectElaborationText')}
 								</Typography>
 							</CardContent>
@@ -88,7 +108,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<PersonAdd color="inherit" fontSize="large" />}
 							color={theme.palette.success.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('inscriptionText')}
 								</Typography>
 								<StyledButton
@@ -108,7 +132,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<BookmarkAdd color="inherit" fontSize="large" />}
 							color={theme.palette.success.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('reservationText')}
 								</Typography>
 							</CardContent>
@@ -120,7 +148,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<Construction color="inherit" fontSize="large" />}
 							color={theme.palette.success.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('projectElaborationText')}
 								</Typography>
 							</CardContent>
@@ -142,7 +174,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<Savings color="inherit" fontSize="large" />}
 							color={theme.palette.primary.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('controlledCostsText')}
 								</Typography>
 							</CardContent>
@@ -154,7 +190,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<MeetingRoom color="inherit" fontSize="large" />}
 							color={theme.palette.primary.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('transparencyText')}
 								</Typography>
 							</CardContent>
@@ -166,7 +206,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<Description color="inherit" fontSize="large" />}
 							color={theme.palette.primary.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('bureaucracyText')}
 								</Typography>
 							</CardContent>
@@ -178,7 +222,11 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 							icon={<Group color="inherit" fontSize="large" />}
 							color={theme.palette.primary.main}>
 							<CardContent>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('middlemanText')}
 								</Typography>
 							</CardContent>
@@ -193,22 +241,46 @@ const Home: NextPage<{ updates: Update[] }> = () => {
 					</Title>
 					<Divider sx={{ mb: 4 }} />
 					<Box sx={{ textIndent: 35, pb: 2 }}>
-						<Typography variant="body2" color="text.secondary">
+						<Typography
+							variant="body2"
+							sx={{
+								color: 'text.secondary'
+							}}>
 							{t('howItStartedTextP1')}
 						</Typography>
-						<Typography variant="body2" color="text.secondary">
+						<Typography
+							variant="body2"
+							sx={{
+								color: 'text.secondary'
+							}}>
 							{t('howItStartedTextP2')}
 						</Typography>
-						<Typography variant="body2" color="text.secondary">
+						<Typography
+							variant="body2"
+							sx={{
+								color: 'text.secondary'
+							}}>
 							{t('howItStartedTextP3')}
 						</Typography>
-						<Typography variant="body2" color="text.secondary">
+						<Typography
+							variant="body2"
+							sx={{
+								color: 'text.secondary'
+							}}>
 							{t('howItStartedTextP4')}
 						</Typography>
-						<Typography variant="body2" color="text.secondary">
+						<Typography
+							variant="body2"
+							sx={{
+								color: 'text.secondary'
+							}}>
 							{t('howItStartedTextP5')}
 						</Typography>
-						<Typography variant="body2" color="text.secondary">
+						<Typography
+							variant="body2"
+							sx={{
+								color: 'text.secondary'
+							}}>
 							{t('howItStartedTextP6')}
 						</Typography>
 					</Box>

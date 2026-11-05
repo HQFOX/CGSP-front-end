@@ -28,7 +28,13 @@ const History: NextPage<ProjectInventoryProps> = (data) => {
 					{t('historyTitle')}
 				</Title>
 				<Divider />
-				<Typography sx={{ pt: 2, textIndent: 35 }} variant="body2" color="text.secondary">
+				<Typography
+					variant="body2"
+					sx={{
+						color: 'text.secondary',
+						pt: 2,
+						textIndent: 35
+					}}>
 					{t('historyP1')}
 				</Typography>
 			</Box>

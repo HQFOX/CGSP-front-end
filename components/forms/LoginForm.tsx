@@ -80,18 +80,34 @@ export const LoginForm = () => {
 	return (
 		<Paper sx={{ mt: 4, maxWidth: '40dvw' }}>
 			<Container>
-				<Grid container pt={2}>
-					<Grid mt={4}>
+				<Grid
+					container
+					sx={{
+						pt: 2
+					}}>
+					<Grid
+						sx={{
+							mt: 4
+						}}>
 						<Typography variant={'h5'}>{'Login'}</Typography>
 					</Grid>
-					<Grid ml="auto">
+					<Grid
+						sx={{
+							ml: 'auto'
+						}}>
 						<IconButton onClick={() => router.push('/')}>
 							<Close />
 						</IconButton>
 					</Grid>
 				</Grid>
 				<form onSubmit={formik.handleSubmit}>
-					<Grid container rowSpacing={4} pb={2} pt={4}>
+					<Grid
+						container
+						rowSpacing={4}
+						sx={{
+							pb: 2,
+							pt: 4
+						}}>
 						<Grid size={{ xs: 12 }}>
 							<TextField
 								id="username"
@@ -119,7 +135,10 @@ export const LoginForm = () => {
 							/>
 						</Grid>
 						<Grid>{statusIcon}</Grid>
-						<Grid ml="auto">
+						<Grid
+							sx={{
+								ml: 'auto'
+							}}>
 							<StyledButton
 								type="submit"
 								variant="contained"

@@ -145,8 +145,16 @@ export const UpdateForm = ({
 	return (
 		<Paper sx={{ mt: 4, minHeight: 600 }}>
 			<Container>
-				<Grid container pt={2}>
-					<Grid size="grow" mt={4}>
+				<Grid
+					container
+					sx={{
+						pt: 2
+					}}>
+					<Grid
+						size="grow"
+						sx={{
+							mt: 4
+						}}>
 						<Typography variant={'h5'}>
 							{update ? 'Editar Atualização' : 'Criar Atualização'}
 						</Typography>
@@ -167,7 +175,13 @@ export const UpdateForm = ({
 					/>
 				) : (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid container spacing={4} pb={2} pt={4}>
+						<Grid
+							container
+							spacing={4}
+							sx={{
+								pb: 2,
+								pt: 4
+							}}>
 							<Grid size={{ xs: 12 }}>
 								<TextField
 									id="title"
@@ -238,7 +252,11 @@ export const UpdateForm = ({
 									helperText="Se este campo não for alterado a data será a de criação."
 								/>
 							</Grid>
-							<Grid size="grow" ml="auto">
+							<Grid
+								size="grow"
+								sx={{
+									ml: 'auto'
+								}}>
 								{submitting ? (
 									<Loading />
 								) : success ? (

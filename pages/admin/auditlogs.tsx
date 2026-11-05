@@ -79,15 +79,17 @@ const AuditLogsAdmin: NextPage = () => {
 			</Box>
 			<Grid
 				container
-				mt={2}
-				mb={2}
-				p={2}
-				gap={1}
 				style={{
 					backgroundColor: 'white',
 					border: '1px solid',
 					borderColor: 'rgb(237, 237, 237)',
 					alignItems: 'center'
+				}}
+				sx={{
+					mt: 2,
+					mb: 2,
+					p: 2,
+					gap: 1
 				}}>
 				<Grid>
 					<TextField
@@ -184,7 +186,11 @@ const AuditLogsAdmin: NextPage = () => {
 				</Grid>
 			</Grid>
 			{isError && (
-				<Typography color="error" mb={2}>
+				<Typography
+					color="error"
+					sx={{
+						mb: 2
+					}}>
 					Não foi possível carregar os registos de auditoria.
 				</Typography>
 			)}

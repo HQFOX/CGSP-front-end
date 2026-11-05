@@ -270,7 +270,11 @@ export const Controls = ({
 										}
 										label={t('projectDetails.constructionStatus')}
 									/>
-									<Box ml={3} component={FormGroup}>
+									<Box
+										component={FormGroup}
+										sx={{
+											ml: 3
+										}}>
 										{constructionsStatus.map((status, index) => (
 											<FormControlLabel
 												control={
@@ -301,7 +305,11 @@ export const Controls = ({
 										}
 										label={t('projectDetails.assignmentStatus')}
 									/>
-									<Box ml={3} component={FormGroup}>
+									<Box
+										component={FormGroup}
+										sx={{
+											ml: 3
+										}}>
 										{assignmentStatus.map((status, index) => (
 											<FormControlLabel
 												control={
@@ -336,7 +344,12 @@ export const Controls = ({
 										}
 										label={t('projectDetails.typologies')}
 									/>
-									<Box ml={3} component={FormGroup} row>
+									<Box
+										component={FormGroup}
+										row
+										sx={{
+											ml: 3
+										}}>
 										{typologies.map((typology, index) => (
 											<FormControlLabel
 												control={<Checkbox onChange={handleTypologyChange} name={typology} />}
@@ -346,7 +359,12 @@ export const Controls = ({
 											/>
 										))}
 									</Box>
-									<Box ml={3} component={FormGroup} row>
+									<Box
+										component={FormGroup}
+										row
+										sx={{
+											ml: 3
+										}}>
 										{types.map((type, index) => (
 											<FormControlLabel
 												control={<Checkbox onChange={handleTypeChange} name={type} />}
@@ -381,7 +399,12 @@ export const Controls = ({
 										max={priceRange[1]}
 									/>
 								</div>
-								<Stack direction="row" spacing={2} justifyContent="flex-end">
+								<Stack
+									direction="row"
+									spacing={2}
+									sx={{
+										justifyContent: 'flex-end'
+									}}>
 									<StyledButton
 										variant="outlined"
 										onClick={handleClearFilters}

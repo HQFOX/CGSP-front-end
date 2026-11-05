@@ -136,7 +136,13 @@ export const FileUploader = (props: FileUploaderProps) => {
 		);
 
 		const presignedFiles = convertedFiles.map((file) =>
-			getPresignedUrl(file).catch(() => ({ ...file, error: 'Network error' }) as AbstractFile)
+			getPresignedUrl(file).catch(
+				() =>
+					({
+						...file,
+						error: 'Network error'
+					}) as AbstractFile
+			)
 		);
 		const results = await Promise.all(presignedFiles);
 		const newFiles = [...files, ...results];

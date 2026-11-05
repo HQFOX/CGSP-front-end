@@ -11,7 +11,12 @@ export interface SuccessMessageProps {
 export const SuccessMessage = ({ title, subtitle }: SuccessMessageProps) => {
 	return (
 		<Grow in={true}>
-			<Stack alignContent={'center'} pt={6} sx={{ textAlign: 'center' }}>
+			<Stack
+				sx={{
+					alignContent: 'center',
+					pt: 6,
+					textAlign: 'center'
+				}}>
 				<CheckCircle color={'success'} style={{ fontSize: '120px', margin: 'auto' }} />
 				<Typography variant="h5">{title}</Typography>
 				{subtitle && <Typography variant="subtitle1">{subtitle}</Typography>}

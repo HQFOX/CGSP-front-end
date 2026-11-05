@@ -66,7 +66,12 @@ const UpdateAdmin: NextPage<{ updates: Update[]; projects: Project[] }> = (data)
 				<Divider />
 			</Box>
 			{!showAddUpdateForm && (
-				<Grid container mt={2} mb={2}>
+				<Grid
+					container
+					sx={{
+						mt: 2,
+						mb: 2
+					}}>
 					<Grid>
 						<StyledButton startIcon={<Add />} variant="contained" onClick={handleShowAddForm}>
 							Criar Atualização

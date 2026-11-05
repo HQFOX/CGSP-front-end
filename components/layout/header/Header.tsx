@@ -145,7 +145,12 @@ const Header = () => {
 							}}>
 							{pages.map((page) => (
 								<MenuItem key={page.headerText} onClick={() => handleCloseNavMenu(page.path)}>
-									<Box textAlign="center">{page.headerText}</Box>
+									<Box
+										sx={{
+											textAlign: 'center'
+										}}>
+										{page.headerText}
+									</Box>
 								</MenuItem>
 							))}
 						</Menu>
@@ -175,8 +180,10 @@ const Header = () => {
 							anchorEl={anchorEl}
 							open={open}
 							onClose={() => handleClose()}
-							MenuListProps={{
-								'aria-labelledby': 'languageDropdown'
+							slotProps={{
+								list: {
+									'aria-labelledby': 'languageDropdown'
+								}
 							}}>
 							{locales?.map((locale, index) => (
 								<MenuItem key={index} onClick={() => handleClose(locale)}>
@@ -214,8 +221,10 @@ const Header = () => {
 							anchorEl={anchorEl}
 							open={open}
 							onClose={() => handleClose()}
-							MenuListProps={{
-								'aria-labelledby': 'languageDropdown'
+							slotProps={{
+								list: {
+									'aria-labelledby': 'languageDropdown'
+								}
 							}}>
 							{locales?.map((locale) => (
 								<MenuItem key={locale} onClick={() => handleClose(locale)}>

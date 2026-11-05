@@ -239,7 +239,7 @@ describe('ProjectForm', () => {
 		it('navigates to step 2 (Tipologias) via stepper button', async () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
-			await userEvent.click(screen.getByRole('button', { name: 'Tipologias' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Tipologias' }));
 
 			await waitFor(() => {
 				expect(screen.getByText('Tipologias', { selector: 'h6' })).toBeDefined();
@@ -249,7 +249,7 @@ describe('ProjectForm', () => {
 		it('navigates to step 3 (Fotografias) via stepper button', async () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
-			await userEvent.click(screen.getByRole('button', { name: 'Fotografias' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Fotografias' }));
 
 			await waitFor(() => {
 				expect(screen.getByTestId('file-uploader-photos')).toBeDefined();
@@ -275,7 +275,7 @@ describe('ProjectForm', () => {
 		it('disables "Próximo Passo" on last step', async () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
-			await userEvent.click(screen.getByRole('button', { name: 'Fotografias' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Fotografias' }));
 
 			await waitFor(() => {
 				const nextButton = screen.getByRole('button', { name: 'Próximo Passo' });
@@ -291,7 +291,7 @@ describe('ProjectForm', () => {
 		it('renders the map on step 1', async () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
-			await userEvent.click(screen.getByRole('button', { name: 'Localização' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Localização' }));
 
 			await waitFor(() => {
 				expect(screen.getByTestId('dynamic-map')).toBeDefined();
@@ -301,7 +301,7 @@ describe('ProjectForm', () => {
 		it('renders latitude and longitude fields on step 1', async () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
-			await userEvent.click(screen.getByRole('button', { name: 'Localização' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Localização' }));
 
 			await waitFor(() => {
 				expect(screen.getByLabelText('latitude')).toBeDefined();
@@ -317,7 +317,7 @@ describe('ProjectForm', () => {
 		it('renders the photos file uploader on step 3', async () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
-			await userEvent.click(screen.getByRole('button', { name: 'Fotografias' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Fotografias' }));
 
 			await waitFor(() => {
 				expect(screen.getByTestId('file-uploader-photos')).toBeDefined();
@@ -407,7 +407,7 @@ describe('ProjectForm', () => {
 
 			await userEvent.type(screen.getByLabelText('Nome do projeto'), 'New Project');
 			// Fill district — navigate to step 1
-			await userEvent.click(screen.getByRole('button', { name: 'Localização' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Localização' }));
 			await waitFor(() => expect(screen.getByLabelText('Concelho')).toBeDefined());
 
 			// Type district via the combobox
@@ -438,7 +438,7 @@ describe('ProjectForm', () => {
 
 			await userEvent.type(screen.getByLabelText('Nome do projeto'), 'New Project');
 
-			await userEvent.click(screen.getByRole('button', { name: 'Localização' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Localização' }));
 			await waitFor(() => expect(screen.getByLabelText('Concelho')).toBeDefined());
 			const districtInput = screen.getByRole('combobox', { name: 'Distrito' });
 			await userEvent.clear(districtInput);
@@ -462,7 +462,7 @@ describe('ProjectForm', () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
 			await userEvent.type(screen.getByLabelText('Nome do projeto'), 'New Project');
-			await userEvent.click(screen.getByRole('button', { name: 'Localização' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Localização' }));
 			await waitFor(() => expect(screen.getByLabelText('Concelho')).toBeDefined());
 			const districtInput = screen.getByRole('combobox', { name: 'Distrito' });
 			await userEvent.clear(districtInput);
@@ -580,7 +580,7 @@ describe('ProjectForm', () => {
 		it('renders the photos uploader on step 3', async () => {
 			render(<ProjectForm {...defaultHandlers} />);
 
-			await userEvent.click(screen.getByRole('button', { name: 'Fotografias' }));
+			await userEvent.click(screen.getByRole('tab', { name: 'Fotografias' }));
 
 			await waitFor(() => {
 				expect(screen.getByTestId('file-uploader-photos')).toBeDefined();

@@ -182,14 +182,24 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 	return (
 		<Paper sx={{ mt: 4 }}>
 			<Container style={{ minHeight: 800 }}>
-				<Grid container pt={2}>
-					<Grid mt={4}>
+				<Grid
+					container
+					sx={{
+						pt: 2
+					}}>
+					<Grid
+						sx={{
+							mt: 4
+						}}>
 						<Typography variant={'h4'}>
 							{project ? 'Editar Projeto' : 'Adicionar Projeto'}
 						</Typography>
 					</Grid>
 					{onCancel ? (
-						<Grid ml="auto">
+						<Grid
+							sx={{
+								ml: 'auto'
+							}}>
 							<IconButton
 								onClick={() => {
 									success ? onCancel() : setCancelModal(true);
@@ -205,7 +215,14 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 					<SuccessMessage title={project ? 'Projeto Editado' : 'Novo Projeto Adicionado'} />
 				) : (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid container rowSpacing={4} pb={2} pt={4} columnSpacing={4}>
+						<Grid
+							container
+							rowSpacing={4}
+							columnSpacing={4}
+							sx={{
+								pb: 2,
+								pt: 4
+							}}>
 							<Grid size={{ xs: 12 }}>
 								<Stepper nonLinear activeStep={activeStep}>
 									{steps.map((label, index) => (
@@ -351,7 +368,13 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 								</Grid>
 							)}
 						</Grid>
-						<Grid container rowSpacing={4} pb={2} columnSpacing={4}>
+						<Grid
+							container
+							rowSpacing={4}
+							columnSpacing={4}
+							sx={{
+								pb: 2
+							}}>
 							<Grid size={{ xs: 6 }}>
 								<StyledButton
 									variant="contained"
@@ -362,7 +385,11 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 									Passo Anterior
 								</StyledButton>
 							</Grid>
-							<Grid size={{ xs: 6 }} textAlign="end">
+							<Grid
+								size={{ xs: 6 }}
+								sx={{
+									textAlign: 'end'
+								}}>
 								<StyledButton
 									variant="contained"
 									color="primary"
@@ -372,7 +399,11 @@ export const ProjectForm = ({ project, onCancel, onSubmit }: ProjectFormProps) =
 									Próximo Passo
 								</StyledButton>
 							</Grid>
-							<Grid size={{ xs: 'auto' }} ml="auto">
+							<Grid
+								size={{ xs: 'auto' }}
+								sx={{
+									ml: 'auto'
+								}}>
 								{submitting ? (
 									<Loading />
 								) : success ? (
