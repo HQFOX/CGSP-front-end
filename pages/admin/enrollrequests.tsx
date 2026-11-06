@@ -60,7 +60,12 @@ const Kpi = ({ total: totalProp, week }: { total: number; week: number }) => {
 			<CardHeader title={<Title>Total de Pedidos:</Title>} />
 			<CardContent>
 				<div style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-between' }}>
-					<Typography fontSize={32}>{total}</Typography>
+					<Typography
+						sx={{
+							fontSize: 32
+						}}>
+						{total}
+					</Typography>
 					{week > 0 && (
 						<div>
 							<Typography variant={'body2'}>
@@ -284,7 +289,12 @@ const EnrollRequestsAdmin: NextPage = () => {
 				</Typography>
 				<Divider />
 			</Box>
-			<Grid container spacing={2} justifyContent="center">
+			<Grid
+				container
+				spacing={2}
+				sx={{
+					justifyContent: 'center'
+				}}>
 				<Grid size={{ xs: 12, md: 3 }}>
 					<div
 						style={{
@@ -307,15 +317,17 @@ const EnrollRequestsAdmin: NextPage = () => {
 			{!showAddRequestForm && (
 				<Grid
 					container
-					mt={2}
-					mb={2}
-					p={2}
-					gap={1}
 					style={{
 						backgroundColor: 'white',
 						border: '1px solid',
 						borderColor: 'rgb(237, 237, 237)',
 						alignItems: 'center'
+					}}
+					sx={{
+						mt: 2,
+						mb: 2,
+						p: 2,
+						gap: 1
 					}}>
 					<Grid>
 						<TextField

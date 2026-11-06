@@ -69,9 +69,11 @@ export const Hero = () => {
 	return (
 		<Grid
 			container
-			height={{ xs: '100dvh', md: '80dvh', lg: '75dvh' }}
 			style={{ position: 'relative' }}
-			color={textColor}>
+			sx={{
+				height: { xs: '100dvh', md: '80dvh', lg: '75dvh' },
+				color: textColor
+			}}>
 			<ImageBox
 				sx={{
 					backgroundImage: `url(${construcao3.src})`,
@@ -93,23 +95,30 @@ export const Hero = () => {
 			</div>
 			<Grid
 				size={{ xs: 12, sm: 12, md: 6 }}
-				zIndex={10}
-				bgcolor={'transparent'}
-				paddingTop={{ xs: 4, md: 8 }}
-				paddingLeft={{ xs: 4, md: 8 }}
-				ml={{ xs: 'auto', md: 8 }}
-				mb={{ xs: 0, md: 8 }}
-				ref={ref}>
+				ref={ref}
+				sx={{
+					zIndex: 10,
+					bgcolor: 'transparent',
+					paddingTop: { xs: 4, md: 8 },
+					paddingLeft: { xs: 4, md: 8 },
+					ml: { xs: 'auto', md: 8 },
+					mb: { xs: 0, md: 8 }
+				}}>
 				<Title variant="h1" component="h1" fontSize={34}>
 					{t('cooperativeName')}
 				</Title>
 				<Title variant="h2" component="h2" fontSize={26}>
 					{t('cooperativeType')}
 				</Title>
-				<Typography variant="subtitle1" component="h2" paddingBottom={2}>
+				<Typography
+					variant="subtitle1"
+					component="h2"
+					sx={{
+						paddingBottom: 2
+					}}>
 					{t('hero.sinceText')}
 				</Typography>
-				<Title variant="h3" component="h3" fontSize={26} paddingTop={4}>
+				<Title variant="h3" component="h3" fontSize={26} sx={{ paddingTop: 4 }}>
 					{t('hero.tagLine')}
 				</Title>
 				<Title
@@ -133,10 +142,12 @@ export const Hero = () => {
 			<Grid
 				offset={{ xs: 1, sm: 1, md: 0 }}
 				size={{ xs: 12, sm: 6, md: 5 }}
-				padding={{ xs: 6, sm: 12 }}
-				mb={1}
-				display="flex"
-				alignItems={{ xs: 'baseline', sm: 'end' }}>
+				sx={{
+					padding: { xs: 6, sm: 12 },
+					mb: 1,
+					display: 'flex',
+					alignItems: { xs: 'baseline', sm: 'end' }
+				}}>
 				<Link href="/history" passHref>
 					<StyledButton disableElevation variant="outlined" color={'secondary'}>
 						{t('hero.ourHistory')}

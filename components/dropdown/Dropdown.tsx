@@ -46,8 +46,10 @@ const Dropdown = ({ options, displayValue, label, valueChange }: DropdownProps) 
 				anchorEl={anchorEl}
 				open={open}
 				onClose={() => handleClose()}
-				MenuListProps={{
-					'aria-labelledby': label
+				slotProps={{
+					list: {
+						'aria-labelledby': label
+					}
 				}}>
 				{options?.map((option, index) => (
 					<MenuItem key={index} onClick={() => handleClose(option)}>

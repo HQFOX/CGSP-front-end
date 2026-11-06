@@ -76,13 +76,27 @@ const Unsubscribe: NextPage = ({ requestId, token }: { requestId?: string; token
 			<Paper sx={{ p: 4 }} variant="outlined">
 				{!showSuccessMessage && (
 					<form onSubmit={formik.handleSubmit}>
-						<Grid container p={4} rowSpacing={1} columnSpacing={1}>
+						<Grid
+							container
+							rowSpacing={1}
+							columnSpacing={1}
+							sx={{
+								p: 4
+							}}>
 							<Grid size={12}>
-								<Typography variant="body2" color="text.secondary">
+								<Typography
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('subtitle')}
 								</Typography>
 							</Grid>
-							<Grid size={12} ml={1}>
+							<Grid
+								size={12}
+								sx={{
+									ml: 1
+								}}>
 								<FormControlLabel
 									name="project"
 									value={formik.values.project}
@@ -90,33 +104,57 @@ const Unsubscribe: NextPage = ({ requestId, token }: { requestId?: string; token
 									control={<Checkbox onChange={formik.handleChange} />}
 									labelPlacement="end"
 									label={
-										<Typography variant="body2" color="text.secondary" component="span">
+										<Typography
+											variant="body2"
+											component="span"
+											sx={{
+												color: 'text.secondary'
+											}}>
 											{t('projectOption')}
 										</Typography>
 									}
 								/>
 							</Grid>
-							<Grid size={12} ml={1}>
+							<Grid
+								size={12}
+								sx={{
+									ml: 1
+								}}>
 								<FormControlLabel
 									name="allProjects"
 									value={formik.values.allProjects}
 									control={<Checkbox onChange={(e, c) => handleAllProjectsChange(c)} />}
 									labelPlacement="end"
 									label={
-										<Typography variant="body2" color="text.secondary">
+										<Typography
+											variant="body2"
+											sx={{
+												color: 'text.secondary'
+											}}>
 											{t('allProjectOption')}
 										</Typography>
 									}
 								/>
 							</Grid>
 							{showErrorMessage && (
-								<Grid ml="auto" alignContent="center">
-									<Typography variant="body2" color="text.secondary">
+								<Grid
+									sx={{
+										ml: 'auto',
+										alignContent: 'center'
+									}}>
+									<Typography
+										variant="body2"
+										sx={{
+											color: 'text.secondary'
+										}}>
 										{t('errorMessage')}
 									</Typography>
 								</Grid>
 							)}
-							<Grid ml={showErrorMessage ? undefined : 'auto'}>
+							<Grid
+								sx={{
+									ml: showErrorMessage ? undefined : 'auto'
+								}}>
 								<StyledButton
 									type="submit"
 									variant="contained"

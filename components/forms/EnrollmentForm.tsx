@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { CheckCircle, ErrorOutline } from '@mui/icons-material';
+import { CheckCircle, ErrorOutlined } from '@mui/icons-material';
 import {
 	Box,
 	Checkbox,
@@ -25,7 +25,11 @@ export const SuccessMessage = ({ email }: { email: string }) => {
 	const { t } = useTranslation(['projectpage']);
 	return (
 		<Grow in={true}>
-			<Stack alignContent={'center'} pt={6}>
+			<Stack
+				sx={{
+					alignContent: 'center',
+					pt: 6
+				}}>
 				<CheckCircle color={'success'} style={{ fontSize: '120px', margin: 'auto' }} />
 				<Typography variant="h5">{t('successMessage.success')}</Typography>
 				<Typography variant="subtitle1">
@@ -42,8 +46,12 @@ export const ErrorMessage = () => {
 
 	return (
 		<Grow in={true}>
-			<Stack alignContent={'center'} pt={6}>
-				<ErrorOutline color={'error'} style={{ fontSize: '120px' }} />
+			<Stack
+				sx={{
+					alignContent: 'center',
+					pt: 6
+				}}>
+				<ErrorOutlined color={'error'} style={{ fontSize: '120px' }} />
 				<Typography variant="h5">{t('errorMessage.error')}</Typography>
 				<Typography variant="subtitle1">{t('errorMessage.reason')}</Typography>
 				<Typography variant="subtitle1">{t('errorMessage.trySoon')}</Typography>
@@ -121,7 +129,11 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 		<form onSubmit={formik.handleSubmit}>
 			<StyledBox>
 				<Grid container columnSpacing={2}>
-					<Grid size={{ xs: 12 }} maxHeight={150}>
+					<Grid
+						size={{ xs: 12 }}
+						sx={{
+							maxHeight: 150
+						}}>
 						<Typography variant="h4" component={'h1'}>
 							{t('preEnroll')}
 						</Typography>
@@ -134,7 +146,13 @@ export const EnrollmentForm = ({ project }: { project?: Project }) => {
 					</Grid>
 				</Grid>
 				{!success && (
-					<Grid container rowSpacing={2} columnSpacing={2} mt={2}>
+					<Grid
+						container
+						rowSpacing={2}
+						columnSpacing={2}
+						sx={{
+							mt: 2
+						}}>
 						<Grid size={{ xs: 12, md: 6 }}>
 							<TextField
 								id="first-name"

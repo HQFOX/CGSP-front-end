@@ -46,13 +46,28 @@ const Membership: NextPage = () => {
 								{t('financialDetailsTitle')}
 							</Typography>
 							<Stack component="ul" sx={{ m: 0, pl: 2.5, gap: 1 }}>
-								<Typography component="li" variant="body2" color="text.secondary">
+								<Typography
+									component="li"
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('monthlyFee')}
 								</Typography>
-								<Typography component="li" variant="body2" color="text.secondary">
+								<Typography
+									component="li"
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('membershipFee')}
 								</Typography>
-								<Typography component="li" variant="body2" color="text.secondary">
+								<Typography
+									component="li"
+									variant="body2"
+									sx={{
+										color: 'text.secondary'
+									}}>
 									{t('shareCapital')}
 								</Typography>
 							</Stack>
@@ -62,11 +77,20 @@ const Membership: NextPage = () => {
 							<Typography variant="h6" sx={{ mb: 1 }}>
 								{t('howToJoinTitle')}
 							</Typography>
-							<Typography variant="body2" color="text.secondary">
+							<Typography
+								variant="body2"
+								sx={{
+									color: 'text.secondary'
+								}}>
 								{t('howToJoinText')}
 							</Typography>
 
-							<Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+							<Typography
+								variant="body2"
+								sx={{
+									color: 'text.secondary',
+									mb: 2
+								}}>
 								{t('contactText')}
 							</Typography>
 							<Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
@@ -87,7 +111,12 @@ const Membership: NextPage = () => {
 							<Typography variant="h6" sx={{ mb: 1 }}>
 								{t('documentsTitle')}
 							</Typography>
-							<Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+							<Typography
+								variant="body2"
+								sx={{
+									color: 'text.secondary',
+									mb: 1
+								}}>
 								{t('documentsText')}
 							</Typography>
 							<Button

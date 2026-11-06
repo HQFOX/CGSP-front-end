@@ -25,15 +25,25 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 				boxShadow: 0
 			})}>
 			<Box sx={{ p: 4 }}>
-				<Grid container justifyContent={'space-between'}>
+				<Grid
+					container
+					sx={{
+						justifyContent: 'space-between'
+					}}>
 					<Grid>
 						<Title variant={'h5'}>{post.title}</Title>
 					</Grid>
-					<Grid alignSelf={'end'}>
+					<Grid
+						sx={{
+							alignSelf: 'end'
+						}}>
 						<Typography
 							variant="body2"
-							color="text.secondary"
-							sx={{ textAlign: 'right', mt: 'auto' }}>
+							sx={{
+								color: 'text.secondary',
+								textAlign: 'right',
+								mt: 'auto'
+							}}>
 							{formatDate(post.createdOn)}
 						</Typography>
 					</Grid>
@@ -45,8 +55,10 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 							<Typography
 								variant={'subtitle2'}
 								component={'span'}
-								color="text.secondary"
-								style={{ paddingTop: '2px' }}>
+								style={{ paddingTop: '2px' }}
+								sx={{
+									color: 'text.secondary'
+								}}>
 								Sobre o projeto:
 							</Typography>
 							<StyledButton
@@ -64,7 +76,11 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 				</div>
 			)}
 			<Box sx={{ p: 4 }}>
-				<Typography variant="body2" color="text.secondary">
+				<Typography
+					variant="body2"
+					sx={{
+						color: 'text.secondary'
+					}}>
 					{post.content}
 				</Typography>
 			</Box>

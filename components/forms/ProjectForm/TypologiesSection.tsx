@@ -89,13 +89,13 @@ export const TypologiesSection = ({ formik }: TypologiesSectionProps) => {
 					}
 					onChange={onTypologyChange}
 					getOptionLabel={(option: string) => option}
-					renderTags={(value: string[], getTagProps: (params: { index: number }) => object) =>
+					renderValue={(value: string[], getItemProps) =>
 						value.map((option, index) => (
 							// eslint-disable-next-line react/jsx-key
 							<Chip
 								variant="outlined"
 								label={option}
-								{...getTagProps({ index })}
+								{...getItemProps({ index })}
 								onDelete={() => handleTypologyDelete(formik.values.typologies.at(index)?.index)}
 							/>
 						))
