@@ -17,11 +17,14 @@ import {
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
-import { Loading, StyledButton } from '../../components';
-import { Title } from '../../components/Title';
-import { SuccessMessage } from '../../components/forms/SuccessMessage';
-import { dataFetch } from '../../components/forms/utils';
-import { PageContainer } from '../../components/pageContainer/PageContainer';
+import {
+	Loading,
+	PageContainer,
+	StyledButton,
+	SuccessMessage,
+	Title,
+	dataFetch
+} from '../../components';
 
 const Unsubscribe: NextPage = ({ requestId, token }: { requestId?: string; token?: string }) => {
 	const { t } = useTranslation(['unsubscribe', 'common']);

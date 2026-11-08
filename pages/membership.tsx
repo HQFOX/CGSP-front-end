@@ -7,10 +7,7 @@ import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 import Link from 'next/link';
 
-import { StyledButton } from '../components';
-import { Title } from '../components/Title';
-import { EnrollmentModal } from '../components/modals/enrollmentModal/enrollmentModal';
-import { PageContainer } from '../components/pageContainer/PageContainer';
+import { EnrollmentModal, PageContainer, StyledButton, Title } from '../components';
 
 const statutesPdfPath = '/Estatutos - Cooperativa Giraldo Sem Pavor - 01-10-2020.pdf';
 

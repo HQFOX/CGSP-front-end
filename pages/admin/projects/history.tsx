@@ -7,11 +7,7 @@ import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslation
 
 import { PageProjectListItemDTO } from '../../../api/model';
 import { getGetAllProjectsHistoryUrl } from '../../../api/project-controller/project-controller';
-import { PageContainer } from '../../../components/pageContainer/PageContainer';
-import {
-	ADMIN_PROJECTS_PAGE_SIZE,
-	ProjectManager
-} from '../../../components/projects/ProjectManager';
+import { ADMIN_PROJECTS_PAGE_SIZE, PageContainer, ProjectManager } from '../../../components';
 
 const ProjectHistoryAdmin: NextPage<{ initialPage: PageProjectListItemDTO }> = (data) => {
 	return (

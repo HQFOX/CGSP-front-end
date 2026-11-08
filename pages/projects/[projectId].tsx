@@ -36,11 +36,18 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { getOneProject } from '../../api/project-controller/project-controller';
-import { Carousel, Details, DynamicMap, LotCounter, StyledButton, Title } from '../../components';
-import { EnrollmentModal } from '../../components/modals/enrollmentModal/enrollmentModal';
-import { PageContainer } from '../../components/pageContainer/PageContainer';
-import TabPanel from '../../components/tabpanel/TabPanel';
-import { UpdateStepper } from '../../components/updateStepper/UpdateStepper';
+import {
+	Carousel,
+	Details,
+	DynamicMap,
+	EnrollmentModal,
+	LotCounter,
+	PageContainer,
+	StyledButton,
+	TabPanel,
+	Title,
+	UpdateStepper
+} from '../../components';
 import theme from '../../theme';
 import { getS3Url } from '../../utils/utils';
 

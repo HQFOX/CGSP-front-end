@@ -19,7 +19,7 @@ export type HeaderProps = {
 	setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const AdminHeader = ({ setOpen }: HeaderProps) => {
+export const AdminHeader = ({ setOpen }: HeaderProps) => {
 	const router = useRouter();
 
 	const { user: currentUser, setUser: setCurrentUser } = useContext(AuthContext);
@@ -65,5 +65,3 @@ const AdminHeader = ({ setOpen }: HeaderProps) => {
 		</StyledAppBar>
 	);
 };
-
-export default AdminHeader;

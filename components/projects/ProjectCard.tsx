@@ -19,7 +19,7 @@ const StyledDiv = styled('div')({
 	height: '400px'
 });
 
-const ProjectCard = ({ project }: ProjectCardProps) => {
+export const ProjectCard = ({ project }: ProjectCardProps) => {
 	const { t } = useTranslation(['projectpage', 'common']);
 
 	return (
@@ -55,8 +55,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 		</StyledCard>
 	);
 };
-
-export default ProjectCard;
 
 interface ProjectCardProps {
 	project: ProjectDTO;

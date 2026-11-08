@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material/styles';
-import 'styled-components';
+import '@mui/material/styles';
 
 interface CustomTheme {
 	bg: {
@@ -14,8 +13,4 @@ interface CustomTheme {
 declare module '@mui/material/styles' {
 	interface Theme extends CustomTheme {}
 	interface ThemeOptions extends CustomTheme {}
-}
-
-declare module 'styled-components' {
-	export interface DefaultTheme extends Theme {}
 }

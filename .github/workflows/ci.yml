@@ -63,6 +63,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: npm run lint
 
+      - name: Run knip
+        if: ${{ !cancelled() }}
+        run: npm run knip
+
   test:
     name: Unit Tests
     runs-on: ubuntu-latest

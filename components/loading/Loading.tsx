@@ -16,7 +16,7 @@ const spinner = keyframes`
     }
 `;
 
-export const StyledSpinnerContainer = styled.div<LoadingProps>`
+const StyledSpinnerContainer = styled.div<LoadingProps>`
 	display: flex;
 	flex-grow: 1;
 	justify-content: center;

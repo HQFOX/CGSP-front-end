@@ -9,9 +9,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 
 import { UpdateDTO } from '../api/model';
 import { getAllUpdates } from '../api/update-controller/update-controller';
-import { Title } from '../components/Title';
-import { PageContainer } from '../components/pageContainer/PageContainer';
-import Updates from '../components/updates/Update';
+import { PageContainer, Title, Updates } from '../components';
 
 const UpdatePage: NextPage<{ updates: UpdateDTO[] }> = (data) => {
 	const pathname = usePathname();

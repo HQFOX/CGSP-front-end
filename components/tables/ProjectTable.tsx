@@ -103,7 +103,7 @@ export interface ProjectTableProps {
 	onPaginationChange: (pageIndex: number, pageSize: number) => void;
 }
 
-const ProjectTable = ({
+export const ProjectTable = ({
 	projects,
 	loading = false,
 	handleShowProjectForm,
@@ -314,5 +314,3 @@ const ProjectTable = ({
 		</DndContext>
 	);
 };
-
-export default ProjectTable;

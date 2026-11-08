@@ -21,7 +21,7 @@ import { Loading, StyledButton } from '../../components';
 import theme from '../../theme';
 import { dataFetch } from './utils';
 
-export const SuccessMessage = ({ email }: { email: string }) => {
+const SuccessMessage = ({ email }: { email: string }) => {
 	const { t } = useTranslation(['projectpage']);
 	return (
 		<Grow in={true}>
@@ -41,7 +41,7 @@ export const SuccessMessage = ({ email }: { email: string }) => {
 	);
 };
 
-export const ErrorMessage = () => {
+const ErrorMessage = () => {
 	const { t } = useTranslation(['projectpage']);
 
 	return (

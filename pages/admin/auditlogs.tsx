@@ -9,19 +9,19 @@ import { SortingState } from '@tanstack/react-table';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
 import { getGetAuditLogsQueryKey } from '../../api/audit-log-controller/audit-log-controller';
-import { StyledButton } from '../../components';
 import {
 	AUDIT_ACTION_LABELS,
 	AUDIT_ENTITY_TYPE_LABELS,
 	AUDIT_LOGS_PAGE_SIZE,
 	AUDIT_OUTCOME_LABELS,
 	AuditLogFilters,
+	AuditLogTable,
 	EMPTY_AUDIT_LOG_FILTERS,
+	PageContainer,
+	StyledButton,
 	fetchAuditLogsPage,
 	toAuditLogsParams
-} from '../../components/auditlogs/utils';
-import { PageContainer } from '../../components/pageContainer/PageContainer';
-import { AuditLogTable } from '../../components/tables/AuditLogTable';
+} from '../../components';
 
 const FILTER_DEBOUNCE_MS = 400;
 

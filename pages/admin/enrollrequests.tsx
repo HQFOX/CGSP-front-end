@@ -10,15 +10,18 @@ import { TrendUpIcon } from '@phosphor-icons/react';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
-import { Loading, StyledButton } from '../../components';
-import { StyledCard } from '../../components/StyledCard';
-import { Title } from '../../components/Title';
-import { DynamicEChartsWrapper } from '../../components/charts/DynamicEChartsWrapper';
-import { KpiPie } from '../../components/charts/PieChart';
-import { EnrollRequestTable } from '../../components/enrollrequests/EnrollRequestTable';
-import { EnrollRequestForm } from '../../components/forms/EnrollRequestForm';
-import { dataFetch } from '../../components/forms/utils';
-import { PageContainer } from '../../components/pageContainer/PageContainer';
+import {
+	DynamicEChartsWrapper,
+	EnrollRequestForm,
+	EnrollRequestTable,
+	KpiPie,
+	Loading,
+	PageContainer,
+	StyledButton,
+	StyledCard,
+	Title,
+	dataFetch
+} from '../../components';
 import theme from '../../theme';
 
 const countFromLastWeek = (requests: EnrollRequest[]): number => {
