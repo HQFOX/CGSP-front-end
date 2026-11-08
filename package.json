@@ -73,7 +73,7 @@
 		"dotenv": "^17.4.2",
 		"dotenv-cli": "^11.1.0",
 		"eslint": "9.39.5",
-		"eslint-config-next": "^16.4.3",
+		"eslint-config-next": "^16.4.5",
 		"jsdom": "^30.0.1",
 		"knip": "^6.44.1",
 		"orval": "^8.44.0",
