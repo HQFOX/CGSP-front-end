@@ -5,9 +5,8 @@ import Head from 'next/head';
 
 import { PageItem } from '../TreeList/TreeList';
 import { VerticalNavigation } from '../verticalNavigation/VerticalNavigation';
-import Footer from './footer/Footer';
-import AdminHeader from './header/AdminHeader';
-import Header from './header/Header';
+import { Footer } from './footer';
+import { AdminHeader, Header } from './header';
 
 const pages: PageItem[] = [
 	{
@@ -75,5 +74,3 @@ export const Layout = ({ isAdmin, children }: { isAdmin: boolean; children: Reac
 		</div>
 	);
 };
-
-export default Layout;

@@ -6,17 +6,15 @@ import { Box, Divider, Typography } from '@mui/material';
 import { useTranslation } from 'next-i18next/pages';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
-import { Title } from '../components/Title';
-import { PageContainer } from '../components/pageContainer/PageContainer';
 import {
+	PageContainer,
 	ProjectInventory,
-	ProjectInventoryProps
-} from '../components/projects/projectInventory/ProjectInventory';
-import {
+	ProjectInventoryProps,
+	Title,
 	fetchFilterValues,
 	fetchProjectsPage,
 	queryToApiParams
-} from '../components/projects/projectInventory/utils';
+} from '../components';
 
 const History: NextPage<ProjectInventoryProps> = (data) => {
 	const { t } = useTranslation(['history', 'projectpage', 'common']);

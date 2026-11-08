@@ -10,7 +10,7 @@ import { formatDate } from '../../utils/utils';
 
 const width = '40vw';
 
-const UpdateCard = ({ post }: UpdateCardProps) => {
+export const UpdateCard = ({ post }: UpdateCardProps) => {
 	const handleClick = (projectId?: string) => {
 		projectId && router.push(`projects/${projectId}`);
 	};
@@ -87,8 +87,6 @@ const UpdateCard = ({ post }: UpdateCardProps) => {
 		</Paper>
 	);
 };
-
-export default UpdateCard;
 
 interface UpdateCardProps {
 	post: UpdateDTO;

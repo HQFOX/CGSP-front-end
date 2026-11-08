@@ -5,10 +5,7 @@ import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslation
 
 import { PageProjectListItemDTO } from '../../api/model';
 import { getGetAllProjectsCurrentUrl } from '../../api/project-controller/project-controller';
-import { BasicChart } from '../../components/charts/BasicChart';
-import { dataFetch } from '../../components/forms/utils';
-import { Loading } from '../../components/loading/Loading';
-import { PageContainer } from '../../components/pageContainer/PageContainer';
+import { BasicChart, Loading, PageContainer, dataFetch } from '../../components';
 
 const CHART_FETCH_PAGE_SIZE = 100;
 

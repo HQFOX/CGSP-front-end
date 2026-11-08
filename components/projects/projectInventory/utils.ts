@@ -32,7 +32,7 @@ export type ViewType = 'card' | 'list' | 'map';
 // The current and history endpoints accept the same filter params
 export type ProjectsQueryParams = GetAllProjectsCurrentParams;
 
-export const PROJECTS_PAGE_SIZE = 4;
+const PROJECTS_PAGE_SIZE = 4;
 
 export const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
 	Évora: Evora.geojson.properties.centros.centro.reverse() as LatLngTuple,
@@ -42,14 +42,6 @@ export const districtCenterCoordinates: { [key: string]: LatLngTuple } = {
 };
 
 export const DISTRICT_OPTIONS = Object.keys(districtCenterCoordinates);
-
-export const constructionStatusValues: ConstructionStatusType[] = [
-	'ALLOTMENTPERMIT',
-	'BUILDINGPERMIT',
-	'CONCLUDED'
-];
-
-export const assignmentStatusValues: AssignmentStatusType[] = ['WAITING', 'ONGOING', 'CONCLUDED'];
 
 // Only defined values are set, so the result is JSON-serializable for getServerSideProps
 export const searchParamsToApiParams = (

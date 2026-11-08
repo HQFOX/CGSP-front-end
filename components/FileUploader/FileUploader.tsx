@@ -13,8 +13,8 @@ import { styles } from './styles';
 
 const EMPTY_FILES: AbstractFile[] = [];
 
-export const IMAGE_FILE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
-export const VIDEO_FILE_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
+const IMAGE_FILE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
+const VIDEO_FILE_TYPES = ['video/mp4', 'video/webm', 'video/ogg'];
 
 export interface FileUploaderProps {
 	title?: string;

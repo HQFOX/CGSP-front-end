@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 import { Circle, FlagCircle } from '@mui/icons-material';
 import { Button, Dialog, Grid } from '@mui/material';
 
-import UpdateCard from '../updates/UpdateCard';
+import { UpdateCard } from '../updates/UpdateCard';
 
 const Seperator = () => (
 	<>

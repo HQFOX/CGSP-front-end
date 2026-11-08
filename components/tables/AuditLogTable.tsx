@@ -239,5 +239,3 @@ export const AuditLogTable = ({
 		</div>
 	);
 };
-
-export default AuditLogTable;

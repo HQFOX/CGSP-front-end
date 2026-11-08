@@ -11,7 +11,7 @@ import { FilterValuesDTO, PageProjectListItemDTO } from '../../../api/model';
 import { getGetFilterValuesQueryKey } from '../../../api/project-controller/project-controller';
 import { Controls } from '../../controls/Controls';
 import { DynamicMap } from '../../map/DynamicMap';
-import ProjectCard from '../ProjectCard';
+import { ProjectCard } from '../ProjectCard';
 import {
 	DISTRICT_OPTIONS,
 	ProjectsQueryParams,

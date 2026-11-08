@@ -22,7 +22,7 @@ import { useTranslation } from 'next-i18next/pages';
 
 import { ViewType } from '../../pages/projects';
 import { StyledButton } from '../Button';
-import Dropdown from '../dropdown/Dropdown';
+import { Dropdown } from '../dropdown/Dropdown';
 import { SearchParams } from '../projects/projectInventory/utils';
 import { styles } from './styles';
 

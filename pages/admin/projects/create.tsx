@@ -5,9 +5,7 @@ import type { NextPage } from 'next';
 import { Box, Divider, Typography } from '@mui/material';
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations';
 
-import { ProjectForm } from '../../../components/forms/ProjectForm';
-import { Loading } from '../../../components/loading/Loading';
-import { PageContainer } from '../../../components/pageContainer/PageContainer';
+import { Loading, PageContainer, ProjectForm } from '../../../components';
 
 const ProjectCreateAdmin: NextPage<{ projects: Project[] }> = (data) => {
 	return (

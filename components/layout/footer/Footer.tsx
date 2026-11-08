@@ -20,7 +20,7 @@ const StyledStack = styled(Stack)<{ side?: 'left' | 'right' }>(({ theme, side = 
 	}
 }));
 
-const Footer = () => {
+export const Footer = () => {
 	const { t } = useTranslation('footer');
 
 	return (
@@ -115,5 +115,3 @@ const Footer = () => {
 		</footer>
 	);
 };
-
-export default Footer;

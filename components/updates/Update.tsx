@@ -3,9 +3,9 @@ import React from 'react';
 import { Stack } from '@mui/material';
 
 import { UpdateDTO } from '../../api/model';
-import UpdateCard from './UpdateCard';
+import { UpdateCard } from './UpdateCard';
 
-const Updates = ({ updates }: { updates?: UpdateDTO[] }) => {
+export const Updates = ({ updates }: { updates?: UpdateDTO[] }) => {
 	return (
 		<Stack spacing={10} sx={{ pt: 10, pb: 10 }}>
 			{updates?.map((item) => (
@@ -14,5 +14,3 @@ const Updates = ({ updates }: { updates?: UpdateDTO[] }) => {
 		</Stack>
 	);
 };
-
-export default Updates;

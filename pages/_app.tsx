@@ -10,10 +10,7 @@ import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 
-import { AuthContext } from '../components/AuthContext';
-import { getUser } from '../components/forms/utils';
-import Layout from '../components/layout/layout';
-import { Loading } from '../components/loading/Loading';
+import { AuthContext, Layout, Loading, getUser } from '../components';
 import '../styles/globals.css';
 import theme from '../theme';
 

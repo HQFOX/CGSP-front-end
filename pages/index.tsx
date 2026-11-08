@@ -21,8 +21,7 @@ import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslation
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Hero, HomeSection, HoverCard, StyledButton, Title } from '../components';
-import { DynamicMap } from '../components/map/DynamicMap';
+import { DynamicMap, Hero, HomeSection, HoverCard, StyledButton, Title } from '../components';
 import logo from '../public/logo.svg';
 import { styles as styles2 } from '../styles/homepage';
 import theme from '../theme';

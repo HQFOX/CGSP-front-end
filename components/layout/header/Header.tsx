@@ -36,7 +36,7 @@ const StyledHeaderButton = styled(Button)({
 	fontWeight: '700'
 });
 
-const Header = () => {
+export const Header = () => {
 	const { t } = useTranslation('header');
 	const router = useRouter();
 
@@ -238,5 +238,3 @@ const Header = () => {
 		</StyledAppBar>
 	);
 };
-
-export default Header;

@@ -17,5 +17,3 @@ export const TabPanel = ({ children, index, value }: TabPanelProps) => {
 		</div>
 	);
 };
-
-export default TabPanel;

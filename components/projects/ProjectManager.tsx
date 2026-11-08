@@ -11,7 +11,7 @@ import { getGetFilterValuesQueryKey } from '../../api/project-controller/project
 import { Loading, StyledButton } from '../../components';
 import { ProjectForm } from '../forms/ProjectForm';
 import { dataFetch } from '../forms/utils';
-import ProjectTable from '../tables/ProjectTable';
+import { ProjectTable } from '../tables/ProjectTable';
 import { fetchProjectsPage, getProjectsQueryKey } from './projectInventory/utils';
 
 export const ADMIN_PROJECTS_PAGE_SIZE = 10;

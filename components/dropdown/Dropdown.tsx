@@ -16,7 +16,7 @@ const StyledButton = styled(Button)({
 	textTransform: 'none'
 });
 
-const Dropdown = ({ options, displayValue, label, valueChange }: DropdownProps) => {
+export const Dropdown = ({ options, displayValue, label, valueChange }: DropdownProps) => {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 
@@ -60,5 +60,3 @@ const Dropdown = ({ options, displayValue, label, valueChange }: DropdownProps) 
 		</>
 	);
 };
-
-export default Dropdown;

@@ -18,7 +18,6 @@ import { dataFetch, submitFile } from '../utils';
 // Mock the form utils so no real fetch calls are made
 vi.mock('../utils', () => ({
 	dataFetch: vi.fn(),
-	getPresignedUrl: vi.fn(),
 	submitFile: vi.fn()
 }));
 
