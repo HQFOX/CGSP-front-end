@@ -81,7 +81,7 @@
 		"size-limit": "^12.1.0",
 		"typescript": "6.0.2",
 		"vite-tsconfig-paths": "^6.1.1",
-		"vitest": "^5.0.5"
+		"vitest": "^5.1.0"
 	},
 	"overrides": {
 		"conventional-changelog-conventionalcommits": "^9.0.0",
