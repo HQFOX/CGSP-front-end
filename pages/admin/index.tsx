@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslation
 import { PageProjectListItemDTO } from '../../api/model';
 import { getGetAllProjectsCurrentUrl } from '../../api/project-controller/project-controller';
 import { BasicChart, Loading, PageContainer, dataFetch } from '../../components';
+import { AnalyticsDashboard } from '../../components/analytics';
 
 const CHART_FETCH_PAGE_SIZE = 100;
 
@@ -52,6 +53,13 @@ const DashBoard = () => {
 				<Divider />
 			</Box>
 			{projects ? <BasicChart chartData={projects} /> : <Loading />}
+			<Box sx={{ pt: 6, pb: 2 }}>
+				<Typography variant="h5" component="h2">
+					Visitas ao website
+				</Typography>
+				<Divider />
+			</Box>
+			<AnalyticsDashboard />
 		</PageContainer>
 	);
 };

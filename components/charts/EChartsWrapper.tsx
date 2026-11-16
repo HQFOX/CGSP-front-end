@@ -2,7 +2,7 @@ import React, { CSSProperties, useEffect, useRef } from 'react';
 
 import type { EChartsOption, SetOptionOpts } from 'echarts';
 
-import { LineChart, PieChart } from 'echarts/charts';
+import { BarChart, LineChart, PieChart } from 'echarts/charts';
 import {
 	DataZoomComponent,
 	GridComponent,
@@ -15,6 +15,7 @@ import type { ECharts } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 
 echarts.use([
+	BarChart,
 	PieChart,
 	LineChart,
 	LegendComponent,
