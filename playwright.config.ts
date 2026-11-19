@@ -11,7 +11,8 @@ dotenv.config({ path: path.resolve(__dirname, '.env.development') });
 
 // The e2e suite runs against a local backend container using the dev profile
 const BACKEND_URL = 'http://localhost:8080';
-const BACKEND_IMAGE = process.env.BACKEND_IMAGE ?? 'hqfox/cgsp-backend:latest';
+// CI sets BACKEND_IMAGE to the ECR image, locally this is the image built from CGSP-back-end
+const BACKEND_IMAGE = process.env.BACKEND_IMAGE ?? 'cgsp-backend:latest';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -79,7 +80,7 @@ export default defineConfig({
 	webServer: [
 		{
 			// The image's entrypoint forces the prod profile, a program argument overrides it
-			command: `docker run --rm --pull always -p 8080:8080 ${BACKEND_IMAGE} --spring.profiles.active=dev`,
+			command: `docker run --rm -p 8080:8080 ${BACKEND_IMAGE} --spring.profiles.active=dev`,
 			url: `${BACKEND_URL}/project/filter-values`,
 			reuseExistingServer: !process.env.CI,
 			timeout: 180 * 1000, // image pull + spring boot startup
