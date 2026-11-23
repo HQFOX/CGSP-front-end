@@ -17,7 +17,7 @@ const expectCardsToMatch = async (projectsPage: ProjectsPage, projects: ProjectI
 	await expect(projectsPage.cardTitles).toHaveText(projects.map((project) => project.title ?? ''));
 };
 
-test.describe.skip('Projects Page', () => {
+test.describe('Projects Page', () => {
 	let projectsPage: ProjectsPage;
 
 	test.beforeEach(async ({ page }) => {
