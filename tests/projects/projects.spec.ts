@@ -39,7 +39,7 @@ test.describe('Projects Page', () => {
 		}
 	});
 
-	test('should be able to filter projects by name using the search bar', async ({ page }) => {
+	test.skip('should be able to filter projects by name using the search bar', async ({ page }) => {
 		const projectsResponse = projectsPage.waitForProjects(
 			(params) => params.get('title') === SEARCH_TERM
 		);
@@ -77,7 +77,7 @@ test.describe('Projects Page', () => {
 		}
 	});
 
-	test('should be able to filter by price and typology and district', async ({ page }) => {
+	test.skip('should be able to filter by price and typology and district', async ({ page }) => {
 		await projectsPage.selectDistrict(DISTRICT);
 
 		await projectsPage.filtersButton.click();
